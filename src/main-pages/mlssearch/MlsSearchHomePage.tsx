@@ -1,0 +1,586 @@
+"use client";
+
+import FilterTop from "@/component/mlsSearchMenu/filterTop";
+import { MlsPropertyMapPage } from "@/component/mlsSearchMenu/MlsPropertyMapPage";
+import { MlsListingOptions } from "@/component/mlsSearchMenu/MlsListingOptions";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useMlsPropertyListInfinite } from "@/services/properties/PropertyQueries";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useSearchParams } from "next/navigation";
+import { MlsPropertyCard } from "@/component/mlsSearchMenu/MlsPropertyCard";
+import RegistrationModal from "../auth/RegistrationModal";
+import LoginModal from "../auth/LoginModal";
+import { GoogleMapComponent } from "@/component/mlsSearchMenu/MlsMap";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import {
+  postUserPropertyWishlist,
+  removeWishlistItem,
+} from "@/services/profile/ProfileServices";
+import { useUserWishlist } from "@/services/profile/ProfileQueries";
+import { saveSearches } from "@/services/properties/PropertyServices";
+import GoogleMapsProvider from "@/provider/GoogleMapProvider";
+import type { SearchFilters } from "@/types/Property";
+import { FiSearch } from "react-icons/fi";
+
+type Property = { id: string; [key: string]: any };
+
+const SAVED_FILTERS_STORAGE_KEY = "saved_search_filters";
+
+const DEFAULT_FILTERS: SearchFilters = {
+  keyword: "",
+  pageLimit: 20,
+  page: 1,
+  property_status: "",
+  property_type: "",
+  property_for: "",
+  category_type: "",
+  price_min: 0,
+  price_max: 0,
+  bed_min: 0,
+  bed_max: 0,
+  bath_min: 0,
+  bath_max: 0,
+  garage_min: 0,
+  garage_max: 0,
+  square_footage_min: 0,
+  square_footage_max: 0,
+  community_amenities: "",
+  property_view: "",
+  lot_size_min: 0,
+  lot_size_max: 0,
+  year_built_min: 0,
+  year_built_max: 0,
+  max_annual_tax: 0,
+  stories: 0,
+  premium: false,
+  exclusive: false,
+  price_on_request: false,
+  construction_status: "",
+  furnishing: "",
+  available_from: "",
+  rented: false,
+  mls_city: "",
+  mls_state: "",
+  zip: "",
+  mls_basement: "",
+  mls_sewer: "",
+  mls_school_district: "",
+  mls_builder_name: "",
+  mls_list_agent: "",
+  mls_site_features: "",
+  mls_lot_feature: "",
+  interior_features: "",
+};
+
+const canPinOnMap = (value: unknown): boolean => {
+  if (value === false || value === 0) return false;
+  if (typeof value === "string") {
+    const normalized = value.trim().toLowerCase();
+    return normalized !== "false" && normalized !== "0";
+  }
+  return true;
+};
+
+const MlsSerchHomePage = () => {
+  const searchParams = useSearchParams();
+  const locationFromParams = searchParams.get("keyword") || "";
+
+  const queryClient = useQueryClient();
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+  const [isRegistrationModalOpen, setIsRegistrationModalOpen] = useState(false);
+  const [showMap, setShowMap] = useState(true);
+  const [hoveredProperty, setHoveredProperty] = useState<Property | null>(null);
+  // Stable ref holding live scroll state — avoids stale closures in the observer callback
+  const observerRef = useRef<IntersectionObserver | null>(null);
+  const sentinelElRef = useRef<HTMLDivElement | null>(null);
+  const scrollState = useRef<{ hasNextPage: boolean; isFetchingNextPage: boolean; fetchNextPage: () => void }>({
+    hasNextPage: false,
+    isFetchingNextPage: false,
+    fetchNextPage: () => {},
+  });
+  // Default to split view (list + map) on first open
+  const [openMapPropertyGrid, setOpenMapPropertyGrid] = useState(true);
+  const [openMapGrid, setOpenMapGrid] = useState(false);
+  const [openPropertyGrid, setOpenPropertyGrid] = useState(false);
+
+  const [searchFilters, setSearchFilters] = useState<SearchFilters>(() => {
+    const base: SearchFilters = { ...DEFAULT_FILTERS, keyword: locationFromParams };
+
+    if (typeof window !== "undefined") {
+      const legacyType = sessionStorage.getItem("prop_type") ?? "";
+      const legacyMaxPrice = sessionStorage.getItem("prop_max_price") ?? "";
+      if (legacyType) base.property_type = legacyType;
+      if (legacyMaxPrice) base.price_max = Number(legacyMaxPrice);
+
+      const raw = sessionStorage.getItem(SAVED_FILTERS_STORAGE_KEY);
+      if (raw) {
+        try {
+          const parsed = JSON.parse(raw);
+          if (parsed && typeof parsed === "object") {
+            return {
+              ...base,
+              ...parsed,
+              page: 1,
+              pageLimit: 20,
+              keyword: parsed.keyword || parsed.mls_city || base.keyword,
+              mls_city: parsed.mls_city || base.mls_city,
+            };
+          }
+        } catch (err) {
+          console.error("Failed to parse saved search filters:", err);
+        }
+      }
+    }
+    return base;
+  });
+
+  useEffect(() => {
+    return () => {
+      sessionStorage.removeItem("prop_type");
+      sessionStorage.removeItem("prop_max_price");
+      sessionStorage.removeItem(SAVED_FILTERS_STORAGE_KEY);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!locationFromParams) return;
+    setSearchFilters((prev) => ({
+      ...prev,
+      keyword: locationFromParams,
+    }));
+  }, [locationFromParams]);
+
+  const clearFilters = () => setSearchFilters(DEFAULT_FILTERS);
+
+  /* -------- Mutations -------- */
+  const postSaveSearchMutation = useMutation({
+    mutationFn: (data: any) => saveSearches(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["savedSearches"] });
+      toast.success("Search saved successfully", { autoClose: 3000 });
+    },
+    onError: () => {
+      toast.error("Failed to save search", { autoClose: 3000 });
+    },
+  });
+
+  const postWishlistMutation = useMutation({
+    mutationFn: (property: any) => postUserPropertyWishlist(property),
+    onSuccess: (data: any) => {
+      queryClient.invalidateQueries({ queryKey: ["userWishlistInfo"] });
+      queryClient.invalidateQueries({ queryKey: ["mlsPropertyList"] });
+      toast.success(data?.message || "Added to favorites", { autoClose: 3000 });
+    },
+    onError: () => {
+      toast.error("Something went wrong. Please try again.", { autoClose: 5000 });
+    },
+  });
+
+  const removeWishlistMutation = useMutation({
+    mutationFn: (id: string) => removeWishlistItem(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["userWishlistInfo"] });
+      queryClient.invalidateQueries({ queryKey: ["mlsPropertyList"] });
+      toast.success("Removed from favorites", { autoClose: 3000 });
+    },
+    onError: () => {
+      toast.error("Something went wrong. Please try again.", { autoClose: 5000 });
+    },
+  });
+
+  /* -------- Data -------- */
+  // Gate full property search at >= 2 chars; faster debounce for snappier results.
+  // Empty keyword still fires (no filter), and 1-char input is suggestion-only.
+  const [debouncedKeyword, setDebouncedKeyword] = useState(searchFilters.keyword);
+  useEffect(() => {
+    const trimmed = (searchFilters.keyword || "").trim();
+    if (!trimmed) return setDebouncedKeyword("");
+    if (trimmed.length < 2) return; // hold last results while typing first char
+    const id = setTimeout(() => setDebouncedKeyword(searchFilters.keyword), 250);
+    return () => clearTimeout(id);
+  }, [searchFilters.keyword]);
+
+  const mlsQueryFilters = { ...searchFilters, keyword: debouncedKeyword };
+  const {
+    data: infiniteData,
+    isLoading,
+    isFetchingNextPage,
+    fetchNextPage,
+    hasNextPage,
+  } = useMlsPropertyListInfinite(mlsQueryFilters);
+  const { data: wishlistData } = useUserWishlist();
+
+  const properties = useMemo(() => {
+    const raw: Property[] = infiniteData?.pages.flatMap((p: any) => p.data || []) ?? [];
+    const wishlistItems: any[] = wishlistData?.data || [];
+    const keys = new Set(wishlistItems.map((w: any) => w.listing_key || w.mls_listingkey));
+    const ids = new Set(wishlistItems.map((w: any) => w.listing_id || w.mls_listingid));
+    return raw.map((p) => ({
+      ...p,
+      is_wishlisted:
+        keys.has(p.mls_listingkey) ||
+        ids.has(p.mls_listingid) ||
+        p.is_wishlisted ||
+        false,
+    }));
+  }, [infiniteData, wishlistData]);
+
+  const totalCount: number = (infiniteData?.pages[0] as any)?.meta?.total ?? 0;
+
+  // Sync scroll state into a ref so the observer callback always reads fresh values
+  // without needing to reconnect the observer on every state change.
+  scrollState.current = { hasNextPage: hasNextPage ?? false, isFetchingNextPage, fetchNextPage };
+
+  // Stable callback ref — React calls this when the sentinel mounts/unmounts.
+  // The observer is created once per sentinel mount; stale-closure bugs are avoided
+  // because the callback reads from scrollState.current at fire-time.
+  const sentinelCallbackRef = useCallback((el: HTMLDivElement | null) => {
+    if (observerRef.current) {
+      observerRef.current.disconnect();
+      observerRef.current = null;
+    }
+    sentinelElRef.current = el;
+    if (!el) return;
+    observerRef.current = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          const { hasNextPage, isFetchingNextPage, fetchNextPage } = scrollState.current;
+          if (hasNextPage && !isFetchingNextPage) {
+            fetchNextPage();
+          }
+        }
+      },
+      { rootMargin: "400px" }
+    );
+    observerRef.current.observe(el);
+  }, []); // intentionally empty — stability is the goal
+
+  // Follow-up: after a page loads, if the sentinel is still in/near the viewport
+  // (e.g. first page didn't fill the screen), kick off the next fetch. The
+  // IntersectionObserver only fires on intersection-state changes, so without
+  // this we'd stall when the sentinel never leaves the visible area.
+  useEffect(() => {
+    if (!hasNextPage || isFetchingNextPage) return;
+    const el = sentinelElRef.current;
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
+    if (rect.top - window.innerHeight < 400) {
+      fetchNextPage();
+    }
+  }, [properties.length, hasNextPage, isFetchingNextPage, fetchNextPage]);
+
+  const mappableProperties = (properties as Property[])
+    .filter((p) => canPinOnMap(p?.NWM_ShowMapLink))
+    .map((p) => ({ ...p, lat: Number(p.latitude), lng: Number(p.longitude) }))
+    .filter(
+      (p) => !isNaN(p.lat) && !isNaN(p.lng) && p.lat !== 0 && p.lng !== 0
+    );
+  const canShowMapViews = mappableProperties.length > 0;
+
+  useEffect(() => {
+    // While the first page is still loading, keep whatever view is mounted
+    // (split is the default) so we don't flash split → grid → split.
+    if (isLoading) return;
+    if (!canShowMapViews) {
+      setOpenPropertyGrid(true);
+      setOpenMapGrid(false);
+      setOpenMapPropertyGrid(false);
+      return;
+    }
+    if (showMap) {
+      setOpenMapPropertyGrid(true);
+      setOpenMapGrid(false);
+      setOpenPropertyGrid(false);
+    } else {
+      setOpenPropertyGrid(true);
+      setOpenMapGrid(false);
+      setOpenMapPropertyGrid(false);
+    }
+  }, [showMap, canShowMapViews, isLoading]);
+
+  /* -------- Handlers -------- */
+  const handleSearch = (value: string, key: keyof SearchFilters) => {
+    if (key === "price_max") sessionStorage.setItem("prop_max_price", value);
+    if (key === "property_type") sessionStorage.setItem("prop_type", value);
+    setSearchFilters((prev) => ({ ...prev, [key]: value }));
+  };
+
+  const handleModal = () => setIsLoginModalOpen(true);
+  const handleOpenRegistration = () => {
+    setIsLoginModalOpen(false);
+    setIsRegistrationModalOpen(true);
+  };
+
+  const handleSaveSearch = () => {
+    const token = sessionStorage.getItem("access_token");
+    const customerId = sessionStorage.getItem("customer_id");
+    if (!token || !customerId) {
+      toast.info("Please login to save your search.", { autoClose: 3000 });
+      setIsLoginModalOpen(true);
+      return;
+    }
+    const nameParts: string[] = [];
+    if (searchFilters.keyword) nameParts.push(searchFilters.keyword);
+    if (searchFilters.property_type) nameParts.push(searchFilters.property_type);
+    if (searchFilters.property_for) nameParts.push(searchFilters.property_for);
+    if (searchFilters.property_status) nameParts.push(searchFilters.property_status);
+    if (searchFilters.price_min || searchFilters.price_max) {
+      nameParts.push(
+        `$${searchFilters.price_min || 0}-$${searchFilters.price_max || "Any"}`
+      );
+    }
+    if (searchFilters.bed_min || searchFilters.bed_max) {
+      nameParts.push(
+        `${searchFilters.bed_min || 0}-${searchFilters.bed_max || "Any"} beds`
+      );
+    }
+    const searchName =
+      nameParts.length > 0
+        ? nameParts.join(" | ")
+        : `Search ${new Date().toLocaleDateString()}`;
+    postSaveSearchMutation.mutate({
+      user_id: customerId,
+      filters: searchFilters,
+      name: searchName,
+      uuid: process.env.NEXT_PUBLIC_REALTY_PRO_AGENT_ID,
+    });
+  };
+
+
+
+  return (
+    <GoogleMapsProvider>
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        newestOnTop
+        closeOnClick
+        pauseOnHover
+        theme="dark"
+      />
+      <RegistrationModal
+        handleModal={handleModal}
+        isOpen={isRegistrationModalOpen}
+        onClose={() => setIsRegistrationModalOpen(false)}
+        onSuccess={() => undefined}
+        onOpenLogin={handleModal}
+      />
+      <LoginModal
+        isHeader={false}
+        isOpen={isLoginModalOpen}
+        onClose={() => setIsLoginModalOpen(false)}
+        onSuccess={() => setIsLoginModalOpen(false)}
+        onOpenRegistration={handleOpenRegistration}
+      />
+
+      <FilterTop
+        handleSearch={handleSearch}
+        searchFilters={searchFilters}
+        handleSaveSearch={handleSaveSearch}
+        handleClearFilters={clearFilters}
+        isSavingSearch={postSaveSearchMutation.isPending}
+      />
+
+      <div className="container-wide py-6">
+        {/* Results bar */}
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 pb-4 border-b border-[var(--line-soft)]">
+          <div className="text-[13px] text-white/55 tracking-wide">
+            {isLoading ? (
+              <span className="inline-flex items-center gap-2">
+                <svg
+                  className="animate-spin"
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.5"
+                >
+                  <circle cx="12" cy="12" r="10" strokeOpacity="0.25" />
+                  <path d="M12 2a10 10 0 0 1 10 10" strokeLinecap="round" />
+                </svg>
+                Loading listings…
+              </span>
+            ) : properties.length ? (
+              <span>
+                <strong className="text-[var(--gold-500)] font-semibold">
+                  {properties.length}
+                </strong>{" "}
+                <span className="text-white/40">of</span>{" "}
+                <strong className="text-white font-semibold">
+                  {totalCount > 0 ? totalCount.toLocaleString() : "…"}
+                </strong>{" "}
+                listings loaded
+              </span>
+            ) : (
+              <span>No listings match your filters</span>
+            )}
+          </div>
+          <MlsListingOptions
+            handleOpenMapPropertyGrid={() => {
+              setOpenMapPropertyGrid(true);
+              setOpenMapGrid(false);
+              setOpenPropertyGrid(false);
+            }}
+            openMapPropertyGrid={openMapPropertyGrid}
+            handleOpenMapGrid={() => {
+              setOpenMapGrid(true);
+              setOpenMapPropertyGrid(false);
+              setOpenPropertyGrid(false);
+            }}
+            openMapGrid={openMapGrid}
+            handleOpenPropertyGrid={() => {
+              setOpenPropertyGrid(true);
+              setOpenMapPropertyGrid(false);
+              setOpenMapGrid(false);
+            }}
+            openPropertyGrid={openPropertyGrid}
+            canShowMapViews={canShowMapViews}
+            handleSearch={handleSearch}
+            searchFilters={searchFilters}
+            handleShowmapDongle={() => setShowMap((s) => !s)}
+            showMap={showMap}
+          />
+        </div>
+
+        <div className="mt-8 min-h-[500px]">
+          {openMapPropertyGrid && (
+            <MlsPropertyMapPage
+              postWishlistMutation={(data: any) =>
+                postWishlistMutation.mutate(data)
+              }
+              removeWishlistMutation={(id: string) =>
+                removeWishlistMutation.mutate(id)
+              }
+              properties={properties}
+              handleModal={handleModal}
+              isLoading={isLoading}
+              hasNextPage={hasNextPage}
+              isFetchingNextPage={isFetchingNextPage}
+              fetchNextPage={fetchNextPage}
+            />
+          )}
+
+          {openPropertyGrid && (
+            <>
+              {isLoading ? (
+                <GridSkeleton />
+              ) : properties.length ? (
+                <>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-4 gap-6">
+                    {properties.map((item) => (
+                      <MlsPropertyCard
+                        key={item.id}
+                        item={item}
+                        handleModal={handleModal}
+                        postWishlistMutation={(data: any) =>
+                          postWishlistMutation.mutate(data)
+                        }
+                        removeWishlistMutation={(id: string) =>
+                          removeWishlistMutation.mutate(id)
+                        }
+                      />
+                    ))}
+                  </div>
+                  {/* Infinite scroll sentinel — callback ref fires when this mounts/unmounts */}
+                  <div ref={sentinelCallbackRef} aria-hidden="true" />
+
+                  {/* Loading skeleton cards while fetching the next page */}
+                  {isFetchingNextPage && (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-4 gap-6 mt-6">
+                      {Array.from({ length: 4 }).map((_, i) => (
+                        <div
+                          key={i}
+                          className="bg-[var(--surface-obsidian)] border border-[var(--line-soft)] overflow-hidden animate-pulse"
+                        >
+                          <div className="aspect-[4/3] bg-white/5" />
+                          <div className="p-6 flex flex-col gap-3">
+                            <div className="h-7 w-40 bg-white/10" />
+                            <div className="h-4 w-full bg-white/5" />
+                            <div className="h-4 w-3/4 bg-white/5" />
+                            <div className="h-px bg-white/10 my-1" />
+                            <div className="h-4 w-1/2 bg-white/5" />
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
+                  {!hasNextPage && properties.length > 0 && (
+                    <p className="text-center text-white/35 text-[13px] py-10 tracking-wide">
+                      All {properties.length.toLocaleString()} listings loaded
+                    </p>
+                  )}
+                </>
+              ) : (
+                <EmptyState onClear={clearFilters} />
+              )}
+            </>
+          )}
+
+          {openMapGrid && (
+            properties.length ? (
+              <div className="h-[calc(100vh-200px)] min-h-[560px] overflow-hidden border border-[var(--line-soft)]">
+                <GoogleMapComponent
+                  markers={mappableProperties}
+                  onMarkerHover={(p: any) => setHoveredProperty(p)}
+                />
+              </div>
+            ) : (
+              <EmptyState onClear={clearFilters} />
+            )
+          )}
+        </div>
+      </div>
+    </GoogleMapsProvider>
+  );
+};
+
+export default MlsSerchHomePage;
+
+/* ---------- Helpers ---------- */
+
+function GridSkeleton() {
+  return (
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-6">
+      {Array.from({ length: 8 }).map((_, i) => (
+        <div
+          key={i}
+          className="bg-[var(--surface-obsidian)] border border-[var(--line-soft)] overflow-hidden animate-pulse"
+        >
+          <div className="aspect-[4/3] bg-white/5" />
+          <div className="p-6 flex flex-col gap-3">
+            <div className="h-7 w-40 bg-white/10" />
+            <div className="h-4 w-full bg-white/5" />
+            <div className="h-4 w-3/4 bg-white/5" />
+            <div className="h-px bg-white/10 my-1" />
+            <div className="h-4 w-1/2 bg-white/5" />
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+
+
+function EmptyState({ onClear }: { onClear: () => void }) {
+  return (
+    <div className="py-24 flex flex-col items-center justify-center text-center max-w-xl mx-auto">
+      <div className="w-16 h-16 rounded-full border border-[var(--gold-500)]/30 bg-[var(--gold-500)]/5 flex items-center justify-center mb-6">
+        <FiSearch size={24} className="text-[var(--gold-500)]" />
+      </div>
+      <h3 className="font-serif text-3xl text-white mb-3">
+        No properties match these filters
+      </h3>
+      <p className="text-white/55 mb-8 leading-relaxed">
+        Try broadening your location, adjusting price, or clearing a filter or two
+        to see what else is on the market.
+      </p>
+      <button onClick={onClear} className="btn-outline-new">
+        Clear all filters
+      </button>
+    </div>
+  );
+}
