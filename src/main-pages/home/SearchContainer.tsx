@@ -209,7 +209,7 @@ const SearchContainer = ({
                     }}
                   >
                     {isSearching ? (
-                      <svg className="animate-spin" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#edb75e" strokeWidth="2.5">
+                      <svg className="animate-spin" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#a6824c" strokeWidth="2.5">
                         <circle cx="12" cy="12" r="10" strokeOpacity="0.25" />
                         <path d="M12 2a10 10 0 0 1 10 10" strokeLinecap="round" />
                       </svg>
@@ -231,7 +231,7 @@ const SearchContainer = ({
                     {trimmedKeyword.length === 0 ? (
                       <div className="px-4 py-6 my-1 min-h-[76px] text-sm text-gray-700 flex items-center">
                         <div className="w-8 h-8 rounded-full bg-gray-50 flex items-center justify-center mr-3 shrink-0">
-                          <HiOutlineLocationMarker className="text-[#edb75e]" size={16} />
+                          <HiOutlineLocationMarker className="text-[#a6824c]" size={16} />
                         </div>
                         <div className="flex flex-col min-w-0">
                           <span className="font-medium">Type something to start searching</span>
@@ -253,7 +253,7 @@ const SearchContainer = ({
                                 onClick={() => handleSuggestionClick(suggestion)}
                               >
                                 <div className="w-8 h-8 rounded-full bg-gray-50 flex items-center justify-center mr-3 shrink-0">
-                                  <HiOutlineLocationMarker className="text-[#edb75e]" size={16} />
+                                  <HiOutlineLocationMarker className="text-[#a6824c]" size={16} />
                                 </div>
                                 <div className="flex flex-col min-w-0">
                                   <span className="truncate font-medium">{suggestion.label}</span>
@@ -267,7 +267,7 @@ const SearchContainer = ({
                     ) : (
                       <div className="px-4 py-6 my-1 min-h-[76px] text-sm text-gray-700 flex items-center">
                         <div className="w-8 h-8 rounded-full bg-gray-50 flex items-center justify-center mr-3 shrink-0">
-                          <HiOutlineLocationMarker className="text-[#edb75e]" size={16} />
+                          <HiOutlineLocationMarker className="text-[#a6824c]" size={16} />
                         </div>
                         <div className="flex flex-col min-w-0">
                           <span className="font-medium">No suggestions found</span>
@@ -299,7 +299,7 @@ const SearchContainer = ({
               <button
                 onClick={() => setIsOpen(true)}
                 style={{
-                  background: "#edb75e",
+                  background: "#a6824c",
                   color: "#fff",
                   border: "none",
                   padding: "11px 28px",
@@ -311,8 +311,8 @@ const SearchContainer = ({
                   textTransform: "uppercase",
                   transition: "background 0.2s ease",
                 }}
-                onMouseEnter={(e) => (e.currentTarget.style.background = "#e0a94d")}
-                onMouseLeave={(e) => (e.currentTarget.style.background = "#edb75e")}
+                onMouseEnter={(e) => (e.currentTarget.style.background = "#8a6a3b")}
+                onMouseLeave={(e) => (e.currentTarget.style.background = "#a6824c")}
               >
                 Start The Process
               </button>

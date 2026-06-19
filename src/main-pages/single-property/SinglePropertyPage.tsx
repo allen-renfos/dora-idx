@@ -73,17 +73,17 @@ function DetailSkeleton() {
           </div>
         </div>
         <div className="flex flex-col gap-3 animate-pulse">
-          <div className="h-12 w-56 bg-white/10" />
-          <div className="h-5 w-80 bg-white/5" />
-          <div className="h-5 w-40 bg-white/5" />
+          <div className="h-12 w-56 bg-[var(--surface-graphite)]" />
+          <div className="h-5 w-80 bg-[var(--surface-graphite)]" />
+          <div className="h-5 w-40 bg-[var(--surface-graphite)]" />
         </div>
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-8">
           <div className="space-y-4 animate-pulse">
-            <div className="h-32 w-full bg-white/5" />
-            <div className="h-64 w-full bg-white/5" />
-            <div className="h-64 w-full bg-white/5" />
+            <div className="h-32 w-full bg-[var(--surface-graphite)]" />
+            <div className="h-64 w-full bg-[var(--surface-graphite)]" />
+            <div className="h-64 w-full bg-[var(--surface-graphite)]" />
           </div>
-          <div className="h-80 bg-white/5 animate-pulse" />
+          <div className="h-80 bg-[var(--surface-graphite)] animate-pulse" />
         </div>
       </div>
     </div>
@@ -98,7 +98,7 @@ function DetailError() {
           <FiAlertCircle size={24} className="text-[var(--gold-500)]" />
         </div>
         <h1 className="font-serif text-3xl mb-3">We couldn&rsquo;t load this listing</h1>
-        <p className="text-white/55 mb-8 leading-relaxed">
+        <p className="text-[var(--ink-soft)] mb-8 leading-relaxed">
           The property may have been delisted or the link is out of date. Try
           browsing the current inventory.
         </p>

@@ -197,7 +197,7 @@ export default function ConnectMainPage() {
         newestOnTop
         closeOnClick
         pauseOnHover
-        theme="dark"
+        theme="light"
       />
 
       {/* HERO */}
@@ -219,7 +219,7 @@ export default function ConnectMainPage() {
             </span>
           </Reveal>
           <Reveal delay={0.08}>
-            <h1 className="display-xl text-white">
+            <h1 className="display-xl text-[var(--ink)]">
               Let&rsquo;s start with a{" "}
               <em className="not-italic italic text-[var(--gold-500)]">
                 conversation
@@ -269,7 +269,7 @@ export default function ConnectMainPage() {
                 <span className="inline-block h-px w-10 bg-[var(--gold-500)]" />
                 Direct Line
               </span>
-              <h2 className="display-md text-white mb-5">
+              <h2 className="display-md text-[var(--ink)] mb-5">
                 A note from{" "}
                 <em className="italic text-[var(--gold-500)]">
                   {name || "the advisor"}
@@ -282,7 +282,7 @@ export default function ConnectMainPage() {
 
               {socials.length > 0 && (
                 <div className="flex flex-col gap-3">
-                  <span className="text-[10px] uppercase tracking-[0.22em] text-white/55">
+                  <span className="text-[10px] uppercase tracking-[0.22em] text-[var(--ink-faint)]">
                     Follow along
                   </span>
                   <div className="flex items-center gap-3">
@@ -293,7 +293,7 @@ export default function ConnectMainPage() {
                         target="_blank"
                         rel="noopener noreferrer"
                         aria-label={label}
-                        className="w-11 h-11 rounded-full border border-white/15 flex items-center justify-center text-white/80 hover:text-[var(--gold-500)] hover:border-[var(--gold-500)] transition-colors"
+                        className="w-11 h-11 rounded-full border border-[var(--line)] flex items-center justify-center text-[var(--ink-soft)] hover:text-[var(--gold-500)] hover:border-[var(--gold-500)] transition-colors"
                       >
                         <Icon size={15} />
                       </a>
@@ -308,7 +308,7 @@ export default function ConnectMainPage() {
                 <p className="text-[12px] uppercase tracking-[0.22em] text-[var(--gold-500)] mb-3">
                   Replies in under 24 hours
                 </p>
-                <p className="text-[14px] text-white/65 leading-relaxed">
+                <p className="text-[14px] text-[var(--ink-soft)] leading-relaxed">
                   Every inquiry is read personally. Expect a thoughtful reply,
                   not a templated one.
                 </p>
@@ -364,7 +364,7 @@ export default function ConnectMainPage() {
                 <div className="flex flex-col gap-2">
                   <label
                     htmlFor="message"
-                    className="text-[10px] uppercase tracking-[0.22em] text-white/55"
+                    className="text-[10px] uppercase tracking-[0.22em] text-[var(--ink-faint)]"
                   >
                     Message
                   </label>
@@ -375,14 +375,14 @@ export default function ConnectMainPage() {
                     onChange={onChange}
                     rows={5}
                     placeholder="Tell us a little about what you're looking for…"
-                    className={`bg-[var(--surface-charcoal)] border px-4 py-3 text-white placeholder:text-white/40 outline-none transition-colors resize-y min-h-[120px] ${
+                    className={`bg-[var(--surface-charcoal)] border px-4 py-3 text-[var(--ink)] placeholder:text-[var(--ink-faint)] outline-none transition-colors resize-y min-h-[120px] ${
                       errors.message
-                        ? "border-red-500/60"
+                        ? "border-[#b3261e]/60"
                         : "border-[var(--line-soft)] focus:border-[var(--gold-500)]/60"
                     }`}
                   />
                   {errors.message && (
-                    <span className="text-[12px] text-red-400">
+                    <span className="text-[12px] text-[#b3261e]">
                       {errors.message}
                     </span>
                   )}
@@ -454,19 +454,19 @@ export default function ConnectMainPage() {
               className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-[90] w-[92%] max-w-[440px] bg-[var(--surface-ink)] border border-[var(--line-soft)] p-6 md:p-7"
             >
               <div className="flex items-center justify-between mb-5">
-                <h3 className="font-serif text-xl text-white">
+                <h3 className="font-serif text-xl text-[var(--ink)]">
                   Quick verification
                 </h3>
                 <button
                   onClick={() => setShowCaptcha(false)}
                   aria-label="Close"
-                  className="w-9 h-9 flex items-center justify-center text-white/70 hover:text-white"
+                  className="w-9 h-9 flex items-center justify-center text-[var(--ink-soft)] hover:text-[var(--ink)]"
                 >
                   <FiX size={20} />
                 </button>
               </div>
 
-              <p className="text-[14px] text-white/65 mb-4 leading-relaxed">
+              <p className="text-[14px] text-[var(--ink-soft)] mb-4 leading-relaxed">
                 To prevent spam, please retype the characters below.
               </p>
 
@@ -478,7 +478,7 @@ export default function ConnectMainPage() {
                   type="button"
                   onClick={refreshCaptcha}
                   aria-label="Refresh captcha"
-                  className="w-11 h-11 border border-[var(--line-soft)] text-white/70 hover:text-[var(--gold-500)] hover:border-[var(--gold-500)] flex items-center justify-center transition-colors"
+                  className="w-11 h-11 border border-[var(--line-soft)] text-[var(--ink-soft)] hover:text-[var(--gold-500)] hover:border-[var(--gold-500)] flex items-center justify-center transition-colors"
                 >
                   <FiRefreshCw size={16} />
                 </button>
@@ -489,14 +489,14 @@ export default function ConnectMainPage() {
                 value={captchaInput}
                 onChange={(e) => setCaptchaInput(e.target.value.toUpperCase())}
                 placeholder="Enter the characters"
-                className={`w-full bg-[var(--surface-charcoal)] border px-4 py-3 text-white placeholder:text-white/40 outline-none transition-colors text-center tracking-[0.32em] font-serif text-lg ${
+                className={`w-full bg-[var(--surface-charcoal)] border px-4 py-3 text-[var(--ink)] placeholder:text-[var(--ink-faint)] outline-none transition-colors text-center tracking-[0.32em] font-serif text-lg ${
                   captchaError
-                    ? "border-red-500/60"
+                    ? "border-[#b3261e]/60"
                     : "border-[var(--line-soft)] focus:border-[var(--gold-500)]/60"
                 }`}
               />
               {captchaError && (
-                <span className="block mt-2 text-[12px] text-red-400">
+                <span className="block mt-2 text-[12px] text-[#b3261e]">
                   {captchaError}
                 </span>
               )}
@@ -505,7 +505,7 @@ export default function ConnectMainPage() {
                 <button
                   type="button"
                   onClick={() => setShowCaptcha(false)}
-                  className="text-[12px] uppercase tracking-[0.18em] text-white/65 hover:text-white transition-colors"
+                  className="text-[12px] uppercase tracking-[0.18em] text-[var(--ink-soft)] hover:text-[var(--ink)] transition-colors"
                 >
                   Cancel
                 </button>
@@ -547,10 +547,10 @@ function InfoTile({
         <Icon size={16} className="text-[var(--gold-500)]" />
       </div>
       <div className="flex flex-col gap-1 min-w-0">
-        <span className="text-[10px] uppercase tracking-[0.22em] text-white/55">
+        <span className="text-[10px] uppercase tracking-[0.22em] text-[var(--ink-faint)]">
           {label}
         </span>
-        <span className="text-[15px] text-white/85 break-words">{value}</span>
+        <span className="text-[15px] text-[var(--ink-soft)] break-words">{value}</span>
       </div>
     </>
   );
@@ -561,7 +561,7 @@ function InfoTile({
         href={href}
         target={href.startsWith("mailto") ? undefined : "_blank"}
         rel={href.startsWith("mailto") ? undefined : "noopener noreferrer"}
-        className="flex items-start gap-4 px-6 md:px-8 py-7 hover:bg-white/[0.02] transition-colors"
+        className="flex items-start gap-4 px-6 md:px-8 py-7 hover:bg-[var(--surface-charcoal)] transition-colors"
       >
         {inner}
       </a>
@@ -595,7 +595,7 @@ function Field({
     <div className="flex flex-col gap-2">
       <label
         htmlFor={name}
-        className="text-[10px] uppercase tracking-[0.22em] text-white/55"
+        className="text-[10px] uppercase tracking-[0.22em] text-[var(--ink-faint)]"
       >
         {label}
       </label>
@@ -607,13 +607,13 @@ function Field({
         onChange={onChange}
         placeholder={placeholder}
         readOnly={readOnly}
-        className={`bg-[var(--surface-charcoal)] border px-4 py-3 text-white placeholder:text-white/40 outline-none transition-colors h-12 ${
+        className={`bg-[var(--surface-charcoal)] border px-4 py-3 text-[var(--ink)] placeholder:text-[var(--ink-faint)] outline-none transition-colors h-12 ${
           error
-            ? "border-red-500/60"
+            ? "border-[#b3261e]/60"
             : "border-[var(--line-soft)] focus:border-[var(--gold-500)]/60"
         } ${readOnly ? "opacity-70 cursor-not-allowed" : ""}`}
       />
-      {error && <span className="text-[12px] text-red-400">{error}</span>}
+      {error && <span className="text-[12px] text-[#b3261e]">{error}</span>}
     </div>
   );
 }

@@ -21,9 +21,9 @@ export function DashboardLayout({
   children,
 }: Props) {
   return (
-    <main className="bg-[var(--surface-ink)] text-white min-h-screen">
+    <main className="bg-[var(--surface)] text-[var(--ink)] min-h-screen">
         <div className="container-wide pt-32">
-          <div className="flex flex-col lg:flex-row lg:items-stretch gap-0 lg:gap-10 lg:border-t lg:border-[var(--line-soft)]">
+          <div className="flex flex-col lg:flex-row lg:items-stretch gap-0 lg:gap-10 lg:border-t lg:border-[var(--line)]">
             <Sidebar activeSidebar={active} />
 
             <div className="flex-1 min-w-0 py-10 md:py-12">
@@ -36,11 +36,11 @@ export function DashboardLayout({
                 )}
                 <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
                   <div className="flex flex-col gap-3 max-w-2xl">
-                    <h1 className="font-serif text-3xl md:text-4xl text-white leading-tight tracking-[-0.01em]">
+                    <h1 className="font-serif text-3xl md:text-4xl text-[var(--ink)] leading-tight tracking-[-0.01em]">
                       {title}
                     </h1>
                     {description && (
-                      <p className="text-[15px] text-white/60 leading-relaxed">
+                      <p className="text-[15px] text-[var(--ink-soft)] leading-relaxed">
                         {description}
                       </p>
                     )}

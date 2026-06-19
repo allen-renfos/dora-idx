@@ -163,7 +163,7 @@ function ScheduleTourForm({ property, profileData, onClose }: SharedFormProps) {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
         <DateTimeField
-          icon={<FiCalendar size={14} className="text-[var(--gold-500)]" />}
+          icon={<FiCalendar size={14} className="text-[var(--accent-text)]" />}
           label="Preferred date"
           error={errors.tourDate}
         >
@@ -173,11 +173,11 @@ function ScheduleTourForm({ property, profileData, onClose }: SharedFormProps) {
             value={formData.tourDate}
             onChange={onChange}
             min={todayISO}
-            className="bg-transparent text-white text-[14px] outline-none w-full"
+            className="bg-transparent text-[var(--ink)] text-[14px] outline-none w-full"
           />
         </DateTimeField>
         <DateTimeField
-          icon={<FiClock size={14} className="text-[var(--gold-500)]" />}
+          icon={<FiClock size={14} className="text-[var(--accent-text)]" />}
           label="Preferred time"
           error={errors.tourTime}
         >
@@ -185,7 +185,7 @@ function ScheduleTourForm({ property, profileData, onClose }: SharedFormProps) {
             name="tourTime"
             value={formData.tourTime}
             onChange={onChange}
-            className="bg-transparent text-white text-[14px] outline-none w-full"
+            className="bg-transparent text-[var(--ink)] text-[14px] outline-none w-full"
           >
               <option value="" style={{ color: "#111111", backgroundColor: "#ffffff" }}>
                 Select a time
@@ -204,8 +204,8 @@ function ScheduleTourForm({ property, profileData, onClose }: SharedFormProps) {
       </div>
 
       <div className="flex flex-col gap-2">
-        <label htmlFor="tour-message" className="text-[10px] uppercase tracking-[0.22em] text-white/55">
-          Message <span className="text-white/35 normal-case tracking-normal">(optional)</span>
+        <label htmlFor="tour-message" className="text-[10px] uppercase tracking-[0.22em] text-[var(--ink-faint)]">
+          Message <span className="text-[var(--ink-faint)] normal-case tracking-normal">(optional)</span>
         </label>
         <textarea
           id="tour-message"
@@ -214,7 +214,7 @@ function ScheduleTourForm({ property, profileData, onClose }: SharedFormProps) {
           onChange={onChange}
           rows={3}
           placeholder="Anything we should know?"
-          className="bg-[var(--surface-charcoal)] border border-[var(--line-soft)] focus:border-[var(--gold-500)]/60 px-4 py-3 text-[14px] text-white placeholder:text-white/40 outline-none transition-colors resize-y min-h-[90px]"
+          className="bg-[var(--surface-charcoal)] border border-[var(--line-soft)] focus:border-[var(--gold-500)]/60 px-4 py-3 text-[14px] text-[var(--ink)] placeholder:text-[var(--ink-faint)] outline-none transition-colors resize-y min-h-[90px]"
         />
       </div>
 
@@ -225,7 +225,7 @@ function ScheduleTourForm({ property, profileData, onClose }: SharedFormProps) {
       />
 
       <div className="flex items-center justify-end gap-3 pt-1">
-        <button type="button" onClick={onClose} className="text-[12px] uppercase tracking-[0.18em] text-white/65 hover:text-white transition-colors">
+        <button type="button" onClick={onClose} className="text-[12px] uppercase tracking-[0.18em] text-[var(--ink-soft)] hover:text-[var(--ink)] transition-colors">
           Cancel
         </button>
         <button type="submit" disabled={mutation.isPending} className="btn-gold-new disabled:opacity-50 disabled:cursor-not-allowed">
@@ -358,7 +358,7 @@ function SendInquiryForm({ property, profileData, onClose }: SharedFormProps) {
       </div>
 
       <div className="flex flex-col gap-2">
-        <label className="text-[10px] uppercase tracking-[0.22em] text-white/55">Timing</label>
+        <label className="text-[10px] uppercase tracking-[0.22em] text-[var(--ink-faint)]">Timing</label>
         <div className="flex flex-wrap gap-2">
           {SELL_WINDOWS.map((w) => {
             const active = formData.whenToSell === w.value;
@@ -369,8 +369,8 @@ function SendInquiryForm({ property, profileData, onClose }: SharedFormProps) {
                 onClick={() => setFormData((p) => ({ ...p, whenToSell: w.value }))}
                 className={`h-10 px-4 text-[12px] uppercase tracking-[0.18em] border transition-colors ${
                   active
-                    ? "bg-[var(--gold-500)]/15 border-[var(--gold-500)] text-[var(--gold-500)]"
-                    : "bg-[var(--surface-charcoal)] border-[var(--line-soft)] text-white/75 hover:border-[var(--gold-500)]/50"
+                    ? "bg-[var(--gold-500)]/15 border-[var(--gold-500)] text-[var(--accent-text)]"
+                    : "bg-[var(--surface-charcoal)] border-[var(--line-soft)] text-[var(--ink-soft)] hover:border-[var(--gold-500)]/50"
                 }`}
               >
                 {w.label}
@@ -381,8 +381,8 @@ function SendInquiryForm({ property, profileData, onClose }: SharedFormProps) {
       </div>
 
       <div className="flex flex-col gap-2">
-        <label htmlFor="enquiry-message" className="text-[10px] uppercase tracking-[0.22em] text-white/55">
-          Message <span className="text-white/35 normal-case tracking-normal">(optional)</span>
+        <label htmlFor="enquiry-message" className="text-[10px] uppercase tracking-[0.22em] text-[var(--ink-faint)]">
+          Message <span className="text-[var(--ink-faint)] normal-case tracking-normal">(optional)</span>
         </label>
         <textarea
           id="enquiry-message"
@@ -391,7 +391,7 @@ function SendInquiryForm({ property, profileData, onClose }: SharedFormProps) {
           onChange={onChange}
           rows={3}
           placeholder="Anything we should know?"
-          className="bg-[var(--surface-charcoal)] border border-[var(--line-soft)] focus:border-[var(--gold-500)]/60 px-4 py-3 text-[14px] text-white placeholder:text-white/40 outline-none transition-colors resize-y min-h-[90px]"
+          className="bg-[var(--surface-charcoal)] border border-[var(--line-soft)] focus:border-[var(--gold-500)]/60 px-4 py-3 text-[14px] text-[var(--ink)] placeholder:text-[var(--ink-faint)] outline-none transition-colors resize-y min-h-[90px]"
         />
       </div>
 
@@ -402,7 +402,7 @@ function SendInquiryForm({ property, profileData, onClose }: SharedFormProps) {
       />
 
       <div className="flex items-center justify-end gap-3 pt-1">
-        <button type="button" onClick={onClose} className="text-[12px] uppercase tracking-[0.18em] text-white/65 hover:text-white transition-colors">
+        <button type="button" onClick={onClose} className="text-[12px] uppercase tracking-[0.18em] text-[var(--ink-soft)] hover:text-[var(--ink)] transition-colors">
           Cancel
         </button>
         <button type="submit" disabled={mutation.isPending} className="btn-gold-new disabled:opacity-50 disabled:cursor-not-allowed">
@@ -454,7 +454,7 @@ export const PropertyEnquiryModal = ({ isOpen, onClose, property }: Props) => {
               type="button"
               onClick={() => setActiveTab(tab.key)}
               className={`relative px-4 py-3 text-[12px] font-bold tracking-[0.18em] uppercase transition-colors ${
-                active ? "text-[var(--gold-500)]" : "text-white/55 hover:text-white"
+                active ? "text-[var(--accent-text)]" : "text-[var(--ink-faint)] hover:text-[var(--ink)]"
               }`}
             >
               {tab.label}
@@ -494,18 +494,18 @@ function DateTimeField({
 }) {
   return (
     <div className="flex flex-col gap-2">
-      <label className="text-[10px] uppercase tracking-[0.22em] text-white/55">
+      <label className="text-[10px] uppercase tracking-[0.22em] text-[var(--ink-faint)]">
         {label}
       </label>
       <div
         className={`flex items-center gap-3 bg-[var(--surface-charcoal)] border h-12 px-4 transition-colors focus-within:border-[var(--gold-500)]/60 ${
-          error ? "border-red-500/60" : "border-[var(--line-soft)]"
+          error ? "border-[#b3261e]/60" : "border-[var(--line-soft)]"
         }`}
       >
         {icon}
         {children}
       </div>
-      {error && <span className="text-[12px] text-red-400">{error}</span>}
+      {error && <span className="text-[12px] text-[#b3261e]">{error}</span>}
     </div>
   );
 }

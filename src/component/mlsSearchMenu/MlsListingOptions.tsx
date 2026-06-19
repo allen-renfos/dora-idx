@@ -76,8 +76,8 @@ export const MlsListingOptions = ({
               onClick={onClick}
               className={`h-9 px-3 inline-flex items-center gap-2 text-[12px] font-medium tracking-[0.08em] uppercase transition-colors ${
                 active
-                  ? "bg-[var(--gold-500)] text-[var(--surface-ink)]"
-                  : "text-white/75 hover:text-white"
+                  ? "bg-[var(--ink)] text-white"
+                  : "text-[var(--ink-soft)] hover:text-[var(--ink)]"
               }`}
             >
               <Icon size={14} />

@@ -110,7 +110,7 @@ export default function RegistrationModal({
         newestOnTop
         closeOnClick
         pauseOnHover
-        theme="dark"
+        theme="light"
       />
       <AuthModal
         isOpen={isOpen}
@@ -124,7 +124,7 @@ export default function RegistrationModal({
             <button
               type="button"
               onClick={() => onOpenLogin?.()}
-              className="text-[var(--gold-500)] hover:text-white transition-colors font-semibold"
+              className="text-[var(--accent-text)] hover:text-[var(--ink)] transition-colors font-semibold"
             >
               Sign in
             </button>
@@ -246,7 +246,7 @@ function PasswordField({
     <div className="flex flex-col gap-2">
       <label
         htmlFor={id}
-        className="text-[10px] uppercase tracking-[0.22em] text-white/55"
+        className="text-[10px] uppercase tracking-[0.22em] text-[var(--ink-faint)]"
       >
         {label}
       </label>
@@ -260,12 +260,12 @@ function PasswordField({
           placeholder={placeholder}
           required
           autoComplete={autoComplete}
-          className="w-full bg-[var(--surface-charcoal)] border border-[var(--line-soft)] focus:border-[var(--gold-500)]/60 px-4 pr-11 h-12 text-[14px] text-white placeholder:text-white/40 outline-none transition-colors"
+          className="w-full bg-[var(--surface-charcoal)] border border-[var(--line-soft)] focus:border-[var(--gold-500)]/60 px-4 pr-11 h-12 text-[14px] text-[var(--ink)] placeholder:text-[var(--ink-faint)] outline-none transition-colors"
         />
         <button
           type="button"
           onClick={onToggleVisible}
-          className="absolute right-3 top-1/2 -translate-y-1/2 text-white/55 hover:text-[var(--gold-500)] transition-colors"
+          className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--ink-faint)] hover:text-[var(--accent-text)] transition-colors"
           aria-label={visible ? "Hide password" : "Show password"}
         >
           {visible ? <IoEyeOffOutline size={18} /> : <IoEyeOutline size={18} />}

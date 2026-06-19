@@ -13,7 +13,7 @@ interface Props {
 export function LegalPage({ eyebrow, title, children }: Props) {
   return (
     <>
-      <main className="bg-[var(--surface-ink)] text-white min-h-screen">
+      <main className="bg-[var(--surface-ink)] text-[var(--ink)] min-h-screen">
         <section className="relative isolate pt-32 pb-12 md:pt-40 md:pb-14 overflow-hidden">
           <div
             aria-hidden
@@ -32,7 +32,7 @@ export function LegalPage({ eyebrow, title, children }: Props) {
               </span>
             </Reveal>
             <Reveal delay={0.08}>
-              <h1 className="display-lg text-white mt-5">{title}</h1>
+              <h1 className="display-lg text-[var(--ink)] mt-5">{title}</h1>
             </Reveal>
           </div>
         </section>
@@ -46,14 +46,14 @@ export function LegalPage({ eyebrow, title, children }: Props) {
 
       <style jsx global>{`
         .legal-prose {
-          color: rgba(255, 255, 255, 0.78);
+          color: var(--ink-soft);
           font-size: 16px;
           line-height: 1.8;
           font-family: var(--font-lato), sans-serif;
         }
         .legal-prose h2 {
           font-family: var(--font-playfair), Georgia, serif;
-          color: #fff;
+          color: var(--ink);
           font-weight: 400;
           font-size: clamp(1.4rem, 1.2vw + 1rem, 1.85rem);
           line-height: 1.25;
@@ -79,14 +79,14 @@ export function LegalPage({ eyebrow, title, children }: Props) {
           margin-bottom: 1.2em;
         }
         .legal-prose a {
-          color: var(--gold-500);
+          color: var(--accent-text);
           text-decoration: underline;
           text-underline-offset: 4px;
           text-decoration-thickness: 1px;
           transition: color 0.2s ease;
         }
         .legal-prose a:hover {
-          color: #fff;
+          color: var(--ink);
         }
         .legal-prose ul,
         .legal-prose ol {
@@ -100,7 +100,7 @@ export function LegalPage({ eyebrow, title, children }: Props) {
           color: var(--gold-500);
         }
         .legal-prose strong {
-          color: #fff;
+          color: var(--ink);
           font-weight: 600;
         }
         .legal-prose hr {

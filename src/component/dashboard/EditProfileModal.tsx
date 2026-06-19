@@ -146,7 +146,7 @@ export const EditProfileModal = ({ isOpen, onClose, userData }: Props) => {
           <button
             type="button"
             onClick={onClose}
-            className="text-[12px] uppercase tracking-[0.18em] text-white/65 hover:text-white transition-colors"
+            className="text-[12px] uppercase tracking-[0.18em] text-[var(--ink-soft)] hover:text-[var(--ink)] transition-colors"
           >
             Cancel
           </button>

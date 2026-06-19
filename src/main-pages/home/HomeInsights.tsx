@@ -23,7 +23,7 @@ export default function HomeInsights() {
   const blogs: Blog[] = (data?.data || []).slice(0, 3);
 
   return (
-    <section className="bg-[var(--surface-ink)] text-white section-pad">
+    <section className="bg-[var(--surface-ink)] text-[var(--ink)] section-pad">
       <div className="container-wide">
         <SectionHeading
           eyebrow="Journal"
@@ -47,13 +47,13 @@ export default function HomeInsights() {
             ? Array.from({ length: 3 }).map((_, i) => (
                 <div
                   key={i}
-                  className="bg-[var(--surface-charcoal)] border border-white/5 animate-pulse"
+                  className="bg-[var(--surface-obsidian)] border border-[var(--line)] animate-pulse"
                 >
-                  <div className="aspect-[16/11] bg-white/5" />
+                  <div className="aspect-[16/11] bg-[var(--surface-graphite)]" />
                   <div className="p-6 flex flex-col gap-3">
-                    <div className="h-3 w-24 bg-white/10" />
-                    <div className="h-5 w-full bg-white/10" />
-                    <div className="h-5 w-[70%] bg-white/10" />
+                    <div className="h-3 w-24 bg-[var(--surface-graphite)]" />
+                    <div className="h-5 w-full bg-[var(--surface-graphite)]" />
+                    <div className="h-5 w-[70%] bg-[var(--surface-graphite)]" />
                   </div>
                 </div>
               ))
@@ -71,7 +71,7 @@ export default function HomeInsights() {
                 >
                   <Link
                     href={`/blog/${item.slug}`}
-                    className="group flex flex-col h-full bg-[var(--surface-obsidian)] border border-white/8 hover:border-[var(--gold-500)]/60 transition-colors duration-500"
+                    className="group flex flex-col h-full bg-[var(--surface-obsidian)] border border-[var(--line)] hover:border-[var(--accent)]/60 hover:shadow-[var(--shadow-soft)] transition-all duration-500"
                   >
                     <div className="relative aspect-[16/11] overflow-hidden bg-[var(--surface-charcoal)]">
                       <Image
@@ -84,15 +84,15 @@ export default function HomeInsights() {
                       <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent pointer-events-none" />
                     </div>
                     <div className="flex flex-col gap-3 p-6 flex-1">
-                      <div className="flex items-center gap-3 text-[11px] uppercase tracking-[0.2em] text-white/45">
+                      <div className="flex items-center gap-3 text-[11px] uppercase tracking-[0.2em] text-[var(--ink-faint)]">
                         <time>{dateToString(item?.publishDate)}</time>
-                        <span className="inline-block w-6 h-px bg-[var(--gold-500)]/60" />
-                        <span className="text-[var(--gold-500)]">Insights</span>
+                        <span className="inline-block w-6 h-px bg-[var(--accent)]/60" />
+                        <span className="text-[var(--accent-text)]">Insights</span>
                       </div>
-                      <h3 className="font-serif text-[1.35rem] md:text-[1.55rem] leading-[1.25] text-white group-hover:text-[var(--gold-500)] transition-colors">
+                      <h3 className="font-serif text-[1.35rem] md:text-[1.55rem] leading-[1.25] text-[var(--ink)] group-hover:text-[var(--accent-text)] transition-colors">
                         {item.title}
                       </h3>
-                      <span className="mt-auto inline-flex items-center gap-2 text-[12px] uppercase tracking-[0.2em] text-white/60 group-hover:text-[var(--gold-500)] transition-colors">
+                      <span className="mt-auto inline-flex items-center gap-2 text-[12px] uppercase tracking-[0.2em] text-[var(--ink-soft)] group-hover:text-[var(--accent-text)] transition-colors">
                         Read
                         <FiArrowRight
                           size={14}
@@ -105,7 +105,7 @@ export default function HomeInsights() {
               ))}
 
           {!isLoading && blogs.length === 0 && (
-            <div className="col-span-full py-16 text-center text-white/50 border border-dashed border-white/10">
+            <div className="col-span-full py-16 text-center text-[var(--ink-faint)] border border-dashed border-[var(--line)]">
               Fresh essays are on the way.
             </div>
           )}

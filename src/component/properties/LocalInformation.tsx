@@ -16,32 +16,32 @@ const containerStyle = {
 };
 
 const darkMapStyles: google.maps.MapTypeStyle[] = [
-  { elementType: 'geometry', stylers: [{ color: '#1a1f2e' }] },
-  { elementType: 'labels.text.stroke', stylers: [{ color: '#1a1f2e' }] },
-  { elementType: 'labels.text.fill', stylers: [{ color: '#8a9bb0' }] },
-  { featureType: 'administrative', elementType: 'geometry', stylers: [{ color: '#2a3040' }] },
-  { featureType: 'administrative.country', elementType: 'labels.text.fill', stylers: [{ color: '#9e9e9e' }] },
+  { elementType: 'geometry', stylers: [{ color: '#f4f2ec' }] },
+  { elementType: 'labels.text.stroke', stylers: [{ color: '#ffffff' }] },
+  { elementType: 'labels.text.fill', stylers: [{ color: '#8a8780' }] },
+  { featureType: 'administrative', elementType: 'geometry', stylers: [{ color: '#e7e4de' }] },
+  { featureType: 'administrative.country', elementType: 'labels.text.fill', stylers: [{ color: '#8a8780' }] },
   { featureType: 'administrative.land_parcel', stylers: [{ visibility: 'off' }] },
-  { featureType: 'administrative.locality', elementType: 'labels.text.fill', stylers: [{ color: '#bdbdbd' }] },
-  { featureType: 'poi', elementType: 'labels.text.fill', stylers: [{ color: '#EDB75E' }] },
-  { featureType: 'poi', elementType: 'geometry', stylers: [{ color: '#1e2535' }] },
-  { featureType: 'poi.park', elementType: 'geometry', stylers: [{ color: '#1a2d20' }] },
+  { featureType: 'administrative.locality', elementType: 'labels.text.fill', stylers: [{ color: '#555350' }] },
+  { featureType: 'poi', elementType: 'labels.text.fill', stylers: [{ color: '#a6824c' }] },
+  { featureType: 'poi', elementType: 'geometry', stylers: [{ color: '#efebe4' }] },
+  { featureType: 'poi.park', elementType: 'geometry', stylers: [{ color: '#e2ead9' }] },
   { featureType: 'poi.park', elementType: 'labels.text.fill', stylers: [{ color: '#6b9a5e' }] },
-  { featureType: 'road', elementType: 'geometry', stylers: [{ color: '#2c3347' }] },
-  { featureType: 'road', elementType: 'geometry.stroke', stylers: [{ color: '#212637' }] },
-  { featureType: 'road', elementType: 'labels.text.fill', stylers: [{ color: '#9ca5b3' }] },
-  { featureType: 'road.arterial', elementType: 'geometry', stylers: [{ color: '#38404f' }] },
-  { featureType: 'road.highway', elementType: 'geometry', stylers: [{ color: '#3c4a6e' }] },
-  { featureType: 'road.highway', elementType: 'geometry.stroke', stylers: [{ color: '#2a3550' }] },
-  { featureType: 'road.highway', elementType: 'labels.text.fill', stylers: [{ color: '#EDB75E' }] },
-  { featureType: 'road.local', elementType: 'labels.text.fill', stylers: [{ color: '#808b9a' }] },
-  { featureType: 'transit', elementType: 'geometry', stylers: [{ color: '#2f3948' }] },
-  { featureType: 'transit.station', elementType: 'labels.text.fill', stylers: [{ color: '#d59563' }] },
-  { featureType: 'water', elementType: 'geometry', stylers: [{ color: '#0d1b2a' }] },
-  { featureType: 'water', elementType: 'labels.text.fill', stylers: [{ color: '#4a6274' }] },
-  { featureType: 'water', elementType: 'labels.text.stroke', stylers: [{ color: '#0d1b2a' }] },
-  { featureType: 'landscape', elementType: 'geometry', stylers: [{ color: '#1e2535' }] },
-  { featureType: 'landscape.man_made', elementType: 'geometry.fill', stylers: [{ color: '#222838' }] },
+  { featureType: 'road', elementType: 'geometry', stylers: [{ color: '#ffffff' }] },
+  { featureType: 'road', elementType: 'geometry.stroke', stylers: [{ color: '#e7e4de' }] },
+  { featureType: 'road', elementType: 'labels.text.fill', stylers: [{ color: '#8a8780' }] },
+  { featureType: 'road.arterial', elementType: 'geometry', stylers: [{ color: '#ffffff' }] },
+  { featureType: 'road.highway', elementType: 'geometry', stylers: [{ color: '#f0e7d6' }] },
+  { featureType: 'road.highway', elementType: 'geometry.stroke', stylers: [{ color: '#e7d9bf' }] },
+  { featureType: 'road.highway', elementType: 'labels.text.fill', stylers: [{ color: '#8a6a3b' }] },
+  { featureType: 'road.local', elementType: 'labels.text.fill', stylers: [{ color: '#8a8780' }] },
+  { featureType: 'transit', elementType: 'geometry', stylers: [{ color: '#efebe4' }] },
+  { featureType: 'transit.station', elementType: 'labels.text.fill', stylers: [{ color: '#a6824c' }] },
+  { featureType: 'water', elementType: 'geometry', stylers: [{ color: '#cfdde6' }] },
+  { featureType: 'water', elementType: 'labels.text.fill', stylers: [{ color: '#7a93a3' }] },
+  { featureType: 'water', elementType: 'labels.text.stroke', stylers: [{ color: '#ffffff' }] },
+  { featureType: 'landscape', elementType: 'geometry', stylers: [{ color: '#faf9f6' }] },
+  { featureType: 'landscape.man_made', elementType: 'geometry.fill', stylers: [{ color: '#f4f2ec' }] },
 ];
 
 const LocalInformation = ({ coordinates }: LocalInformationProps) => {
@@ -64,10 +64,10 @@ const LocalInformation = ({ coordinates }: LocalInformationProps) => {
 
   if (!isLoaded) {
     return (
-      <div style={{ height: 460, display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#1a1f2e' }}>
+      <div style={{ height: 460, display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#f4f2ec' }}>
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12 }}>
-          <div style={{ width: 32, height: 32, border: '2px solid #EDB75E', borderTopColor: 'transparent', borderRadius: '50%', animation: 'spin 0.8s linear infinite' }} />
-          <span style={{ color: '#8a9bb0', fontSize: 13, letterSpacing: '0.05em' }}>Loading map…</span>
+          <div style={{ width: 32, height: 32, border: '2px solid #a6824c', borderTopColor: 'transparent', borderRadius: '50%', animation: 'spin 0.8s linear infinite' }} />
+          <span style={{ color: '#8a8780', fontSize: 13, letterSpacing: '0.05em' }}>Loading map…</span>
         </div>
       </div>
     );
@@ -97,7 +97,7 @@ const LocalInformation = ({ coordinates }: LocalInformationProps) => {
           zIndex={100}
           icon={{
             path: google.maps.SymbolPath.CIRCLE,
-            fillColor: '#EDB75E',
+            fillColor: '#a6824c',
             fillOpacity: 1,
             strokeColor: '#fff',
             strokeWeight: 2,
@@ -112,8 +112,8 @@ const LocalInformation = ({ coordinates }: LocalInformationProps) => {
         top: 12,
         left: 12,
         display: 'flex',
-        background: 'rgba(17,21,32,0.92)',
-        border: '1px solid #2e3548',
+        background: 'rgba(255,255,255,0.95)',
+        border: '1px solid #e7e4de',
         overflow: 'hidden',
         backdropFilter: 'blur(6px)',
         zIndex: 10,
@@ -132,9 +132,9 @@ const LocalInformation = ({ coordinates }: LocalInformationProps) => {
                 textTransform: 'uppercase',
                 cursor: 'pointer',
                 border: 'none',
-                borderRight: type === 'roadmap' ? '1px solid #2e3548' : 'none',
-                background: active ? '#EDB75E' : 'transparent',
-                color: active ? '#0b0c0f' : '#8a9bb0',
+                borderRight: type === 'roadmap' ? '1px solid #e7e4de' : 'none',
+                background: active ? '#a6824c' : 'transparent',
+                color: active ? '#ffffff' : '#555350',
                 transition: 'background 0.18s, color 0.18s',
                 fontFamily: 'var(--font-lato), sans-serif',
               }}

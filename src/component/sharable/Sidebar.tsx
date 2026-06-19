@@ -59,15 +59,15 @@ export const Sidebar = ({ activeSidebar }: Props) => {
               href={link.href}
               className={`relative flex items-center gap-3 px-4 py-3 text-[13px] tracking-[0.06em] uppercase transition-colors ${
                 isActive
-                  ? "text-[var(--gold-500)]"
-                  : "text-white/72 hover:text-white"
+                  ? "text-[var(--accent-text)]"
+                  : "text-[var(--ink-soft)] hover:text-[var(--ink)]"
               }`}
             >
               {isActive && (
                 <span className="absolute left-0 top-2.5 bottom-2.5 w-[2px] bg-[var(--gold-500)]" />
               )}
               <span
-                className={`shrink-0 ${isActive ? "text-[var(--gold-500)]" : "text-white/55"}`}
+                className={`shrink-0 ${isActive ? "text-[var(--accent-text)]" : "text-[var(--ink-faint)]"}`}
               >
                 {isActive ? link.activeIcon : link.icon}
               </span>
@@ -78,7 +78,7 @@ export const Sidebar = ({ activeSidebar }: Props) => {
       </nav>
 
       <div className="mt-auto pt-8 border-t border-[var(--line-soft)]">
-        <p className="text-[11px] uppercase tracking-[0.2em] text-white/35 px-2">
+        <p className="text-[11px] uppercase tracking-[0.2em] text-[var(--ink-faint)] px-2">
           © {new Date().getFullYear()} RealtiPro
         </p>
       </div>

@@ -32,21 +32,21 @@ export const FormDisclaimer: React.FC<Props> = ({
           aria-hidden
           className={`relative shrink-0 w-5 h-5 mt-[2px] border transition-all duration-200 ${
             checked
-              ? "bg-[var(--gold-500)] border-[var(--gold-500)]"
+              ? "bg-[var(--accent)] border-[var(--accent)]"
               : error
-                ? "border-red-500/60 bg-transparent group-hover:border-red-400"
-                : "border-[var(--line-medium)] bg-transparent group-hover:border-[var(--gold-500)]/60"
+                ? "border-red-500/60 bg-transparent group-hover:border-red-500"
+                : "border-[var(--line-medium)] bg-transparent group-hover:border-[var(--accent)]/60"
           }`}
         >
           {checked && (
             <FiCheck
               size={14}
               strokeWidth={3}
-              className="absolute inset-0 m-auto text-[var(--surface-ink)]"
+              className="absolute inset-0 m-auto text-white"
             />
           )}
         </span>
-        <span className="text-[12px] leading-[1.6] text-white/55">
+        <span className="text-[12px] leading-[1.6] text-[var(--ink-soft)]">
           By submitting your phone number, you provide your express written
           consent to receive calls and text messages, including marketing
           communications, at the number you entered. Your consent is not a
@@ -57,14 +57,14 @@ export const FormDisclaimer: React.FC<Props> = ({
           This site is protected by reCAPTCHA and the Google{" "}
           <Link
             href="/privacy-policy"
-            className="text-[var(--gold-500)] underline underline-offset-2 hover:text-white transition-colors"
+            className="text-[var(--accent-text)] underline underline-offset-2 hover:text-[var(--ink)] transition-colors"
           >
             Privacy Policy
           </Link>{" "}
           and{" "}
           <Link
             href="/terms-of-service"
-            className="text-[var(--gold-500)] underline underline-offset-2 hover:text-white transition-colors"
+            className="text-[var(--accent-text)] underline underline-offset-2 hover:text-[var(--ink)] transition-colors"
           >
             Terms of Service
           </Link>{" "}
@@ -72,7 +72,7 @@ export const FormDisclaimer: React.FC<Props> = ({
         </span>
       </label>
       {error && (
-        <p className="ml-8 text-[12px] text-red-400 inline-flex items-center gap-1.5">
+        <p className="ml-8 text-[12px] text-[#b3261e] inline-flex items-center gap-1.5">
           <FiAlertCircle size={12} />
           {error}
         </p>

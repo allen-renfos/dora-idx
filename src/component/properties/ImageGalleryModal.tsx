@@ -55,7 +55,7 @@ export const ImageGalleryModal = ({
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.3 }}
-          className="fixed inset-0 z-[9999] bg-[var(--surface-ink)] flex flex-col"
+          className="fixed inset-0 z-[9999] bg-black flex flex-col"
         >
           {/* Top bar */}
           <div className="flex items-center justify-between px-6 md:px-8 h-14 border-b border-white/8 shrink-0">
@@ -78,7 +78,7 @@ export const ImageGalleryModal = ({
           {/* Body */}
           <div className="flex-1 flex gap-1 p-1 min-h-0 overflow-hidden">
             {/* Main image */}
-            <div className="relative flex-1 bg-[var(--surface-obsidian)] flex items-center justify-center overflow-hidden">
+            <div className="relative flex-1 bg-black flex items-center justify-center overflow-hidden">
               <AnimatePresence mode="wait">
                 <motion.div
                   key={current}

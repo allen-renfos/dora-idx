@@ -43,7 +43,7 @@ const SingleBlog = () => {
 
   return (
     <>
-      <main className="bg-[var(--surface-ink)] text-white min-h-screen">
+      <main className="bg-[var(--surface-ink)] text-[var(--ink)] min-h-screen">
         {isLoading ? (
           <BlogSkeleton />
         ) : error ? (
@@ -65,10 +65,10 @@ function BlogSkeleton() {
     <div className="container-wide pt-32 pb-20 animate-pulse">
       <div className="h-[40vh] min-h-[260px] bg-[var(--surface-charcoal)] mb-10" />
       <div className="max-w-3xl mx-auto flex flex-col gap-4">
-        <div className="h-3 w-32 bg-white/10" />
-        <div className="h-10 w-full bg-white/10" />
-        <div className="h-5 w-[80%] bg-white/5" />
-        <div className="h-5 w-[60%] bg-white/5" />
+        <div className="h-3 w-32 bg-[var(--surface-graphite)]" />
+        <div className="h-10 w-full bg-[var(--surface-graphite)]" />
+        <div className="h-5 w-[80%] bg-[var(--surface-graphite)]" />
+        <div className="h-5 w-[60%] bg-[var(--surface-graphite)]" />
       </div>
     </div>
   );
@@ -81,7 +81,7 @@ function BlogError() {
         <FiAlertCircle size={24} className="text-[var(--gold-500)]" />
       </div>
       <h1 className="font-serif text-3xl mb-3">Article unavailable</h1>
-      <p className="text-white/55 mb-8 leading-relaxed">
+      <p className="text-[var(--ink-faint)] mb-8 leading-relaxed">
         The article may have moved or been removed. Browse the journal for the
         latest writing.
       </p>

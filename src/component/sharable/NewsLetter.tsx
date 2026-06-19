@@ -175,9 +175,9 @@ export const NewsLetter = () => {
                       borderColor: !touched
                         ? "rgba(255,255,255,0.3)"
                         : email && isValidEmail
-                          ? "#10b981"
+                          ? "#2e7d32"
                           : email && !isValidEmail
-                            ? "#ef4444"
+                            ? "#b3261e"
                             : "rgba(255,255,255,0.3)",
                       paddingRight: email ? "40px" : "12px",
                       transition: "all 0.3s ease",
@@ -201,13 +201,13 @@ export const NewsLetter = () => {
                       {isValidEmail ? (
                         <IoCheckmarkCircle
                           size={20}
-                          color="#10b981"
+                          color="#2e7d32"
                           title="Email is valid"
                         />
                       ) : (
                         <IoAlertCircle
                           size={20}
-                          color="#ef4444"
+                          color="#b3261e"
                           title="Invalid email"
                         />
                       )}

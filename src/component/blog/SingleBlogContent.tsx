@@ -17,7 +17,7 @@ export const SingleBlogContent = ({ blog }: Props) => {
               dangerouslySetInnerHTML={{ __html: blog.content }}
             />
           ) : (
-            <p className="text-white/55 text-center py-10">
+            <p className="text-[var(--ink-faint)] text-center py-10">
               No content available.
             </p>
           )}
@@ -26,7 +26,7 @@ export const SingleBlogContent = ({ blog }: Props) => {
 
       <style jsx global>{`
         .single-blog-prose {
-          color: rgba(255, 255, 255, 0.78);
+          color: var(--ink-soft);
           font-size: 17px;
           line-height: 1.8;
           font-family: var(--font-lato), sans-serif;
@@ -35,7 +35,7 @@ export const SingleBlogContent = ({ blog }: Props) => {
         .single-blog-prose h2,
         .single-blog-prose h3,
         .single-blog-prose h4 {
-          color: #fff;
+          color: var(--ink);
           font-family: var(--font-playfair), Georgia, serif;
           font-weight: 400;
           letter-spacing: -0.01em;
@@ -59,14 +59,14 @@ export const SingleBlogContent = ({ blog }: Props) => {
           margin-bottom: 1.4em;
         }
         .single-blog-prose a {
-          color: var(--gold-500);
+          color: var(--accent-text);
           text-decoration: underline;
           text-underline-offset: 4px;
           text-decoration-thickness: 1px;
           transition: color 0.2s ease;
         }
         .single-blog-prose a:hover {
-          color: #fff;
+          color: var(--ink);
         }
         .single-blog-prose ul,
         .single-blog-prose ol {
@@ -83,7 +83,7 @@ export const SingleBlogContent = ({ blog }: Props) => {
           border-left: 2px solid var(--gold-500);
           padding-left: 1.5em;
           margin: 2em 0;
-          color: rgba(255, 255, 255, 0.85);
+          color: var(--ink);
           font-family: var(--font-playfair), Georgia, serif;
           font-style: italic;
           font-size: 1.25em;
@@ -115,7 +115,7 @@ export const SingleBlogContent = ({ blog }: Props) => {
           margin: 2.5em 0;
         }
         .single-blog-prose strong {
-          color: #fff;
+          color: var(--ink);
           font-weight: 600;
         }
         .single-blog-prose em {

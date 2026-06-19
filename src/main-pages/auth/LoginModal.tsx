@@ -115,7 +115,7 @@ export default function LoginModal({
           <button
             type="button"
             onClick={() => onOpenRegistration?.()}
-            className="text-[var(--gold-500)] hover:text-white transition-colors font-semibold"
+            className="text-[var(--accent-text)] hover:text-[var(--ink)] transition-colors font-semibold"
           >
             Create an account
           </button>
@@ -142,14 +142,14 @@ export default function LoginModal({
           <div className="flex items-center justify-between">
             <label
               htmlFor="modal-password"
-              className="text-[10px] uppercase tracking-[0.22em] text-white/55"
+              className="text-[10px] uppercase tracking-[0.22em] text-[var(--ink-faint)]"
             >
               Password
             </label>
             <button
               type="button"
               onClick={() => onOpenForgotPassword?.()}
-              className="text-[10px] uppercase tracking-[0.2em] text-[var(--gold-500)] hover:text-white transition-colors"
+              className="text-[10px] uppercase tracking-[0.2em] text-[var(--accent-text)] hover:text-[var(--ink)] transition-colors"
             >
               Forgot?
             </button>
@@ -164,12 +164,12 @@ export default function LoginModal({
               placeholder="••••••••"
               required
               autoComplete="current-password"
-              className="w-full bg-[var(--surface-charcoal)] border border-[var(--line-soft)] focus:border-[var(--gold-500)]/60 px-4 pr-11 h-12 text-[14px] text-white placeholder:text-white/40 outline-none transition-colors"
+              className="w-full bg-[var(--surface-charcoal)] border border-[var(--line-soft)] focus:border-[var(--gold-500)]/60 px-4 pr-11 h-12 text-[14px] text-[var(--ink)] placeholder:text-[var(--ink-faint)] outline-none transition-colors"
             />
             <button
               type="button"
               onClick={() => setShowPassword((s) => !s)}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-white/55 hover:text-[var(--gold-500)] transition-colors"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--ink-faint)] hover:text-[var(--accent-text)] transition-colors"
               aria-label={showPassword ? "Hide password" : "Show password"}
             >
               {showPassword ? <IoEyeOffOutline size={18} /> : <IoEyeOutline size={18} />}

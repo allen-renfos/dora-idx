@@ -96,7 +96,7 @@ export default function RegistrationPage() {
         newestOnTop
         closeOnClick
         pauseOnHover
-        theme="dark"
+        theme="light"
       />
       <AuthShell
         eyebrow="Create Account"
@@ -107,7 +107,7 @@ export default function RegistrationPage() {
             Already have an account?{" "}
             <Link
               href="/login"
-              className="text-[var(--gold-500)] hover:text-white transition-colors font-semibold"
+              className="text-[var(--accent-text)] hover:text-[var(--ink)] transition-colors font-semibold"
             >
               Sign in
             </Link>

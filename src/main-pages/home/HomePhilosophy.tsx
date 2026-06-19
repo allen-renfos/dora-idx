@@ -5,7 +5,7 @@ import { Reveal } from "@/component/ui/Reveal";
 
 export default function HomePhilosophy() {
   return (
-    <section className="relative bg-[var(--surface-ink)] text-white overflow-hidden">
+    <section className="relative bg-[var(--surface-ink)] text-[var(--ink)] overflow-hidden">
       <div className="grid grid-cols-1 lg:grid-cols-12 lg:min-h-[640px]">
         {/* Image side */}
         <div className="relative lg:col-span-7 aspect-[5/4] lg:aspect-auto">
@@ -34,19 +34,19 @@ export default function HomePhilosophy() {
           {/* Decorative oversized mark */}
           <span
             aria-hidden
-            className="absolute top-6 right-6 md:top-10 md:right-10 font-serif text-[180px] leading-none text-white/[0.04] select-none pointer-events-none"
+            className="absolute top-6 right-6 md:top-10 md:right-10 font-serif text-[180px] leading-none text-black/[0.05] select-none pointer-events-none"
           >
             &mdash;
           </span>
 
           <Reveal y={32}>
             <div className="relative max-w-xl flex flex-col gap-7">
-              <span className="eyebrow inline-flex items-center gap-3 text-white/70">
-                <span className="inline-block h-px w-10 bg-[var(--gold-500)]" />
+              <span className="eyebrow inline-flex items-center gap-3">
+                <span className="inline-block h-px w-10 bg-[var(--accent)]" />
                 Our Philosophy
               </span>
 
-              <h2 className="font-serif text-[clamp(2rem,3vw+1rem,3.25rem)] leading-[1.15] text-white">
+              <h2 className="font-serif text-[clamp(2rem,3vw+1rem,3.25rem)] leading-[1.15] text-[var(--ink)]">
                 A great house is{" "}
                 <span className="italic text-[var(--gold-500)] font-normal">
                   built
@@ -60,15 +60,15 @@ export default function HomePhilosophy() {
                 .
               </h2>
 
-              <p className="text-[15px] md:text-[16px] leading-[1.7] text-white/70 max-w-md">
+              <p className="text-[15px] md:text-[16px] leading-[1.7] text-[var(--ink-soft)] max-w-md">
                 Every search begins with a question — not where, but how. How
                 you live. How you host. How you rest. We listen first, and the
                 address follows.
               </p>
 
               <div className="flex items-center gap-4 pt-2">
-                <span className="inline-block h-px w-12 bg-[var(--gold-500)]/60" />
-                <span className="text-[10px] uppercase tracking-[0.28em] text-white/55">
+                <span className="inline-block h-px w-12 bg-[var(--accent)]/60" />
+                <span className="text-[10px] uppercase tracking-[0.28em] text-[var(--ink-faint)]">
                   The Curator&rsquo;s Note
                 </span>
               </div>

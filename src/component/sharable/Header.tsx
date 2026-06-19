@@ -62,6 +62,12 @@ export const Header = ({ activeHeader }: HeaderProps = {}) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
 
+  // The transparent, white-text header is only legible over the full-bleed dark
+  // hero on the home page. On every other (white) route — and once scrolled —
+  // the header uses the solid white surface with ink text.
+  const isHeroRoute = pathname === "/" || pathname.startsWith("/home");
+  const solid = isScrolled || !isHeroRoute;
+
   useEffect(() => {
     const token = sessionStorage.getItem("access_token");
     setIsUserDashboard(!!token);
@@ -159,7 +165,7 @@ export const Header = ({ activeHeader }: HeaderProps = {}) => {
 
       <header
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
-          isScrolled
+          solid
             ? "bg-[var(--surface-ink)]/92 backdrop-blur-xl border-b border-[var(--line-soft)]"
             : "bg-transparent border-b border-transparent"
         }`}
@@ -187,7 +193,11 @@ export const Header = ({ activeHeader }: HeaderProps = {}) => {
                 />
               </div>
             ) : (
-              <span className="font-serif text-white text-2xl tracking-tight">
+              <span
+                className={`font-serif text-2xl tracking-tight ${
+                  solid ? "text-[var(--ink)]" : "text-white"
+                }`}
+              >
                 {name || "RealtiPro"}
               </span>
             )}
@@ -203,8 +213,12 @@ export const Header = ({ activeHeader }: HeaderProps = {}) => {
                   href={item.path}
                   className={`relative px-4 py-2 text-[13px] font-medium tracking-[0.08em] uppercase transition-colors duration-300 ${
                     active
-                      ? "text-[var(--gold-500)]"
-                      : "text-white/85 hover:text-[var(--gold-500)]"
+                      ? solid
+                        ? "text-[var(--accent-text)]"
+                        : "text-[var(--gold-300)]"
+                      : solid
+                      ? "text-[var(--ink-soft)] hover:text-[var(--accent-text)]"
+                      : "text-white/85 hover:text-white"
                   }`}
                 >
                   {item.label}
@@ -225,7 +239,11 @@ export const Header = ({ activeHeader }: HeaderProps = {}) => {
               <>
                 <Link
                   href="/collection/favourites"
-                  className="hidden md:inline-flex items-center gap-2 px-4 py-2 text-[12px] font-semibold tracking-[0.14em] uppercase text-white/85 hover:text-[var(--gold-500)] transition"
+                  className={`hidden md:inline-flex items-center gap-2 px-4 py-2 text-[12px] font-semibold tracking-[0.14em] uppercase transition ${
+                    solid
+                      ? "text-[var(--ink-soft)] hover:text-[var(--accent-text)]"
+                      : "text-white/85 hover:text-white"
+                  }`}
                   aria-label="Dashboard"
                 >
                   <FiUser size={16} />
@@ -234,7 +252,7 @@ export const Header = ({ activeHeader }: HeaderProps = {}) => {
                 <div className="hidden md:block">
                   <button
                     onClick={handleLogout}
-                    className="btn-outline-new"
+                    className={`btn-outline-new ${solid ? "" : "on-dark"}`}
                     aria-label="Sign out"
                   >
                     Sign Out
@@ -246,7 +264,11 @@ export const Header = ({ activeHeader }: HeaderProps = {}) => {
                 {/* Sign In only in sidebar for mobile */}
                 <button
                   onClick={handleDashboard}
-                  className="hidden md:inline-flex items-center gap-2 px-4 py-2 text-[12px] font-semibold tracking-[0.14em] uppercase text-white/85 hover:text-white transition"
+                  className={`hidden md:inline-flex items-center gap-2 px-4 py-2 text-[12px] font-semibold tracking-[0.14em] uppercase transition ${
+                    solid
+                      ? "text-[var(--ink-soft)] hover:text-[var(--accent-text)]"
+                      : "text-white/85 hover:text-white"
+                  }`}
                   aria-label="Sign in"
                 >
                   <FiUser size={16} />
@@ -257,7 +279,9 @@ export const Header = ({ activeHeader }: HeaderProps = {}) => {
             )}
             <button
               onClick={() => setIsMobileMenuOpen(true)}
-              className="lg:hidden inline-flex items-center justify-center w-11 h-11 text-white"
+              className={`lg:hidden inline-flex items-center justify-center w-11 h-11 ${
+                solid ? "text-[var(--ink)]" : "text-white"
+              }`}
               aria-label="Open menu"
             >
               <FiMenu size={22} />
@@ -299,14 +323,14 @@ export const Header = ({ activeHeader }: HeaderProps = {}) => {
                       style={{ objectFit: "contain", height: 38, width: "auto" }}
                     />
                   ) : (
-                    <span className="font-serif text-white text-xl">
+                    <span className="font-serif text-[var(--ink)] text-xl">
                       {name || "RealtiPro"}
                     </span>
                   )}
                 </Link>
                 <button
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className="w-10 h-10 flex items-center justify-center text-white/90"
+                  className="w-10 h-10 flex items-center justify-center text-[var(--ink-soft)] hover:text-[var(--ink)]"
                   aria-label="Close menu"
                 >
                   <FiX size={22} />
@@ -332,7 +356,7 @@ export const Header = ({ activeHeader }: HeaderProps = {}) => {
                           href={item.path}
                           onClick={() => setIsMobileMenuOpen(false)}
                           className={`group flex items-center justify-between py-4 border-b border-[var(--line-soft)] transition ${
-                            active ? "text-[var(--gold-500)]" : "text-white"
+                            active ? "text-[var(--accent-text)]" : "text-[var(--ink)]"
                           }`}
                         >
                           <span className="font-serif text-2xl tracking-tight">

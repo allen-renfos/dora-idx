@@ -46,8 +46,8 @@ export default function ProtectedRoute({ children }: { children: React.ReactNode
 
   return (
     <>
-      {/* Full-screen dark backdrop so the page behind doesn't show */}
-      <div className="fixed inset-0 z-[9990] bg-[var(--surface-ink)]" />
+      {/* Full-screen backdrop so the page behind doesn't show */}
+      <div className="fixed inset-0 z-[9990] bg-[var(--surface)]" />
       <LoginModal
         isOpen={activeModal === "login"}
         isHeader={false}

@@ -3,7 +3,7 @@ import MlsSerchHomePage from "@/main-pages/mlssearch/MlsSearchHomePage";
 
 const MLSSearchPage = () => {
   return (
-    <main className="bg-[var(--surface-ink)] text-white">
+    <main className="bg-[var(--surface-ink)] text-[var(--ink)]">
         {/* Page banner */}
         <section className="relative isolate pt-32 pb-10 md:pt-40 md:pb-14 overflow-hidden">
           <div
@@ -21,7 +21,7 @@ const MLSSearchPage = () => {
                 <span className="inline-block h-px w-10 bg-[var(--gold-500)]" />
                 Listings
               </span>
-              <h1 className="display-lg text-white">
+              <h1 className="display-lg text-[var(--ink)]">
                 Every home tells a story.
                 <br />
                 <span className="italic text-[var(--gold-500)] font-normal">
@@ -47,7 +47,7 @@ const MLSSearchPage = () => {
 function ListingsLoader() {
   return (
     <div className="container-wide py-20 flex items-center justify-center">
-      <div className="flex items-center gap-3 text-white/55 text-sm tracking-[0.2em] uppercase">
+      <div className="flex items-center gap-3 text-[var(--ink-faint)] text-sm tracking-[0.2em] uppercase">
         <svg
           className="animate-spin"
           width="16"

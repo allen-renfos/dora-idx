@@ -68,11 +68,11 @@ export default function BlogList({ searchQuery = "" }: Props) {
             key={i}
             className="bg-[var(--surface-obsidian)] border border-[var(--line-soft)] animate-pulse"
           >
-            <div className="aspect-[16/10] bg-white/5" />
+            <div className="aspect-[16/10] bg-[var(--surface-graphite)]" />
             <div className="p-6 flex flex-col gap-3">
-              <div className="h-3 w-24 bg-white/10" />
-              <div className="h-5 w-full bg-white/10" />
-              <div className="h-5 w-[70%] bg-white/10" />
+              <div className="h-3 w-24 bg-[var(--surface-graphite)]" />
+              <div className="h-5 w-full bg-[var(--surface-graphite)]" />
+              <div className="h-5 w-[70%] bg-[var(--surface-graphite)]" />
             </div>
           </div>
         ))}
@@ -81,12 +81,12 @@ export default function BlogList({ searchQuery = "" }: Props) {
   }
 
   if (error) {
-    return <div className="text-white/55">Error loading articles.</div>;
+    return <div className="text-[var(--ink-faint)]">Error loading articles.</div>;
   }
 
   if (!filtered.length) {
     return (
-      <div className="py-20 border border-dashed border-white/10 text-center text-white/55">
+      <div className="py-20 border border-dashed border-[var(--line)] text-center text-[var(--ink-faint)]">
         No articles found.
       </div>
     );
@@ -126,7 +126,7 @@ export default function BlogList({ searchQuery = "" }: Props) {
           <button
             onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
             disabled={currentPage === 1}
-            className="w-10 h-10 inline-flex items-center justify-center border border-[var(--line-soft)] text-white/80 hover:text-[var(--gold-500)] hover:border-[var(--gold-500)]/60 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+            className="w-10 h-10 inline-flex items-center justify-center border border-[var(--line-soft)] text-[var(--ink-soft)] hover:text-[var(--accent-text)] hover:border-[var(--gold-500)]/60 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
             aria-label="Previous page"
           >
             <FiChevronLeft size={16} />
@@ -135,7 +135,7 @@ export default function BlogList({ searchQuery = "" }: Props) {
             p === "…" ? (
               <span
                 key={`el-${i}`}
-                className="w-10 h-10 inline-flex items-center justify-center text-white/35"
+                className="w-10 h-10 inline-flex items-center justify-center text-[var(--ink-faint)]"
               >
                 …
               </span>
@@ -145,8 +145,8 @@ export default function BlogList({ searchQuery = "" }: Props) {
                 onClick={() => setCurrentPage(p)}
                 className={`w-10 h-10 inline-flex items-center justify-center text-[13px] border transition-colors ${
                   p === currentPage
-                    ? "bg-[var(--gold-500)] text-[var(--surface-ink)] border-[var(--gold-500)] font-bold"
-                    : "border-[var(--line-soft)] text-white/80 hover:text-[var(--gold-500)] hover:border-[var(--gold-500)]/60"
+                    ? "bg-[var(--ink)] text-white border-[var(--ink)] font-bold"
+                    : "border-[var(--line-soft)] text-[var(--ink-soft)] hover:text-[var(--accent-text)] hover:border-[var(--gold-500)]/60"
                 }`}
               >
                 {p}
@@ -158,7 +158,7 @@ export default function BlogList({ searchQuery = "" }: Props) {
               setCurrentPage((p) => Math.min(totalPages, p + 1))
             }
             disabled={currentPage === totalPages}
-            className="w-10 h-10 inline-flex items-center justify-center border border-[var(--line-soft)] text-white/80 hover:text-[var(--gold-500)] hover:border-[var(--gold-500)]/60 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+            className="w-10 h-10 inline-flex items-center justify-center border border-[var(--line-soft)] text-[var(--ink-soft)] hover:text-[var(--accent-text)] hover:border-[var(--gold-500)]/60 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
             aria-label="Next page"
           >
             <FiChevronRight size={16} />
@@ -173,7 +173,7 @@ function BlogCard({ item }: { item: any }) {
   return (
     <Link
       href={`/blog/${item.slug}`}
-      className="group flex flex-col h-full bg-[var(--surface-obsidian)] border border-[var(--line-soft)] hover:border-[var(--gold-500)]/60 transition-colors duration-500"
+      className="group flex flex-col h-full bg-[var(--surface)] border border-[var(--line)] hover:border-[var(--accent)]/60 hover:shadow-[var(--shadow-soft)] transition-all duration-500"
     >
       <div className="relative aspect-[16/10] overflow-hidden bg-[var(--surface-charcoal)]">
         <Image
@@ -186,24 +186,24 @@ function BlogCard({ item }: { item: any }) {
         <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent pointer-events-none" />
       </div>
       <div className="flex flex-col gap-3 p-6 flex-1">
-        <div className="flex items-center gap-3 text-[11px] uppercase tracking-[0.2em] text-white/45">
+        <div className="flex items-center gap-3 text-[11px] uppercase tracking-[0.2em] text-[var(--ink-faint)]">
           {item.publishDate && <time>{dateToString(item.publishDate)}</time>}
           {item.publishDate && (
             <span className="inline-block w-6 h-px bg-[var(--gold-500)]/60" />
           )}
-          <span className="text-[var(--gold-500)]">
+          <span className="text-[var(--accent-text)]">
             {item.category || "Insight"}
           </span>
         </div>
-        <h3 className="font-serif text-[1.35rem] md:text-[1.55rem] leading-[1.25] text-white group-hover:text-[var(--gold-500)] transition-colors">
+        <h3 className="font-serif text-[1.35rem] md:text-[1.55rem] leading-[1.25] text-[var(--ink)] group-hover:text-[var(--accent-text)] transition-colors">
           {item.title}
         </h3>
         {item.subtitle && (
-          <p className="text-[14px] text-white/65 line-clamp-2">
+          <p className="text-[14px] text-[var(--ink-soft)] line-clamp-2">
             {item.subtitle}
           </p>
         )}
-        <span className="mt-auto inline-flex items-center gap-2 text-[12px] uppercase tracking-[0.2em] text-white/60 group-hover:text-[var(--gold-500)] transition-colors">
+        <span className="mt-auto inline-flex items-center gap-2 text-[12px] uppercase tracking-[0.2em] text-[var(--ink-faint)] group-hover:text-[var(--accent-text)] transition-colors">
           Read
           <FiArrowRight
             size={14}

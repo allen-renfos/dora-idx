@@ -101,12 +101,12 @@ const NeighborhoodList = ({ searchQuery = "" }: Props) => {
           <div className="w-16 h-16 rounded-full border border-[var(--gold-500)]/30 bg-[var(--gold-500)]/5 flex items-center justify-center mb-6">
             <FiSearch size={22} className="text-[var(--gold-500)]" />
           </div>
-          <h3 className="font-serif text-3xl text-white mb-3">
+          <h3 className="font-serif text-3xl text-[var(--ink)] mb-3">
             {neighborhood.length && searchQuery
               ? "No neighborhoods match that search"
               : "Neighborhoods are on the way"}
           </h3>
-          <p className="text-white/55 leading-relaxed">
+          <p className="text-[var(--ink-soft)] leading-relaxed">
             Try a different name, city, or county — or check back shortly as
             our list grows.
           </p>

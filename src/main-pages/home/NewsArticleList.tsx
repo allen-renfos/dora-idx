@@ -140,14 +140,14 @@ const NewsArticleList = ({ currentPage, onPageChange, totalPages, setTotalPages 
                             onClick={handlePrevNews}
                             disabled={!canScrollLeft}
                         >
-                            <IoIosArrowRoundBack color={canScrollLeft ? "white" : "#EDB75E"} size={40} />
+                            <IoIosArrowRoundBack color={canScrollLeft ? "white" : "#a6824c"} size={40} />
                         </button>
                         <button
                             className={`nav-arrow ${canScrollRight ? 'nav-arrow-bgbutton' : ''}`}
                             onClick={handleNextNews}
                             disabled={!canScrollRight}
                         >
-                            <IoIosArrowRoundForward color={canScrollRight ? "white" : "#EDB75E"} size={40} />
+                            <IoIosArrowRoundForward color={canScrollRight ? "white" : "#a6824c"} size={40} />
                         </button>
                     </div>
                 )}

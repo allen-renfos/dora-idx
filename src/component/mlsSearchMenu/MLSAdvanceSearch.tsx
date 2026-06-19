@@ -104,7 +104,7 @@ function SectionTitle({ children }: { children: React.ReactNode }) {
 }
 
 function Divider() {
-  return <div className="my-7 h-px bg-white/8" />;
+  return <div className="my-7 h-px bg-[var(--line)]" />;
 }
 
 function Select({
@@ -120,7 +120,7 @@ function Select({
     <select
       value={value}
       onChange={onChange}
-      className="h-10 px-3 bg-[var(--surface-charcoal)] border border-[var(--line-soft)] text-[13px] text-white focus:outline-none focus:border-[var(--gold-500)]/60 transition-colors"
+      className="h-10 px-3 bg-[var(--surface-charcoal)] border border-[var(--line-soft)] text-[13px] text-[var(--ink)] focus:outline-none focus:border-[var(--gold-500)]/60 transition-colors"
     >
       {children}
     </select>
@@ -145,7 +145,7 @@ function RangeSelect({
   const maxOpts = filterMaxOpts(opts, minVal);
   return (
     <div className="flex flex-col gap-2">
-      <label className="text-[10px] uppercase tracking-[0.22em] text-white/55">{label}</label>
+      <label className="text-[10px] uppercase tracking-[0.22em] text-[var(--ink-faint)]">{label}</label>
       <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-2">
         <Select value={minVal} onChange={e => onMinChange(e.target.value)}>
           <option value="">No Min</option>
@@ -153,7 +153,7 @@ function RangeSelect({
             <option key={o.value} value={o.value}>{o.label}</option>
           ))}
         </Select>
-        <span className="text-white/40 text-sm">—</span>
+        <span className="text-[var(--ink-faint)] text-sm">—</span>
         <Select value={maxVal} onChange={e => onMaxChange(e.target.value)}>
           <option value="">No Max</option>
           {maxOpts.map(o => (
@@ -185,8 +185,8 @@ function TagGroup({
             onClick={() => onToggle(item)}
             className={`inline-flex items-center gap-1.5 h-9 px-3.5 text-[12px] tracking-wide border transition-all duration-200 ${
               active
-                ? "bg-[var(--gold-500)]/15 border-[var(--gold-500)] text-[var(--gold-500)]"
-                : "bg-[var(--surface-charcoal)] border-[var(--line-soft)] text-white/80 hover:border-[var(--gold-500)]/50 hover:text-white"
+                ? "bg-[var(--gold-500)]/15 border-[var(--gold-500)] text-[var(--accent-text)]"
+                : "bg-[var(--surface-charcoal)] border-[var(--line-soft)] text-[var(--ink-soft)] hover:border-[var(--gold-500)]/50 hover:text-[var(--ink)]"
             }`}
           >
             {active && <span className="inline-block w-1.5 h-1.5 rounded-full bg-[var(--gold-500)]" />}
@@ -216,9 +216,9 @@ function Accordion({
       <button
         type="button"
         onClick={onToggle}
-        className="w-full flex items-center justify-between py-3.5 px-4 text-left hover:bg-white/[0.02] transition-colors"
+        className="w-full flex items-center justify-between py-3.5 px-4 text-left hover:bg-black/[0.02] transition-colors"
       >
-        <span className="inline-flex items-center gap-3 text-[14px] font-medium text-white">
+        <span className="inline-flex items-center gap-3 text-[14px] font-medium text-[var(--ink)]">
           {label}
           {count > 0 && (
             <span className="inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 bg-[var(--gold-500)] text-[var(--surface-ink)] text-[10px] font-bold rounded-full">
@@ -226,7 +226,7 @@ function Accordion({
             </span>
           )}
         </span>
-        {open ? <FiChevronUp size={16} className="text-white/60" /> : <FiChevronDown size={16} className="text-white/60" />}
+        {open ? <FiChevronUp size={16} className="text-[var(--ink-faint)]" /> : <FiChevronDown size={16} className="text-[var(--ink-faint)]" />}
       </button>
       <AnimatePresence initial={false}>
         {open && (
@@ -364,7 +364,7 @@ const MLSAdvanceSearch = ({
             <div className="flex items-center justify-between px-6 md:px-8 py-5 border-b border-[var(--line-soft)] bg-[var(--surface-obsidian)]">
               <div className="flex items-center gap-3">
                 <FiSliders size={18} className="text-[var(--gold-500)]" />
-                <h2 className="font-serif text-xl text-white">Advanced Filters</h2>
+                <h2 className="font-serif text-xl text-[var(--ink)]">Advanced Filters</h2>
                 {totalActive > 0 && (
                   <span className="inline-flex items-center justify-center min-w-[22px] h-6 px-2 bg-[var(--gold-500)] text-[var(--surface-ink)] text-[11px] font-bold rounded-full">
                     {totalActive}
@@ -373,7 +373,7 @@ const MLSAdvanceSearch = ({
               </div>
               <button
                 onClick={onClose}
-                className="w-10 h-10 flex items-center justify-center text-white/75 hover:text-white transition-colors"
+                className="w-10 h-10 flex items-center justify-center text-[var(--ink-soft)] hover:text-[var(--ink)] transition-colors"
                 aria-label="Close"
               >
                 <FiX size={20} />
@@ -462,7 +462,7 @@ const MLSAdvanceSearch = ({
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mt-5">
                 <div className="flex flex-col gap-2">
-                  <label className="text-[10px] uppercase tracking-[0.22em] text-white/55">Stories</label>
+                  <label className="text-[10px] uppercase tracking-[0.22em] text-[var(--ink-faint)]">Stories</label>
                   <Select
                     value={stories}
                     onChange={e => { setStories(e.target.value); handleSearch(e.target.value, "stories"); }}
@@ -472,7 +472,7 @@ const MLSAdvanceSearch = ({
                   </Select>
                 </div>
                 <div className="flex flex-col gap-2">
-                  <label className="text-[10px] uppercase tracking-[0.22em] text-white/55">Basement</label>
+                  <label className="text-[10px] uppercase tracking-[0.22em] text-[var(--ink-faint)]">Basement</label>
                   <Select
                     value={basement}
                     onChange={e => { setBasement(e.target.value); handleSearch(e.target.value, "mls_basement"); }}
@@ -482,7 +482,7 @@ const MLSAdvanceSearch = ({
                   </Select>
                 </div>
                 <div className="flex flex-col gap-2">
-                  <label className="text-[10px] uppercase tracking-[0.22em] text-white/55">Sewer</label>
+                  <label className="text-[10px] uppercase tracking-[0.22em] text-[var(--ink-faint)]">Sewer</label>
                   <Select
                     value={sewer}
                     onChange={e => { setSewer(e.target.value); handleSearch(e.target.value, "mls_sewer"); }}
@@ -597,7 +597,7 @@ const MLSAdvanceSearch = ({
               <button
                 type="button"
                 onClick={handleClear}
-                className="text-[12px] font-semibold tracking-[0.18em] uppercase text-white/70 hover:text-[var(--gold-500)] transition-colors"
+                className="text-[12px] font-semibold tracking-[0.18em] uppercase text-[var(--ink-soft)] hover:text-[var(--accent-text)] transition-colors"
               >
                 Clear all
               </button>

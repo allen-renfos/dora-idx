@@ -92,7 +92,7 @@ export default function ForgotPasswordReset({ token }: ForgotPasswordResetProps)
           Remembered it?{" "}
           <Link
             href="/login"
-            className="text-[var(--gold-500)] hover:text-white transition-colors font-semibold"
+            className="text-[var(--accent-text)] hover:text-[var(--ink)] transition-colors font-semibold"
           >
             Back to sign in
           </Link>

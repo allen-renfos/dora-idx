@@ -33,7 +33,7 @@ export default function HomeAdvisor() {
   const portrait = profile_image || "/images/ashu_flipped.png";
 
   return (
-    <section className="bg-[var(--surface-ink)] text-white relative overflow-hidden section-pad">
+    <section className="bg-[var(--surface-ink)] text-[var(--ink)] relative overflow-hidden section-pad">
       <div className="container-wide">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 items-center">
           {/* Portrait */}
@@ -45,9 +45,9 @@ export default function HomeAdvisor() {
                   aria-hidden
                   className="absolute -inset-3 border border-[var(--gold-500)]/40 translate-x-4 translate-y-4"
                 />
-                <div className="absolute inset-0 bg-[var(--surface-obsidian)] overflow-hidden">
+                <div className="absolute inset-0 bg-[var(--surface-graphite)] overflow-hidden">
                   {!imgLoaded && (
-                    <div className="absolute inset-0 bg-gradient-to-br from-[#14171d] to-[#08090b] animate-pulse" />
+                    <div className="absolute inset-0 bg-gradient-to-br from-[#f2efea] to-[#e7e4de] animate-pulse" />
                   )}
                   <Image
                     src={portrait}
@@ -76,7 +76,7 @@ export default function HomeAdvisor() {
                 <span className="inline-block h-px w-10 bg-[var(--gold-500)]" />
                 Trusted Global Advisor
               </span>
-              <h2 className="display-lg text-white max-w-xl">
+              <h2 className="display-lg text-[var(--ink)] max-w-xl">
                 Guiding generational moves with{" "}
                 <span className="italic text-[var(--gold-500)]">
                   clarity &amp; conviction
@@ -107,11 +107,11 @@ export default function HomeAdvisor() {
                     hidden: { opacity: 0, y: 24 },
                     visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] } },
                   }}
-                  className="flex flex-col gap-3 border-t border-white/10 pt-5"
+                  className="flex flex-col gap-3 border-t border-[var(--line)] pt-5"
                 >
-                  <span className="font-serif text-[var(--gold-500)] text-lg">{p.n}</span>
-                  <h3 className="font-serif text-xl text-white leading-tight">{p.title}</h3>
-                  <p className="text-[14px] text-white/60 leading-relaxed">{p.body}</p>
+                  <span className="font-serif text-[var(--accent)] text-lg">{p.n}</span>
+                  <h3 className="font-serif text-xl text-[var(--ink)] leading-tight">{p.title}</h3>
+                  <p className="text-[14px] text-[var(--ink-soft)] leading-relaxed">{p.body}</p>
                 </motion.div>
               ))}
             </motion.div>

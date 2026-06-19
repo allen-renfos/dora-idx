@@ -138,7 +138,7 @@ export const EnquiryModal = ({ isOpen, onClose }: Props) => {
       size="lg"
     >
       {success && (
-        <div className="mb-5 px-4 py-3 border bg-[var(--gold-500)]/10 border-[var(--gold-500)]/40 text-[var(--gold-500)] text-[13px] inline-flex items-center gap-2">
+        <div className="mb-5 px-4 py-3 border bg-[var(--gold-500)]/10 border-[var(--gold-500)]/40 text-[var(--accent-text)] text-[13px] inline-flex items-center gap-2">
           <FiCheckCircle size={14} />
           {success}
         </div>
@@ -191,7 +191,7 @@ export const EnquiryModal = ({ isOpen, onClose }: Props) => {
         <div className="flex flex-col gap-2">
           <label
             htmlFor="enq-description"
-            className="text-[10px] uppercase tracking-[0.22em] text-white/55"
+            className="text-[10px] uppercase tracking-[0.22em] text-[var(--ink-faint)]"
           >
             Message
           </label>
@@ -202,14 +202,14 @@ export const EnquiryModal = ({ isOpen, onClose }: Props) => {
             onChange={onChange}
             rows={4}
             placeholder="What can we help you with?"
-            className={`bg-[var(--surface-charcoal)] border px-4 py-3 text-[14px] text-white placeholder:text-white/40 outline-none transition-colors resize-y min-h-[110px] ${
+            className={`bg-[var(--surface-charcoal)] border px-4 py-3 text-[14px] text-[var(--ink)] placeholder:text-[var(--ink-faint)] outline-none transition-colors resize-y min-h-[110px] ${
               errors.description
-                ? "border-red-500/60"
+                ? "border-[#b3261e]/60"
                 : "border-[var(--line-soft)] focus:border-[var(--gold-500)]/60"
             }`}
           />
           {errors.description && (
-            <span className="text-[12px] text-red-400">
+            <span className="text-[12px] text-[#b3261e]">
               {errors.description}
             </span>
           )}
@@ -228,7 +228,7 @@ export const EnquiryModal = ({ isOpen, onClose }: Props) => {
           <button
             type="button"
             onClick={onClose}
-            className="text-[12px] uppercase tracking-[0.18em] text-white/65 hover:text-white transition-colors"
+            className="text-[12px] uppercase tracking-[0.18em] text-[var(--ink-soft)] hover:text-[var(--ink)] transition-colors"
           >
             Cancel
           </button>

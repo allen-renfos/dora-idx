@@ -37,8 +37,8 @@ export const PropertyCard = ({ item, handleModal, hideWishlist }: PropertyCardPr
       setIsFavorited(true);
       setIsAddingToFavorites(false);
       toast.success("Added to favorites", {
-        style: { background: "#14171d", color: "#fff", border: "1px solid #edb75e" },
-        iconTheme: { primary: "#edb75e", secondary: "#0b0c0f" },
+        style: { background: "#ffffff", color: "#1a1a1a", border: "1px solid #a6824c" },
+        iconTheme: { primary: "#a6824c", secondary: "#ffffff" },
       });
       queryClient.invalidateQueries({ queryKey: ["userWishlistInfo"] });
       queryClient.invalidateQueries({ queryKey: ["mlsProperties"] });
@@ -72,19 +72,19 @@ export const PropertyCard = ({ item, handleModal, hideWishlist }: PropertyCardPr
   return (
     <article
       onClick={handleCardClick}
-      className="group relative flex flex-col h-full cursor-pointer bg-[var(--surface-obsidian)] border border-[var(--line-soft)] hover:border-[var(--gold-500)]/60 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]"
+      className="group relative flex flex-col h-full cursor-pointer bg-[var(--surface)] border border-[var(--line)] hover:border-[var(--accent)]/60 hover:shadow-[var(--shadow-soft)] transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]"
       style={{ borderRadius: "var(--radius-sm)" }}
     >
       {/* Image */}
       <div className="relative overflow-hidden aspect-[4/3] bg-[var(--surface-charcoal)]">
         {!item.cover_photo || imgError ? (
-          <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-gradient-to-br from-[#14171d] to-[#08090b]">
+          <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-gradient-to-br from-[var(--surface-graphite)] to-[var(--surface-charcoal)]">
             <svg
               width="42"
               height="42"
               viewBox="0 0 24 24"
               fill="none"
-              stroke="var(--gold-500)"
+              stroke="var(--accent)"
               strokeWidth="1.2"
               strokeLinecap="round"
               strokeLinejoin="round"
@@ -92,7 +92,7 @@ export const PropertyCard = ({ item, handleModal, hideWishlist }: PropertyCardPr
               <path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9.5z" />
               <polyline points="9 21 9 13 15 13 15 21" />
             </svg>
-            <span className="text-[10px] uppercase tracking-[0.18em] text-white/35">
+            <span className="text-[10px] uppercase tracking-[0.18em] text-[var(--ink-faint)]">
               Image coming soon
             </span>
           </div>
@@ -103,18 +103,18 @@ export const PropertyCard = ({ item, handleModal, hideWishlist }: PropertyCardPr
             fill
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
             onError={() => setImgError(true)}
-            className="object-contain"
+            className="object-cover transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-105"
             referrerPolicy="no-referrer"
           />
         )}
 
         {/* Gradient veil */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/15 to-black/10 pointer-events-none" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-black/5 to-transparent pointer-events-none" />
 
         {/* Status Badge */}
         {item.property_status && (
           <span
-            className="absolute top-4 left-4 px-3 py-1.5 text-[10px] font-bold tracking-[0.16em] uppercase bg-[var(--gold-500)] text-[var(--surface-ink)]"
+            className="absolute top-4 left-4 px-3 py-1.5 text-[10px] font-bold tracking-[0.16em] uppercase bg-[var(--ink)] text-white"
             style={{ borderRadius: "var(--radius-xs)" }}
           >
             {item.property_status}
@@ -131,12 +131,12 @@ export const PropertyCard = ({ item, handleModal, hideWishlist }: PropertyCardPr
             style={{
               borderRadius: "999px",
               background: isFavorited
-                ? "rgba(237,183,94,0.95)"
+                ? "rgba(166,130,76,0.95)"
                 : "rgba(0,0,0,0.35)",
               borderColor: isFavorited
-                ? "rgba(237,183,94,1)"
-                : "rgba(255,255,255,0.25)",
-              color: isFavorited ? "#0b0c0f" : "#fff",
+                ? "rgba(166,130,76,1)"
+                : "rgba(255,255,255,0.35)",
+              color: isFavorited ? "#ffffff" : "#fff",
             }}
           >
             {isAddingToFavorites ? (
@@ -164,7 +164,7 @@ export const PropertyCard = ({ item, handleModal, hideWishlist }: PropertyCardPr
       {/* Body */}
       <div className="flex flex-col gap-4 p-6">
         <div className="flex items-baseline justify-between gap-3">
-          <h3 className="font-sans font-bold text-[clamp(1.35rem,1.2vw+0.8rem,1.65rem)] text-[var(--gold-500)] leading-none tracking-[-0.02em]">
+          <h3 className="font-sans font-bold text-[clamp(1.35rem,1.2vw+0.8rem,1.65rem)] text-[var(--ink)] leading-none tracking-[-0.02em]">
             {formattedPrice}
           </h3>
         </div>
@@ -172,30 +172,30 @@ export const PropertyCard = ({ item, handleModal, hideWishlist }: PropertyCardPr
         {/* Address */}
         {item.address && (
           <div className="flex items-start gap-2.5 min-h-[44px]">
-            <FiMapPin size={16} className="text-[var(--gold-500)] mt-[3px] shrink-0" />
-            <p className="text-[17px] leading-[1.5] text-white/72 font-sans font-semibold">
+            <FiMapPin size={16} className="text-[var(--accent)] mt-[3px] shrink-0" />
+            <p className="text-[17px] leading-[1.5] text-[var(--ink-soft)] font-sans font-semibold">
               {String(item.address).replace(/±/g, "#")}
             </p>
           </div>
         )}
 
         {/* Specs */}
-        <div className="flex items-center gap-5 pt-4 border-t border-white/8 text-[13px] text-white/70">
+        <div className="flex items-center gap-5 pt-4 border-t border-[var(--line)] text-[13px] text-[var(--ink-soft)]">
           {item.beds ? (
             <span className="inline-flex items-center gap-2">
-              <IoBedOutline size={16} className="text-[var(--gold-500)]" />
+              <IoBedOutline size={16} className="text-[var(--accent)]" />
               <span>{item.beds} Beds</span>
             </span>
           ) : null}
           {item.baths ? (
             <span className="inline-flex items-center gap-2">
-              <PiBathtub size={16} className="text-[var(--gold-500)]" />
+              <PiBathtub size={16} className="text-[var(--accent)]" />
               <span>{item.baths} Baths</span>
             </span>
           ) : null}
           {item.bua ? (
             <span className="inline-flex items-center gap-2">
-              <BiArea size={16} className="text-[var(--gold-500)]" />
+              <BiArea size={16} className="text-[var(--accent)]" />
               <span>{Number(item.bua).toLocaleString()} SqFt</span>
             </span>
           ) : null}
@@ -215,7 +215,7 @@ export const PropertyCard = ({ item, handleModal, hideWishlist }: PropertyCardPr
                 style={{ width: 18, height: 18 }}
               />
             )}
-            <span className="text-[10px] uppercase tracking-[0.16em] font-semibold text-white/45">
+            <span className="text-[10px] uppercase tracking-[0.16em] font-semibold text-[var(--ink-faint)]">
               Listed with {item.listed_with}
             </span>
           </div>

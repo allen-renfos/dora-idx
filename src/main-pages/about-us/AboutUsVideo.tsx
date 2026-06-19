@@ -60,9 +60,9 @@ export const AboutUsVideo = () => {
   const noProfileImg = "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=800&h=1200&fit=crop&crop=faces";
 
   return (
-    <section className="bg-black text-white py-20 pb-40 md:py-32 md:pb-60 relative overflow-hidden">
+    <section className="bg-[var(--surface-ink)] text-[var(--ink)] py-20 pb-40 md:py-32 md:pb-60 relative overflow-hidden">
       {/* Background Decorative Element */}
-      <div className="absolute -top-24 -right-24 w-96 h-96 bg-[#EDB75E]/5 blur-[100px] rounded-full" />
+      <div className="absolute -top-24 -right-24 w-96 h-96 bg-[var(--accent)]/5 blur-[100px] rounded-full" />
 
       <div className="container mx-auto px-6 lg:px-24 relative z-10 mb-20">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center justify-items-center glass-premium p-10 md:p-16 rounded-none">
@@ -70,11 +70,11 @@ export const AboutUsVideo = () => {
           {/* Left Column - Video Player */}
           <div className="flex flex-col gap-6 group">
             <div
-              className="relative w-full overflow-hidden shadow-2xl transition-all duration-700 group-hover:shadow-[#EDB75E]/10"
+              className="relative w-full overflow-hidden shadow-2xl transition-all duration-700 group-hover:shadow-[var(--accent)]/10"
               style={{
                 aspectRatio: "16/9",
                 borderRadius: "0px",
-                border: "1px solid rgba(255, 255, 255, 0.05)"
+                border: "1px solid var(--line)"
               }}
             >
               <video
@@ -99,17 +99,17 @@ export const AboutUsVideo = () => {
                 >
                   <div
                     style={{
-                      background: "rgba(237, 183, 94, 0.15)",
+                      background: "rgba(166, 130, 76, 0.15)",
                       backdropFilter: "blur(12px)",
                       WebkitBackdropFilter: "blur(12px)",
                       borderRadius: "0%",
                       padding: "24px",
-                      border: "1px solid rgba(237, 183, 94, 0.4)",
-                      boxShadow: "0 0 30px rgba(237, 183, 94, 0.2)"
+                      border: "1px solid rgba(166, 130, 76, 0.4)",
+                      boxShadow: "0 0 30px rgba(166, 130, 76, 0.2)"
                     }}
                     className="hover:scale-110 transition-all duration-300"
                   >
-                    <svg width="32" height="32" viewBox="0 0 24 24" fill="#EDB75E">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="#a6824c">
                       <path d="M8 5v14l11-7z" />
                     </svg>
                   </div>
@@ -118,8 +118,8 @@ export const AboutUsVideo = () => {
             </div>
 
             <div className="hidden lg:block">
-              <h4 className="text-[#EDB75E] text-xs uppercase tracking-[0.2em] font-semibold mb-3">Our Legacy</h4>
-              <p className="text-sm text-white/50 leading-relaxed max-w-sm">
+              <h4 className="text-[var(--accent-text)] text-xs uppercase tracking-[0.2em] font-semibold mb-3">Our Legacy</h4>
+              <p className="text-sm text-[var(--ink-soft)] leading-relaxed max-w-sm">
                 Setting the gold standard in premium real estate through unparalleled expertise and global reach.
               </p>
             </div>
@@ -130,7 +130,7 @@ export const AboutUsVideo = () => {
             <div className="flex flex-col md:flex-row items-center justify-center gap-10">
               <div className="relative w-40 h-52 flex-shrink-0 group">
                 {/* Square Profile Image */}
-                <div className="relative w-full h-full overflow-hidden border border-[#EDB75E]/30">
+                <div className="relative w-full h-full overflow-hidden border border-[var(--accent)]/30">
                   <Image
                     src={profile_image || noProfileImg}
                     alt={name || "Agent"}
@@ -148,18 +148,18 @@ export const AboutUsVideo = () => {
                   {name || "Bino"}
                 </h3>
                 <div className="flex items-center justify-center gap-2">
-                  <div className="w-8 h-[1px] bg-[#EDB75E]" />
-                  <p className="text-[#EDB75E] text-sm uppercase tracking-widest font-medium">
+                  <div className="w-8 h-[1px] bg-[var(--accent)]" />
+                  <p className="text-[var(--accent-text)] text-sm uppercase tracking-widest font-medium">
                     Trusted Global Advisor
                   </p>
                 </div>
               </div>
             </div>
 
-            <div className="h-[1px] bg-gradient-to-r from-[#EDB75E]/40 via-[#EDB75E]/10 to-transparent w-full" />
+            <div className="h-[1px] bg-gradient-to-r from-[var(--accent)]/40 via-[var(--accent)]/10 to-transparent w-full" />
 
             <div className="relative">
-              <div className="text-lg leading-relaxed text-white/70 font-light flex flex-col gap-6 text-center">
+              <div className="text-lg leading-relaxed text-[var(--ink-soft)] font-light flex flex-col gap-6 text-center">
                 <p>
                   Bino is a dependable and accomplished real estate professional serving the greater Seattle area.
                   She has called Redmond home for over 20 years, giving her a deep understanding of the local market and community.
@@ -175,22 +175,22 @@ export const AboutUsVideo = () => {
             <div className="flex flex-col md:flex-row items-center justify-center gap-10 pt-4">
               <div className="flex items-center gap-10">
                 {socialUrls?.facebook && (
-                  <a href={socialUrls.facebook} target="_blank" rel="noopener noreferrer" className="text-white/40 hover:text-[#EDB75E] transition-all duration-300 hover:-translate-y-1">
+                  <a href={socialUrls.facebook} target="_blank" rel="noopener noreferrer" className="text-[var(--ink-faint)] hover:text-[var(--accent-text)] transition-all duration-300 hover:-translate-y-1">
                     <FaFacebookF size={22} />
                   </a>
                 )}
                 {socialUrls?.instagram && (
-                  <a href={socialUrls.instagram} target="_blank" rel="noopener noreferrer" className="text-white/40 hover:text-[#EDB75E] transition-all duration-300 hover:-translate-y-1">
+                  <a href={socialUrls.instagram} target="_blank" rel="noopener noreferrer" className="text-[var(--ink-faint)] hover:text-[var(--accent-text)] transition-all duration-300 hover:-translate-y-1">
                     <FaInstagram size={22} />
                   </a>
                 )}
                 {socialUrls?.twitter && (
-                  <a href={socialUrls.twitter} target="_blank" rel="noopener noreferrer" className="text-white/40 hover:text-[#EDB75E] transition-all duration-300 hover:-translate-y-1">
+                  <a href={socialUrls.twitter} target="_blank" rel="noopener noreferrer" className="text-[var(--ink-faint)] hover:text-[var(--accent-text)] transition-all duration-300 hover:-translate-y-1">
                     <FaTwitter size={22} />
                   </a>
                 )}
                 {(socialUrls?.linkedin || socialUrls?.linked_in) && (
-                  <a href={socialUrls.linkedin || socialUrls.linked_in} target="_blank" rel="noopener noreferrer" className="text-white/40 hover:text-[#EDB75E] transition-all duration-300 hover:-translate-y-1">
+                  <a href={socialUrls.linkedin || socialUrls.linked_in} target="_blank" rel="noopener noreferrer" className="text-[var(--ink-faint)] hover:text-[var(--accent-text)] transition-all duration-300 hover:-translate-y-1">
                     <FaLinkedinIn size={22} />
                   </a>
                 )}

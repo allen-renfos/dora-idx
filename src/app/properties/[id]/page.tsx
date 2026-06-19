@@ -4,7 +4,7 @@ import { SinglePropertyPage } from "@/main-pages/single-property/SinglePropertyP
 
 export default function SingleProperty() {
   return (
-    <main className="bg-[var(--surface-ink)] text-white min-h-screen">
+    <main className="bg-[var(--surface-ink)] text-[var(--ink)] min-h-screen">
       <SinglePropertyPage />
     </main>
   );

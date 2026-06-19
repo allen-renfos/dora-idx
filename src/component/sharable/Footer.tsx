@@ -52,9 +52,9 @@ export const Footer = () => {
   ].filter((s) => s.href);
 
   return (
-    <footer className="bg-[var(--surface-ink)] text-white relative overflow-hidden">
-      {/* Soft gold top line */}
-      <div className="h-px bg-gradient-to-r from-transparent via-[var(--gold-500)]/50 to-transparent" />
+    <footer className="bg-[var(--bg-subtle)] text-[var(--ink-soft)] relative overflow-hidden border-t border-[var(--line)]">
+      {/* Soft brass top line */}
+      <div className="h-px bg-gradient-to-r from-transparent via-[var(--accent)]/40 to-transparent" />
 
       <div className="container-wide pt-20 pb-12">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
@@ -69,10 +69,10 @@ export const Footer = () => {
                   style={{ objectFit: "contain", height: 80, width: "auto" }}
                 />
               ) : (
-                <span className="font-serif text-3xl">{name || "RealtiPro"}</span>
+                <span className="font-serif text-3xl text-[var(--ink)]">{name || "RealtiPro"}</span>
               )}
             </Link>
-            <p className="text-[15px] text-white/80 max-w-md leading-relaxed">
+            <p className="text-[15px] text-[var(--ink-soft)] max-w-md leading-relaxed">
               {shortDescription ||
                 "A boutique real estate practice committed to guiding buyers, sellers, and investors with clarity, integrity, and uncompromising attention to detail."}
             </p>
@@ -85,7 +85,7 @@ export const Footer = () => {
                     aria-label={label}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-10 h-10 rounded-full border border-white/15 flex items-center justify-center text-white/80 hover:text-[var(--gold-500)] hover:border-[var(--gold-500)] transition-colors duration-300"
+                    className="w-10 h-10 rounded-full border border-[var(--line)] flex items-center justify-center text-[var(--ink-soft)] hover:text-[var(--accent-text)] hover:border-[var(--accent)] transition-colors duration-300"
                   >
                     <Icon size={15} />
                   </a>
@@ -98,13 +98,13 @@ export const Footer = () => {
           <div className="lg:col-span-7 grid grid-cols-2 md:grid-cols-3 gap-8">
             {FOOTER_COLS.map((col) => (
               <div key={col.title} className="flex flex-col gap-5">
-                <h4 className="eyebrow text-[var(--gold-500)]">{col.title}</h4>
+                <h4 className="eyebrow">{col.title}</h4>
                 <ul className="flex flex-col gap-3">
                   {col.links.map((l) => (
                     <li key={l.href + l.label}>
                       <Link
                         href={l.href}
-                        className="text-[15px] text-white/80 hover:text-[var(--gold-500)] transition-colors"
+                        className="text-[15px] text-[var(--ink-soft)] hover:text-[var(--accent-text)] transition-colors"
                       >
                         {l.label}
                       </Link>
@@ -119,7 +119,7 @@ export const Footer = () => {
 
       {/* NWMLS notice */}
       <div className="container-wide pb-4">
-        <div className="flex items-center gap-2 text-[12px] text-white/50">
+        <div className="flex items-center gap-2 text-[12px] text-[var(--ink-faint)]">
           <span>The three tree icon represents listings courtesy of NWMLS.</span>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src="/nwmls.png" alt="NWMLS" width={20} height={20} style={{ objectFit: "contain" }} />
@@ -127,13 +127,13 @@ export const Footer = () => {
       </div>
 
       {/* Sub-footer */}
-      <div className="border-t border-white/8">
-        <div className="container-wide py-6 flex flex-col md:flex-row items-center justify-between gap-4 text-[12px] text-white/55">
+      <div className="border-t border-[var(--line)]">
+        <div className="container-wide py-6 flex flex-col md:flex-row items-center justify-between gap-4 text-[12px] text-[var(--ink-faint)]">
           <div className="flex items-center gap-3 flex-wrap justify-center md:justify-start">
             <span>
               © {new Date().getFullYear()} {company_name || name || "RealtiPro"}. All rights reserved.
             </span>
-            <span className="hidden md:inline text-white/25">/</span>
+            <span className="hidden md:inline text-[var(--line)]">/</span>
             <div className="flex items-center gap-2">
               <span>Powered by</span>
               <a
@@ -151,8 +151,8 @@ export const Footer = () => {
                   height={20}
                   style={{
                     objectFit: "contain",
-                    filter: "brightness(0) invert(1)",
-                    opacity: 0.8,
+                    filter: "brightness(0)",
+                    opacity: 0.7,
                     transition: "opacity 0.3s ease",
                   }}
                 />
@@ -164,16 +164,16 @@ export const Footer = () => {
               href="https://admin.realtipro.com/"
               target="_blank"
               rel="noopener noreferrer"
-              className="hover:text-white transition-colors"
+              className="hover:text-[var(--ink)] transition-colors"
             >
               Admin Log In
             </a>
-            <span className="text-white/25">|</span>
-            <Link href="/privacy-policy" className="hover:text-white transition-colors">
+            <span className="text-[var(--line)]">|</span>
+            <Link href="/privacy-policy" className="hover:text-[var(--ink)] transition-colors">
               Privacy
             </Link>
-            <span className="text-white/25">|</span>
-            <Link href="/terms-of-service" className="hover:text-white transition-colors">
+            <span className="text-[var(--line)]">|</span>
+            <Link href="/terms-of-service" className="hover:text-[var(--ink)] transition-colors">
               Terms
             </Link>
           </div>

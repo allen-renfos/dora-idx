@@ -91,7 +91,7 @@ export default function HomeSearch({ keyword, setKeyword }: HomeSearchProps) {
               key={tab.key}
               onClick={() => setActiveTab(tab.key)}
               className={`relative px-5 py-2.5 text-[11px] font-bold tracking-[0.22em] uppercase transition-colors duration-300 ${
-                active ? "text-white" : "text-white/55 hover:text-white/80"
+                active ? "text-[var(--ink)]" : "text-[var(--ink-faint)] hover:text-[var(--ink-soft)]"
               }`}
             >
               {tab.label}
@@ -152,7 +152,7 @@ export default function HomeSearch({ keyword, setKeyword }: HomeSearchProps) {
                 {/* Desktop: button inside bar */}
                 <button
                   onClick={() => goToResults(keyword)}
-                  className="hidden sm:flex shrink-0 items-center h-[64px] px-9 text-[11px] font-bold tracking-[0.2em] uppercase bg-[var(--surface-ink)] text-white hover:bg-[var(--gold-500)] hover:text-[var(--surface-ink)] transition-colors duration-300"
+                  className="hidden sm:flex shrink-0 items-center h-[64px] px-9 text-[11px] font-bold tracking-[0.2em] uppercase bg-[var(--ink)] text-white hover:bg-[var(--accent)] hover:text-white transition-colors duration-300"
                 >
                   Search
                 </button>
@@ -160,7 +160,7 @@ export default function HomeSearch({ keyword, setKeyword }: HomeSearchProps) {
               {/* Mobile: full-width button below the bar */}
               <button
                 onClick={() => goToResults(keyword)}
-                className="sm:hidden w-full mt-3 h-[50px] flex items-center justify-center gap-2 text-[11px] font-bold tracking-[0.2em] uppercase bg-[var(--gold-500)] text-[var(--surface-ink)] hover:bg-[var(--gold-600)] transition-colors duration-300"
+                className="sm:hidden w-full mt-3 h-[50px] flex items-center justify-center gap-2 text-[11px] font-bold tracking-[0.2em] uppercase bg-[var(--ink)] text-white hover:bg-[var(--accent-text)] transition-colors duration-300"
               >
                 <FiSearch size={15} strokeWidth={2.5} />
                 Search
@@ -248,7 +248,7 @@ export default function HomeSearch({ keyword, setKeyword }: HomeSearchProps) {
                 {/* Desktop: button inside bar */}
                 <button
                   onClick={() => setIsSellModalOpen(true)}
-                  className="hidden sm:flex shrink-0 items-center h-[64px] px-8 text-[11px] font-bold tracking-[0.2em] uppercase bg-[var(--surface-ink)] text-white hover:bg-[var(--gold-500)] hover:text-[var(--surface-ink)] transition-colors duration-300 whitespace-nowrap"
+                  className="hidden sm:flex shrink-0 items-center h-[64px] px-8 text-[11px] font-bold tracking-[0.2em] uppercase bg-[var(--ink)] text-white hover:bg-[var(--accent)] hover:text-white transition-colors duration-300 whitespace-nowrap"
                 >
                   Request Valuation
                 </button>
@@ -256,7 +256,7 @@ export default function HomeSearch({ keyword, setKeyword }: HomeSearchProps) {
               {/* Mobile: full-width button below the bar */}
               <button
                 onClick={() => setIsSellModalOpen(true)}
-                className="sm:hidden w-full mt-3 h-[50px] flex items-center justify-center text-[11px] font-bold tracking-[0.2em] uppercase bg-[var(--gold-500)] text-[var(--surface-ink)] hover:bg-[var(--gold-600)] transition-colors duration-300"
+                className="sm:hidden w-full mt-3 h-[50px] flex items-center justify-center text-[11px] font-bold tracking-[0.2em] uppercase bg-[var(--ink)] text-white hover:bg-[var(--accent-text)] transition-colors duration-300"
               >
                 Request Valuation
               </button>

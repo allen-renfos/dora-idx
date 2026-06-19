@@ -68,14 +68,14 @@ export function AuthModal({
               <button
                 onClick={onClose}
                 aria-label="Close"
-                className="absolute top-3 right-3 z-10 w-9 h-9 flex items-center justify-center text-white/70 hover:text-white transition-colors"
+                className="absolute top-3 right-3 z-10 w-9 h-9 flex items-center justify-center text-[var(--ink-soft)] hover:text-[var(--ink)] transition-colors"
               >
                 <FiX size={20} />
               </button>
 
               {/* Scrollable content */}
               <div className="overflow-y-scroll custom-scrollbar min-h-0">
-                <div className="bg-[var(--surface-obsidian)] border border-[var(--line-soft)] p-7 md:p-9 relative">
+                <div className="bg-[var(--surface)] border border-[var(--line)] p-7 md:p-9 relative">
                   <div
                     aria-hidden
                     className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[var(--gold-500)]/55 to-transparent"
@@ -88,11 +88,11 @@ export function AuthModal({
                         {eyebrow}
                       </span>
                     )}
-                    <h2 className="font-serif text-2xl md:text-3xl text-white leading-tight tracking-[-0.01em]">
+                    <h2 className="font-serif text-2xl md:text-3xl text-[var(--ink)] leading-tight tracking-[-0.01em]">
                       {title}
                     </h2>
                     {description && (
-                      <p className="text-[14px] text-white/60 leading-relaxed">
+                      <p className="text-[14px] text-[var(--ink-soft)] leading-relaxed">
                         {description}
                       </p>
                     )}
@@ -101,7 +101,7 @@ export function AuthModal({
                   {children}
 
                   {footer && (
-                    <div className="text-center mt-6 text-[14px] text-white/55">
+                    <div className="text-center mt-6 text-[14px] text-[var(--ink-faint)]">
                       {footer}
                     </div>
                   )}

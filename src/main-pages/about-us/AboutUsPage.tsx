@@ -21,17 +21,17 @@ export default function AboutUsPage() {
 
     const stats = [
         {
-            icon: <FaAward style={{ color: "#EDB75E", fontSize: 22 }} />,
+            icon: <FaAward style={{ color: "#a6824c", fontSize: 22 }} />,
             title: "20+ Years Experience",
             desc: "Over two decades of trusted expertise in the local real estate market.",
         },
         {
-            icon: <FaStar style={{ color: "#EDB75E", fontSize: 22 }} />,
+            icon: <FaStar style={{ color: "#a6824c", fontSize: 22 }} />,
             title: "500+ Properties Sold",
             desc: "A proven track record of successful closings for buyers and sellers alike.",
         },
         {
-            icon: <FaHandshake style={{ color: "#EDB75E", fontSize: 22 }} />,
+            icon: <FaHandshake style={{ color: "#a6824c", fontSize: 22 }} />,
             title: "Trusted Advisor",
             desc: "Committed to guiding every client with integrity, transparency, and care.",
         },
@@ -52,8 +52,8 @@ export default function AboutUsPage() {
                     position: "absolute",
                     inset: 0,
                     backgroundImage: `
-                        linear-gradient(90deg, rgba(237, 183, 94, 0.03) 1px, transparent 1px),
-                        linear-gradient(rgba(237, 183, 94, 0.03) 1px, transparent 1px)
+                        linear-gradient(90deg, rgba(166, 130, 76, 0.03) 1px, transparent 1px),
+                        linear-gradient(rgba(166, 130, 76, 0.03) 1px, transparent 1px)
                     `,
                     backgroundSize: "50px 50px",
                     opacity: 0.5,
@@ -83,7 +83,7 @@ export default function AboutUsPage() {
                 <div style={{ 
                     position: "absolute",
                     inset: 0,
-                    background: "radial-gradient(circle at 30% 50%, rgba(237, 183, 94, 0.08) 0%, transparent 60%)",
+                    background: "radial-gradient(circle at 30% 50%, rgba(166, 130, 76, 0.08) 0%, transparent 60%)",
                     zIndex: 1,
                 }} />
 
@@ -103,9 +103,9 @@ export default function AboutUsPage() {
                                 display: "inline-block",
                                 padding: "8px 20px",
                                 background: "rgba(80, 58, 10, 0.7)",
-                                border: "1px solid rgba(237, 183, 94, 0.5)",
+                                border: "1px solid rgba(166, 130, 76, 0.5)",
                                 borderRadius: 0,
-                                color: "#EDB75E",
+                                color: "#a6824c",
                                 fontSize: 13,
                                 fontWeight: 700,
                                 letterSpacing: 2,
@@ -124,7 +124,7 @@ export default function AboutUsPage() {
                                 lineHeight: 1.15,
                                 marginBottom: 20,
                                 fontFamily: "var(--font-playfair)",
-                                background: "linear-gradient(135deg, #f5e6c8 0%, #EDB75E 60%, #c8902e 100%)",
+                                background: "linear-gradient(135deg, #f5e6c8 0%, #a6824c 60%, #c8902e 100%)",
                                 WebkitBackgroundClip: "text",
                                 WebkitTextFillColor: "transparent",
                                 backgroundClip: "text",
@@ -157,15 +157,15 @@ export default function AboutUsPage() {
                                 alignItems: "center",
                                 gap: 8,
                                 padding: "14px 28px",
-                                background: "#EDB75E",
-                                color: "#000",
+                                background: "#a6824c",
+                                color: "#fff",
                                 fontWeight: 600,
                                 fontSize: 15,
                                 textDecoration: "none",
                                 transition: "background .3s",
                             }}
-                            onMouseEnter={(e) => (e.currentTarget.style.background = "#d9a44d")}
-                            onMouseLeave={(e) => (e.currentTarget.style.background = "#EDB75E")}
+                            onMouseEnter={(e) => (e.currentTarget.style.background = "#8a6a3b")}
+                            onMouseLeave={(e) => (e.currentTarget.style.background = "#a6824c")}
                         >
                             Get In Touch
                         </a>
@@ -230,7 +230,7 @@ export default function AboutUsPage() {
             </section> */}
 
             {/* ───────────── AGENT BIO SECTION ───────────── */}
-            <section style={{ background: "#000", padding: "100px 0" }}>
+            <section style={{ background: "#ffffff", padding: "100px 0" }}>
                 <div
                     style={{
                         maxWidth: 1280,
@@ -275,7 +275,7 @@ export default function AboutUsPage() {
                                     aspectRatio: "3/4",
                                     maxWidth: 420,
                                     overflow: "hidden",
-                                    border: "1px solid #313131",
+                                    border: "1px solid #e7e4de",
                                 }}
                             >
                                 <Image
@@ -290,7 +290,7 @@ export default function AboutUsPage() {
                             <div>
                                 <h2
                                     style={{
-                                        color: "#fff",
+                                        color: "#1a1a1a",
                                         fontSize: "clamp(28px, 3vw, 40px)",
                                         fontWeight: 700,
                                         marginBottom: 8,
@@ -300,10 +300,10 @@ export default function AboutUsPage() {
                                     {name || "Realty Pro"}
                                 </h2>
                                 <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 24 }}>
-                                    <div style={{ width: 32, height: 1, background: "#EDB75E" }} />
+                                    <div style={{ width: 32, height: 1, background: "#a6824c" }} />
                                     <p
                                         style={{
-                                            color: "#EDB75E",
+                                            color: "#8a6a3b",
                                             fontSize: 13,
                                             textTransform: "uppercase",
                                             letterSpacing: "0.15em",
@@ -352,13 +352,13 @@ export default function AboutUsPage() {
                                 style={{
                                     fontSize: "clamp(28px, 4vw, 48px)",
                                     fontWeight: 700,
-                                    color: "#fff",
+                                    color: "#1a1a1a",
                                     lineHeight: 1.2,
                                     margin: 0,
                                 }}
                             >
                                 Committed to Your{" "}
-                                <span style={{ color: "#EDB75E" }}>Real Estate Success</span>
+                                <span style={{ color: "#a6824c" }}>Real Estate Success</span>
                             </h2>
 
                             {/* Gold divider */}
@@ -366,7 +366,7 @@ export default function AboutUsPage() {
                                 style={{
                                     height: 1,
                                     background:
-                                        "linear-gradient(to right, #EDB75E 0%, rgba(237,183,94,.3) 50%, transparent 100%)",
+                                        "linear-gradient(to right, #a6824c 0%, rgba(166,130,76,.3) 50%, transparent 100%)",
                                     width: "100%",
                                 }}
                             />
@@ -375,7 +375,7 @@ export default function AboutUsPage() {
                                 {longDescription ? (
                                     <p
                                         style={{
-                                            color: "#9ca3af",
+                                            color: "#555350",
                                             fontSize: 17,
                                             lineHeight: 1.8,
                                             margin: 0,
@@ -387,7 +387,7 @@ export default function AboutUsPage() {
                                     <>
                                         <p
                                             style={{
-                                                color: "#9ca3af",
+                                                color: "#555350",
                                                 fontSize: 17,
                                                 lineHeight: 1.8,
                                                 margin: 0,
@@ -400,7 +400,7 @@ export default function AboutUsPage() {
                                         </p>
                                         <p
                                             style={{
-                                                color: "#9ca3af",
+                                                color: "#555350",
                                                 fontSize: 17,
                                                 lineHeight: 1.8,
                                                 margin: 0,
@@ -422,15 +422,15 @@ export default function AboutUsPage() {
                                         alignItems: "center",
                                         gap: 8,
                                         padding: "14px 28px",
-                                        background: "#EDB75E",
-                                        color: "#000",
+                                        background: "#1a1a1a",
+                                        color: "#fff",
                                         fontWeight: 600,
                                         fontSize: 15,
                                         textDecoration: "none",
                                         transition: "background .3s",
                                     }}
-                                    onMouseEnter={(e) => (e.currentTarget.style.background = "#d9a44d")}
-                                    onMouseLeave={(e) => (e.currentTarget.style.background = "#EDB75E")}
+                                    onMouseEnter={(e) => (e.currentTarget.style.background = "#8a6a3b")}
+                                    onMouseLeave={(e) => (e.currentTarget.style.background = "#1a1a1a")}
                                 >
                                     Connect with Agent
                                 </a>
@@ -463,21 +463,21 @@ function SocialIcon({ href, children }: { href: string; children: React.ReactNod
             style={{
                 width: 42,
                 height: 42,
-                border: "1px solid #313131",
+                border: "1px solid #e7e4de",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                color: "#9ca3af",
+                color: "#555350",
                 transition: "all .3s",
                 textDecoration: "none",
             }}
             onMouseEnter={(e) => {
-                e.currentTarget.style.borderColor = "#EDB75E";
-                e.currentTarget.style.color = "#EDB75E";
+                e.currentTarget.style.borderColor = "#8a6a3b";
+                e.currentTarget.style.color = "#8a6a3b";
             }}
             onMouseLeave={(e) => {
-                e.currentTarget.style.borderColor = "#313131";
-                e.currentTarget.style.color = "#9ca3af";
+                e.currentTarget.style.borderColor = "#e7e4de";
+                e.currentTarget.style.color = "#555350";
             }}
         >
             {children}

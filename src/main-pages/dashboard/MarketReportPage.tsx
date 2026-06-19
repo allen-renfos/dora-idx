@@ -27,10 +27,10 @@ const MarketReportPage = () => {
               <span className="inline-block h-px w-8 bg-[var(--gold-500)]" />
               Build a report
             </span>
-            <h2 className="font-serif text-2xl md:text-3xl text-white leading-tight">
+            <h2 className="font-serif text-2xl md:text-3xl text-[var(--ink)] leading-tight">
               Create your first market report
             </h2>
-            <p className="text-[14px] text-white/60 leading-relaxed max-w-md">
+            <p className="text-[14px] text-[var(--ink-soft)] leading-relaxed max-w-md">
               Enter a city, neighborhood, or zip and we&rsquo;ll surface trends,
               comparable homes, and recent activity.
             </p>
@@ -61,9 +61,9 @@ const MarketReportPage = () => {
               }}
               type="text"
               placeholder="Search by location"
-              className="flex-1 px-3 h-12 bg-transparent outline-none text-[14px] text-white placeholder:text-white/40 font-serif"
+              className="flex-1 px-3 h-12 bg-transparent outline-none text-[14px] text-[var(--ink)] placeholder:text-[var(--ink-faint)] font-serif"
             />
-            <button className="h-12 px-5 text-[12px] font-bold tracking-[0.18em] uppercase bg-[var(--gold-500)] text-[var(--surface-ink)] hover:bg-[var(--gold-600)] transition-colors">
+            <button className="h-12 px-5 text-[12px] font-bold tracking-[0.18em] uppercase bg-[var(--ink)] text-white hover:bg-[var(--accent-text)] transition-colors">
               Generate
             </button>
           </div>
@@ -87,10 +87,10 @@ const MarketReportPage = () => {
             <FiSmartphone size={22} />
           </div>
           <div className="max-w-xs">
-            <h3 className="font-serif text-xl text-white">
+            <h3 className="font-serif text-xl text-[var(--ink)]">
               Get the RealtiPro app
             </h3>
-            <p className="text-[13px] text-white/60 mt-1.5 leading-relaxed">
+            <p className="text-[13px] text-[var(--ink-soft)] mt-1.5 leading-relaxed">
               Notifications, listings, and direct lines to your advisor — all in
               one place.
             </p>
@@ -104,7 +104,7 @@ const MarketReportPage = () => {
             onChange={(e) => setMobile(formatUSPhoneInput(e.target.value))}
             maxLength={14}
             placeholder="(555) 123-4567"
-            className="bg-[var(--surface-charcoal)] border border-[var(--line-soft)] focus:border-[var(--gold-500)]/60 px-4 h-12 text-[14px] text-white placeholder:text-white/40 outline-none transition-colors w-full md:max-w-[240px]"
+            className="bg-[var(--surface-charcoal)] border border-[var(--line-soft)] focus:border-[var(--gold-500)]/60 px-4 h-12 text-[14px] text-[var(--ink)] placeholder:text-[var(--ink-faint)] outline-none transition-colors w-full md:max-w-[240px]"
           />
           <button className="btn-gold-new shrink-0 justify-center">
             Text me the app
@@ -113,7 +113,7 @@ const MarketReportPage = () => {
         </div>
       </section>
 
-      <p className="mt-3 text-[11px] uppercase tracking-[0.18em] text-white/35 text-center md:text-right">
+      <p className="mt-3 text-[11px] uppercase tracking-[0.18em] text-[var(--ink-faint)] text-center md:text-right">
         Standard messaging rates apply.
       </p>
     </DashboardLayout>

@@ -23,7 +23,7 @@ export default function HomeHero() {
       {/* Background image */}
       <div className="absolute inset-0 -z-10">
         <Image
-          src="/images/sample-4.jpg"
+          src="/images/sample-6.jpeg"
           alt=""
           fill
           priority
@@ -46,10 +46,10 @@ export default function HomeHero() {
                 initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-                className="eyebrow inline-flex items-center gap-3"
+                className="eyebrow on-dark inline-flex items-center gap-3"
               >
-                <span className="inline-block h-px w-10 bg-[var(--gold-500)]" />
-                Curated Real Estate 
+                <span className="inline-block h-px w-10 bg-[var(--gold-300)]" />
+                Curated Real Estate
               </motion.span>
 
               <motion.h1
@@ -88,35 +88,35 @@ export default function HomeHero() {
               {/* Offset gold frame — large screens only (overflows on narrow widths) */}
               <div
                 aria-hidden
-                className="hidden lg:block absolute -inset-2 border border-[var(--gold-500)]/35 translate-x-3 translate-y-3 pointer-events-none"
+                className="hidden lg:block absolute -inset-2 border border-[var(--accent)]/40 translate-x-3 translate-y-3 pointer-events-none"
               />
 
-              <div className="relative bg-[var(--surface-ink)]/72 backdrop-blur-xl border border-white/10">
+              <div className="relative bg-[var(--surface)]/95 backdrop-blur-xl border border-[var(--line)] shadow-[var(--shadow-lift)]">
                 {/* Header */}
                 <div className="px-5 md:px-9 pt-6 md:pt-10 pb-5 md:pb-6">
                   <span className="eyebrow inline-flex items-center gap-3">
-                    <span className="inline-block h-px w-8 bg-[var(--gold-500)]" />
+                    <span className="inline-block h-px w-8 bg-[var(--accent)]" />
                     Property Search
                   </span>
-                  <h2 className="font-serif text-[26px] md:text-[30px] text-white leading-[1.15] mt-4">
+                  <h2 className="font-serif text-[26px] md:text-[30px] text-[var(--ink)] leading-[1.15] mt-4">
                     Begin your search
                   </h2>
-                  <p className="text-[13px] text-white/55 mt-2 leading-relaxed">
+                  <p className="text-[13px] text-[var(--ink-faint)] mt-2 leading-relaxed">
                     City, neighborhood, address, or zip — start anywhere.
                   </p>
                 </div>
 
-                <div className="border-t border-white/10 px-5 md:px-9 py-6 md:py-7">
+                <div className="border-t border-[var(--line)] px-5 md:px-9 py-6 md:py-7">
                   <HomeSearch keyword={keyword} setKeyword={setKeyword} />
                 </div>
 
                 {/* Sought-after markets — editorial list */}
-                <div className="border-t border-white/10 px-5 md:px-9 py-5">
+                <div className="border-t border-[var(--line)] px-5 md:px-9 py-5">
                   <div className="flex items-center gap-3 mb-1">
-                    <span className="text-[10px] uppercase tracking-[0.24em] text-white/50">
+                    <span className="text-[10px] uppercase tracking-[0.24em] text-[var(--ink-faint)]">
                       Sought-after Markets
                     </span>
-                    <span className="h-px flex-1 bg-white/10" />
+                    <span className="h-px flex-1 bg-[var(--line)]" />
                   </div>
                   <ul>
                     {["Lynnwood", "Everett", "Bothell", "Edmonds"].map(
@@ -124,17 +124,17 @@ export default function HomeHero() {
                         <li
                           key={n}
                           className={`${
-                            i === 0 ? "" : "border-t border-white/5"
+                            i === 0 ? "" : "border-t border-[var(--line)]"
                           }`}
                         >
                           <Link
                             href={`/properties?keyword=${encodeURIComponent(n)}`}
                             className="group flex items-center justify-between py-3"
                           >
-                            <span className="font-serif text-[15px] text-white/80 group-hover:text-white transition-colors">
+                            <span className="font-serif text-[15px] text-[var(--ink-soft)] group-hover:text-[var(--ink)] transition-colors">
                               {n}
                             </span>
-                            <span className="text-[10px] uppercase tracking-[0.24em] text-white/35 group-hover:text-[var(--gold-500)] transition-colors">
+                            <span className="text-[10px] uppercase tracking-[0.24em] text-[var(--ink-faint)] group-hover:text-[var(--accent-text)] transition-colors">
                               Browse
                             </span>
                           </Link>
@@ -154,7 +154,7 @@ export default function HomeHero() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.9, delay: 0.9, ease: [0.16, 1, 0.3, 1] }}
-        className="border-t border-white/10 bg-[var(--surface-ink)]/55 backdrop-blur-md"
+        className="border-t border-white/10 bg-black/30 backdrop-blur-md"
       >
         <div className="container-wide py-6 md:py-8 grid grid-cols-2 md:grid-cols-4 gap-6">
           {PILLARS.map((pillar) => (

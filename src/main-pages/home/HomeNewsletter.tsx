@@ -70,7 +70,7 @@ export default function HomeNewsletter() {
   };
 
   return (
-    <section className="relative text-white overflow-hidden">
+    <section className="relative text-[var(--ink)] overflow-hidden">
       {/* Background */}
       <div className="absolute inset-0 -z-10">
         <Image
@@ -81,7 +81,7 @@ export default function HomeNewsletter() {
           className="object-cover"
           style={{ objectPosition: "center" }}
         />
-        <div className="absolute inset-0 bg-[var(--surface-ink)]/82" />
+        <div className="absolute inset-0 bg-[var(--surface-ink)]/90" />
         <div className="absolute inset-0 bg-gradient-to-b from-[var(--surface-ink)] via-transparent to-[var(--surface-ink)]" />
       </div>
 
@@ -115,7 +115,7 @@ export default function HomeNewsletter() {
             onSubmit={handleSubmit}
             className="mt-10 flex flex-col gap-6"
           >
-            <div className="flex items-stretch border-b border-white/25 focus-within:border-[var(--gold-500)] transition-colors">
+            <div className="flex items-stretch border-b border-[var(--line-medium)] focus-within:border-[var(--accent)] transition-colors">
               <input
                 type="email"
                 value={email}
@@ -128,21 +128,21 @@ export default function HomeNewsletter() {
                 readOnly={!!profileData?.data?.email}
                 placeholder="your@email.com"
                 required
-                className="flex-1 bg-transparent border-0 outline-none text-white placeholder:text-white/45 py-4 text-[15px]"
+                className="flex-1 bg-transparent border-0 outline-none text-[var(--ink)] placeholder:text-[var(--ink-faint)] py-4 text-[15px]"
               />
-              <div className="flex items-center pr-3 text-white/70">
+              <div className="flex items-center pr-3 text-[var(--ink-faint)]">
                 {touched && email && (
                   isValid ? (
-                    <FiCheckCircle className="text-[#7bd88f]" size={18} />
+                    <FiCheckCircle className="text-[#2e7d32]" size={18} />
                   ) : (
-                    <FiAlertCircle className="text-[#e48e8e]" size={18} />
+                    <FiAlertCircle className="text-[#b3261e]" size={18} />
                   )
                 )}
               </div>
               <button
                 type="submit"
                 disabled={mutation.isPending}
-                className="pl-5 pr-2 flex items-center gap-2 text-[12px] font-bold tracking-[0.22em] uppercase text-[var(--gold-500)] hover:text-white transition-colors disabled:opacity-50"
+                className="pl-5 pr-2 flex items-center gap-2 text-[12px] font-bold tracking-[0.22em] uppercase text-[var(--accent-text)] hover:text-[var(--ink)] transition-colors disabled:opacity-50"
               >
                 {mutation.isPending ? "Sending" : "Subscribe"}
                 <FiArrowRight size={14} />

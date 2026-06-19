@@ -77,20 +77,20 @@ const TestimonialPage = () => {
       }
     >
       {success && (
-        <div className="mb-5 px-4 py-3 border bg-[var(--gold-500)]/10 border-[var(--gold-500)]/40 text-[var(--gold-500)] text-[13px] inline-flex items-center gap-2">
+        <div className="mb-5 px-4 py-3 border bg-[var(--gold-500)]/10 border-[var(--gold-500)]/40 text-[var(--accent-text)] text-[13px] inline-flex items-center gap-2">
           <FiCheckCircle size={14} />
           {success}
         </div>
       )}
       {error && (
-        <div className="mb-5 px-4 py-3 border bg-red-500/10 border-red-500/30 text-red-300 text-[13px] inline-flex items-center gap-2">
+        <div className="mb-5 px-4 py-3 border bg-[#b3261e]/10 border-[#b3261e]/30 text-[#b3261e] text-[13px] inline-flex items-center gap-2">
           <FiAlertCircle size={14} />
           {error}
         </div>
       )}
 
       {isLoading ? (
-        <div className="bg-[var(--surface-obsidian)] border border-[var(--line-soft)] p-10 text-center text-white/55 text-[14px]">
+        <div className="bg-[var(--surface-obsidian)] border border-[var(--line-soft)] p-10 text-center text-[var(--ink-soft)] text-[14px]">
           Loading…
         </div>
       ) : has ? (
@@ -106,22 +106,22 @@ const TestimonialPage = () => {
               ))}
             </div>
             {existing.status && (
-              <span className="text-[10px] uppercase tracking-[0.22em] text-[var(--gold-500)] bg-[var(--gold-500)]/10 border border-[var(--gold-500)]/30 px-2.5 py-1">
+              <span className="text-[10px] uppercase tracking-[0.22em] text-[var(--accent-text)] bg-[var(--gold-500)]/10 border border-[var(--gold-500)]/30 px-2.5 py-1">
                 {existing.status}
               </span>
             )}
           </div>
-          <blockquote className="font-serif text-[clamp(1.25rem,1.4vw+1rem,1.75rem)] leading-[1.4] text-white">
+          <blockquote className="font-serif text-[clamp(1.25rem,1.4vw+1rem,1.75rem)] leading-[1.4] text-[var(--ink)]">
             &ldquo;{existing.details}&rdquo;
           </blockquote>
           <footer className="mt-7 pt-5 border-t border-[var(--line-soft)] flex items-center gap-4">
             <div className="w-px h-9 bg-[var(--gold-500)]/60" />
             <div className="flex flex-col">
-              <cite className="not-italic font-serif text-lg text-white">
+              <cite className="not-italic font-serif text-lg text-[var(--ink)]">
                 {existing.name}
               </cite>
               {existing.created_at && (
-                <span className="text-[12px] text-white/55 mt-1">
+                <span className="text-[12px] text-[var(--ink-faint)] mt-1">
                   Submitted {formatDate(existing.created_at)}
                 </span>
               )}
@@ -134,7 +134,7 @@ const TestimonialPage = () => {
           className="bg-[var(--surface-obsidian)] border border-[var(--line-soft)] p-8 md:p-10 flex flex-col gap-6 max-w-3xl"
         >
           <div className="flex flex-col gap-2">
-            <label className="text-[10px] uppercase tracking-[0.22em] text-white/55">
+            <label className="text-[10px] uppercase tracking-[0.22em] text-[var(--ink-faint)]">
               Rating
             </label>
             <div className="flex items-center gap-1">
@@ -153,19 +153,19 @@ const TestimonialPage = () => {
                   >
                     <FiStar
                       size={22}
-                      className={filled ? "fill-[var(--gold-500)] text-[var(--gold-500)]" : "text-white/30"}
+                      className={filled ? "fill-[var(--gold-500)] text-[var(--gold-500)]" : "text-[var(--ink-faint)]"}
                     />
                   </button>
                 );
               })}
-              <span className="ml-2 text-[12px] text-white/50">{rating} / 5</span>
+              <span className="ml-2 text-[12px] text-[var(--ink-faint)]">{rating} / 5</span>
             </div>
           </div>
 
           <div className="flex flex-col gap-2">
             <label
               htmlFor="t-name"
-              className="text-[10px] uppercase tracking-[0.22em] text-white/55"
+              className="text-[10px] uppercase tracking-[0.22em] text-[var(--ink-faint)]"
             >
               Your name
             </label>
@@ -177,7 +177,7 @@ const TestimonialPage = () => {
               readOnly={!!profileData?.data?.name}
               maxLength={100}
               placeholder="How you'd like to be quoted"
-              className={`bg-[var(--surface-charcoal)] border border-[var(--line-soft)] focus:border-[var(--gold-500)]/60 px-4 h-12 text-[14px] text-white placeholder:text-white/40 outline-none transition-colors ${
+              className={`bg-[var(--surface-charcoal)] border border-[var(--line-soft)] focus:border-[var(--gold-500)]/60 px-4 h-12 text-[14px] text-[var(--ink)] placeholder:text-[var(--ink-faint)] outline-none transition-colors ${
                 profileData?.data?.name ? "opacity-70 cursor-not-allowed" : ""
               }`}
             />
@@ -186,7 +186,7 @@ const TestimonialPage = () => {
           <div className="flex flex-col gap-2">
             <label
               htmlFor="t-details"
-              className="text-[10px] uppercase tracking-[0.22em] text-white/55"
+              className="text-[10px] uppercase tracking-[0.22em] text-[var(--ink-faint)]"
             >
               Your testimonial
             </label>
@@ -197,9 +197,9 @@ const TestimonialPage = () => {
               rows={6}
               maxLength={1000}
               placeholder="Tell us about your experience…"
-              className="bg-[var(--surface-charcoal)] border border-[var(--line-soft)] focus:border-[var(--gold-500)]/60 px-4 py-3 text-[14px] text-white placeholder:text-white/40 outline-none transition-colors resize-y min-h-[160px]"
+              className="bg-[var(--surface-charcoal)] border border-[var(--line-soft)] focus:border-[var(--gold-500)]/60 px-4 py-3 text-[14px] text-[var(--ink)] placeholder:text-[var(--ink-faint)] outline-none transition-colors resize-y min-h-[160px]"
             />
-            <span className="text-[11px] text-white/45 self-end">
+            <span className="text-[11px] text-[var(--ink-faint)] self-end">
               {details.length}/1000
             </span>
           </div>

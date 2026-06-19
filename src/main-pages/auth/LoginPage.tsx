@@ -73,7 +73,7 @@ export default function LoginPage() {
           New here?{" "}
           <Link
             href="/register"
-            className="text-[var(--gold-500)] hover:text-white transition-colors font-semibold"
+            className="text-[var(--accent-text)] hover:text-[var(--ink)] transition-colors font-semibold"
           >
             Create an account
           </Link>
@@ -107,7 +107,7 @@ export default function LoginPage() {
           rightAction={
             <Link
               href="/forgot-password"
-              className="text-[10px] uppercase tracking-[0.2em] text-[var(--gold-500)] hover:text-white transition-colors"
+              className="text-[10px] uppercase tracking-[0.2em] text-[var(--accent-text)] hover:text-[var(--ink)] transition-colors"
             >
               Forgot?
             </Link>

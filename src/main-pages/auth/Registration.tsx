@@ -88,16 +88,16 @@ export default function RegistrationPage() {
         >
           <h2 className="text-2xl font-bold mb-6 text-center">Register</h2>
           {error && (
-            <div className="mb-4 text-red-600 text-center">{error}</div>
+            <div className="mb-4 text-[#b3261e] text-center">{error}</div>
           )}
           {success && (
-            <div className="mb-4 text-green-600 text-center">{success}</div>
+            <div className="mb-4 text-[#2e7d32] text-center">{success}</div>
           )}
           <div className="mb-4">
             <label className="block mb-1 font-medium">Name</label>
             <input
               type="text"
-              className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#EDB75E]"
+              className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#a6824c]"
               value={name}
               onChange={e => setName(e.target.value)}
               required
@@ -108,7 +108,7 @@ export default function RegistrationPage() {
             <label className="block mb-1 font-medium">Email</label>
             <input
               type="email"
-              className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#EDB75E]"
+              className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#a6824c]"
               value={email}
               onChange={e => setEmail(e.target.value)}
               required
@@ -118,7 +118,7 @@ export default function RegistrationPage() {
             <label className="block mb-1 font-medium">Phone</label>
             <input
               type="tel"
-              className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#EDB75E]"
+              className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#a6824c]"
               value={phone}
               onChange={e => setPhone(formatUSPhoneInput(e.target.value))}
               maxLength={14}
@@ -130,7 +130,7 @@ export default function RegistrationPage() {
             <label className="block mb-1 font-medium">Password</label>
             <input
               type="password"
-              className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#EDB75E]"
+              className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#a6824c]"
               value={password}
               onChange={e => setPassword(e.target.value)}
               required
@@ -140,7 +140,7 @@ export default function RegistrationPage() {
             <label className="block mb-1 font-medium">Confirm Password</label>
             <input
               type="password"
-              className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#EDB75E]"
+              className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#a6824c]"
               value={confirmPassword}
               onChange={e => setConfirmPassword(e.target.value)}
               required
@@ -148,13 +148,13 @@ export default function RegistrationPage() {
           </div>
           <button
             type="submit"
-            className="w-full bg-[#EDB75E] text-white font-bold py-2 rounded hover:bg-[#d9a04f] transition"
+            className="w-full bg-[#a6824c] text-white font-bold py-2 rounded hover:bg-[#8a6a3b] transition"
             disabled={loading}
           >
             {loading ? "Registering..." : "Register"}
           </button>
           <div className="mt-4 text-center">
-            <a href="/login" className="text-sm text-[#EDB75E] hover:underline">
+            <a href="/login" className="text-sm text-[#a6824c] hover:underline">
               Already have an account? Login
             </a>
           </div>

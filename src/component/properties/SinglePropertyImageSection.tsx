@@ -194,13 +194,13 @@ export const SinglePropertyImageSection = ({ property: prop }: Props) => {
           {listingAttribution && (
             <div className="mt-4 flex flex-col gap-1">
               {listingAttribution.listed_with && (
-                <span className="text-[13px] font-semibold text-white/72">
-                  <span className="font-normal text-white/45">Listed by </span>
+                <span className="text-[13px] font-semibold text-[var(--ink-soft)]">
+                  <span className="font-normal text-[var(--ink-faint)]">Listed by </span>
                   {listingAttribution.listed_with}
                 </span>
               )}
               <div className="flex items-center gap-2">
-                <span className="text-[12px] text-white/45">Provided courtesy of</span>
+                <span className="text-[12px] text-[var(--ink-faint)]">Provided courtesy of</span>
                 {listingAttribution.logo && (
                   // eslint-disable-next-line @next/next/no-img-element
                   <img
@@ -211,7 +211,7 @@ export const SinglePropertyImageSection = ({ property: prop }: Props) => {
                   />
                 )}
                 {listingAttribution.mls_name && (
-                  <span className="text-[12px] text-white/45">
+                  <span className="text-[12px] text-[var(--ink-faint)]">
                     {listingAttribution.mls_name}
                   </span>
                 )}
@@ -255,7 +255,7 @@ export const SinglePropertyImageSection = ({ property: prop }: Props) => {
 
 function EmptyGallery() {
   return (
-    <div className="relative w-full h-[50vh] min-h-[320px] max-h-[520px] bg-gradient-to-br from-[#14171d] to-[#08090b] flex flex-col items-center justify-center gap-4">
+    <div className="relative w-full h-[50vh] min-h-[320px] max-h-[520px] bg-gradient-to-br from-[var(--surface-graphite)] to-[var(--surface-charcoal)] flex flex-col items-center justify-center gap-4">
       <svg
         width="56"
         height="56"
@@ -269,7 +269,7 @@ function EmptyGallery() {
         <path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9.5z" />
         <polyline points="9 21 9 13 15 13 15 21" />
       </svg>
-      <span className="text-[11px] uppercase tracking-[0.22em] text-white/40">
+      <span className="text-[11px] uppercase tracking-[0.22em] text-[var(--ink-faint)]">
         No images available
       </span>
     </div>
@@ -278,7 +278,7 @@ function EmptyGallery() {
 
 function EmptyGalleryInner() {
   return (
-    <div className="absolute inset-0 bg-gradient-to-br from-[#14171d] to-[#08090b] flex flex-col items-center justify-center gap-3">
+    <div className="absolute inset-0 bg-gradient-to-br from-[var(--surface-graphite)] to-[var(--surface-charcoal)] flex flex-col items-center justify-center gap-3">
       <svg
         width="48"
         height="48"
@@ -292,7 +292,7 @@ function EmptyGalleryInner() {
         <path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9.5z" />
         <polyline points="9 21 9 13 15 13 15 21" />
       </svg>
-      <span className="text-[11px] uppercase tracking-[0.22em] text-white/40">
+      <span className="text-[11px] uppercase tracking-[0.22em] text-[var(--ink-faint)]">
         No image
       </span>
     </div>

@@ -1,40 +1,68 @@
 @import "tailwindcss";
 
 /* =========================================================
-   DESIGN TOKENS — Dark + Gold Luxury Real Estate
+   DESIGN TOKENS — White Premium Luxury Real Estate
+   ---------------------------------------------------------
+   Re-skin note: the original theme was dark + gold. Token
+   *names* are intentionally preserved (surface-ink, gold-500,
+   line-soft, …) so the ~700 component references that point at
+   them flip to the light palette automatically. The semantic
+   meaning is inverted: "ink/obsidian" surfaces are now whites,
+   the "gold" ramp is a muted brass, and hairlines are dark-on-
+   light instead of light-on-dark.
    ========================================================= */
 :root {
-  /* Surface palette */
-  --surface-ink: #08090b;
-  --surface-obsidian: #0d0f13;
-  --surface-onyx: #14171d;
-  --surface-charcoal: #1a1d24;
-  --surface-graphite: #23272f;
+  /* Surface palette — base white → faint warm off-whites.
+     ink = pure white page base; obsidian/onyx/charcoal = warm off-whites
+     used for alternating sections; graphite = input fills / skeletons. */
+  --surface-ink: #ffffff;       /* page background (base) */
+  --surface-obsidian: #fafaf8;  /* alternating subtle sections / cards */
+  --surface-onyx: #fafaf8;      /* warm off-white sections (bg-subtle) */
+  --surface-charcoal: #f4f2ec;  /* deeper alternating section */
+  --surface-graphite: #efebe4;  /* most-raised surface / input fills / skeleton */
 
-  /* Brand — gold */
-  --gold-50: #fdf6e6;
-  --gold-100: #f7e4b4;
-  --gold-300: #edcb8b;
-  --gold-400: #e4bc74;
-  --gold-500: #edb75e;
-  --gold-600: #d9a24a;
-  --gold-700: #b7863b;
+  /* Semantic surfaces (brief aliases) */
+  --bg: #ffffff;
+  --bg-subtle: #fafaf8;
+  --surface: #ffffff;
 
-  /* Neutrals for dark UI */
+  /* Text — near-black ink ramp */
+  --ink: #1a1a1a;        /* primary text */
+  --ink-soft: #555350;   /* secondary text */
+  --ink-faint: #8a8780;  /* tertiary / meta */
+
+  /* Brand — muted brass/gold (use SPARINGLY, like jewelry).
+     gold-500 = display/decorative accent; gold-600 = AA-safe
+     value for small text, links & borders on white. */
+  --gold-50: #f7f1e6;
+  --gold-100: #e8dcc4;
+  --gold-300: #c9ae80;
+  --gold-400: #b8965e;
+  --gold-500: #a6824c;   /* --accent */
+  --gold-600: #8a6a3b;   /* --accent-text (AA on white) */
+  --gold-700: #6f5530;   /* --accent-deep brass */
+
+  /* Brief accent aliases */
+  --accent: #a6824c;
+  --accent-text: #8a6a3b;
+  --accent-deep: #2c3a33; /* optional deep forest/charcoal-green */
+
+  /* Neutrals — light UI ramp (0 = white … 600 = dark) */
   --neutral-0: #ffffff;
-  --neutral-50: #f7f6f3;
-  --neutral-100: #eeece5;
-  --neutral-200: #d7d4ca;
-  --neutral-400: #8f8d86;
-  --neutral-500: #6d6c67;
-  --neutral-600: #4d4c48;
+  --neutral-50: #fafaf8;
+  --neutral-100: #f2efea;
+  --neutral-200: #e7e4de;
+  --neutral-400: #8a8780;
+  --neutral-500: #555350;
+  --neutral-600: #1a1a1a;
 
-  /* Functional */
-  --line-soft: rgba(255, 255, 255, 0.08);
-  --line-medium: rgba(255, 255, 255, 0.14);
-  --line-strong: rgba(255, 255, 255, 0.22);
+  /* Functional — hairlines are now dark-on-light */
+  --line: #e7e4de;
+  --line-soft: rgba(26, 24, 20, 0.09);
+  --line-medium: rgba(26, 24, 20, 0.16);
+  --line-strong: rgba(26, 24, 20, 0.26);
   --overlay-deep: rgba(0, 0, 0, 0.55);
-  --overlay-edge: linear-gradient(180deg, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.75) 100%);
+  --overlay-edge: linear-gradient(180deg, rgba(0,0,0,0.05) 0%, rgba(0,0,0,0.55) 100%);
 
   /* Motion */
   --ease-out-soft: cubic-bezier(0.16, 1, 0.3, 1);
@@ -51,14 +79,14 @@
   --radius-md: 8px;
   --radius-pill: 999px;
 
-  /* Shadows */
-  --shadow-soft: 0 10px 30px -12px rgba(0, 0, 0, 0.45);
-  --shadow-lift: 0 22px 50px -18px rgba(0, 0, 0, 0.7);
-  --shadow-gold: 0 18px 40px -16px rgba(237, 183, 94, 0.45);
+  /* Shadows — soft, low-opacity, large blur (white-theme restraint) */
+  --shadow-soft: 0 8px 28px -14px rgba(26, 24, 20, 0.12);
+  --shadow-lift: 0 18px 48px -22px rgba(26, 24, 20, 0.18);
+  --shadow-gold: 0 16px 38px -18px rgba(166, 130, 76, 0.22);
 
   /* Keep legacy vars used elsewhere */
   --background: #ffffff;
-  --foreground: #171717;
+  --foreground: #1a1a1a;
 }
 
 @theme inline {
@@ -98,8 +126,8 @@ body {
 }
 
 ::selection {
-  background: var(--gold-500);
-  color: #000;
+  background: var(--gold-100);
+  color: var(--ink);
 }
 
 /* =========================================================
@@ -145,13 +173,15 @@ body {
   font-weight: 600;
   letter-spacing: 0.24em;
   text-transform: uppercase;
-  color: var(--gold-500);
+  color: var(--accent-text); /* AA-safe brass for small uppercase label */
 }
+/* Over dark photography, use the brighter brass for legibility */
+.eyebrow.on-dark { color: var(--gold-300); }
 
 .lede {
   font-size: clamp(1rem, 0.3vw + 0.95rem, 1.125rem);
   line-height: 1.65;
-  color: rgba(255, 255, 255, 0.72);
+  color: var(--ink-soft);
 }
 
 /* =========================================================
@@ -223,36 +253,50 @@ body {
   will-change: transform;
 }
 
+/* Primary — solid ink (jewelry rule: brass is reserved for hover/accents,
+   never large filled blocks). Class name kept for stable component refs. */
 .btn-gold-new {
-  background: var(--gold-500);
-  color: #0b0c0f;
-  border: 1px solid var(--gold-500);
+  background: var(--ink);
+  color: #ffffff;
+  border: 1px solid var(--ink);
 }
 .btn-gold-new:hover {
-  background: var(--gold-600);
-  border-color: var(--gold-600);
+  background: var(--accent-text);
+  border-color: var(--accent-text);
   transform: translateY(-1px);
   box-shadow: var(--shadow-gold);
 }
 .btn-gold-new:active { transform: translateY(0); }
 
+/* Secondary — thin outline. Defaults to ink-on-white; the .on-dark
+   modifier keeps it legible over photography (heroes). */
 .btn-outline-new {
   background: transparent;
-  color: var(--neutral-0);
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: var(--ink);
+  border: 1px solid var(--line-medium);
 }
 .btn-outline-new:hover {
-  border-color: var(--gold-500);
-  color: var(--gold-500);
+  border-color: var(--accent);
+  color: var(--accent-text);
+}
+.btn-outline-new.on-dark {
+  color: var(--neutral-0);
+  border-color: rgba(255, 255, 255, 0.45);
+}
+.btn-outline-new.on-dark:hover {
+  border-color: var(--gold-300);
+  color: var(--gold-300);
 }
 
 .btn-ghost-new {
   background: transparent;
-  color: var(--neutral-0);
+  color: var(--ink);
   border: 1px solid transparent;
   padding: 0.55rem 0.25rem;
 }
-.btn-ghost-new:hover { color: var(--gold-500); }
+.btn-ghost-new:hover { color: var(--accent-text); }
+.btn-ghost-new.on-dark { color: var(--neutral-0); }
+.btn-ghost-new.on-dark:hover { color: var(--gold-300); }
 
 /* Animated underline for links */
 .link-underline {
@@ -260,7 +304,7 @@ body {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  color: var(--gold-500);
+  color: var(--accent-text);
   font-family: var(--font-lato);
   font-size: 12px;
   letter-spacing: 0.22em;
@@ -268,6 +312,7 @@ body {
   font-weight: 700;
   transition: color var(--duration-base) var(--ease-out-soft);
 }
+.link-underline.on-dark { color: var(--gold-300); }
 .link-underline::after {
   content: "";
   position: absolute;
@@ -378,16 +423,16 @@ body {
 .search-container { position: relative; z-index: 50; }
 
 /* =========================================================
-   TOAST OVERRIDES (react-toastify) — branded dark + gold
+   TOAST OVERRIDES (react-toastify) — branded white + brass
    ========================================================= */
 .Toastify__toast-container {
   font-family: var(--font-lato), sans-serif;
 }
 .Toastify__toast {
-  background: var(--surface-obsidian) !important;
-  color: rgba(255, 255, 255, 0.92) !important;
-  border: 1px solid var(--line-soft) !important;
-  border-left: 3px solid var(--gold-500) !important;
+  background: var(--surface) !important;
+  color: var(--ink) !important;
+  border: 1px solid var(--line) !important;
+  border-left: 3px solid var(--accent) !important;
   border-radius: 0 !important;
   box-shadow: var(--shadow-lift) !important;
   padding: 14px 16px !important;
@@ -400,34 +445,34 @@ body {
 }
 .Toastify__toast-body > div:last-child {
   font-weight: 500 !important;
-  color: rgba(255, 255, 255, 0.92) !important;
+  color: var(--ink) !important;
   line-height: 1.5 !important;
 }
 .Toastify__toast--success {
-  border-left-color: var(--gold-500) !important;
+  border-left-color: var(--accent) !important;
 }
 .Toastify__toast--error {
-  border-left-color: #e48e8e !important;
+  border-left-color: #b3261e !important;
 }
 .Toastify__toast--info {
-  border-left-color: rgba(255, 255, 255, 0.4) !important;
+  border-left-color: var(--ink-faint) !important;
 }
 .Toastify__toast--warning {
-  border-left-color: var(--gold-300) !important;
+  border-left-color: var(--gold-400) !important;
 }
 .Toastify__progress-bar {
-  background: linear-gradient(90deg, var(--gold-500), var(--gold-300)) !important;
+  background: linear-gradient(90deg, var(--accent), var(--gold-300)) !important;
   height: 2px !important;
 }
 .Toastify__close-button {
-  color: rgba(255, 255, 255, 0.55) !important;
+  color: var(--ink-faint) !important;
   opacity: 1 !important;
   align-self: flex-start !important;
   padding: 2px !important;
   transition: color 0.2s ease !important;
 }
 .Toastify__close-button:hover {
-  color: var(--gold-500) !important;
+  color: var(--accent-text) !important;
 }
 .Toastify__toast-icon {
   margin-right: 12px !important;
@@ -435,13 +480,13 @@ body {
   height: 18px !important;
 }
 .Toastify__toast-icon svg {
-  fill: var(--gold-500) !important;
+  fill: var(--accent) !important;
 }
 .Toastify__toast--error .Toastify__toast-icon svg {
-  fill: #e48e8e !important;
+  fill: #b3261e !important;
 }
 .Toastify__toast--info .Toastify__toast-icon svg {
-  fill: rgba(255, 255, 255, 0.55) !important;
+  fill: var(--ink-faint) !important;
 }
 
 /* Reduced motion */

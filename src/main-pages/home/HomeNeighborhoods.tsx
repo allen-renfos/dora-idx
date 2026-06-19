@@ -66,7 +66,7 @@ export default function HomeNeighborhoods() {
   };
 
   return (
-    <section className="bg-[var(--surface-ink)] text-white section-pad relative overflow-hidden">
+    <section className="bg-[var(--surface-ink)] text-[var(--ink)] section-pad relative overflow-hidden">
       <div className="container-wide">
         <SectionHeading
           eyebrow="Neighborhoods"
@@ -85,7 +85,7 @@ export default function HomeNeighborhoods() {
                 onClick={() => scrollBy(-1)}
                 disabled={!canLeft}
                 aria-label="Scroll left"
-                className="w-11 h-11 rounded-full border border-white/15 flex items-center justify-center text-white disabled:opacity-30 disabled:cursor-not-allowed hover:border-[var(--gold-500)] hover:text-[var(--gold-500)] transition-colors"
+                className="w-11 h-11 rounded-full border border-[var(--line)] flex items-center justify-center text-[var(--ink-soft)] disabled:opacity-30 disabled:cursor-not-allowed hover:border-[var(--accent)] hover:text-[var(--accent-text)] transition-colors"
               >
                 <FiArrowLeft size={16} />
               </button>
@@ -93,7 +93,7 @@ export default function HomeNeighborhoods() {
                 onClick={() => scrollBy(1)}
                 disabled={!canRight}
                 aria-label="Scroll right"
-                className="w-11 h-11 rounded-full border border-white/15 flex items-center justify-center text-white disabled:opacity-30 disabled:cursor-not-allowed hover:border-[var(--gold-500)] hover:text-[var(--gold-500)] transition-colors"
+                className="w-11 h-11 rounded-full border border-[var(--line)] flex items-center justify-center text-[var(--ink-soft)] disabled:opacity-30 disabled:cursor-not-allowed hover:border-[var(--accent)] hover:text-[var(--accent-text)] transition-colors"
               >
                 <FiArrowRight size={16} />
               </button>
@@ -130,7 +130,7 @@ export default function HomeNeighborhoods() {
               ))}
 
           {!isLoading && neighborhoods.length === 0 && (
-            <div className="w-full py-20 text-center text-white/50">
+            <div className="w-full py-20 text-center text-[var(--ink-faint)]">
               No neighborhoods to display yet.
             </div>
           )}
@@ -171,7 +171,7 @@ function NeighborhoodCard({ item }: { item: Neighborhood }) {
           <h3 className="font-serif text-2xl text-white leading-tight tracking-tight">
             {label}
           </h3>
-          <span className="shrink-0 w-9 h-9 rounded-full border border-white/25 flex items-center justify-center text-white group-hover:bg-[var(--gold-500)] group-hover:border-[var(--gold-500)] group-hover:text-[var(--surface-ink)] transition-all duration-300">
+          <span className="shrink-0 w-9 h-9 rounded-full border border-white/25 flex items-center justify-center text-white group-hover:bg-[var(--accent)] group-hover:border-[var(--accent)] group-hover:text-white transition-all duration-300">
             <FiArrowRight size={14} />
           </span>
         </div>

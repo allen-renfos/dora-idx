@@ -59,7 +59,7 @@ export const AboutUs = () => {
   const lastName = nameParts.slice(1).join(" ");
 
   return (
-    <div className="bg-[var(--surface-ink)] text-white">
+    <div className="bg-[var(--surface-ink)] text-[var(--ink)]">
       {/* HERO + STORY — combined */}
       <section className="relative isolate overflow-hidden">
         {/* Background */}
@@ -87,7 +87,7 @@ export const AboutUs = () => {
                   {/* Ghost watermark behind */}
                   <span
                     aria-hidden
-                    className="absolute -top-4 -left-3 font-serif font-bold leading-none text-white/[0.03] whitespace-nowrap pointer-events-none"
+                    className="absolute -top-4 -left-3 font-serif font-bold leading-none text-[var(--ink)]/[0.04] whitespace-nowrap pointer-events-none"
                     style={{ fontSize: "clamp(72px, 14vw, 180px)" }}
                   >
                     {firstName}
@@ -95,7 +95,7 @@ export const AboutUs = () => {
                   {/* Actual name */}
                   <div className="relative flex flex-col gap-0.5">
                     <span
-                      className="font-serif font-bold text-white leading-[1]"
+                      className="font-serif font-bold text-[var(--ink)] leading-[1]"
                       style={{ fontSize: "clamp(44px, 7vw, 88px)" }}
                     >
                       {firstName || "Your"}
@@ -110,7 +110,7 @@ export const AboutUs = () => {
                   {/* Role tag */}
                   <div className="flex items-center gap-3 mt-5">
                     <span className="h-px w-8 bg-[var(--gold-500)]/50" />
-                    <span className="text-[11px] text-white/45 uppercase tracking-[0.2em] font-semibold">
+                    <span className="text-[11px] text-[var(--ink-faint)] uppercase tracking-[0.2em] font-semibold">
                       Real Estate Advisor
                     </span>
                   </div>
@@ -120,7 +120,7 @@ export const AboutUs = () => {
               {/* Pull quote */}
               <Reveal delay={0.14}>
                 <blockquote className="border-l-2 border-[var(--gold-500)]/50 pl-6">
-                  <p className="font-serif italic text-[clamp(17px,2vw,22px)] text-white/80 leading-[1.6]">
+                  <p className="font-serif italic text-[clamp(17px,2vw,22px)] text-[var(--ink-soft)] leading-[1.6]">
                     &ldquo;{shortDescription ||
                       "Real estate made personal — every client gets the attention a generational decision deserves."}&rdquo;
                   </p>
@@ -131,14 +131,14 @@ export const AboutUs = () => {
               <Reveal delay={0.18}>
                 <div className="flex items-center gap-4">
                   <span className="h-px flex-1 bg-[var(--line-soft)]" />
-                  <span className="eyebrow text-white/35">The Story</span>
+                  <span className="eyebrow text-[var(--ink-faint)]">The Story</span>
                   <span className="h-px w-8 bg-[var(--line-soft)]" />
                 </div>
               </Reveal>
 
               {/* Story content */}
               <Reveal delay={0.22}>
-                <div className="flex flex-col gap-4 text-[15px] text-white/65 leading-[1.85]">
+                <div className="flex flex-col gap-4 text-[15px] text-[var(--ink-soft)] leading-[1.85]">
                   {longDescription ? (
                     <p className="whitespace-pre-line">{longDescription}</p>
                   ) : (
@@ -202,7 +202,7 @@ export const AboutUs = () => {
                       </p>
                       <div className="flex items-center gap-2 mt-2">
                         <span className="h-px w-5 bg-[var(--gold-500)]/60" />
-                        <span className="text-[11px] uppercase tracking-[0.18em] text-white/50 font-medium">
+                        <span className="text-[11px] uppercase tracking-[0.18em] text-white/70 font-medium">
                           Real Estate Advisor
                         </span>
                       </div>
@@ -224,7 +224,7 @@ export const AboutUs = () => {
                 style={{ transform: "translateY(-50%) rotate(90deg)", transformOrigin: "center" }}
               >
                 <span className="h-px w-6 bg-[var(--gold-500)]/40" />
-                <span className="text-[10px] uppercase tracking-[0.25em] text-white/25 font-semibold whitespace-nowrap">
+                <span className="text-[10px] uppercase tracking-[0.25em] text-[var(--ink-faint)] font-semibold whitespace-nowrap">
                   Est. in Excellence
                 </span>
                 <span className="h-px w-6 bg-[var(--gold-500)]/40" />
@@ -243,7 +243,7 @@ export const AboutUs = () => {
               <span className="inline-block h-px w-10 bg-[var(--gold-500)]" />
               How I Work
             </span>
-            <h2 className="display-md text-white">
+            <h2 className="display-md text-[var(--ink)]">
               Three commitments,
               <br />
               kept consistently.
@@ -268,15 +268,15 @@ export const AboutUs = () => {
                     transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] },
                   },
                 }}
-                className="border-t border-white/10 pt-6 flex flex-col gap-3"
+                className="border-t border-[var(--line)] pt-6 flex flex-col gap-3"
               >
                 <span className="font-serif text-[var(--gold-500)] text-lg">
                   {p.n}
                 </span>
-                <h3 className="font-serif text-2xl text-white leading-tight">
+                <h3 className="font-serif text-2xl text-[var(--ink)] leading-tight">
                   {p.title}
                 </h3>
-                <p className="text-[14px] text-white/65 leading-relaxed">
+                <p className="text-[14px] text-[var(--ink-soft)] leading-relaxed">
                   {p.body}
                 </p>
               </motion.div>
@@ -294,7 +294,7 @@ export const AboutUs = () => {
                 <span className="inline-block h-px w-10 bg-[var(--gold-500)]" />
                 Services
               </span>
-              <h2 className="display-md text-white">
+              <h2 className="display-md text-[var(--ink)]">
                 Engagements built around{" "}
                 <em className="italic text-[var(--gold-500)]">your goal</em>.
               </h2>
@@ -308,8 +308,8 @@ export const AboutUs = () => {
             {SERVICES.map((s, i) => (
               <Reveal key={s.title} delay={i * 0.06}>
                 <div className="bg-[var(--surface-obsidian)] border border-[var(--line-soft)] hover:border-[var(--gold-500)]/40 p-6 md:p-7 h-full transition-colors">
-                  <h3 className="font-serif text-xl text-white mb-2">{s.title}</h3>
-                  <p className="text-[14px] text-white/65 leading-relaxed">
+                  <h3 className="font-serif text-xl text-[var(--ink)] mb-2">{s.title}</h3>
+                  <p className="text-[14px] text-[var(--ink-soft)] leading-relaxed">
                     {s.body}
                   </p>
                 </div>
@@ -350,7 +350,7 @@ export const AboutUs = () => {
                     aria-label={label}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-11 h-11 rounded-full border border-white/15 flex items-center justify-center text-white/80 hover:text-[var(--gold-500)] hover:border-[var(--gold-500)] transition-colors"
+                    className="w-11 h-11 rounded-full border border-[var(--line)] flex items-center justify-center text-[var(--ink-soft)] hover:text-[var(--gold-500)] hover:border-[var(--gold-500)] transition-colors"
                   >
                     <Icon size={15} />
                   </a>

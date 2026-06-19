@@ -123,11 +123,11 @@ const SavedSearchesPage = () => {
           {Array.from({ length: 3 }).map((_, i) => (
             <div
               key={i}
-              className="bg-[var(--surface-obsidian)] border border-[var(--line-soft)] p-6 animate-pulse h-[180px]"
+              className="bg-[var(--surface)] border border-[var(--line)] p-6 animate-pulse h-[180px]"
             >
-              <div className="h-3 w-24 bg-white/10 mb-3" />
-              <div className="h-5 w-3/4 bg-white/10 mb-3" />
-              <div className="h-4 w-1/2 bg-white/5" />
+              <div className="h-3 w-24 bg-[var(--surface-graphite)] mb-3" />
+              <div className="h-5 w-3/4 bg-[var(--surface-graphite)] mb-3" />
+              <div className="h-4 w-1/2 bg-[var(--surface-graphite)]" />
             </div>
           ))}
         </div>
@@ -140,24 +140,24 @@ const SavedSearchesPage = () => {
               <button
                 key={s.id}
                 onClick={() => handleClick(s)}
-                className="group relative text-left bg-[var(--surface-obsidian)] border border-[var(--line-soft)] hover:border-[var(--gold-500)]/60 p-6 transition-colors flex flex-col gap-4"
+                className="group relative text-left bg-[var(--surface)] border border-[var(--line)] hover:border-[var(--accent)]/60 p-6 transition-colors flex flex-col gap-4"
               >
                 <div className="flex items-start justify-between gap-3">
-                  <div className="w-10 h-10 rounded-full bg-[var(--gold-500)]/10 border border-[var(--gold-500)]/30 flex items-center justify-center text-[var(--gold-500)]">
+                  <div className="w-10 h-10 rounded-full bg-[var(--accent)]/10 border border-[var(--accent)]/30 flex items-center justify-center text-[var(--accent)]">
                     <FiBookmark size={16} />
                   </div>
-                  <span className="text-[10px] uppercase tracking-[0.22em] text-white/35">
+                  <span className="text-[10px] uppercase tracking-[0.22em] text-[var(--ink-faint)]">
                     #{String(i + 1).padStart(2, "0")}
                   </span>
                 </div>
 
-                <h3 className="font-serif text-xl text-white leading-tight line-clamp-2">
+                <h3 className="font-serif text-xl text-[var(--ink)] leading-tight line-clamp-2">
                   {s.name || filters.keyword || "Untitled search"}
                 </h3>
 
                 {filters.keyword && (
-                  <p className="flex items-center gap-2 text-[13px] text-white/60">
-                    <FiMapPin size={12} className="text-[var(--gold-500)]" />
+                  <p className="flex items-center gap-2 text-[13px] text-[var(--ink-soft)]">
+                    <FiMapPin size={12} className="text-[var(--accent)]" />
                     {filters.keyword}
                   </p>
                 )}
@@ -169,7 +169,7 @@ const SavedSearchesPage = () => {
                       return (
                         <span
                           key={idx}
-                          className="inline-flex items-center gap-1.5 h-7 px-2.5 bg-[var(--gold-500)]/10 border border-[var(--gold-500)]/25 text-[11px] text-[var(--gold-500)] rounded-full"
+                          className="inline-flex items-center gap-1.5 h-7 px-2.5 bg-[var(--accent)]/10 border border-[var(--accent)]/25 text-[11px] text-[var(--accent-text)] rounded-full"
                         >
                           {Icon && <Icon size={11} />}
                           {t.label}
@@ -179,14 +179,14 @@ const SavedSearchesPage = () => {
                   </div>
                 )}
 
-                <div className="mt-auto pt-4 border-t border-[var(--line-soft)] flex items-center justify-between text-[12px] text-white/55">
+                <div className="mt-auto pt-4 border-t border-[var(--line)] flex items-center justify-between text-[12px] text-[var(--ink-faint)]">
                   {s.created_at && (
                     <span className="inline-flex items-center gap-1.5">
                       <FiCalendar size={12} />
                       {formatDate(s.created_at)}
                     </span>
                   )}
-                  <span className="inline-flex items-center gap-1.5 text-[var(--gold-500)] uppercase tracking-[0.18em] font-semibold group-hover:translate-x-0.5 transition-transform">
+                  <span className="inline-flex items-center gap-1.5 text-[var(--accent-text)] uppercase tracking-[0.18em] font-semibold group-hover:translate-x-0.5 transition-transform">
                     View results
                     <FiArrowRight size={12} />
                   </span>
@@ -196,14 +196,14 @@ const SavedSearchesPage = () => {
           })}
         </div>
       ) : (
-        <div className="border border-dashed border-white/10 py-20 px-6 flex flex-col items-center text-center max-w-xl mx-auto">
+        <div className="border border-dashed border-[var(--line)] py-20 px-6 flex flex-col items-center text-center max-w-xl mx-auto">
           <div className="w-16 h-16 rounded-full bg-[var(--gold-500)]/10 border border-[var(--gold-500)]/30 flex items-center justify-center mb-6">
             <FiBookmark size={22} className="text-[var(--gold-500)]" />
           </div>
-          <h3 className="font-serif text-2xl text-white mb-3">
+          <h3 className="font-serif text-2xl text-[var(--ink)] mb-3">
             No saved searches yet
           </h3>
-          <p className="text-white/55 mb-8 leading-relaxed">
+          <p className="text-[var(--ink-soft)] mb-8 leading-relaxed">
             From any search results page, save the filters you care about and
             we&rsquo;ll keep them here for one-click recall.
           </p>

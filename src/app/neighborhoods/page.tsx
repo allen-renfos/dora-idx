@@ -13,7 +13,7 @@ export default function NeighborhoodsPage() {
 
   return (
     <>
-      <main className="bg-[var(--surface-ink)] text-white">
+      <main className="bg-[var(--surface-ink)] text-[var(--ink)]">
         {/* Hero */}
         <section className="relative isolate pt-32 pb-14 md:pt-40 md:pb-16 overflow-hidden">
           <div
@@ -33,7 +33,7 @@ export default function NeighborhoodsPage() {
               </span>
             </Reveal>
             <Reveal delay={0.08}>
-              <h1 className="display-xl text-white">
+              <h1 className="display-xl text-[var(--ink)]">
                 Find the place that{" "}
                 <em className="not-italic italic text-[var(--gold-500)]">feels</em>{" "}
                 like home.
@@ -72,12 +72,12 @@ export default function NeighborhoodsPage() {
                       }
                     }}
                     placeholder="Search by name, city, or county"
-                    className="flex-1 px-3 bg-transparent outline-none text-[14px] text-white placeholder:text-white/45 font-serif"
+                    className="flex-1 px-3 bg-transparent outline-none text-[14px] text-[var(--ink)] placeholder:text-[var(--ink-faint)] font-serif"
                   />
                   {searchQuery && (
                     <button
                       onClick={() => setSearchQuery("")}
-                      className="pr-3 text-white/55 hover:text-white"
+                      className="pr-3 text-[var(--ink-faint)] hover:text-[var(--ink)]"
                       aria-label="Clear search"
                     >
                       <FiX size={16} />

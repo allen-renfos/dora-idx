@@ -30,12 +30,12 @@ export const SharePopup = ({ property }: Props) => {
       setCopied(true);
       toast.success("Link copied to clipboard", {
         style: {
-          background: "var(--surface-obsidian)",
-          color: "#fff",
-          border: "1px solid var(--gold-500)",
+          background: "#ffffff",
+          color: "#1a1a1a",
+          border: "1px solid #a6824c",
           borderRadius: 0,
         },
-        iconTheme: { primary: "var(--gold-500)", secondary: "#0b0c0f" },
+        iconTheme: { primary: "#a6824c", secondary: "#ffffff" },
       });
       setTimeout(() => setCopied(false), 2200);
     } catch {
@@ -111,7 +111,7 @@ export const SharePopup = ({ property }: Props) => {
       <button
         type="button"
         onClick={() => setIsOpen(true)}
-        className="inline-flex items-center justify-center gap-2.5 h-11 border border-[var(--line-medium)] hover:border-[var(--gold-500)] text-white/85 hover:text-[var(--gold-500)] transition-colors text-[12px] font-bold tracking-[0.18em] uppercase"
+        className="inline-flex items-center justify-center gap-2.5 h-11 border border-[var(--line-medium)] hover:border-[var(--gold-500)] text-[var(--ink-soft)] hover:text-[var(--accent-text)] transition-colors text-[12px] font-bold tracking-[0.18em] uppercase"
       >
         <FiShare2 size={14} />
         Share
@@ -145,14 +145,14 @@ export const SharePopup = ({ property }: Props) => {
                 <div className="flex items-center justify-between px-6 py-5 border-b border-[var(--line-soft)]">
                   <div className="flex items-center gap-3">
                     <FiShare2 size={16} className="text-[var(--gold-500)]" />
-                    <h3 className="font-serif text-lg text-white">
+                    <h3 className="font-serif text-lg text-[var(--ink)]">
                       Share this listing
                     </h3>
                   </div>
                   <button
                     onClick={() => setIsOpen(false)}
                     aria-label="Close"
-                    className="w-9 h-9 flex items-center justify-center text-white/70 hover:text-white transition-colors"
+                    className="w-9 h-9 flex items-center justify-center text-[var(--ink-faint)] hover:text-[var(--ink)] transition-colors"
                   >
                     <FiX size={18} />
                   </button>
@@ -165,11 +165,11 @@ export const SharePopup = ({ property }: Props) => {
                     <input
                       readOnly
                       value={shareUrl}
-                      className="flex-1 px-3 py-3 text-[12px] text-white/72 bg-transparent outline-none truncate"
+                      className="flex-1 px-3 py-3 text-[12px] text-[var(--ink-soft)] bg-transparent outline-none truncate"
                     />
                     <button
                       onClick={handleCopy}
-                      className="px-4 inline-flex items-center gap-2 text-[11px] font-bold tracking-[0.18em] uppercase text-[var(--gold-500)] hover:text-white border-l border-[var(--line-soft)] transition-colors"
+                      className="px-4 inline-flex items-center gap-2 text-[11px] font-bold tracking-[0.18em] uppercase text-[var(--accent-text)] hover:text-[var(--ink)] border-l border-[var(--line-soft)] transition-colors"
                     >
                       {copied ? <FiCheck size={14} /> : <FiCopy size={14} />}
                       {copied ? "Copied" : "Copy"}
@@ -184,8 +184,8 @@ export const SharePopup = ({ property }: Props) => {
                         onClick={onClick}
                         className={`flex flex-col items-center justify-center gap-2.5 py-5 border transition-colors group ${
                           accent
-                            ? "bg-[var(--gold-500)]/10 border-[var(--gold-500)]/30 text-[var(--gold-500)] hover:border-[var(--gold-500)]/60"
-                            : "bg-[var(--surface-charcoal)] border-[var(--line-soft)] text-white/85 hover:border-[var(--gold-500)]/50 hover:text-[var(--gold-500)]"
+                            ? "bg-[var(--gold-500)]/10 border-[var(--gold-500)]/30 text-[var(--accent-text)] hover:border-[var(--gold-500)]/60"
+                            : "bg-[var(--surface-charcoal)] border-[var(--line-soft)] text-[var(--ink-soft)] hover:border-[var(--gold-500)]/50 hover:text-[var(--accent-text)]"
                         }`}
                       >
                         <Icon size={20} />

@@ -125,30 +125,30 @@ export const MlsPropertyMapPage = ({
                         key={i}
                         className="bg-[var(--surface-obsidian)] border border-[var(--line-soft)] overflow-hidden animate-pulse"
                       >
-                        <div className="aspect-[4/3] bg-white/5" />
+                        <div className="aspect-[4/3] bg-[var(--surface-graphite)]" />
                         <div className="p-5 flex flex-col gap-2.5">
-                          <div className="h-6 w-32 bg-white/10" />
-                          <div className="h-3 w-full bg-white/5" />
-                          <div className="h-3 w-3/4 bg-white/5" />
-                          <div className="h-px bg-white/10 my-1" />
-                          <div className="h-3 w-1/2 bg-white/5" />
+                          <div className="h-6 w-32 bg-[var(--surface-graphite)]" />
+                          <div className="h-3 w-full bg-[var(--surface-graphite)]" />
+                          <div className="h-3 w-3/4 bg-[var(--surface-graphite)]" />
+                          <div className="h-px bg-[var(--line)] my-1" />
+                          <div className="h-3 w-1/2 bg-[var(--surface-graphite)]" />
                         </div>
                       </div>
                     ))}
                   </div>
                 )}
                 {!hasNextPage && properties.length > 0 && (
-                  <p className="text-center text-white/35 text-[12px] py-6 tracking-wide">
+                  <p className="text-center text-[var(--ink-faint)] text-[12px] py-6 tracking-wide">
                     All {properties.length.toLocaleString()} listings loaded
                   </p>
                 )}
               </>
             ) : (
-              <div className="flex flex-col items-center text-center py-24 text-white/55">
+              <div className="flex flex-col items-center text-center py-24 text-[var(--ink-soft)]">
                 <div className="w-14 h-14 rounded-full bg-[var(--gold-500)]/10 border border-[var(--gold-500)]/30 flex items-center justify-center mb-4">
                   <FiSearch className="text-[var(--gold-500)]" size={20} />
                 </div>
-                <p className="font-serif text-xl text-white mb-1">
+                <p className="font-serif text-xl text-[var(--ink)] mb-1">
                   No listings in this area yet
                 </p>
                 <p className="text-sm">
@@ -169,7 +169,7 @@ export const MlsPropertyMapPage = ({
               }
             }}
           >
-            <span className="text-[13px] text-white/60">
+            <span className="text-[13px] text-[var(--ink-soft)]">
               Search an area to see more listings —
             </span>
             <span className="text-[12px] font-bold text-[var(--gold-500)] uppercase tracking-[0.2em]">
@@ -206,13 +206,13 @@ function SplitSkeleton({ count }: { count: number }) {
           key={i}
           className="bg-[var(--surface-obsidian)] border border-[var(--line-soft)] overflow-hidden animate-pulse"
         >
-          <div className="aspect-[4/3] bg-white/5" />
+          <div className="aspect-[4/3] bg-[var(--surface-graphite)]" />
           <div className="p-5 flex flex-col gap-2.5">
-            <div className="h-6 w-32 bg-white/10" />
-            <div className="h-3 w-full bg-white/5" />
-            <div className="h-3 w-3/4 bg-white/5" />
-            <div className="h-px bg-white/10 my-1" />
-            <div className="h-3 w-1/2 bg-white/5" />
+            <div className="h-6 w-32 bg-[var(--surface-graphite)]" />
+            <div className="h-3 w-full bg-[var(--surface-graphite)]" />
+            <div className="h-3 w-3/4 bg-[var(--surface-graphite)]" />
+            <div className="h-px bg-[var(--line)] my-1" />
+            <div className="h-3 w-1/2 bg-[var(--surface-graphite)]" />
           </div>
         </div>
       ))}

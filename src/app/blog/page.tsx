@@ -13,7 +13,7 @@ export default function BlogPage() {
 
   return (
     <>
-      <main className="bg-[var(--surface-ink)] text-white">
+      <main className="bg-[var(--surface-ink)] text-[var(--ink)]">
         {/* Hero */}
         <section className="relative isolate pt-32 pb-14 md:pt-40 md:pb-16 overflow-hidden">
           <div
@@ -33,7 +33,7 @@ export default function BlogPage() {
               </span>
             </Reveal>
             <Reveal delay={0.08}>
-              <h1 className="display-xl text-white">
+              <h1 className="display-xl text-[var(--ink)]">
                 Notes from the{" "}
                 <em className="not-italic italic text-[var(--gold-500)]">market</em>
                 .
@@ -57,12 +57,12 @@ export default function BlogPage() {
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     placeholder="Search articles, authors, categories"
-                    className="flex-1 px-3 bg-transparent outline-none text-[14px] text-white placeholder:text-white/45 font-serif"
+                    className="flex-1 px-3 bg-transparent outline-none text-[14px] text-[var(--ink)] placeholder:text-[var(--ink-faint)] font-serif"
                   />
                   {searchQuery && (
                     <button
                       onClick={() => setSearchQuery("")}
-                      className="pr-3 text-white/55 hover:text-white"
+                      className="pr-3 text-[var(--ink-faint)] hover:text-[var(--ink)]"
                       aria-label="Clear search"
                     >
                       <FiX size={16} />
@@ -80,7 +80,7 @@ export default function BlogPage() {
             <div>
               <div className="flex items-center gap-3 mb-8">
                 <span className="inline-block h-px w-8 bg-[var(--gold-500)]" />
-                <h2 className="font-serif text-2xl text-white">
+                <h2 className="font-serif text-2xl text-[var(--ink)]">
                   Latest articles
                 </h2>
               </div>
@@ -91,7 +91,7 @@ export default function BlogPage() {
               <div>
                 <div className="flex items-center gap-3 mb-6">
                   <span className="inline-block h-px w-8 bg-[var(--gold-500)]" />
-                  <h2 className="font-serif text-xl text-white">
+                  <h2 className="font-serif text-xl text-[var(--ink)]">
                     Featured news
                   </h2>
                 </div>
@@ -100,7 +100,7 @@ export default function BlogPage() {
               <div>
                 <div className="flex items-center gap-3 mb-6">
                   <span className="inline-block h-px w-8 bg-[var(--gold-500)]" />
-                  <h2 className="font-serif text-xl text-white">
+                  <h2 className="font-serif text-xl text-[var(--ink)]">
                     Featured articles
                   </h2>
                 </div>

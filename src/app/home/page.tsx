@@ -29,7 +29,7 @@ export default function HomePage() {
         newestOnTop
         closeOnClick
         pauseOnHover
-        theme="dark"
+        theme="light"
       />
     </main>
   );

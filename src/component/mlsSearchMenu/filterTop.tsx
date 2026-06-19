@@ -278,7 +278,7 @@ const FilterTop = ({
               type="text"
               placeholder="Search city, county, or zip"
               autoComplete="off"
-              className="flex-1 px-3 bg-transparent outline-none text-[15px] font-sans text-white placeholder:text-white/40"
+              className="flex-1 px-3 bg-transparent outline-none text-[15px] font-sans text-[var(--ink)] placeholder:text-[var(--ink-faint)]"
             />
             {inputValue && (
               <button
@@ -291,7 +291,7 @@ const FilterTop = ({
                   url.searchParams.delete("keyword");
                   window.history.replaceState({}, "", url.toString());
                 }}
-                className="pr-3 text-white/45 hover:text-white"
+                className="pr-3 text-[var(--ink-faint)] hover:text-[var(--ink)]"
                 aria-label="Clear search"
               >
                 <FiX size={16} />
@@ -440,7 +440,7 @@ const FilterTop = ({
 
           <button
             onClick={() => setOpenAdvanced(true)}
-            className="relative h-11 px-4 inline-flex items-center gap-2 bg-[var(--surface-charcoal)] border border-[var(--line-soft)] hover:border-[var(--gold-500)]/60 text-white transition-colors"
+            className="relative h-11 px-4 inline-flex items-center gap-2 bg-[var(--surface-charcoal)] border border-[var(--line-soft)] hover:border-[var(--gold-500)]/60 text-[var(--ink)] transition-colors"
             aria-label="All filters"
           >
             <FiSliders size={14} className="text-[var(--gold-500)]" />
@@ -460,7 +460,7 @@ const FilterTop = ({
           {hasAny && (
             <button
               onClick={clearAll}
-              className="h-11 px-4 inline-flex items-center gap-2 text-[13px] text-[var(--gold-500)] hover:text-white transition-colors"
+              className="h-11 px-4 inline-flex items-center gap-2 text-[13px] text-[var(--accent-text)] hover:text-[var(--ink)] transition-colors"
             >
               <FiX size={14} />
               Clear
@@ -469,7 +469,7 @@ const FilterTop = ({
           <button
             onClick={handleSaveSearch}
             disabled={isSavingSearch}
-            className="h-11 px-5 inline-flex items-center gap-2 bg-[var(--gold-500)] hover:bg-[var(--gold-600)] text-[var(--surface-ink)] text-[12px] font-bold tracking-[0.18em] uppercase disabled:opacity-60 disabled:cursor-not-allowed transition-colors"
+            className="h-11 px-5 inline-flex items-center gap-2 bg-[var(--ink)] hover:bg-[var(--accent-text)] text-white text-[12px] font-bold tracking-[0.18em] uppercase disabled:opacity-60 disabled:cursor-not-allowed transition-colors"
           >
             {isSavingSearch ? (
               <svg
@@ -496,12 +496,12 @@ const FilterTop = ({
           {chips.map((c, i) => (
             <span
               key={i}
-              className="inline-flex items-center gap-2 h-8 px-3 bg-[var(--gold-500)]/10 border border-[var(--gold-500)]/30 text-[12px] text-[var(--gold-500)] rounded-full"
+              className="inline-flex items-center gap-2 h-8 px-3 bg-[var(--gold-500)]/10 border border-[var(--gold-500)]/30 text-[12px] text-[var(--accent-text)] rounded-full"
             >
               {c.label}
               <button
                 onClick={c.onRemove}
-                className="w-4 h-4 flex items-center justify-center hover:text-white"
+                className="w-4 h-4 flex items-center justify-center hover:text-[var(--ink)]"
                 aria-label={`Remove ${c.label}`}
               >
                 <FiX size={12} />
@@ -564,8 +564,8 @@ function FilterPill({
         onClick={onClick}
         className={`h-11 px-4 inline-flex items-center gap-2 border transition-colors text-[13px] ${
           active
-            ? "bg-[var(--gold-500)]/10 border-[var(--gold-500)]/60 text-[var(--gold-500)]"
-            : "bg-[var(--surface-charcoal)] border-[var(--line-soft)] text-white hover:border-[var(--gold-500)]/60"
+            ? "bg-[var(--gold-500)]/10 border-[var(--gold-500)]/60 text-[var(--accent-text)]"
+            : "bg-[var(--surface-charcoal)] border-[var(--line-soft)] text-[var(--ink)] hover:border-[var(--gold-500)]/60"
         }`}
       >
         <span className="font-medium">{activeValue || label}</span>
@@ -615,7 +615,7 @@ function RangeSelect({
     <div className="grid grid-cols-2 gap-4">
       {/* Min */}
       <div className="flex flex-col gap-2">
-        <span className="text-[10px] uppercase tracking-[0.2em] text-white/40 font-semibold">
+        <span className="text-[10px] uppercase tracking-[0.2em] text-[var(--ink-faint)] font-semibold">
           {minLabel}
         </span>
         <div className="flex flex-col overflow-y-auto max-h-[220px] border border-[var(--line-soft)] custom-scrollbar">
@@ -628,8 +628,8 @@ function RangeSelect({
                 onClick={() => onChangeMin(o.value)}
                 className={`text-left px-4 py-2.5 text-[13px] transition-colors duration-150 border-b border-[var(--line-soft)] last:border-0 ${
                   selected
-                    ? "bg-[var(--gold-500)] text-[var(--surface-ink)] font-semibold"
-                    : "text-white/80 hover:bg-[var(--surface-charcoal)] hover:text-white"
+                    ? "bg-[var(--ink)] text-white font-semibold"
+                    : "text-[var(--ink-soft)] hover:bg-[var(--surface-charcoal)] hover:text-[var(--ink)]"
                 }`}
               >
                 {o.label}
@@ -641,7 +641,7 @@ function RangeSelect({
 
       {/* Max */}
       <div className="flex flex-col gap-2">
-        <span className="text-[10px] uppercase tracking-[0.2em] text-white/40 font-semibold">
+        <span className="text-[10px] uppercase tracking-[0.2em] text-[var(--ink-faint)] font-semibold">
           {maxLabel}
         </span>
         <div className="flex flex-col overflow-y-auto max-h-[220px] border border-[var(--line-soft)] custom-scrollbar">
@@ -654,8 +654,8 @@ function RangeSelect({
                 onClick={() => onChangeMax(o.value)}
                 className={`text-left px-4 py-2.5 text-[13px] transition-colors duration-150 border-b border-[var(--line-soft)] last:border-0 ${
                   selected
-                    ? "bg-[var(--gold-500)] text-[var(--surface-ink)] font-semibold"
-                    : "text-white/80 hover:bg-[var(--surface-charcoal)] hover:text-white"
+                    ? "bg-[var(--ink)] text-white font-semibold"
+                    : "text-[var(--ink-soft)] hover:bg-[var(--surface-charcoal)] hover:text-[var(--ink)]"
                 }`}
               >
                 {o.label}

@@ -357,7 +357,7 @@ const MlsSerchHomePage = () => {
         newestOnTop
         closeOnClick
         pauseOnHover
-        theme="dark"
+        theme="light"
       />
       <RegistrationModal
         handleModal={handleModal}
@@ -385,7 +385,7 @@ const MlsSerchHomePage = () => {
       <div className="container-wide py-6">
         {/* Results bar */}
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 pb-4 border-b border-[var(--line-soft)]">
-          <div className="text-[13px] text-white/55 tracking-wide">
+          <div className="text-[13px] text-[var(--ink-faint)] tracking-wide">
             {isLoading ? (
               <span className="inline-flex items-center gap-2">
                 <svg
@@ -404,11 +404,11 @@ const MlsSerchHomePage = () => {
               </span>
             ) : properties.length ? (
               <span>
-                <strong className="text-[var(--gold-500)] font-semibold">
+                <strong className="text-[var(--accent-text)] font-semibold">
                   {properties.length}
                 </strong>{" "}
-                <span className="text-white/40">of</span>{" "}
-                <strong className="text-white font-semibold">
+                <span className="text-[var(--ink-faint)]">of</span>{" "}
+                <strong className="text-[var(--ink)] font-semibold">
                   {totalCount > 0 ? totalCount.toLocaleString() : "…"}
                 </strong>{" "}
                 listings loaded
@@ -494,13 +494,13 @@ const MlsSerchHomePage = () => {
                           key={i}
                           className="bg-[var(--surface-obsidian)] border border-[var(--line-soft)] overflow-hidden animate-pulse"
                         >
-                          <div className="aspect-[4/3] bg-white/5" />
+                          <div className="aspect-[4/3] bg-[var(--surface-graphite)]" />
                           <div className="p-6 flex flex-col gap-3">
-                            <div className="h-7 w-40 bg-white/10" />
-                            <div className="h-4 w-full bg-white/5" />
-                            <div className="h-4 w-3/4 bg-white/5" />
-                            <div className="h-px bg-white/10 my-1" />
-                            <div className="h-4 w-1/2 bg-white/5" />
+                            <div className="h-7 w-40 bg-[var(--surface-graphite)]" />
+                            <div className="h-4 w-full bg-[var(--surface-graphite)]" />
+                            <div className="h-4 w-3/4 bg-[var(--surface-graphite)]" />
+                            <div className="h-px bg-[var(--line)] my-1" />
+                            <div className="h-4 w-1/2 bg-[var(--surface-graphite)]" />
                           </div>
                         </div>
                       ))}
@@ -508,7 +508,7 @@ const MlsSerchHomePage = () => {
                   )}
 
                   {!hasNextPage && properties.length > 0 && (
-                    <p className="text-center text-white/35 text-[13px] py-10 tracking-wide">
+                    <p className="text-center text-[var(--ink-faint)] text-[13px] py-10 tracking-wide">
                       All {properties.length.toLocaleString()} listings loaded
                     </p>
                   )}
@@ -549,13 +549,13 @@ function GridSkeleton() {
           key={i}
           className="bg-[var(--surface-obsidian)] border border-[var(--line-soft)] overflow-hidden animate-pulse"
         >
-          <div className="aspect-[4/3] bg-white/5" />
+          <div className="aspect-[4/3] bg-[var(--surface-graphite)]" />
           <div className="p-6 flex flex-col gap-3">
-            <div className="h-7 w-40 bg-white/10" />
-            <div className="h-4 w-full bg-white/5" />
-            <div className="h-4 w-3/4 bg-white/5" />
-            <div className="h-px bg-white/10 my-1" />
-            <div className="h-4 w-1/2 bg-white/5" />
+            <div className="h-7 w-40 bg-[var(--surface-graphite)]" />
+            <div className="h-4 w-full bg-[var(--surface-graphite)]" />
+            <div className="h-4 w-3/4 bg-[var(--surface-graphite)]" />
+            <div className="h-px bg-[var(--line)] my-1" />
+            <div className="h-4 w-1/2 bg-[var(--surface-graphite)]" />
           </div>
         </div>
       ))}
@@ -571,10 +571,10 @@ function EmptyState({ onClear }: { onClear: () => void }) {
       <div className="w-16 h-16 rounded-full border border-[var(--gold-500)]/30 bg-[var(--gold-500)]/5 flex items-center justify-center mb-6">
         <FiSearch size={24} className="text-[var(--gold-500)]" />
       </div>
-      <h3 className="font-serif text-3xl text-white mb-3">
+      <h3 className="font-serif text-3xl text-[var(--ink)] mb-3">
         No properties match these filters
       </h3>
-      <p className="text-white/55 mb-8 leading-relaxed">
+      <p className="text-[var(--ink-soft)] mb-8 leading-relaxed">
         Try broadening your location, adjusting price, or clearing a filter or two
         to see what else is on the market.
       </p>

@@ -119,11 +119,11 @@ export const SinglePropertyDetails = ({ property: prop }: Props) => {
       if (data?.data?.id) setWishlistItemId(String(data.data.id));
       toast.success("Saved to favorites", {
         style: {
-          background: "#14171d",
-          color: "#fff",
-          border: "1px solid #edb75e",
+          background: "#fff",
+          color: "#1a1a1a",
+          border: "1px solid #a6824c",
         },
-        iconTheme: { primary: "#edb75e", secondary: "#0b0c0f" },
+        iconTheme: { primary: "#a6824c", secondary: "#fff" },
       });
       queryClient.invalidateQueries({ queryKey: ["userWishlistInfo"] });
       queryClient.invalidateQueries({ queryKey: ["mlsProperties"] });
@@ -142,9 +142,9 @@ export const SinglePropertyDetails = ({ property: prop }: Props) => {
       setWishlistItemId(null);
       toast.success("Removed from favorites", {
         style: {
-          background: "#14171d",
-          color: "#fff",
-          border: "1px solid #edb75e",
+          background: "#fff",
+          color: "#1a1a1a",
+          border: "1px solid #a6824c",
         },
       });
       queryClient.invalidateQueries({ queryKey: ["userWishlistInfo"] });
@@ -471,7 +471,7 @@ export const SinglePropertyDetails = ({ property: prop }: Props) => {
                 {property.status || property.MlsStatus || "Active"}
               </span>
               {(property.DaysOnSite|| property.dom) && (
-                <span className="inline-flex items-center gap-2 text-[12px] text-white/55">
+                <span className="inline-flex items-center gap-2 text-[12px] text-[var(--ink-faint)]">
                   <FiClock size={12} />
                   {property.DaysOnSite || property.dom} days on
                   market
@@ -486,7 +486,7 @@ export const SinglePropertyDetails = ({ property: prop }: Props) => {
             </h1>
 
             {showAddress && property.address && (
-              <p className="flex items-start gap-2 text-[22px] text-white/72 font-sans font-semibold">
+              <p className="flex items-start gap-2 text-[22px] text-[var(--ink-soft)] font-sans font-semibold">
                 <FiMapPin
                   size={22}
                   className="mt-1 text-[var(--gold-500)] shrink-0"
@@ -525,7 +525,7 @@ export const SinglePropertyDetails = ({ property: prop }: Props) => {
           <div className="flex flex-col gap-8 min-w-0">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <Card title="Description">
-                <p className="text-[15px] leading-[1.75] text-white/72 whitespace-pre-line">
+                <p className="text-[15px] leading-[1.75] text-[var(--ink-soft)] whitespace-pre-line">
                   {property.description ||
                     property.PublicRemarks ||
                     "No description available for this property."}
@@ -575,10 +575,10 @@ export const SinglePropertyDetails = ({ property: prop }: Props) => {
             {/* Inline CTA */}
             <div className="bg-gradient-to-br from-[var(--gold-500)]/10 to-transparent border border-[var(--gold-500)]/25 px-6 md:px-8 py-7 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
               <div>
-                <h3 className="font-serif text-2xl text-white">
+                <h3 className="font-serif text-2xl text-[var(--ink)]">
                   Interested in this home?
                 </h3>
-                <p className="text-[14px] text-white/65 mt-1.5 max-w-md">
+                <p className="text-[14px] text-[var(--ink-soft)] mt-1.5 max-w-md">
                   Schedule a private viewing or request more information from a
                   trusted advisor.
                 </p>
@@ -629,7 +629,7 @@ export const SinglePropertyDetails = ({ property: prop }: Props) => {
                           cy="100"
                           r={donutR}
                           fill="none"
-                          stroke="rgba(255,255,255,0.32)"
+                          stroke="rgba(26,26,26,0.32)"
                           strokeWidth="22"
                           strokeDasharray={`${taxDash} ${circumference}`}
                           strokeDashoffset={-piDash}
@@ -654,7 +654,7 @@ export const SinglePropertyDetails = ({ property: prop }: Props) => {
                           x="100"
                           y="114"
                           textAnchor="middle"
-                          fill="rgba(255,255,255,0.55)"
+                          fill="rgba(138,135,128,1)"
                           fontSize="11"
                           letterSpacing="2"
                         >
@@ -665,12 +665,12 @@ export const SinglePropertyDetails = ({ property: prop }: Props) => {
 
                     {/* Breakdown */}
                     <div className="flex-1 min-w-[200px] flex flex-col gap-4">
-                      <div className="flex justify-between items-center pb-3 border-b border-white/8">
-                        <span className="flex items-center gap-3 text-[14px] text-white/72">
+                      <div className="flex justify-between items-center pb-3 border-b border-[var(--line)]">
+                        <span className="flex items-center gap-3 text-[14px] text-[var(--ink-soft)]">
                           <span className="w-3 h-3 rounded-full bg-[var(--gold-500)]" />
                           Principal &amp; Interest
                         </span>
-                        <span className="text-[var(--gold-500)] font-medium">
+                        <span className="text-[var(--accent-text)] font-medium">
                           $
                           {mortgage.pi.toLocaleString("en-US", {
                             minimumFractionDigits: 2,
@@ -680,11 +680,11 @@ export const SinglePropertyDetails = ({ property: prop }: Props) => {
                       </div>
                       {mortgage.monthlyTax > 0 && (
                         <div className="flex justify-between items-center">
-                          <span className="flex items-center gap-3 text-[14px] text-white/72">
-                            <span className="w-3 h-3 rounded-full bg-white/35" />
+                          <span className="flex items-center gap-3 text-[14px] text-[var(--ink-soft)]">
+                            <span className="w-3 h-3 rounded-full bg-[var(--ink)]/35" />
                             Taxes
                           </span>
-                          <span className="text-white font-medium">
+                          <span className="text-[var(--ink)] font-medium">
                             $
                             {mortgage.monthlyTax.toLocaleString("en-US", {
                               minimumFractionDigits: 2,
@@ -711,10 +711,10 @@ export const SinglePropertyDetails = ({ property: prop }: Props) => {
                           }
                           onBlur={() => setEditingField(null)}
                           autoFocus
-                          className="bg-transparent border-0 outline-none text-white text-[16px] font-medium w-full"
+                          className="bg-transparent border-0 outline-none text-[var(--ink)] text-[16px] font-medium w-full"
                         />
                       ) : (
-                        <span className="text-white text-[16px] font-medium">
+                        <span className="text-[var(--ink)] text-[16px] font-medium">
                           ${mortgageHomePrice.toLocaleString()}
                         </span>
                       )}
@@ -730,15 +730,15 @@ export const SinglePropertyDetails = ({ property: prop }: Props) => {
                           setLoanDropdownOpen((o) => !o);
                         }}
                       >
-                        <span className="text-white text-[16px] font-medium">
+                        <span className="text-[var(--ink)] text-[16px] font-medium">
                           {mortgageLoanYears} yrs
-                          <span className="text-white/30 mx-2">|</span>
+                          <span className="text-[var(--ink-faint)] mx-2">|</span>
                           {mortgageRate}%
                         </span>
                       </CalcField>
                       {loanDropdownOpen && (
-                        <div className="absolute top-full left-0 right-0 mt-2 bg-[var(--surface-charcoal)] border border-[var(--gold-500)]/40 p-5 z-30 shadow-[0_20px_40px_-15px_rgba(0,0,0,0.6)]">
-                          <label className="block text-[10px] uppercase tracking-[0.2em] text-white/55 mb-1.5">
+                        <div className="absolute top-full left-0 right-0 mt-2 bg-[var(--surface-charcoal)] border border-[var(--gold-500)]/40 p-5 z-30 shadow-[0_20px_40px_-15px_rgba(0,0,0,0.18)]">
+                          <label className="block text-[10px] uppercase tracking-[0.2em] text-[var(--ink-faint)] mb-1.5">
                             Interest Rate
                           </label>
                           <div className="flex items-center bg-[var(--surface-ink)] border border-[var(--line-soft)] px-3 py-2.5 mb-4">
@@ -751,11 +751,11 @@ export const SinglePropertyDetails = ({ property: prop }: Props) => {
                               onChange={(e) =>
                                 setTempRate(Number(e.target.value))
                               }
-                              className="bg-transparent border-0 outline-none text-white text-[14px] w-full"
+                              className="bg-transparent border-0 outline-none text-[var(--ink)] text-[14px] w-full"
                             />
-                            <span className="text-white/55 ml-1">%</span>
+                            <span className="text-[var(--ink-faint)] ml-1">%</span>
                           </div>
-                          <label className="block text-[10px] uppercase tracking-[0.2em] text-white/55 mb-1.5">
+                          <label className="block text-[10px] uppercase tracking-[0.2em] text-[var(--ink-faint)] mb-1.5">
                             Loan Type
                           </label>
                           <select
@@ -763,7 +763,7 @@ export const SinglePropertyDetails = ({ property: prop }: Props) => {
                             onChange={(e) =>
                               setTempYears(Number(e.target.value))
                             }
-                            className="w-full bg-[var(--surface-ink)] border border-[var(--line-soft)] px-3 py-2.5 text-white text-[14px] mb-5 outline-none focus:border-[var(--gold-500)]/60"
+                            className="w-full bg-[var(--surface-ink)] border border-[var(--line-soft)] px-3 py-2.5 text-[var(--ink)] text-[14px] mb-5 outline-none focus:border-[var(--gold-500)]/60"
                           >
                             <option value={10}>10 years</option>
                             <option value={15}>15 years</option>
@@ -789,7 +789,7 @@ export const SinglePropertyDetails = ({ property: prop }: Props) => {
                       label="Down Payment"
                       onEdit={() => setEditingField("downPct")}
                     >
-                      <div className="flex items-center gap-2 text-white text-[16px] font-medium">
+                      <div className="flex items-center gap-2 text-[var(--ink)] text-[16px] font-medium">
                         {editingField === "downPct" ? (
                           <input
                             type="number"
@@ -799,12 +799,12 @@ export const SinglePropertyDetails = ({ property: prop }: Props) => {
                             }
                             onBlur={() => setEditingField(null)}
                             autoFocus
-                            className="bg-transparent border-0 outline-none text-white text-[16px] font-medium w-12"
+                            className="bg-transparent border-0 outline-none text-[var(--ink)] text-[16px] font-medium w-12"
                           />
                         ) : (
                           <span>{mortgageDownPct}%</span>
                         )}
-                        <span className="text-white/30">|</span>
+                        <span className="text-[var(--ink-faint)]">|</span>
                         <span>${mortgage.downAmt.toLocaleString()}</span>
                       </div>
                     </CalcField>
@@ -815,7 +815,7 @@ export const SinglePropertyDetails = ({ property: prop }: Props) => {
 
             {/* Mortgage calculator disclaimer */}
             {showMortgageCalculator && (
-              <div className="p-5 bg-[var(--surface-obsidian)] border border-[var(--line-soft)] text-[12px] text-white/45 leading-relaxed flex flex-col gap-2">
+              <div className="p-5 bg-[var(--surface-obsidian)] border border-[var(--line-soft)] text-[12px] text-[var(--ink-faint)] leading-relaxed flex flex-col gap-2">
                 <p>
                   All calculations are estimates and today&rsquo;s rates are provided by Realtipro for informational purposes only.
                 </p>
@@ -838,7 +838,7 @@ export const SinglePropertyDetails = ({ property: prop }: Props) => {
                     className="absolute inset-0 w-full h-full border-0"
                   />
                 </div>
-                <p className="mt-3 text-[12px] text-white/45">
+                <p className="mt-3 text-[12px] text-[var(--ink-faint)]">
                   Interactive 3D walkthrough — explore from anywhere.
                 </p>
               </div>
@@ -860,7 +860,7 @@ export const SinglePropertyDetails = ({ property: prop }: Props) => {
             )}
 
             {/* MLS disclaimer */}
-            <div className="mt-4 p-6 md:p-8 bg-[var(--surface-obsidian)] border border-[var(--line-soft)] flex flex-col gap-3 text-[12px] text-white/55 leading-relaxed">
+            <div className="mt-4 p-6 md:p-8 bg-[var(--surface-obsidian)] border border-[var(--line-soft)] flex flex-col gap-3 text-[12px] text-[var(--ink-faint)] leading-relaxed">
               <p>
                 Estimated payment, market insight calculations, school and
                 neighborhood information provided by Realtipro.
@@ -915,12 +915,12 @@ export const SinglePropertyDetails = ({ property: prop }: Props) => {
                   />
                 </div>
                 <div className="flex flex-col gap-1">
-                  <span className="font-serif text-xl text-white leading-tight">
+                  <span className="font-serif text-xl text-[var(--ink)] leading-tight">
                     {name || "Your Advisor"}
                   </span>
                   <Link
                     href="/about-us"
-                    className="text-[12px] uppercase tracking-[0.18em] text-[var(--gold-500)] hover:text-white transition-colors inline-flex items-center gap-1.5"
+                    className="text-[12px] uppercase tracking-[0.18em] text-[var(--accent-text)] hover:text-[var(--ink)] transition-colors inline-flex items-center gap-1.5"
                   >
                     View profile
                     <FiArrowRight size={12} />
@@ -933,7 +933,7 @@ export const SinglePropertyDetails = ({ property: prop }: Props) => {
                   {hasEmail && (
                     <a
                       href={`mailto:${email}`}
-                      className="inline-flex items-center justify-center gap-2 h-11 border border-[var(--line-soft)] text-white/85 text-[12px] tracking-[0.14em] uppercase font-semibold hover:border-[var(--gold-500)] hover:text-[var(--gold-500)] transition-colors"
+                      className="inline-flex items-center justify-center gap-2 h-11 border border-[var(--line-soft)] text-[var(--ink-soft)] text-[12px] tracking-[0.14em] uppercase font-semibold hover:border-[var(--gold-500)] hover:text-[var(--accent-text)] transition-colors"
                     >
                       <FiMail size={14} />
                       Email
@@ -942,7 +942,7 @@ export const SinglePropertyDetails = ({ property: prop }: Props) => {
                   {hasPhone && (
                     <a
                       href={`tel:${formattedPhone}`}
-                      className="inline-flex items-center justify-center gap-2 h-11 border border-[var(--line-soft)] text-white/85 text-[12px] tracking-[0.14em] uppercase font-semibold hover:border-[var(--gold-500)] hover:text-[var(--gold-500)] transition-colors"
+                      className="inline-flex items-center justify-center gap-2 h-11 border border-[var(--line-soft)] text-[var(--ink-soft)] text-[12px] tracking-[0.14em] uppercase font-semibold hover:border-[var(--gold-500)] hover:text-[var(--accent-text)] transition-colors"
                     >
                       <FiPhone size={14} />
                       Call
@@ -965,8 +965,8 @@ export const SinglePropertyDetails = ({ property: prop }: Props) => {
                 disabled={isAddingToFavorites}
                 className={`inline-flex items-center justify-center gap-2.5 h-11 border transition-all duration-300 text-[12px] font-bold tracking-[0.18em] uppercase ${
                   isFavorited
-                    ? "bg-[var(--gold-500)] border-[var(--gold-500)] text-[var(--surface-ink)]"
-                    : "border-[var(--gold-500)] text-[var(--gold-500)] hover:bg-[var(--gold-500)]/10"
+                    ? "bg-[var(--ink)] border-[var(--ink)] text-white"
+                    : "border-[var(--gold-500)] text-[var(--accent-text)] hover:bg-[var(--gold-500)]/10"
                 } disabled:opacity-50 disabled:cursor-not-allowed`}
               >
                 {isAddingToFavorites ? (
@@ -1018,10 +1018,10 @@ type SpecRow = { label: string; value: any };
 function Stat({ value, label }: { value: any; label: string }) {
   return (
     <div className="flex flex-col items-center justify-center px-5 md:px-7 py-4 min-w-[88px]">
-      <span className="font-serif text-[28px] leading-none text-white">
+      <span className="font-serif text-[28px] leading-none text-[var(--ink)]">
         {value}
       </span>
-      <span className="text-[10px] mt-1.5 uppercase tracking-[0.22em] text-white/55">
+      <span className="text-[10px] mt-1.5 uppercase tracking-[0.22em] text-[var(--ink-faint)]">
         {label}
       </span>
     </div>
@@ -1032,7 +1032,7 @@ function SectionHeader({ title }: { title: string }) {
   return (
     <div className="flex items-center gap-3 mb-5">
       <span className="inline-block h-px w-8 bg-[var(--gold-500)]" />
-      <h2 className="font-serif text-2xl text-white">{title}</h2>
+      <h2 className="font-serif text-2xl text-[var(--ink)]">{title}</h2>
     </div>
   );
 }
@@ -1046,7 +1046,7 @@ function Card({
 }) {
   return (
     <div className="bg-[var(--surface-obsidian)] border border-[var(--line-soft)] hover:border-[var(--line-medium)] transition-colors p-6 md:p-7">
-      <h3 className="flex items-center gap-3 mb-5 font-serif text-lg text-white">
+      <h3 className="flex items-center gap-3 mb-5 font-serif text-lg text-[var(--ink)]">
         <span className="inline-block w-1 h-5 bg-[var(--gold-500)]" />
         {title}
       </h3>
@@ -1069,10 +1069,10 @@ function SpecList({ rows }: { rows: SpecRow[] }) {
         return (
           <div
             key={i}
-            className="flex items-start justify-between gap-4 py-2.5 border-b border-white/5 last:border-0 text-[14px]"
+            className="flex items-start justify-between gap-4 py-2.5 border-b border-[var(--line-soft)] last:border-0 text-[14px]"
           >
-            <dt className="text-white/55 shrink-0">{row.label}</dt>
-            <dd className="text-white/85 text-right">{display}</dd>
+            <dt className="text-[var(--ink-faint)] shrink-0">{row.label}</dt>
+            <dd className="text-[var(--ink-soft)] text-right">{display}</dd>
           </div>
         );
       })}
@@ -1099,7 +1099,7 @@ function CalcField({
           : "border-[var(--line-soft)] hover:border-[var(--line-medium)]"
       }`}
     >
-      <div className="text-[10px] uppercase tracking-[0.22em] text-white/55 mb-1.5">
+      <div className="text-[10px] uppercase tracking-[0.22em] text-[var(--ink-faint)] mb-1.5">
         {label}
       </div>
       <div className="flex items-center justify-between gap-2">
@@ -1107,7 +1107,7 @@ function CalcField({
         {onEdit && (
           <button
             onClick={onEdit}
-            className="text-white/55 hover:text-[var(--gold-500)] transition-colors p-0.5"
+            className="text-[var(--ink-faint)] hover:text-[var(--accent-text)] transition-colors p-0.5"
             aria-label="Edit"
           >
             <FiEdit2 size={14} />

@@ -217,7 +217,7 @@ export default function SellModal({ handleOpenModal }: Props) {
         </div>
 
         <div className="flex flex-col gap-2">
-          <label className="text-[10px] uppercase tracking-[0.22em] text-white/55">
+          <label className="text-[10px] uppercase tracking-[0.22em] text-[var(--ink-faint)]">
             Timing
           </label>
           <div className="flex flex-wrap gap-2">
@@ -232,8 +232,8 @@ export default function SellModal({ handleOpenModal }: Props) {
                   }
                   className={`h-10 px-4 text-[12px] uppercase tracking-[0.18em] border transition-colors ${
                     active
-                      ? "bg-[var(--gold-500)]/15 border-[var(--gold-500)] text-[var(--gold-500)]"
-                      : "bg-[var(--surface-charcoal)] border-[var(--line-soft)] text-white/75 hover:border-[var(--gold-500)]/50"
+                      ? "bg-[var(--gold-500)]/15 border-[var(--gold-500)] text-[var(--accent-text)]"
+                      : "bg-[var(--surface-charcoal)] border-[var(--line-soft)] text-[var(--ink-soft)] hover:border-[var(--gold-500)]/50"
                   }`}
                 >
                   {w.label}
@@ -256,7 +256,7 @@ export default function SellModal({ handleOpenModal }: Props) {
           <button
             type="button"
             onClick={handleOpenModal}
-            className="text-[12px] uppercase tracking-[0.18em] text-white/65 hover:text-white transition-colors"
+            className="text-[12px] uppercase tracking-[0.18em] text-[var(--ink-soft)] hover:text-[var(--ink)] transition-colors"
           >
             Cancel
           </button>

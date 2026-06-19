@@ -24,11 +24,13 @@ export function SectionHeading({
   tone = "dark",
   className,
 }: SectionHeadingProps) {
-  const textColor = tone === "dark" ? "text-white" : "text-[var(--surface-ink)]";
+  // White-theme mapping: "dark" tone = ink text for default (white) sections;
+  // "light" tone = white text for sections sitting over dark photography.
+  const textColor = tone === "dark" ? "text-[var(--ink)]" : "text-white";
   const mutedColor =
     tone === "dark"
-      ? "text-[rgba(255,255,255,0.62)]"
-      : "text-[rgba(10,10,12,0.65)]";
+      ? "text-[var(--ink-soft)]"
+      : "text-[rgba(255,255,255,0.72)]";
 
   const containerAlign =
     align === "center"
