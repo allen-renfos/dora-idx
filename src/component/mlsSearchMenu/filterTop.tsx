@@ -246,15 +246,15 @@ const FilterTop = ({
   });
 
   return (
-    <div className="sticky top-[68px] z-30 border-y border-[var(--line-soft)] bg-[var(--surface-obsidian)]/95 backdrop-blur-xl">
+    <div className="sticky top-[68px] z-30 border-y border-[var(--line)] bg-[var(--canvas-2)]/95 backdrop-blur-xl">
       <div className="container-wide py-4 flex flex-wrap items-center gap-3">
         {/* Search input */}
         <div
           ref={dropdownRef}
           className="relative flex-1 min-w-[260px] md:min-w-[320px]"
         >
-          <div className="flex items-center h-11 bg-[var(--surface-charcoal)] border border-[var(--line-soft)] hover:border-[var(--line-medium)] focus-within:border-[var(--gold-500)]/60 transition-colors">
-            <span className="pl-3 text-[var(--gold-500)]">
+          <div className="flex items-center h-11 rounded-[var(--radius-pill)] bg-[var(--cream)] border border-[var(--line)] hover:border-[var(--line-medium)] focus-within:border-[var(--sage-deep)]/60 transition-colors">
+            <span className="pl-4 text-[var(--sage-deep)]">
               {isSearching ? (
                 <svg className="animate-spin" width={16} height={16} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                   <circle cx="12" cy="12" r="10" strokeOpacity="0.25" />
@@ -276,7 +276,7 @@ const FilterTop = ({
                 }
               }}
               type="text"
-              placeholder="Search city, county, or zip"
+              placeholder="Search by city, county, or zip"
               autoComplete="off"
               className="flex-1 px-3 bg-transparent outline-none text-[15px] font-sans text-[var(--ink)] placeholder:text-[var(--ink-faint)]"
             />
@@ -306,37 +306,37 @@ const FilterTop = ({
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -4 }}
                 transition={{ duration: 0.2 }}
-                className="absolute left-0 right-0 top-full mt-1 bg-white shadow-[0_30px_60px_-15px_rgba(0,0,0,0.5)] z-50 max-h-[380px] overflow-y-auto custom-scrollbar border-t border-[var(--gold-500)]/30"
+                className="absolute left-0 right-0 top-full mt-2 bg-[var(--cream)] rounded-[var(--radius-md)] shadow-[var(--shadow-lift)] z-50 max-h-[380px] overflow-y-auto custom-scrollbar border border-[var(--line)] overflow-hidden"
               >
                 {trimmedInput.length === 0 ? (
                   <EmptyRow
-                    title="Start typing to find properties"
+                    title="Begin typing to find a home"
                     subtitle="Try a city, neighborhood, or zip"
                   />
                 ) : groupedSuggestions.length > 0 ? (
                   groupedSuggestions.map(([category, suggestions]) => (
                     <div
                       key={category}
-                      className="border-b last:border-0 border-gray-100"
+                      className="border-b last:border-0 border-[var(--line)]"
                     >
-                      <div className="px-5 py-2 bg-[#f9f8f5] text-[10px] font-bold text-[#6d6c67] uppercase tracking-[0.24em] flex items-center justify-between">
+                      <div className="px-5 py-2 bg-[var(--canvas-2)] text-[10px] text-[var(--ink-faint)] uppercase tracking-[0.24em] flex items-center justify-between font-[family-name:var(--font-accent)]">
                         <span>{category}</span>
-                        <span className="h-px flex-1 ml-4 bg-gray-200" />
+                        <span className="h-px flex-1 ml-4 bg-[var(--line)]" />
                       </div>
                       {suggestions.map((s, i) => (
                         <button
                           key={i}
                           type="button"
                           onClick={() => onSuggestionClick(s)}
-                          className="w-full text-left px-5 py-3 hover:bg-[#f9f8f5] transition-colors duration-150 flex items-center gap-3"
+                          className="w-full text-left px-5 py-3 hover:bg-[var(--canvas)] transition-colors duration-150 flex items-center gap-3"
                         >
-                          <div className="w-8 h-8 rounded-full bg-[#f4f1ea] flex items-center justify-center shrink-0">
+                          <div className="w-8 h-8 rounded-full bg-[var(--sage)]/15 flex items-center justify-center shrink-0">
                             <HiOutlineLocationMarker
-                              className="text-[var(--gold-600)]"
+                              className="text-[var(--sage-deep)]"
                               size={14}
                             />
                           </div>
-                          <span className="text-[14px] text-[#1a1a1a] font-medium truncate">
+                          <span className="text-[14px] text-[var(--ink)] truncate">
                             {s.label}
                           </span>
                         </button>
@@ -345,7 +345,7 @@ const FilterTop = ({
                   ))
                 ) : (
                   <EmptyRow
-                    title="No matches"
+                    title="Nothing matches that yet"
                     subtitle="Try a broader keyword"
                   />
                 )}
@@ -440,15 +440,15 @@ const FilterTop = ({
 
           <button
             onClick={() => setOpenAdvanced(true)}
-            className="relative h-11 px-4 inline-flex items-center gap-2 bg-[var(--surface-charcoal)] border border-[var(--line-soft)] hover:border-[var(--gold-500)]/60 text-[var(--ink)] transition-colors"
+            className="relative h-11 px-4 inline-flex items-center gap-2 bg-[var(--cream)] border border-[var(--line)] rounded-[var(--radius-pill)] hover:border-[var(--sage-deep)]/60 text-[var(--ink)] transition-colors"
             aria-label="All filters"
           >
-            <FiSliders size={14} className="text-[var(--gold-500)]" />
-            <span className="text-[13px] font-medium tracking-[0.06em]">
+            <FiSliders size={14} className="text-[var(--sage-deep)]" />
+            <span className="text-[13px] tracking-[0.06em] font-[family-name:var(--font-accent)]">
               All Filters
             </span>
             {activeCount > 0 && (
-              <span className="ml-1 inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 bg-[var(--gold-500)] text-[var(--surface-ink)] text-[10px] font-bold rounded-full">
+              <span className="ml-1 inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 bg-[var(--pine)] text-[var(--on-pine)] text-[10px] font-bold rounded-full">
                 {activeCount}
               </span>
             )}
@@ -460,7 +460,7 @@ const FilterTop = ({
           {hasAny && (
             <button
               onClick={clearAll}
-              className="h-11 px-4 inline-flex items-center gap-2 text-[13px] text-[var(--accent-text)] hover:text-[var(--ink)] transition-colors"
+              className="h-11 px-4 inline-flex items-center gap-2 text-[13px] text-[var(--sage-deep)] hover:text-[var(--ink)] transition-colors"
             >
               <FiX size={14} />
               Clear
@@ -469,7 +469,7 @@ const FilterTop = ({
           <button
             onClick={handleSaveSearch}
             disabled={isSavingSearch}
-            className="h-11 px-5 inline-flex items-center gap-2 bg-[var(--ink)] hover:bg-[var(--accent-text)] text-white text-[12px] font-bold tracking-[0.18em] uppercase disabled:opacity-60 disabled:cursor-not-allowed transition-colors"
+            className="h-11 px-5 inline-flex items-center gap-2 bg-[var(--pine)] hover:bg-[var(--pine-soft)] text-[var(--on-pine)] text-[12px] tracking-[0.18em] uppercase rounded-[var(--radius-pill)] disabled:opacity-60 disabled:cursor-not-allowed transition-colors font-[family-name:var(--font-accent)]"
           >
             {isSavingSearch ? (
               <svg
@@ -496,7 +496,7 @@ const FilterTop = ({
           {chips.map((c, i) => (
             <span
               key={i}
-              className="inline-flex items-center gap-2 h-8 px-3 bg-[var(--gold-500)]/10 border border-[var(--gold-500)]/30 text-[12px] text-[var(--accent-text)] rounded-full"
+              className="inline-flex items-center gap-2 h-8 px-3 bg-[var(--sage)]/12 border border-[var(--sage)]/35 text-[12px] text-[var(--sage-deep)] rounded-full"
             >
               {c.label}
               <button
@@ -532,12 +532,12 @@ export default FilterTop;
 function EmptyRow({ title, subtitle }: { title: string; subtitle: string }) {
   return (
     <div className="px-5 py-5 flex items-center gap-3">
-      <div className="w-8 h-8 rounded-full bg-[#f4f1ea] flex items-center justify-center">
-        <HiOutlineLocationMarker className="text-[var(--gold-600)]" size={14} />
+      <div className="w-8 h-8 rounded-full bg-[var(--sage)]/15 flex items-center justify-center">
+        <HiOutlineLocationMarker className="text-[var(--sage-deep)]" size={14} />
       </div>
       <div className="flex flex-col">
-        <span className="text-[14px] text-[#1a1a1a] font-medium">{title}</span>
-        <span className="text-[11px] text-[#888]">{subtitle}</span>
+        <span className="text-[14px] text-[var(--ink)] font-medium">{title}</span>
+        <span className="text-[11px] text-[var(--ink-faint)]">{subtitle}</span>
       </div>
     </div>
   );
@@ -562,10 +562,10 @@ function FilterPill({
     <div className="relative">
       <button
         onClick={onClick}
-        className={`h-11 px-4 inline-flex items-center gap-2 border transition-colors text-[13px] ${
+        className={`h-11 px-4 inline-flex items-center gap-2 border rounded-[var(--radius-pill)] transition-colors text-[13px] ${
           active
-            ? "bg-[var(--gold-500)]/10 border-[var(--gold-500)]/60 text-[var(--accent-text)]"
-            : "bg-[var(--surface-charcoal)] border-[var(--line-soft)] text-[var(--ink)] hover:border-[var(--gold-500)]/60"
+            ? "bg-[var(--sage)]/12 border-[var(--sage-deep)]/60 text-[var(--sage-deep)]"
+            : "bg-[var(--cream)] border-[var(--line)] text-[var(--ink)] hover:border-[var(--sage-deep)]/60"
         }`}
       >
         <span className="font-medium">{activeValue || label}</span>
@@ -581,7 +581,7 @@ function FilterPill({
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -4 }}
             transition={{ duration: 0.2 }}
-            className="absolute left-0 top-full mt-2 min-w-[340px] bg-[var(--surface-ink)] border border-[var(--line-soft)] shadow-[0_20px_40px_-15px_rgba(0,0,0,0.6)] z-40 p-5"
+            className="absolute left-0 top-full mt-2 min-w-[340px] bg-[var(--cream)] border border-[var(--line)] rounded-[var(--radius-md)] shadow-[var(--shadow-lift)] z-40 p-5"
           >
             {children}
           </motion.div>
@@ -618,7 +618,7 @@ function RangeSelect({
         <span className="text-[10px] uppercase tracking-[0.2em] text-[var(--ink-faint)] font-semibold">
           {minLabel}
         </span>
-        <div className="flex flex-col overflow-y-auto max-h-[220px] border border-[var(--line-soft)] custom-scrollbar">
+        <div className="flex flex-col overflow-y-auto max-h-[220px] border border-[var(--line)] rounded-[var(--radius-sm)] custom-scrollbar">
           {minOptions.map((o) => {
             const selected = o.value === min;
             return (
@@ -626,10 +626,10 @@ function RangeSelect({
                 key={o.value}
                 type="button"
                 onClick={() => onChangeMin(o.value)}
-                className={`text-left px-4 py-2.5 text-[13px] transition-colors duration-150 border-b border-[var(--line-soft)] last:border-0 ${
+                className={`text-left px-4 py-2.5 text-[13px] transition-colors duration-150 border-b border-[var(--line)] last:border-0 ${
                   selected
-                    ? "bg-[var(--ink)] text-white font-semibold"
-                    : "text-[var(--ink-soft)] hover:bg-[var(--surface-charcoal)] hover:text-[var(--ink)]"
+                    ? "bg-[var(--pine)] text-[var(--on-pine)] font-semibold"
+                    : "text-[var(--ink-soft)] hover:bg-[var(--canvas-2)] hover:text-[var(--ink)]"
                 }`}
               >
                 {o.label}
@@ -644,7 +644,7 @@ function RangeSelect({
         <span className="text-[10px] uppercase tracking-[0.2em] text-[var(--ink-faint)] font-semibold">
           {maxLabel}
         </span>
-        <div className="flex flex-col overflow-y-auto max-h-[220px] border border-[var(--line-soft)] custom-scrollbar">
+        <div className="flex flex-col overflow-y-auto max-h-[220px] border border-[var(--line)] rounded-[var(--radius-sm)] custom-scrollbar">
           {maxOptions.map((o) => {
             const selected = o.value === max;
             return (
@@ -652,10 +652,10 @@ function RangeSelect({
                 key={o.value}
                 type="button"
                 onClick={() => onChangeMax(o.value)}
-                className={`text-left px-4 py-2.5 text-[13px] transition-colors duration-150 border-b border-[var(--line-soft)] last:border-0 ${
+                className={`text-left px-4 py-2.5 text-[13px] transition-colors duration-150 border-b border-[var(--line)] last:border-0 ${
                   selected
-                    ? "bg-[var(--ink)] text-white font-semibold"
-                    : "text-[var(--ink-soft)] hover:bg-[var(--surface-charcoal)] hover:text-[var(--ink)]"
+                    ? "bg-[var(--pine)] text-[var(--on-pine)] font-semibold"
+                    : "text-[var(--ink-soft)] hover:bg-[var(--canvas-2)] hover:text-[var(--ink)]"
                 }`}
               >
                 {o.label}

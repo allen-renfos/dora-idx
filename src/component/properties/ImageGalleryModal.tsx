@@ -59,8 +59,8 @@ export const ImageGalleryModal = ({
         >
           {/* Top bar */}
           <div className="flex items-center justify-between px-6 md:px-8 h-14 border-b border-white/8 shrink-0">
-            <span className="text-[12px] uppercase tracking-[0.2em] text-white/55">
-              <span className="text-[var(--gold-500)] font-semibold">
+            <span className="text-[12px] uppercase tracking-[0.2em] text-white/55 font-[family-name:var(--font-accent)]">
+              <span className="text-[var(--gold-300)]">
                 {String(current + 1).padStart(2, "0")}
               </span>
               <span className="mx-2 text-white/25">/</span>
@@ -104,14 +104,14 @@ export const ImageGalleryModal = ({
                   <button
                     onClick={prev}
                     aria-label="Previous image"
-                    className="absolute left-4 md:left-6 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-black/55 backdrop-blur-md border border-white/15 text-white hover:bg-[var(--gold-500)] hover:text-[var(--surface-ink)] hover:border-[var(--gold-500)] transition-colors flex items-center justify-center z-10"
+                    className="absolute left-4 md:left-6 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-black/55 backdrop-blur-md border border-white/15 text-white hover:bg-white hover:text-[var(--pine)] hover:border-white transition-colors flex items-center justify-center z-10"
                   >
                     <FiChevronLeft size={22} />
                   </button>
                   <button
                     onClick={next}
                     aria-label="Next image"
-                    className="absolute right-4 md:right-6 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-black/55 backdrop-blur-md border border-white/15 text-white hover:bg-[var(--gold-500)] hover:text-[var(--surface-ink)] hover:border-[var(--gold-500)] transition-colors flex items-center justify-center z-10"
+                    className="absolute right-4 md:right-6 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-black/55 backdrop-blur-md border border-white/15 text-white hover:bg-white hover:text-[var(--pine)] hover:border-white transition-colors flex items-center justify-center z-10"
                   >
                     <FiChevronRight size={22} />
                   </button>
@@ -130,7 +130,7 @@ export const ImageGalleryModal = ({
                       onClick={() => setCurrent(idx)}
                       className={`relative w-full h-[120px] shrink-0 overflow-hidden border-2 transition-colors ${
                         active
-                          ? "border-[var(--gold-500)]"
+                          ? "border-[var(--gold-300)]"
                           : "border-transparent hover:border-white/30"
                       }`}
                     >

@@ -62,7 +62,7 @@ export const MlsListingOptions = ({
     <div
       role="tablist"
       aria-label="View mode"
-      className="inline-flex items-center bg-[var(--surface-charcoal)] border border-[var(--line-soft)] p-1"
+      className="inline-flex items-center bg-[var(--cream)] border border-[var(--line)] rounded-[var(--radius-pill)] p-1"
     >
       {views
         .filter((v) => !v.hidden)
@@ -74,9 +74,9 @@ export const MlsListingOptions = ({
               role="tab"
               aria-selected={active}
               onClick={onClick}
-              className={`h-9 px-3 inline-flex items-center gap-2 text-[12px] font-medium tracking-[0.08em] uppercase transition-colors ${
+              className={`h-9 px-4 inline-flex items-center gap-2 text-[12px] tracking-[0.12em] uppercase rounded-[var(--radius-pill)] font-[family-name:var(--font-accent)] transition-colors ${
                 active
-                  ? "bg-[var(--ink)] text-white"
+                  ? "bg-[var(--pine)] text-[var(--on-pine)]"
                   : "text-[var(--ink-soft)] hover:text-[var(--ink)]"
               }`}
             >

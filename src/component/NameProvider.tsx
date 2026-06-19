@@ -38,7 +38,7 @@ export function useNameContext() {
 }
 
 export function NameProvider({ children }: { children: React.ReactNode }) {
-  const [name, setName] = useState("RealtiPro");
+  const [name, setName] = useState("Dora");
   const [shortDescription, setShortDescription] = useState("");
   const [longDescription, setLongDescription] = useState("");
   const [companyLogo, setCompanyLogo] = useState("");

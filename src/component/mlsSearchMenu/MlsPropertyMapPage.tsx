@@ -123,7 +123,7 @@ export const MlsPropertyMapPage = ({
                     {Array.from({ length: 4 }).map((_, i) => (
                       <div
                         key={i}
-                        className="bg-[var(--surface-obsidian)] border border-[var(--line-soft)] overflow-hidden animate-pulse"
+                        className="bg-[var(--cream)] border border-[var(--line)] rounded-[var(--radius-md)] overflow-hidden animate-pulse"
                       >
                         <div className="aspect-[4/3] bg-[var(--surface-graphite)]" />
                         <div className="p-5 flex flex-col gap-2.5">
@@ -145,14 +145,14 @@ export const MlsPropertyMapPage = ({
               </>
             ) : (
               <div className="flex flex-col items-center text-center py-24 text-[var(--ink-soft)]">
-                <div className="w-14 h-14 rounded-full bg-[var(--gold-500)]/10 border border-[var(--gold-500)]/30 flex items-center justify-center mb-4">
-                  <FiSearch className="text-[var(--gold-500)]" size={20} />
+                <div className="w-14 h-14 rounded-full bg-[var(--sage)]/12 border border-[var(--sage)]/40 flex items-center justify-center mb-4">
+                  <FiSearch className="text-[var(--sage-deep)]" size={20} />
                 </div>
                 <p className="font-serif text-xl text-[var(--ink)] mb-1">
-                  No listings in this area yet
+                  No residences within this view
                 </p>
                 <p className="text-sm">
-                  Try broadening your search or zooming out the map.
+                  Widen the search or draw back the map to uncover more.
                 </p>
               </div>
             )}
@@ -160,7 +160,7 @@ export const MlsPropertyMapPage = ({
 
           {/* Hint pill */}
           <div
-            className="flex items-center justify-center gap-2 py-3 px-4 border border-[var(--line-soft)] bg-[var(--surface-charcoal)] cursor-pointer hover:border-[var(--gold-500)]/40 transition-colors"
+            className="flex items-center justify-center gap-2 py-3 px-4 border border-[var(--line)] rounded-[var(--radius-md)] bg-[var(--cream)] cursor-pointer hover:border-[var(--sage-deep)]/40 transition-colors"
             onClick={() => {
               const el = document.getElementById("mls-search-input");
               if (el) {
@@ -170,9 +170,9 @@ export const MlsPropertyMapPage = ({
             }}
           >
             <span className="text-[13px] text-[var(--ink-soft)]">
-              Search an area to see more listings —
+              Search an area to reveal more residences —
             </span>
-            <span className="text-[12px] font-bold text-[var(--gold-500)] uppercase tracking-[0.2em]">
+            <span className="text-[12px] text-[var(--sage-deep)] uppercase tracking-[0.2em] font-[family-name:var(--font-accent)]">
               Search
             </span>
           </div>
@@ -181,9 +181,9 @@ export const MlsPropertyMapPage = ({
         {/* Map column — sticky */}
         {showMapSection && (
           <div className="hidden lg:block lg:col-span-5">
-            <div className="sticky top-[180px] h-[calc(100vh-220px)] min-h-[560px] overflow-hidden border border-[var(--line-soft)]">
+            <div className="sticky top-[180px] h-[calc(100vh-220px)] min-h-[560px] overflow-hidden rounded-[var(--radius-md)] border border-[var(--line)]">
               {isLoading ? (
-                <div className="w-full h-full bg-[var(--surface-charcoal)] animate-pulse" />
+                <div className="w-full h-full bg-[var(--surface-graphite)] animate-pulse" />
               ) : (
                 <GoogleMapComponent
                   markers={mappableProperties}
@@ -204,7 +204,7 @@ function SplitSkeleton({ count }: { count: number }) {
       {Array.from({ length: count }).map((_, i) => (
         <div
           key={i}
-          className="bg-[var(--surface-obsidian)] border border-[var(--line-soft)] overflow-hidden animate-pulse"
+          className="bg-[var(--cream)] border border-[var(--line)] rounded-[var(--radius-md)] overflow-hidden animate-pulse"
         >
           <div className="aspect-[4/3] bg-[var(--surface-graphite)]" />
           <div className="p-5 flex flex-col gap-2.5">

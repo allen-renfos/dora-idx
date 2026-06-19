@@ -91,14 +91,14 @@ const NeighborhoodHomeList = () => {
                   onClick={handleScrollLeft}
                   disabled={!canScrollLeft}
                 >
-                  <IoIosArrowRoundBack color={canScrollLeft ? "white" : "#a6824c"} size={30} />
+                  <IoIosArrowRoundBack color={canScrollLeft ? "white" : "#c2a878"} size={30} />
                 </button>
                 <button
                   className={`nav-arrow ${canScrollRight ? 'nav-arrow-bgbutton' : ''}`}
                   onClick={handleScrollRight}
                   disabled={!canScrollRight}
                 >
-                  <IoIosArrowRoundForward color={canScrollRight ? "white" : "#a6824c"} size={30} />
+                  <IoIosArrowRoundForward color={canScrollRight ? "white" : "#c2a878"} size={30} />
                 </button>
               </div>
             ) : null}

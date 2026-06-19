@@ -37,12 +37,12 @@ const LocationSearchInput = <T extends string>({ handleSearch, searchKey }: {
     <div className="relative flex flex-1 min-w-[200px]">
       <span className="absolute inset-y-0 left-0 flex items-center pr-2 pl-3 text-gray-400">
         {isSearching ? (
-          <svg className="animate-spin" width={15} height={15} viewBox="0 0 24 24" fill="none" stroke="#a6824c" strokeWidth="2.5">
+          <svg className="animate-spin" width={15} height={15} viewBox="0 0 24 24" fill="none" stroke="#c2a878" strokeWidth="2.5">
             <circle cx="12" cy="12" r="10" strokeOpacity="0.25" />
             <path d="M12 2a10 10 0 0 1 10 10" strokeLinecap="round" />
           </svg>
         ) : (
-          <HiOutlineLocationMarker size={"15px"} color={"#a6824c"} />
+          <HiOutlineLocationMarker size={"15px"} color={"#c2a878"} />
         )}
       </span>
       <input

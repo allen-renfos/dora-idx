@@ -41,13 +41,13 @@ export default function ForgotPasswordPage() {
     <AuthShell
       eyebrow="Recovery"
       title="Reset your password"
-      description="Enter the email associated with your account and we'll send you a reset link."
+      description="Tell us the email on your account and we'll send a secure link to set a new one."
       footer={
         <>
           Remembered it?{" "}
           <Link
             href="/login"
-            className="text-[var(--accent-text)] hover:text-[var(--ink)] transition-colors font-semibold"
+            className="text-[var(--sage-deep)] hover:text-[var(--ink)] transition-colors font-medium"
           >
             Back to sign in
           </Link>

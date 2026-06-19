@@ -13,38 +13,38 @@ export default function HomeFeatured() {
   const properties: Property[] = (data?.data || []).slice(0, 6);
 
   return (
-    <section className="relative bg-[var(--surface-obsidian)] text-[var(--ink)] section-pad overflow-hidden">
-      {/* Decorative gradient */}
+    <section className="relative bg-[var(--canvas-2)] text-[var(--ink)] section-pad overflow-hidden">
+      {/* Soft sage halo */}
       <div
         aria-hidden
-        className="absolute -top-40 right-0 w-[520px] h-[520px] rounded-full opacity-[0.05] blur-[120px] bg-[var(--gold-300)]"
+        className="absolute -top-40 right-0 w-[560px] h-[560px] rounded-full opacity-[0.08] blur-[130px] bg-[var(--sage)]"
       />
 
       <div className="container-wide relative">
         <SectionHeading
-          eyebrow="New Listings"
+          eyebrow="Newly Listed"
           title={
             <>
-              Fresh homes,<br /> just hit the{" "}
-              <em className="not-italic italic text-[var(--gold-500)]">market</em>
+              Homes fresh<br /> to the{" "}
+              <em className="not-italic italic text-[var(--gold-deep)]">market</em>
             </>
           }
-          description="The latest properties to hit the market — updated regularly so you never miss an opportunity."
+          description="The latest additions to our collection — kept current, so the right home never slips past you."
           align="between"
           action={
             <Link href="/properties" className="btn-outline-new">
-              View all listings
+              See every listing
             </Link>
           }
         />
 
-        <div className="mt-14">
+        <div className="mt-16">
           {isLoading ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {Array.from({ length: 6 }).map((_, i) => (
                 <div
                   key={i}
-                  className="flex flex-col h-full bg-[var(--surface)] border border-[var(--line)] rounded-sm overflow-hidden animate-pulse"
+                  className="flex flex-col h-full bg-[var(--cream)] border border-[var(--line)] rounded-[var(--radius-md)] overflow-hidden animate-pulse"
                 >
                   <div className="aspect-[4/3] bg-[var(--surface-graphite)]" />
                   <div className="p-6 flex flex-col gap-3">
@@ -83,14 +83,14 @@ export default function HomeFeatured() {
 
 function EmptyState() {
   return (
-    <div className="flex flex-col items-center justify-center text-center py-20 border border-dashed border-[var(--line)]">
-      <div className="w-14 h-14 rounded-full bg-[var(--surface-graphite)] flex items-center justify-center mb-4">
+    <div className="flex flex-col items-center justify-center text-center py-24 rounded-[var(--radius-md)] border border-dashed border-[var(--line)] bg-[var(--cream)]">
+      <div className="w-14 h-14 rounded-full bg-[var(--canvas-2)] flex items-center justify-center mb-5">
         <svg
           width="24"
           height="24"
           viewBox="0 0 24 24"
           fill="none"
-          stroke="var(--accent)"
+          stroke="var(--gold-deep)"
           strokeWidth="1.3"
           strokeLinecap="round"
           strokeLinejoin="round"
@@ -99,11 +99,11 @@ function EmptyState() {
           <polyline points="9 21 9 13 15 13 15 21" />
         </svg>
       </div>
-      <h3 className="font-serif text-2xl text-[var(--ink)]">No new listings right now</h3>
-      <p className="text-[var(--ink-soft)] mt-2 max-w-md">
-        Check back shortly, or{" "}
-        <Link href="/properties" className="text-[var(--accent-text)] underline underline-offset-4">
-          browse all properties
+      <h3 className="font-serif text-2xl text-[var(--ink)]">Nothing new at this moment</h3>
+      <p className="text-[var(--ink-soft)] mt-3 max-w-md">
+        New homes arrive often — look in again soon, or{" "}
+        <Link href="/properties" className="text-[var(--gold-deep)] underline underline-offset-4">
+          wander the full collection
         </Link>
         .
       </p>

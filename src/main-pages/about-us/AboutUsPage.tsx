@@ -21,17 +21,17 @@ export default function AboutUsPage() {
 
     const stats = [
         {
-            icon: <FaAward style={{ color: "#a6824c", fontSize: 22 }} />,
+            icon: <FaAward style={{ color: "#c2a878", fontSize: 22 }} />,
             title: "20+ Years Experience",
             desc: "Over two decades of trusted expertise in the local real estate market.",
         },
         {
-            icon: <FaStar style={{ color: "#a6824c", fontSize: 22 }} />,
+            icon: <FaStar style={{ color: "#c2a878", fontSize: 22 }} />,
             title: "500+ Properties Sold",
             desc: "A proven track record of successful closings for buyers and sellers alike.",
         },
         {
-            icon: <FaHandshake style={{ color: "#a6824c", fontSize: 22 }} />,
+            icon: <FaHandshake style={{ color: "#c2a878", fontSize: 22 }} />,
             title: "Trusted Advisor",
             desc: "Committed to guiding every client with integrity, transparency, and care.",
         },
@@ -52,8 +52,8 @@ export default function AboutUsPage() {
                     position: "absolute",
                     inset: 0,
                     backgroundImage: `
-                        linear-gradient(90deg, rgba(166, 130, 76, 0.03) 1px, transparent 1px),
-                        linear-gradient(rgba(166, 130, 76, 0.03) 1px, transparent 1px)
+                        linear-gradient(90deg, rgba(194, 168, 120, 0.03) 1px, transparent 1px),
+                        linear-gradient(rgba(194, 168, 120, 0.03) 1px, transparent 1px)
                     `,
                     backgroundSize: "50px 50px",
                     opacity: 0.5,
@@ -83,7 +83,7 @@ export default function AboutUsPage() {
                 <div style={{ 
                     position: "absolute",
                     inset: 0,
-                    background: "radial-gradient(circle at 30% 50%, rgba(166, 130, 76, 0.08) 0%, transparent 60%)",
+                    background: "radial-gradient(circle at 30% 50%, rgba(194, 168, 120, 0.08) 0%, transparent 60%)",
                     zIndex: 1,
                 }} />
 
@@ -103,9 +103,9 @@ export default function AboutUsPage() {
                                 display: "inline-block",
                                 padding: "8px 20px",
                                 background: "rgba(80, 58, 10, 0.7)",
-                                border: "1px solid rgba(166, 130, 76, 0.5)",
+                                border: "1px solid rgba(194, 168, 120, 0.5)",
                                 borderRadius: 0,
-                                color: "#a6824c",
+                                color: "#c2a878",
                                 fontSize: 13,
                                 fontWeight: 700,
                                 letterSpacing: 2,
@@ -124,7 +124,7 @@ export default function AboutUsPage() {
                                 lineHeight: 1.15,
                                 marginBottom: 20,
                                 fontFamily: "var(--font-playfair)",
-                                background: "linear-gradient(135deg, #f5e6c8 0%, #a6824c 60%, #c8902e 100%)",
+                                background: "linear-gradient(135deg, #f5e6c8 0%, #c2a878 60%, #c8902e 100%)",
                                 WebkitBackgroundClip: "text",
                                 WebkitTextFillColor: "transparent",
                                 backgroundClip: "text",
@@ -157,15 +157,15 @@ export default function AboutUsPage() {
                                 alignItems: "center",
                                 gap: 8,
                                 padding: "14px 28px",
-                                background: "#a6824c",
+                                background: "#c2a878",
                                 color: "#fff",
                                 fontWeight: 600,
                                 fontSize: 15,
                                 textDecoration: "none",
                                 transition: "background .3s",
                             }}
-                            onMouseEnter={(e) => (e.currentTarget.style.background = "#8a6a3b")}
-                            onMouseLeave={(e) => (e.currentTarget.style.background = "#a6824c")}
+                            onMouseEnter={(e) => (e.currentTarget.style.background = "#957a4b")}
+                            onMouseLeave={(e) => (e.currentTarget.style.background = "#c2a878")}
                         >
                             Get In Touch
                         </a>
@@ -300,10 +300,10 @@ export default function AboutUsPage() {
                                     {name || "Realty Pro"}
                                 </h2>
                                 <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 24 }}>
-                                    <div style={{ width: 32, height: 1, background: "#a6824c" }} />
+                                    <div style={{ width: 32, height: 1, background: "#c2a878" }} />
                                     <p
                                         style={{
-                                            color: "#8a6a3b",
+                                            color: "#957a4b",
                                             fontSize: 13,
                                             textTransform: "uppercase",
                                             letterSpacing: "0.15em",
@@ -358,7 +358,7 @@ export default function AboutUsPage() {
                                 }}
                             >
                                 Committed to Your{" "}
-                                <span style={{ color: "#a6824c" }}>Real Estate Success</span>
+                                <span style={{ color: "#c2a878" }}>Real Estate Success</span>
                             </h2>
 
                             {/* Gold divider */}
@@ -366,7 +366,7 @@ export default function AboutUsPage() {
                                 style={{
                                     height: 1,
                                     background:
-                                        "linear-gradient(to right, #a6824c 0%, rgba(166,130,76,.3) 50%, transparent 100%)",
+                                        "linear-gradient(to right, #c2a878 0%, rgba(194, 168, 120,.3) 50%, transparent 100%)",
                                     width: "100%",
                                 }}
                             />
@@ -429,7 +429,7 @@ export default function AboutUsPage() {
                                         textDecoration: "none",
                                         transition: "background .3s",
                                     }}
-                                    onMouseEnter={(e) => (e.currentTarget.style.background = "#8a6a3b")}
+                                    onMouseEnter={(e) => (e.currentTarget.style.background = "#957a4b")}
                                     onMouseLeave={(e) => (e.currentTarget.style.background = "#1a1a1a")}
                                 >
                                     Connect with Agent
@@ -472,8 +472,8 @@ function SocialIcon({ href, children }: { href: string; children: React.ReactNod
                 textDecoration: "none",
             }}
             onMouseEnter={(e) => {
-                e.currentTarget.style.borderColor = "#8a6a3b";
-                e.currentTarget.style.color = "#8a6a3b";
+                e.currentTarget.style.borderColor = "#957a4b";
+                e.currentTarget.style.color = "#957a4b";
             }}
             onMouseLeave={(e) => {
                 e.currentTarget.style.borderColor = "#e7e4de";

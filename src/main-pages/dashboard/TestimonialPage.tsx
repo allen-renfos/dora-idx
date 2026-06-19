@@ -72,41 +72,41 @@ const TestimonialPage = () => {
       title={has ? "Your testimonial" : "Share your experience"}
       description={
         has
-          ? "Thank you for sharing. Your words help future clients trust the process."
-          : "If we made your move smoother, we'd be grateful to hear about it."
+          ? "Thank you for sharing. Your words help future clients move with confidence."
+          : "If we made your move feel easier, we'd be honored to hear about it."
       }
     >
       {success && (
-        <div className="mb-5 px-4 py-3 border bg-[var(--gold-500)]/10 border-[var(--gold-500)]/40 text-[var(--accent-text)] text-[13px] inline-flex items-center gap-2">
+        <div className="mb-5 px-4 py-3 border rounded-[var(--radius-sm)] bg-[var(--cream)] border-[var(--sage-deep)]/35 text-[var(--sage-deep)] text-[13px] inline-flex items-center gap-2">
           <FiCheckCircle size={14} />
           {success}
         </div>
       )}
       {error && (
-        <div className="mb-5 px-4 py-3 border bg-[#b3261e]/10 border-[#b3261e]/30 text-[#b3261e] text-[13px] inline-flex items-center gap-2">
+        <div className="mb-5 px-4 py-3 border rounded-[var(--radius-sm)] bg-[#fbeceb] border-[#b3261e]/25 text-[#8f2018] text-[13px] inline-flex items-center gap-2">
           <FiAlertCircle size={14} />
           {error}
         </div>
       )}
 
       {isLoading ? (
-        <div className="bg-[var(--surface-obsidian)] border border-[var(--line-soft)] p-10 text-center text-[var(--ink-soft)] text-[14px]">
+        <div className="bg-[var(--cream)] border border-[var(--line)] rounded-[var(--radius-md)] p-10 text-center text-[var(--ink-soft)] text-[14px]">
           Loading…
         </div>
       ) : has ? (
-        <article className="bg-[var(--surface-obsidian)] border border-[var(--line-soft)] p-8 md:p-10 max-w-3xl">
-          <div className="flex items-center justify-between mb-6 pb-4 border-b border-[var(--line-soft)]">
-            <div className="flex items-center gap-2 text-[var(--gold-500)]">
+        <article className="bg-[var(--cream)] border border-[var(--line)] rounded-[var(--radius-md)] p-8 md:p-10 max-w-3xl shadow-[var(--shadow-soft)]">
+          <div className="flex items-center justify-between mb-6 pb-4 border-b border-[var(--line)]">
+            <div className="flex items-center gap-2 text-[var(--gold)]">
               {Array.from({ length: 5 }).map((_, i) => (
                 <FiStar
                   key={i}
                   size={14}
-                  className={i < (existing.rating ?? 5) ? "fill-[var(--gold-500)]" : "opacity-30"}
+                  className={i < (existing.rating ?? 5) ? "fill-[var(--gold)]" : "opacity-30"}
                 />
               ))}
             </div>
             {existing.status && (
-              <span className="text-[10px] uppercase tracking-[0.22em] text-[var(--accent-text)] bg-[var(--gold-500)]/10 border border-[var(--gold-500)]/30 px-2.5 py-1">
+              <span className="text-[10px] uppercase tracking-[0.22em] font-[family-name:var(--font-accent)] text-[var(--sage-deep)] bg-[var(--canvas)] border border-[var(--line)] rounded-full px-3 py-1">
                 {existing.status}
               </span>
             )}
@@ -114,8 +114,8 @@ const TestimonialPage = () => {
           <blockquote className="font-serif text-[clamp(1.25rem,1.4vw+1rem,1.75rem)] leading-[1.4] text-[var(--ink)]">
             &ldquo;{existing.details}&rdquo;
           </blockquote>
-          <footer className="mt-7 pt-5 border-t border-[var(--line-soft)] flex items-center gap-4">
-            <div className="w-px h-9 bg-[var(--gold-500)]/60" />
+          <footer className="mt-7 pt-5 border-t border-[var(--line)] flex items-center gap-4">
+            <div className="w-px h-9 bg-[var(--gold)]/60" />
             <div className="flex flex-col">
               <cite className="not-italic font-serif text-lg text-[var(--ink)]">
                 {existing.name}
@@ -131,10 +131,10 @@ const TestimonialPage = () => {
       ) : (
         <form
           onSubmit={onSubmit}
-          className="bg-[var(--surface-obsidian)] border border-[var(--line-soft)] p-8 md:p-10 flex flex-col gap-6 max-w-3xl"
+          className="bg-[var(--cream)] border border-[var(--line)] rounded-[var(--radius-md)] p-8 md:p-10 flex flex-col gap-6 max-w-3xl shadow-[var(--shadow-soft)]"
         >
           <div className="flex flex-col gap-2">
-            <label className="text-[10px] uppercase tracking-[0.22em] text-[var(--ink-faint)]">
+            <label className="text-[11px] uppercase tracking-[0.22em] text-[var(--ink-faint)] font-[family-name:var(--font-accent)]">
               Rating
             </label>
             <div className="flex items-center gap-1">
@@ -153,7 +153,7 @@ const TestimonialPage = () => {
                   >
                     <FiStar
                       size={22}
-                      className={filled ? "fill-[var(--gold-500)] text-[var(--gold-500)]" : "text-[var(--ink-faint)]"}
+                      className={filled ? "fill-[var(--gold)] text-[var(--gold)]" : "text-[var(--ink-faint)]"}
                     />
                   </button>
                 );
@@ -165,7 +165,7 @@ const TestimonialPage = () => {
           <div className="flex flex-col gap-2">
             <label
               htmlFor="t-name"
-              className="text-[10px] uppercase tracking-[0.22em] text-[var(--ink-faint)]"
+              className="text-[11px] uppercase tracking-[0.22em] text-[var(--ink-faint)] font-[family-name:var(--font-accent)]"
             >
               Your name
             </label>
@@ -177,7 +177,7 @@ const TestimonialPage = () => {
               readOnly={!!profileData?.data?.name}
               maxLength={100}
               placeholder="How you'd like to be quoted"
-              className={`bg-[var(--surface-charcoal)] border border-[var(--line-soft)] focus:border-[var(--gold-500)]/60 px-4 h-12 text-[14px] text-[var(--ink)] placeholder:text-[var(--ink-faint)] outline-none transition-colors ${
+              className={`bg-[var(--canvas)] border border-[var(--line)] rounded-[var(--radius-sm)] focus:border-[var(--sage-deep)] px-4 h-12 text-[14px] text-[var(--ink)] placeholder:text-[var(--ink-faint)] outline-none transition-colors ${
                 profileData?.data?.name ? "opacity-70 cursor-not-allowed" : ""
               }`}
             />
@@ -186,7 +186,7 @@ const TestimonialPage = () => {
           <div className="flex flex-col gap-2">
             <label
               htmlFor="t-details"
-              className="text-[10px] uppercase tracking-[0.22em] text-[var(--ink-faint)]"
+              className="text-[11px] uppercase tracking-[0.22em] text-[var(--ink-faint)] font-[family-name:var(--font-accent)]"
             >
               Your testimonial
             </label>
@@ -197,7 +197,7 @@ const TestimonialPage = () => {
               rows={6}
               maxLength={1000}
               placeholder="Tell us about your experience…"
-              className="bg-[var(--surface-charcoal)] border border-[var(--line-soft)] focus:border-[var(--gold-500)]/60 px-4 py-3 text-[14px] text-[var(--ink)] placeholder:text-[var(--ink-faint)] outline-none transition-colors resize-y min-h-[160px]"
+              className="bg-[var(--canvas)] border border-[var(--line)] rounded-[var(--radius-sm)] focus:border-[var(--sage-deep)] px-4 py-3 text-[14px] text-[var(--ink)] placeholder:text-[var(--ink-faint)] outline-none transition-colors resize-y min-h-[160px]"
             />
             <span className="text-[11px] text-[var(--ink-faint)] self-end">
               {details.length}/1000

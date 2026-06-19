@@ -17,26 +17,34 @@ export const TestmonialCard = ({ item, index }: { item: any; index: number }) =>
     const imageSrc = getValidImageSrc(item?.image);
 
     return (
-        <div className={((index + 1) % 2) ? "testimonial-card " : "testimonial-card active"}>
-            <div className="stars">
-                <span className="star">★</span>
-                <span className="star">★</span>
-                <span className="star">★</span>
-                <span className="star">★</span>
-                <span className="star">★</span>
+        <div className="relative h-full flex flex-col gap-6 bg-[var(--cream)] rounded-[var(--radius-md)] border border-[var(--line)] p-8 md:p-10 hover:shadow-[var(--shadow-soft)] hover:-translate-y-1 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]">
+            <span
+                aria-hidden
+                className="font-serif text-[var(--gold)]/40 text-6xl leading-none select-none"
+            >
+                &ldquo;
+            </span>
+            <div className="flex items-center gap-1 text-[var(--gold-deep)] text-sm tracking-[0.2em]">
+                <span>★</span>
+                <span>★</span>
+                <span>★</span>
+                <span>★</span>
+                <span>★</span>
             </div>
-            <p className="testimonial-text">{item.details}</p>
-            <div className="testimonial-author">
+            <p className="font-serif italic text-[clamp(17px,1.4vw,21px)] leading-[1.6] text-[var(--ink-soft)] flex-1">
+                {item.details}
+            </p>
+            <div className="flex items-center gap-4 pt-4 border-t border-[var(--line)]">
                 <Image
                     src={imageSrc}
                     alt={item?.name || "Testimonial"}
                     width={48}
                     height={48}
-                    className="author-avatar"
+                    className="rounded-full object-cover w-12 h-12"
                 />
-                <div className="author-info">
-                    <h4>{item.name}</h4>
-                    <span>{item.position}</span>
+                <div className="flex flex-col">
+                    <h4 className="font-serif text-[17px] text-[var(--ink)] leading-tight">{item.name}</h4>
+                    <span className="text-[12px] uppercase tracking-[0.18em] text-[var(--ink-faint)] font-[family-name:var(--font-accent)]">{item.position}</span>
                 </div>
             </div>
         </div>

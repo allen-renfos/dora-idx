@@ -60,7 +60,7 @@ export const SinglePropertyImageSection = ({ property: prop }: Props) => {
 
   return (
     <>
-      <section className="bg-[var(--surface-ink)]">
+      <section className="bg-[var(--canvas)]">
         <div className="container-wide pt-4 pb-6">
           {images.length === 0 ? (
             <EmptyGallery />
@@ -98,14 +98,14 @@ export const SinglePropertyImageSection = ({ property: prop }: Props) => {
                     <button
                       onClick={prev}
                       aria-label="Previous photo"
-                      className="absolute left-4 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-black/55 backdrop-blur-md border border-white/15 text-white hover:bg-[var(--gold-500)] hover:text-[var(--surface-ink)] hover:border-[var(--gold-500)] transition-colors flex items-center justify-center"
+                      className="absolute left-4 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-black/55 backdrop-blur-md border border-white/15 text-white hover:bg-[var(--pine)] hover:text-[var(--on-pine)] hover:border-[var(--pine)] transition-colors flex items-center justify-center"
                     >
                       <FiChevronLeft size={20} />
                     </button>
                     <button
                       onClick={next}
                       aria-label="Next photo"
-                      className="absolute right-4 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-black/55 backdrop-blur-md border border-white/15 text-white hover:bg-[var(--gold-500)] hover:text-[var(--surface-ink)] hover:border-[var(--gold-500)] transition-colors flex items-center justify-center"
+                      className="absolute right-4 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-black/55 backdrop-blur-md border border-white/15 text-white hover:bg-[var(--pine)] hover:text-[var(--on-pine)] hover:border-[var(--pine)] transition-colors flex items-center justify-center"
                     >
                       <FiChevronRight size={20} />
                     </button>
@@ -119,7 +119,7 @@ export const SinglePropertyImageSection = ({ property: prop }: Props) => {
                       e.stopPropagation();
                       setIsModalOpen(true);
                     }}
-                    className="absolute top-4 right-4 inline-flex items-center gap-2 px-4 py-2 bg-black/65 backdrop-blur-md border border-white/15 text-white text-[12px] font-semibold tracking-[0.14em] uppercase hover:bg-[var(--gold-500)] hover:text-[var(--surface-ink)] hover:border-[var(--gold-500)] transition-colors"
+                    className="absolute top-4 right-4 inline-flex items-center gap-2 px-4 py-2 bg-black/65 backdrop-blur-md border border-white/15 text-white text-[12px] font-semibold tracking-[0.14em] uppercase hover:bg-[var(--pine)] hover:text-[var(--on-pine)] hover:border-[var(--pine)] transition-colors"
                   >
                     <FiMaximize2 size={14} />
                     View all {images.length}
@@ -261,7 +261,7 @@ function EmptyGallery() {
         height="56"
         viewBox="0 0 24 24"
         fill="none"
-        stroke="var(--gold-500)"
+        stroke="var(--gold-deep)"
         strokeWidth="1.2"
         strokeLinecap="round"
         strokeLinejoin="round"
@@ -284,7 +284,7 @@ function EmptyGalleryInner() {
         height="48"
         viewBox="0 0 24 24"
         fill="none"
-        stroke="var(--gold-500)"
+        stroke="var(--gold-deep)"
         strokeWidth="1.3"
         strokeLinecap="round"
         strokeLinejoin="round"

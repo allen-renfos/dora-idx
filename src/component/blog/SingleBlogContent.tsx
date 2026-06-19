@@ -8,7 +8,7 @@ interface Props {
 
 export const SingleBlogContent = ({ blog }: Props) => {
   return (
-    <section className="bg-[var(--surface-ink)]">
+    <section className="bg-[var(--canvas)]">
       <div className="container-wide py-16 md:py-20">
         <article className="max-w-3xl mx-auto">
           {blog?.content ? (
@@ -96,18 +96,20 @@ export const SingleBlogContent = ({ blog }: Props) => {
           margin: 2em 0;
         }
         .single-blog-prose code {
-          background: var(--surface-charcoal);
-          color: var(--gold-500);
+          background: var(--canvas-2);
+          color: var(--gold-deep);
           padding: 0.15em 0.4em;
           font-size: 0.92em;
-          border-radius: 2px;
+          border-radius: 4px;
         }
         .single-blog-prose pre {
-          background: var(--surface-obsidian);
-          border: 1px solid var(--line-soft);
+          background: var(--pine);
+          color: var(--on-pine);
+          border: 1px solid var(--line);
           padding: 1em 1.25em;
           overflow-x: auto;
           margin: 2em 0;
+          border-radius: var(--radius-sm);
         }
         .single-blog-prose hr {
           border: 0;
@@ -119,7 +121,8 @@ export const SingleBlogContent = ({ blog }: Props) => {
           font-weight: 600;
         }
         .single-blog-prose em {
-          color: var(--gold-500);
+          color: var(--gold-deep);
+          font-style: italic;
         }
       `}</style>
     </section>

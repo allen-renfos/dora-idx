@@ -116,15 +116,15 @@ export default function RegistrationModal({
         isOpen={isOpen}
         onClose={onClose}
         eyebrow="Create Account"
-        title="Build your dashboard"
-        description="Save searches, favorites, and stay close to listings."
+        title="Begin your collection"
+        description="Keep your favorites close and stay first to know when a home worth seeing arrives."
         footer={
           <>
-            Already have an account?{" "}
+            Already with Dora?{" "}
             <button
               type="button"
               onClick={() => onOpenLogin?.()}
-              className="text-[var(--accent-text)] hover:text-[var(--ink)] transition-colors font-semibold"
+              className="text-[var(--sage-deep)] hover:text-[var(--ink)] transition-colors font-medium"
             >
               Sign in
             </button>
@@ -246,7 +246,7 @@ function PasswordField({
     <div className="flex flex-col gap-2">
       <label
         htmlFor={id}
-        className="text-[10px] uppercase tracking-[0.22em] text-[var(--ink-faint)]"
+        className="text-[11px] uppercase tracking-[0.22em] text-[var(--ink-faint)] font-[family-name:var(--font-accent)]"
       >
         {label}
       </label>
@@ -260,12 +260,12 @@ function PasswordField({
           placeholder={placeholder}
           required
           autoComplete={autoComplete}
-          className="w-full bg-[var(--surface-charcoal)] border border-[var(--line-soft)] focus:border-[var(--gold-500)]/60 px-4 pr-11 h-12 text-[14px] text-[var(--ink)] placeholder:text-[var(--ink-faint)] outline-none transition-colors"
+          className="w-full bg-[var(--cream)] border border-[var(--line)] rounded-[var(--radius-sm)] focus:border-[var(--sage-deep)] px-4 pr-11 h-12 text-[14.5px] text-[var(--ink)] placeholder:text-[var(--ink-faint)] outline-none transition-colors"
         />
         <button
           type="button"
           onClick={onToggleVisible}
-          className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--ink-faint)] hover:text-[var(--accent-text)] transition-colors"
+          className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--ink-faint)] hover:text-[var(--sage-deep)] transition-colors"
           aria-label={visible ? "Hide password" : "Show password"}
         >
           {visible ? <IoEyeOffOutline size={18} /> : <IoEyeOutline size={18} />}

@@ -200,37 +200,32 @@ export default function ConnectMainPage() {
         theme="light"
       />
 
-      {/* HERO */}
-      <section className="relative isolate pt-32 pb-16 md:pt-40 md:pb-20 overflow-hidden">
-        <div
+      {/* HERO — pine band */}
+      <section className="relative isolate overflow-hidden bg-[var(--pine)] pt-36 pb-16 md:pt-44 md:pb-24">
+        <span
           aria-hidden
-          className="absolute inset-0 -z-10 bg-gradient-to-b from-[var(--surface-obsidian)] via-[var(--surface-ink)] to-[var(--surface-ink)]"
-        />
-        <div
-          aria-hidden
-          className="absolute -top-20 left-0 w-[460px] h-[460px] rounded-full opacity-[0.06] blur-[120px] bg-[var(--gold-500)]"
-        />
+          className="pointer-events-none select-none absolute -bottom-16 right-[2vw] font-serif text-[clamp(7rem,20vw,18rem)] leading-none text-[var(--on-pine)]/[0.04]"
+        >
+          Hello
+        </span>
 
-        <div className="container-wide flex flex-col gap-5 max-w-3xl">
+        <div className="container-wide flex flex-col gap-6 max-w-3xl relative">
           <Reveal>
-            <span className="eyebrow inline-flex items-center gap-3">
-              <span className="inline-block h-px w-10 bg-[var(--gold-500)]" />
+            <span className="eyebrow on-dark inline-flex items-center gap-4">
+              <span className="inline-block h-px w-12 bg-[var(--gold-300)]" />
               Connect
             </span>
           </Reveal>
           <Reveal delay={0.08}>
-            <h1 className="display-xl text-[var(--ink)]">
-              Let&rsquo;s start with a{" "}
-              <em className="not-italic italic text-[var(--gold-500)]">
-                conversation
-              </em>
-              .
+            <h1 className="display-xl text-[var(--on-pine)]">
+              It starts with a quiet{" "}
+              <em className="text-[var(--gold-300)]">conversation</em>.
             </h1>
           </Reveal>
           <Reveal delay={0.16}>
-            <p className="lede max-w-xl">
-              Whether you&rsquo;re searching, selling, or simply exploring —
-              share a few details below and {name || "we"} will respond
+            <p className="lede max-w-xl text-[var(--on-pine-soft)]">
+              Whether you&rsquo;re searching, selling, or simply curious —
+              leave a few details below and {name || "we"} will reply
               personally, usually within the day.
             </p>
           </Reveal>
@@ -238,8 +233,8 @@ export default function ConnectMainPage() {
       </section>
 
       {/* INFO TILES */}
-      <section className="border-y border-[var(--line-soft)] bg-[var(--surface-obsidian)]">
-        <div className="container-wide grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-[var(--line-soft)]">
+      <section className="border-y border-[var(--line)] bg-[var(--canvas-2)]">
+        <div className="container-wide grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-[var(--line)]">
           <InfoTile
             Icon={FiMail}
             label="Email"
@@ -266,23 +261,23 @@ export default function ConnectMainPage() {
           <aside className="lg:col-span-4 flex flex-col gap-8">
             <Reveal>
               <span className="eyebrow inline-flex items-center gap-3 mb-4">
-                <span className="inline-block h-px w-10 bg-[var(--gold-500)]" />
+                <span className="inline-block h-px w-10 bg-[var(--gold)]" />
                 Direct Line
               </span>
               <h2 className="display-md text-[var(--ink)] mb-5">
                 A note from{" "}
-                <em className="italic text-[var(--gold-500)]">
+                <em className="text-[var(--gold-deep)]">
                   {name || "the advisor"}
                 </em>
               </h2>
               <p className="lede mb-8">
                 {shortDescription ||
-                  "Every great move starts with a quiet conversation. Tell me what you're considering — I'll listen first, advise carefully, and only act when the moment is right."}
+                  "Every meaningful move begins with an unhurried conversation. Tell me what you're weighing — I'll listen first, counsel carefully, and act only when the moment feels right."}
               </p>
 
               {socials.length > 0 && (
                 <div className="flex flex-col gap-3">
-                  <span className="text-[10px] uppercase tracking-[0.22em] text-[var(--ink-faint)]">
+                  <span className="text-[10px] uppercase tracking-[0.22em] text-[var(--ink-faint)] font-[family-name:var(--font-accent)]">
                     Follow along
                   </span>
                   <div className="flex items-center gap-3">
@@ -293,7 +288,7 @@ export default function ConnectMainPage() {
                         target="_blank"
                         rel="noopener noreferrer"
                         aria-label={label}
-                        className="w-11 h-11 rounded-full border border-[var(--line)] flex items-center justify-center text-[var(--ink-soft)] hover:text-[var(--gold-500)] hover:border-[var(--gold-500)] transition-colors"
+                        className="w-11 h-11 rounded-full border border-[var(--line)] flex items-center justify-center text-[var(--ink-soft)] hover:text-[var(--pine)] hover:bg-[var(--gold-300)] hover:border-[var(--gold-300)] transition-colors duration-300"
                       >
                         <Icon size={15} />
                       </a>
@@ -304,13 +299,13 @@ export default function ConnectMainPage() {
             </Reveal>
 
             <Reveal delay={0.1}>
-              <div className="bg-[var(--surface-obsidian)] border border-[var(--line-soft)] p-6">
-                <p className="text-[12px] uppercase tracking-[0.22em] text-[var(--gold-500)] mb-3">
-                  Replies in under 24 hours
+              <div className="bg-[var(--cream)] rounded-[var(--radius-md)] border border-[var(--line)] p-6">
+                <p className="text-[12px] uppercase tracking-[0.22em] text-[var(--gold-deep)] mb-3 font-[family-name:var(--font-accent)]">
+                  Replies within the day
                 </p>
                 <p className="text-[14px] text-[var(--ink-soft)] leading-relaxed">
-                  Every inquiry is read personally. Expect a thoughtful reply,
-                  not a templated one.
+                  Every message is read in person. Expect a considered reply —
+                  never a templated one.
                 </p>
               </div>
             </Reveal>
@@ -321,7 +316,7 @@ export default function ConnectMainPage() {
             <Reveal y={32}>
               <form
                 onSubmit={onSubmit}
-                className="bg-[var(--surface-obsidian)] border border-[var(--line-soft)] p-6 md:p-10 flex flex-col gap-6"
+                className="bg-[var(--cream)] rounded-[var(--radius-lg)] border border-[var(--line)] shadow-[var(--shadow-soft)] p-6 md:p-10 flex flex-col gap-6"
               >
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                   <Field
@@ -364,7 +359,7 @@ export default function ConnectMainPage() {
                 <div className="flex flex-col gap-2">
                   <label
                     htmlFor="message"
-                    className="text-[10px] uppercase tracking-[0.22em] text-[var(--ink-faint)]"
+                    className="text-[10px] uppercase tracking-[0.22em] text-[var(--ink-faint)] font-[family-name:var(--font-accent)]"
                   >
                     Message
                   </label>
@@ -375,10 +370,10 @@ export default function ConnectMainPage() {
                     onChange={onChange}
                     rows={5}
                     placeholder="Tell us a little about what you're looking for…"
-                    className={`bg-[var(--surface-charcoal)] border px-4 py-3 text-[var(--ink)] placeholder:text-[var(--ink-faint)] outline-none transition-colors resize-y min-h-[120px] ${
+                    className={`bg-[var(--canvas)] rounded-[var(--radius-sm)] border px-4 py-3 text-[var(--ink)] placeholder:text-[var(--ink-faint)] outline-none transition-colors resize-y min-h-[120px] ${
                       errors.message
                         ? "border-[#b3261e]/60"
-                        : "border-[var(--line-soft)] focus:border-[var(--gold-500)]/60"
+                        : "border-[var(--line)] focus:border-[var(--gold-deep)]/60"
                     }`}
                   />
                   {errors.message && (
@@ -443,7 +438,7 @@ export default function ConnectMainPage() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.25 }}
-              className="fixed inset-0 z-[80] bg-black/65 backdrop-blur-sm"
+              className="fixed inset-0 z-[80] bg-[var(--pine)]/70 backdrop-blur-sm"
               onClick={() => setShowCaptcha(false)}
             />
             <motion.div
@@ -451,7 +446,7 @@ export default function ConnectMainPage() {
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 10, scale: 0.98 }}
               transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-              className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-[90] w-[92%] max-w-[440px] bg-[var(--surface-ink)] border border-[var(--line-soft)] p-6 md:p-7"
+              className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-[90] w-[92%] max-w-[440px] bg-[var(--cream)] rounded-[var(--radius-lg)] border border-[var(--line)] shadow-[var(--shadow-lift)] p-6 md:p-7"
             >
               <div className="flex items-center justify-between mb-5">
                 <h3 className="font-serif text-xl text-[var(--ink)]">
@@ -471,14 +466,14 @@ export default function ConnectMainPage() {
               </p>
 
               <div className="flex items-center gap-3 mb-4">
-                <div className="flex-1 select-none bg-[var(--surface-charcoal)] border border-[var(--line-soft)] py-3 text-center font-serif text-2xl tracking-[0.4em] text-[var(--gold-500)]">
+                <div className="flex-1 select-none bg-[var(--canvas)] rounded-[var(--radius-sm)] border border-[var(--line)] py-3 text-center font-serif text-2xl tracking-[0.4em] text-[var(--gold-deep)]">
                   {captchaText}
                 </div>
                 <button
                   type="button"
                   onClick={refreshCaptcha}
                   aria-label="Refresh captcha"
-                  className="w-11 h-11 border border-[var(--line-soft)] text-[var(--ink-soft)] hover:text-[var(--gold-500)] hover:border-[var(--gold-500)] flex items-center justify-center transition-colors"
+                  className="w-11 h-11 rounded-[var(--radius-sm)] border border-[var(--line)] text-[var(--ink-soft)] hover:text-[var(--gold-deep)] hover:border-[var(--gold-deep)] flex items-center justify-center transition-colors"
                 >
                   <FiRefreshCw size={16} />
                 </button>
@@ -489,10 +484,10 @@ export default function ConnectMainPage() {
                 value={captchaInput}
                 onChange={(e) => setCaptchaInput(e.target.value.toUpperCase())}
                 placeholder="Enter the characters"
-                className={`w-full bg-[var(--surface-charcoal)] border px-4 py-3 text-[var(--ink)] placeholder:text-[var(--ink-faint)] outline-none transition-colors text-center tracking-[0.32em] font-serif text-lg ${
+                className={`w-full bg-[var(--canvas)] rounded-[var(--radius-sm)] border px-4 py-3 text-[var(--ink)] placeholder:text-[var(--ink-faint)] outline-none transition-colors text-center tracking-[0.32em] font-serif text-lg ${
                   captchaError
                     ? "border-[#b3261e]/60"
-                    : "border-[var(--line-soft)] focus:border-[var(--gold-500)]/60"
+                    : "border-[var(--line)] focus:border-[var(--gold-deep)]/60"
                 }`}
               />
               {captchaError && (
@@ -543,11 +538,11 @@ function InfoTile({
 }) {
   const inner = (
     <>
-      <div className="w-11 h-11 rounded-full bg-[var(--gold-500)]/10 border border-[var(--gold-500)]/30 flex items-center justify-center shrink-0">
-        <Icon size={16} className="text-[var(--gold-500)]" />
+      <div className="w-11 h-11 rounded-full bg-[var(--cream)] border border-[var(--gold)]/40 flex items-center justify-center shrink-0">
+        <Icon size={16} className="text-[var(--gold-deep)]" />
       </div>
       <div className="flex flex-col gap-1 min-w-0">
-        <span className="text-[10px] uppercase tracking-[0.22em] text-[var(--ink-faint)]">
+        <span className="text-[10px] uppercase tracking-[0.22em] text-[var(--ink-faint)] font-[family-name:var(--font-accent)]">
           {label}
         </span>
         <span className="text-[15px] text-[var(--ink-soft)] break-words">{value}</span>
@@ -561,7 +556,7 @@ function InfoTile({
         href={href}
         target={href.startsWith("mailto") ? undefined : "_blank"}
         rel={href.startsWith("mailto") ? undefined : "noopener noreferrer"}
-        className="flex items-start gap-4 px-6 md:px-8 py-7 hover:bg-[var(--surface-charcoal)] transition-colors"
+        className="flex items-start gap-4 px-6 md:px-8 py-7 hover:bg-[var(--cream)] transition-colors"
       >
         {inner}
       </a>
@@ -595,7 +590,7 @@ function Field({
     <div className="flex flex-col gap-2">
       <label
         htmlFor={name}
-        className="text-[10px] uppercase tracking-[0.22em] text-[var(--ink-faint)]"
+        className="text-[10px] uppercase tracking-[0.22em] text-[var(--ink-faint)] font-[family-name:var(--font-accent)]"
       >
         {label}
       </label>
@@ -607,10 +602,10 @@ function Field({
         onChange={onChange}
         placeholder={placeholder}
         readOnly={readOnly}
-        className={`bg-[var(--surface-charcoal)] border px-4 py-3 text-[var(--ink)] placeholder:text-[var(--ink-faint)] outline-none transition-colors h-12 ${
+        className={`bg-[var(--canvas)] rounded-[var(--radius-sm)] border px-4 py-3 text-[var(--ink)] placeholder:text-[var(--ink-faint)] outline-none transition-colors h-12 ${
           error
             ? "border-[#b3261e]/60"
-            : "border-[var(--line-soft)] focus:border-[var(--gold-500)]/60"
+            : "border-[var(--line)] focus:border-[var(--gold-deep)]/60"
         } ${readOnly ? "opacity-70 cursor-not-allowed" : ""}`}
       />
       {error && <span className="text-[12px] text-[#b3261e]">{error}</span>}

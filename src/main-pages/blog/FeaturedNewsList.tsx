@@ -64,13 +64,13 @@ const FeaturedNewsList = () => {
             </div>
           ) : (
             <div className="empty-state">
-              <p>No news found.</p>
+              <p>No headlines just yet.</p>
             </div>
           )}
         </>
       ) : (
         <div className="empty-state">
-          <p>No news found.</p>
+          <p>No headlines just yet.</p>
         </div>
       )}
     </div>

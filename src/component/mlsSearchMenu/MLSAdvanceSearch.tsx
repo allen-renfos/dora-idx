@@ -96,8 +96,8 @@ function splitPipe(s: string | number): string[] {
 
 function SectionTitle({ children }: { children: React.ReactNode }) {
   return (
-    <h3 className="text-[11px] font-bold tracking-[0.22em] uppercase text-[var(--gold-500)] mb-4 inline-flex items-center gap-3">
-      <span className="inline-block h-px w-8 bg-[var(--gold-500)]" />
+    <h3 className="text-[11px] tracking-[0.22em] uppercase text-[var(--sage-deep)] mb-4 inline-flex items-center gap-3 font-[family-name:var(--font-accent)]">
+      <span className="inline-block h-px w-8 bg-[var(--gold)]" />
       {children}
     </h3>
   );
@@ -120,7 +120,7 @@ function Select({
     <select
       value={value}
       onChange={onChange}
-      className="h-10 px-3 bg-[var(--surface-charcoal)] border border-[var(--line-soft)] text-[13px] text-[var(--ink)] focus:outline-none focus:border-[var(--gold-500)]/60 transition-colors"
+      className="h-10 px-3 bg-[var(--canvas)] border border-[var(--line)] rounded-[var(--radius-sm)] text-[13px] text-[var(--ink)] focus:outline-none focus:border-[var(--sage-deep)]/60 transition-colors"
     >
       {children}
     </select>
@@ -183,13 +183,13 @@ function TagGroup({
             key={item}
             type="button"
             onClick={() => onToggle(item)}
-            className={`inline-flex items-center gap-1.5 h-9 px-3.5 text-[12px] tracking-wide border transition-all duration-200 ${
+            className={`inline-flex items-center gap-1.5 h-9 px-3.5 text-[12px] tracking-wide border rounded-[var(--radius-pill)] transition-all duration-200 ${
               active
-                ? "bg-[var(--gold-500)]/15 border-[var(--gold-500)] text-[var(--accent-text)]"
-                : "bg-[var(--surface-charcoal)] border-[var(--line-soft)] text-[var(--ink-soft)] hover:border-[var(--gold-500)]/50 hover:text-[var(--ink)]"
+                ? "bg-[var(--pine)] border-[var(--pine)] text-[var(--on-pine)]"
+                : "bg-[var(--canvas)] border-[var(--line)] text-[var(--ink-soft)] hover:border-[var(--sage-deep)]/50 hover:text-[var(--ink)]"
             }`}
           >
-            {active && <span className="inline-block w-1.5 h-1.5 rounded-full bg-[var(--gold-500)]" />}
+            {active && <span className="inline-block w-1.5 h-1.5 rounded-full bg-[var(--gold-300)]" />}
             {item}
           </button>
         );
@@ -212,7 +212,7 @@ function Accordion({
   children: React.ReactNode;
 }) {
   return (
-    <div className="border border-[var(--line-soft)] bg-[var(--surface-obsidian)] mb-3">
+    <div className="border border-[var(--line)] rounded-[var(--radius-sm)] bg-[var(--canvas-2)] mb-3 overflow-hidden">
       <button
         type="button"
         onClick={onToggle}
@@ -221,7 +221,7 @@ function Accordion({
         <span className="inline-flex items-center gap-3 text-[14px] font-medium text-[var(--ink)]">
           {label}
           {count > 0 && (
-            <span className="inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 bg-[var(--gold-500)] text-[var(--surface-ink)] text-[10px] font-bold rounded-full">
+            <span className="inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 bg-[var(--pine)] text-[var(--on-pine)] text-[10px] font-bold rounded-full">
               {count}
             </span>
           )}
@@ -359,14 +359,14 @@ const MLSAdvanceSearch = ({
             exit={{ opacity: 0, y: 16, scale: 0.98 }}
             transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
             onClick={(e) => e.stopPropagation()}
-            className="relative w-full max-w-3xl max-h-full flex flex-col bg-[var(--surface-ink)] border border-[var(--line-soft)] shadow-[0_40px_80px_-20px_rgba(0,0,0,0.7)]"
+            className="relative w-full max-w-3xl max-h-full flex flex-col bg-[var(--cream)] border border-[var(--line)] rounded-[var(--radius-lg)] overflow-hidden shadow-[var(--shadow-lift)]"
           >
-            <div className="flex items-center justify-between px-6 md:px-8 py-5 border-b border-[var(--line-soft)] bg-[var(--surface-obsidian)]">
+            <div className="flex items-center justify-between px-6 md:px-8 py-5 border-b border-[var(--line)] bg-[var(--canvas-2)]">
               <div className="flex items-center gap-3">
-                <FiSliders size={18} className="text-[var(--gold-500)]" />
-                <h2 className="font-serif text-xl text-[var(--ink)]">Advanced Filters</h2>
+                <FiSliders size={18} className="text-[var(--sage-deep)]" />
+                <h2 className="font-serif text-xl text-[var(--ink)]">Refine Your Search</h2>
                 {totalActive > 0 && (
-                  <span className="inline-flex items-center justify-center min-w-[22px] h-6 px-2 bg-[var(--gold-500)] text-[var(--surface-ink)] text-[11px] font-bold rounded-full">
+                  <span className="inline-flex items-center justify-center min-w-[22px] h-6 px-2 bg-[var(--pine)] text-[var(--on-pine)] text-[11px] font-bold rounded-full">
                     {totalActive}
                   </span>
                 )}
@@ -593,11 +593,11 @@ const MLSAdvanceSearch = ({
               </Accordion>
             </div>
 
-            <div className="flex items-center justify-between gap-3 px-6 md:px-8 py-4 border-t border-[var(--line-soft)] bg-[var(--surface-obsidian)]">
+            <div className="flex items-center justify-between gap-3 px-6 md:px-8 py-4 border-t border-[var(--line)] bg-[var(--canvas-2)]">
               <button
                 type="button"
                 onClick={handleClear}
-                className="text-[12px] font-semibold tracking-[0.18em] uppercase text-[var(--ink-soft)] hover:text-[var(--accent-text)] transition-colors"
+                className="text-[12px] tracking-[0.18em] uppercase text-[var(--ink-soft)] hover:text-[var(--sage-deep)] transition-colors font-[family-name:var(--font-accent)]"
               >
                 Clear all
               </button>
@@ -608,7 +608,7 @@ const MLSAdvanceSearch = ({
               >
                 View results
                 {totalActive > 0 && (
-                  <span className="ml-1 inline-flex items-center justify-center min-w-[18px] h-5 px-1.5 bg-[var(--surface-ink)] text-[var(--gold-500)] text-[10px] font-bold rounded-full">
+                  <span className="ml-1 inline-flex items-center justify-center min-w-[18px] h-5 px-1.5 bg-[var(--on-pine)]/20 text-[var(--on-pine)] text-[10px] font-bold rounded-full">
                     {totalActive}
                   </span>
                 )}

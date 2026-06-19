@@ -384,7 +384,7 @@ export const GoogleMapComponent = ({ markers = [], onMarkerHover }: MapProps) =>
               textTransform: 'uppercase',
               cursor: 'pointer',
               border: 'none',
-              background: mapType === type ? '#a6824c' : 'transparent',
+              background: mapType === type ? '#c2a878' : 'transparent',
               color: mapType === type ? '#ffffff' : '#8a8780',
               transition: 'background 0.2s, color 0.2s',
             }}

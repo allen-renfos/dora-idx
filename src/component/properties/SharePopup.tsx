@@ -32,10 +32,10 @@ export const SharePopup = ({ property }: Props) => {
         style: {
           background: "#ffffff",
           color: "#1a1a1a",
-          border: "1px solid #a6824c",
+          border: "1px solid #c2a878",
           borderRadius: 0,
         },
-        iconTheme: { primary: "#a6824c", secondary: "#ffffff" },
+        iconTheme: { primary: "#c2a878", secondary: "#ffffff" },
       });
       setTimeout(() => setCopied(false), 2200);
     } catch {
@@ -111,7 +111,7 @@ export const SharePopup = ({ property }: Props) => {
       <button
         type="button"
         onClick={() => setIsOpen(true)}
-        className="inline-flex items-center justify-center gap-2.5 h-11 border border-[var(--line-medium)] hover:border-[var(--gold-500)] text-[var(--ink-soft)] hover:text-[var(--accent-text)] transition-colors text-[12px] font-bold tracking-[0.18em] uppercase"
+        className="inline-flex items-center justify-center gap-2.5 h-11 border border-[var(--line-medium)] rounded-[var(--radius-pill)] hover:border-[var(--sage-deep)] text-[var(--ink-soft)] hover:text-[var(--sage-deep)] transition-colors text-[12px] tracking-[0.18em] uppercase font-[family-name:var(--font-accent)]"
       >
         <FiShare2 size={14} />
         Share
@@ -135,16 +135,16 @@ export const SharePopup = ({ property }: Props) => {
               transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
               className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-[9999] w-[92%] max-w-[460px]"
             >
-              <div className="bg-[var(--surface-obsidian)] border border-[var(--line-soft)] relative">
+              <div className="bg-[var(--cream)] border border-[var(--line)] rounded-[var(--radius-md)] relative overflow-hidden">
                 <div
                   aria-hidden
-                  className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[var(--gold-500)]/55 to-transparent"
+                  className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[var(--gold)]/55 to-transparent"
                 />
 
                 {/* Header */}
-                <div className="flex items-center justify-between px-6 py-5 border-b border-[var(--line-soft)]">
+                <div className="flex items-center justify-between px-6 py-5 border-b border-[var(--line)]">
                   <div className="flex items-center gap-3">
-                    <FiShare2 size={16} className="text-[var(--gold-500)]" />
+                    <FiShare2 size={16} className="text-[var(--sage-deep)]" />
                     <h3 className="font-serif text-lg text-[var(--ink)]">
                       Share this listing
                     </h3>
@@ -161,7 +161,7 @@ export const SharePopup = ({ property }: Props) => {
                 {/* Body */}
                 <div className="p-6">
                   {/* URL preview */}
-                  <div className="flex items-stretch border border-[var(--line-soft)] bg-[var(--surface-charcoal)] mb-5">
+                  <div className="flex items-stretch border border-[var(--line)] bg-[var(--canvas)] rounded-[var(--radius-sm)] mb-5">
                     <input
                       readOnly
                       value={shareUrl}
@@ -169,7 +169,7 @@ export const SharePopup = ({ property }: Props) => {
                     />
                     <button
                       onClick={handleCopy}
-                      className="px-4 inline-flex items-center gap-2 text-[11px] font-bold tracking-[0.18em] uppercase text-[var(--accent-text)] hover:text-[var(--ink)] border-l border-[var(--line-soft)] transition-colors"
+                      className="px-4 inline-flex items-center gap-2 text-[11px] tracking-[0.18em] uppercase text-[var(--sage-deep)] hover:text-[var(--ink)] border-l border-[var(--line)] transition-colors font-[family-name:var(--font-accent)]"
                     >
                       {copied ? <FiCheck size={14} /> : <FiCopy size={14} />}
                       {copied ? "Copied" : "Copy"}
@@ -182,10 +182,10 @@ export const SharePopup = ({ property }: Props) => {
                       <button
                         key={label}
                         onClick={onClick}
-                        className={`flex flex-col items-center justify-center gap-2.5 py-5 border transition-colors group ${
+                        className={`flex flex-col items-center justify-center gap-2.5 py-5 border rounded-[var(--radius-sm)] transition-colors group ${
                           accent
-                            ? "bg-[var(--gold-500)]/10 border-[var(--gold-500)]/30 text-[var(--accent-text)] hover:border-[var(--gold-500)]/60"
-                            : "bg-[var(--surface-charcoal)] border-[var(--line-soft)] text-[var(--ink-soft)] hover:border-[var(--gold-500)]/50 hover:text-[var(--accent-text)]"
+                            ? "bg-[var(--sage)]/12 border-[var(--sage)]/40 text-[var(--sage-deep)] hover:border-[var(--sage-deep)]/60"
+                            : "bg-[var(--canvas)] border-[var(--line)] text-[var(--ink-soft)] hover:border-[var(--sage-deep)]/50 hover:text-[var(--sage-deep)]"
                         }`}
                       >
                         <Icon size={20} />

@@ -97,7 +97,7 @@ export default function RegistrationPage() {
             <label className="block mb-1 font-medium">Name</label>
             <input
               type="text"
-              className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#a6824c]"
+              className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c2a878]"
               value={name}
               onChange={e => setName(e.target.value)}
               required
@@ -108,7 +108,7 @@ export default function RegistrationPage() {
             <label className="block mb-1 font-medium">Email</label>
             <input
               type="email"
-              className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#a6824c]"
+              className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c2a878]"
               value={email}
               onChange={e => setEmail(e.target.value)}
               required
@@ -118,7 +118,7 @@ export default function RegistrationPage() {
             <label className="block mb-1 font-medium">Phone</label>
             <input
               type="tel"
-              className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#a6824c]"
+              className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c2a878]"
               value={phone}
               onChange={e => setPhone(formatUSPhoneInput(e.target.value))}
               maxLength={14}
@@ -130,7 +130,7 @@ export default function RegistrationPage() {
             <label className="block mb-1 font-medium">Password</label>
             <input
               type="password"
-              className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#a6824c]"
+              className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c2a878]"
               value={password}
               onChange={e => setPassword(e.target.value)}
               required
@@ -140,7 +140,7 @@ export default function RegistrationPage() {
             <label className="block mb-1 font-medium">Confirm Password</label>
             <input
               type="password"
-              className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#a6824c]"
+              className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c2a878]"
               value={confirmPassword}
               onChange={e => setConfirmPassword(e.target.value)}
               required
@@ -148,13 +148,13 @@ export default function RegistrationPage() {
           </div>
           <button
             type="submit"
-            className="w-full bg-[#a6824c] text-white font-bold py-2 rounded hover:bg-[#8a6a3b] transition"
+            className="w-full bg-[#c2a878] text-white font-bold py-2 rounded hover:bg-[#957a4b] transition"
             disabled={loading}
           >
             {loading ? "Registering..." : "Register"}
           </button>
           <div className="mt-4 text-center">
-            <a href="/login" className="text-sm text-[#a6824c] hover:underline">
+            <a href="/login" className="text-sm text-[#c2a878] hover:underline">
               Already have an account? Login
             </a>
           </div>

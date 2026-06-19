@@ -37,8 +37,8 @@ export const PropertyCard = ({ item, handleModal, hideWishlist }: PropertyCardPr
       setIsFavorited(true);
       setIsAddingToFavorites(false);
       toast.success("Added to favorites", {
-        style: { background: "#ffffff", color: "#1a1a1a", border: "1px solid #a6824c" },
-        iconTheme: { primary: "#a6824c", secondary: "#ffffff" },
+        style: { background: "#ffffff", color: "#1a1a1a", border: "1px solid #c2a878" },
+        iconTheme: { primary: "#c2a878", secondary: "#ffffff" },
       });
       queryClient.invalidateQueries({ queryKey: ["userWishlistInfo"] });
       queryClient.invalidateQueries({ queryKey: ["mlsProperties"] });
@@ -131,10 +131,10 @@ export const PropertyCard = ({ item, handleModal, hideWishlist }: PropertyCardPr
             style={{
               borderRadius: "999px",
               background: isFavorited
-                ? "rgba(166,130,76,0.95)"
+                ? "rgba(194, 168, 120,0.95)"
                 : "rgba(0,0,0,0.35)",
               borderColor: isFavorited
-                ? "rgba(166,130,76,1)"
+                ? "rgba(194, 168, 120,1)"
                 : "rgba(255,255,255,0.35)",
               color: isFavorited ? "#ffffff" : "#fff",
             }}

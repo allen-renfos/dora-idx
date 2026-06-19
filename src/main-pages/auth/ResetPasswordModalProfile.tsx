@@ -35,9 +35,9 @@ export default function ResetPasswordModalProfile({
         style: {
           background: "#ffffff",
           color: "#1a1a1a",
-          border: "1px solid #a6824c",
+          border: "1px solid #c2a878",
         },
-        iconTheme: { primary: "#a6824c", secondary: "#ffffff" },
+        iconTheme: { primary: "#c2a878", secondary: "#ffffff" },
       });
       setTimeout(() => {
         handleClose();
@@ -101,7 +101,7 @@ export default function ResetPasswordModalProfile({
       <form onSubmit={onSubmit} className="flex flex-col gap-5">
         {/* New Password */}
         <div className="relative">
-          <label className="block text-[11px] uppercase tracking-[0.18em] text-[var(--ink-faint)] mb-2">
+          <label className="block text-[11px] uppercase tracking-[0.18em] text-[var(--ink-faint)] font-[family-name:var(--font-accent)] mb-2">
             New password
           </label>
           <div className="relative flex items-center">
@@ -115,12 +115,12 @@ export default function ResetPasswordModalProfile({
               placeholder="••••••••"
               autoComplete="new-password"
               required
-              className="w-full px-4 py-3 bg-[var(--surface-charcoal)] border border-[var(--line-soft)] text-[var(--ink)] placeholder:text-[var(--ink-faint)] outline-none focus:border-[var(--gold-500)] transition-colors rounded-sm"
+              className="w-full px-4 py-3 bg-[var(--cream)] border border-[var(--line)] text-[var(--ink)] placeholder:text-[var(--ink-faint)] outline-none focus:border-[var(--sage-deep)] transition-colors rounded-[var(--radius-sm)]"
             />
             <button
               type="button"
               onClick={() => setShowNewPassword(!showNewPassword)}
-              className="absolute right-4 text-[var(--ink-faint)] hover:text-[var(--ink)] transition-colors"
+              className="absolute right-4 text-[var(--ink-faint)] hover:text-[var(--sage-deep)] transition-colors"
               aria-label={showNewPassword ? "Hide password" : "Show password"}
             >
               {showNewPassword ? (
@@ -134,7 +134,7 @@ export default function ResetPasswordModalProfile({
 
         {/* Confirm New Password */}
         <div className="relative">
-          <label className="block text-[11px] uppercase tracking-[0.18em] text-[var(--ink-faint)] mb-2">
+          <label className="block text-[11px] uppercase tracking-[0.18em] text-[var(--ink-faint)] font-[family-name:var(--font-accent)] mb-2">
             Confirm new password
           </label>
           <div className="relative flex items-center">
@@ -148,12 +148,12 @@ export default function ResetPasswordModalProfile({
               placeholder="••••••••"
               autoComplete="new-password"
               required
-              className="w-full px-4 py-3 bg-[var(--surface-charcoal)] border border-[var(--line-soft)] text-[var(--ink)] placeholder:text-[var(--ink-faint)] outline-none focus:border-[var(--gold-500)] transition-colors rounded-sm"
+              className="w-full px-4 py-3 bg-[var(--cream)] border border-[var(--line)] text-[var(--ink)] placeholder:text-[var(--ink-faint)] outline-none focus:border-[var(--sage-deep)] transition-colors rounded-[var(--radius-sm)]"
             />
             <button
               type="button"
               onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-              className="absolute right-4 text-[var(--ink-faint)] hover:text-[var(--ink)] transition-colors"
+              className="absolute right-4 text-[var(--ink-faint)] hover:text-[var(--sage-deep)] transition-colors"
               aria-label={
                 showConfirmPassword ? "Hide password" : "Show password"
               }

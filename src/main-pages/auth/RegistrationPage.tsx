@@ -100,14 +100,14 @@ export default function RegistrationPage() {
       />
       <AuthShell
         eyebrow="Create Account"
-        title="Build your private dashboard."
-        description="Save searches, favorites, and stay close to listings as they hit the market."
+        title="Begin your private collection."
+        description="Keep your favorites in one place and be the first to know when a home worth seeing arrives."
         footer={
           <>
-            Already have an account?{" "}
+            Already with Dora?{" "}
             <Link
               href="/login"
-              className="text-[var(--accent-text)] hover:text-[var(--ink)] transition-colors font-semibold"
+              className="text-[var(--sage-deep)] hover:text-[var(--ink)] transition-colors font-medium"
             >
               Sign in
             </Link>

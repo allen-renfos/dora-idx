@@ -103,8 +103,8 @@ const SavedSearchesPage = () => {
       title="Your saved searches"
       description={
         savedSearches.length
-          ? `${savedSearches.length} saved ${savedSearches.length === 1 ? "search" : "searches"}.`
-          : "Save criteria from any search and reopen them with one click."
+          ? `${savedSearches.length} saved ${savedSearches.length === 1 ? "search" : "searches"}, ready when you are.`
+          : "Save the criteria you care about and return to them in a single click."
       }
       actions={
         savedSearches.length > 0 ? (
@@ -123,11 +123,11 @@ const SavedSearchesPage = () => {
           {Array.from({ length: 3 }).map((_, i) => (
             <div
               key={i}
-              className="bg-[var(--surface)] border border-[var(--line)] p-6 animate-pulse h-[180px]"
+              className="bg-[var(--cream)] border border-[var(--line)] rounded-[var(--radius-md)] p-6 animate-pulse h-[180px]"
             >
-              <div className="h-3 w-24 bg-[var(--surface-graphite)] mb-3" />
-              <div className="h-5 w-3/4 bg-[var(--surface-graphite)] mb-3" />
-              <div className="h-4 w-1/2 bg-[var(--surface-graphite)]" />
+              <div className="h-3 w-24 bg-[var(--canvas-2)] rounded-[var(--radius-xs)] mb-3" />
+              <div className="h-5 w-3/4 bg-[var(--canvas-2)] rounded-[var(--radius-xs)] mb-3" />
+              <div className="h-4 w-1/2 bg-[var(--canvas-2)] rounded-[var(--radius-xs)]" />
             </div>
           ))}
         </div>
@@ -140,13 +140,13 @@ const SavedSearchesPage = () => {
               <button
                 key={s.id}
                 onClick={() => handleClick(s)}
-                className="group relative text-left bg-[var(--surface)] border border-[var(--line)] hover:border-[var(--accent)]/60 p-6 transition-colors flex flex-col gap-4"
+                className="group relative text-left bg-[var(--cream)] border border-[var(--line)] rounded-[var(--radius-md)] hover:border-[var(--sage-deep)]/60 hover:shadow-[var(--shadow-soft)] p-6 transition-all flex flex-col gap-4"
               >
                 <div className="flex items-start justify-between gap-3">
-                  <div className="w-10 h-10 rounded-full bg-[var(--accent)]/10 border border-[var(--accent)]/30 flex items-center justify-center text-[var(--accent)]">
+                  <div className="w-10 h-10 rounded-full bg-[var(--canvas)] border border-[var(--line)] flex items-center justify-center text-[var(--sage-deep)]">
                     <FiBookmark size={16} />
                   </div>
-                  <span className="text-[10px] uppercase tracking-[0.22em] text-[var(--ink-faint)]">
+                  <span className="text-[10px] uppercase tracking-[0.22em] text-[var(--ink-faint)] font-[family-name:var(--font-accent)]">
                     #{String(i + 1).padStart(2, "0")}
                   </span>
                 </div>
@@ -157,7 +157,7 @@ const SavedSearchesPage = () => {
 
                 {filters.keyword && (
                   <p className="flex items-center gap-2 text-[13px] text-[var(--ink-soft)]">
-                    <FiMapPin size={12} className="text-[var(--accent)]" />
+                    <FiMapPin size={12} className="text-[var(--sage-deep)]" />
                     {filters.keyword}
                   </p>
                 )}
@@ -169,7 +169,7 @@ const SavedSearchesPage = () => {
                       return (
                         <span
                           key={idx}
-                          className="inline-flex items-center gap-1.5 h-7 px-2.5 bg-[var(--accent)]/10 border border-[var(--accent)]/25 text-[11px] text-[var(--accent-text)] rounded-full"
+                          className="inline-flex items-center gap-1.5 h-7 px-2.5 bg-[var(--canvas)] border border-[var(--line)] text-[11px] text-[var(--ink-soft)] rounded-full"
                         >
                           {Icon && <Icon size={11} />}
                           {t.label}
@@ -186,7 +186,7 @@ const SavedSearchesPage = () => {
                       {formatDate(s.created_at)}
                     </span>
                   )}
-                  <span className="inline-flex items-center gap-1.5 text-[var(--accent-text)] uppercase tracking-[0.18em] font-semibold group-hover:translate-x-0.5 transition-transform">
+                  <span className="inline-flex items-center gap-1.5 text-[var(--sage-deep)] uppercase tracking-[0.18em] font-[family-name:var(--font-accent)] group-hover:translate-x-0.5 transition-transform">
                     View results
                     <FiArrowRight size={12} />
                   </span>
@@ -196,16 +196,16 @@ const SavedSearchesPage = () => {
           })}
         </div>
       ) : (
-        <div className="border border-dashed border-[var(--line)] py-20 px-6 flex flex-col items-center text-center max-w-xl mx-auto">
-          <div className="w-16 h-16 rounded-full bg-[var(--gold-500)]/10 border border-[var(--gold-500)]/30 flex items-center justify-center mb-6">
-            <FiBookmark size={22} className="text-[var(--gold-500)]" />
+        <div className="bg-[var(--cream)] border border-dashed border-[var(--line-medium)] rounded-[var(--radius-md)] py-20 px-6 flex flex-col items-center text-center max-w-xl mx-auto">
+          <div className="w-16 h-16 rounded-full bg-[var(--canvas)] border border-[var(--line)] flex items-center justify-center mb-6">
+            <FiBookmark size={22} className="text-[var(--sage-deep)]" />
           </div>
-          <h3 className="font-serif text-2xl text-[var(--ink)] mb-3">
+          <h3 className="font-serif text-2xl md:text-3xl text-[var(--ink)] mb-3">
             No saved searches yet
           </h3>
           <p className="text-[var(--ink-soft)] mb-8 leading-relaxed">
-            From any search results page, save the filters you care about and
-            we&rsquo;ll keep them here for one-click recall.
+            From any results page, save the filters that matter to you and
+            we&rsquo;ll keep them here for a one-click return.
           </p>
           <button
             onClick={() => router.push("/properties")}

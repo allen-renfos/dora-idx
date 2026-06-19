@@ -81,7 +81,7 @@ const ProfilePage = () => {
       active="Profile"
       eyebrow="Account"
       title="Your profile"
-      description="Keep your contact details up to date so we can reach you about new listings and showings."
+      description="Keep your details current so we can reach you the moment a home worth seeing arrives."
       actions={
         <button
           onClick={() => logoutMutation.mutate()}
@@ -94,15 +94,15 @@ const ProfilePage = () => {
       }
     >
       {/* Identity row */}
-      <div className="bg-[var(--surface)] border border-[var(--line)] p-6 md:p-8 mb-6 flex flex-col md:flex-row md:items-center gap-6">
-        <div className="w-20 h-20 shrink-0 rounded-full bg-[var(--accent)]/15 border border-[var(--accent)]/40 flex items-center justify-center text-[var(--accent)] font-serif text-3xl">
+      <div className="bg-[var(--cream)] border border-[var(--line)] rounded-[var(--radius-md)] p-6 md:p-8 mb-6 flex flex-col md:flex-row md:items-center gap-6 shadow-[var(--shadow-soft)]">
+        <div className="w-20 h-20 shrink-0 rounded-full bg-[var(--pine)] flex items-center justify-center text-[var(--on-pine)] font-serif text-3xl">
           {display.charAt(0).toUpperCase()}
         </div>
         <div className="flex-1 min-w-0">
           <h2 className="font-serif text-2xl md:text-3xl text-[var(--ink)] leading-tight">
             {display}
           </h2>
-          <p className="text-[13px] text-[var(--ink-faint)] mt-1">
+          <p className="text-[12px] uppercase tracking-[0.2em] text-[var(--ink-faint)] font-[family-name:var(--font-accent)] mt-2">
             Member since {memberSince}
           </p>
         </div>
@@ -129,15 +129,15 @@ const ProfilePage = () => {
       </div>
 
       {/* Security Card */}
-      <div className="bg-[var(--surface)] border border-[var(--line)] p-6 md:p-7 mt-6">
+      <div className="bg-[var(--cream)] border border-[var(--line)] rounded-[var(--radius-md)] p-6 md:p-7 mt-6">
         <div className="flex items-center justify-between mb-5 pb-3 border-b border-[var(--line)]">
-          <h3 className="flex items-center gap-3 font-serif text-lg text-[var(--ink)]">
-            <span className="inline-block w-1 h-5 bg-[var(--accent)]" />
+          <h3 className="flex items-center gap-3 font-serif text-xl text-[var(--ink)]">
+            <span className="inline-block w-1 h-5 rounded-full bg-[var(--sage-deep)]" />
             Security
           </h3>
         </div>
-        <p className="text-[13px] text-[var(--ink-faint)] mb-4">
-          Regularly update your password to keep your account secure.
+        <p className="text-[13.5px] text-[var(--ink-soft)] mb-5 leading-relaxed">
+          Refresh your password from time to time to keep your account secure.
         </p>
         <button
           onClick={() => setIsResetPasswordModalOpen(true)}
@@ -177,16 +177,16 @@ function Card({
   children: React.ReactNode;
 }) {
   return (
-    <section className="bg-[var(--surface)] border border-[var(--line)] p-6 md:p-7">
+    <section className="bg-[var(--cream)] border border-[var(--line)] rounded-[var(--radius-md)] p-6 md:p-7">
       <div className="flex items-center justify-between mb-5 pb-3 border-b border-[var(--line)]">
-        <h3 className="flex items-center gap-3 font-serif text-lg text-[var(--ink)]">
-          <span className="inline-block w-1 h-5 bg-[var(--accent)]" />
+        <h3 className="flex items-center gap-3 font-serif text-xl text-[var(--ink)]">
+          <span className="inline-block w-1 h-5 rounded-full bg-[var(--sage-deep)]" />
           {title}
         </h3>
         {onEdit && (
           <button
             onClick={onEdit}
-            className="inline-flex items-center gap-2 text-[11px] uppercase tracking-[0.18em] text-[var(--accent-text)] hover:text-[var(--ink)] transition-colors"
+            className="inline-flex items-center gap-2 text-[11px] uppercase tracking-[0.18em] font-[family-name:var(--font-accent)] text-[var(--sage-deep)] hover:text-[var(--ink)] transition-colors"
           >
             <EditIcon size={12} />
             {editLabel}
@@ -209,11 +209,11 @@ function Row({
 }) {
   return (
     <div className="flex items-start gap-3">
-      <div className="w-9 h-9 rounded-full bg-[var(--accent)]/10 border border-[var(--accent)]/30 flex items-center justify-center shrink-0 mt-0.5">
-        <Icon size={14} className="text-[var(--accent)]" />
+      <div className="w-9 h-9 rounded-full bg-[var(--canvas)] border border-[var(--line)] flex items-center justify-center shrink-0 mt-0.5">
+        <Icon size={14} className="text-[var(--sage-deep)]" />
       </div>
       <div className="flex flex-col gap-0.5 min-w-0">
-        <span className="text-[10px] uppercase tracking-[0.22em] text-[var(--ink-faint)]">
+        <span className="text-[10px] uppercase tracking-[0.22em] text-[var(--ink-faint)] font-[family-name:var(--font-accent)]">
           {label}
         </span>
         <span className="text-[15px] text-[var(--ink-soft)] break-words">{value}</span>

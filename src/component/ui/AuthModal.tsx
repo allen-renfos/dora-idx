@@ -68,27 +68,27 @@ export function AuthModal({
               <button
                 onClick={onClose}
                 aria-label="Close"
-                className="absolute top-3 right-3 z-10 w-9 h-9 flex items-center justify-center text-[var(--ink-soft)] hover:text-[var(--ink)] transition-colors"
+                className="absolute top-4 right-4 z-10 w-9 h-9 flex items-center justify-center rounded-full text-[var(--ink-soft)] hover:text-[var(--ink)] hover:bg-[var(--canvas-2)] transition-colors"
               >
                 <FiX size={20} />
               </button>
 
               {/* Scrollable content */}
-              <div className="overflow-y-scroll custom-scrollbar min-h-0">
-                <div className="bg-[var(--surface)] border border-[var(--line)] p-7 md:p-9 relative">
+              <div className="overflow-y-scroll custom-scrollbar min-h-0 rounded-[var(--radius-md)]">
+                <div className="bg-[var(--cream)] border border-[var(--line)] rounded-[var(--radius-md)] shadow-[var(--shadow-lift)] p-7 md:p-10 relative">
                   <div
                     aria-hidden
-                    className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[var(--gold-500)]/55 to-transparent"
+                    className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[var(--gold)]/60 to-transparent rounded-t-[var(--radius-md)]"
                   />
 
                   <div className="flex flex-col gap-3 mb-7 mt-2">
                     {eyebrow && (
                       <span className="eyebrow inline-flex items-center gap-3">
-                        <span className="inline-block h-px w-8 bg-[var(--gold-500)]" />
+                        <span className="inline-block h-px w-8 bg-[var(--gold)]" />
                         {eyebrow}
                       </span>
                     )}
-                    <h2 className="font-serif text-2xl md:text-3xl text-[var(--ink)] leading-tight tracking-[-0.01em]">
+                    <h2 className="font-serif text-[1.7rem] md:text-[2.1rem] text-[var(--ink)] leading-[1.08] tracking-[-0.015em]">
                       {title}
                     </h2>
                     {description && (
@@ -101,7 +101,7 @@ export function AuthModal({
                   {children}
 
                   {footer && (
-                    <div className="text-center mt-6 text-[14px] text-[var(--ink-faint)]">
+                    <div className="text-center mt-7 pt-6 border-t border-[var(--line)] text-[14px] text-[var(--ink-faint)]">
                       {footer}
                     </div>
                   )}

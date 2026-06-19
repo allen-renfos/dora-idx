@@ -13,7 +13,7 @@ import HomeNewsletter from "@/main-pages/home/HomeNewsletter";
 
 export default function HomePage() {
   return (
-    <main className="bg-[var(--surface-ink)]">
+    <main className="bg-[var(--canvas)]">
       <HomeHero />
       <HomeAdvisor />
       <HomeFeatured />

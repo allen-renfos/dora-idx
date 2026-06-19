@@ -34,7 +34,7 @@ const TestimonialList = () => {
                         ))}
                     </>
                 ) : (
-                    <div>No Testimonials found.</div>
+                    <div className="text-[var(--ink-faint)]">No reflections to share just yet.</div>
                 )}
 
             </div >

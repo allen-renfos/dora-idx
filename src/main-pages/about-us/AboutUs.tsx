@@ -18,26 +18,26 @@ import HomeNewsletter from "@/main-pages/home/HomeNewsletter";
 const PILLARS = [
   {
     n: "01",
-    title: "Discreet Representation",
-    body: "Private client service, white-glove confidentiality, and complete attention from first showing to final close.",
+    title: "Quiet Representation",
+    body: "Private, unhurried client service held in complete confidence — full attention from the first walkthrough to the keys in hand.",
   },
   {
     n: "02",
-    title: "Market Fluency",
-    body: "Two decades of trades and a data-led approach to pricing — informed by the rooms and the rhythms of the local market.",
+    title: "A Feel for the Market",
+    body: "Two decades of closings paired with a measured, evidence-led read on pricing — shaped by the rooms and the rhythms of place.",
   },
   {
     n: "03",
-    title: "Concierge Close",
-    body: "Hand-selected inspectors, stagers, lenders, and attorneys — coordinated end-to-end so you can focus on the move.",
+    title: "A Considered Close",
+    body: "Trusted inspectors, stagers, lenders, and attorneys — gathered and choreographed so the move feels effortless.",
   },
 ];
 
 const SERVICES = [
-  { title: "Buyer Representation", body: "From private previews to last-mile diligence." },
-  { title: "Seller Strategy", body: "Pricing, staging, and a marketing plan with intent." },
-  { title: "Investment Advisory", body: "Yield-driven analysis for portfolios of every size." },
-  { title: "Relocation", body: "Full-service white-glove moves across markets." },
+  { title: "Buyer Representation", body: "From quiet private previews to the last detail of diligence." },
+  { title: "Seller Strategy", body: "Pricing, presentation, and a marketing plan made with intent." },
+  { title: "Investment Advisory", body: "Yield-minded counsel for portfolios of every shape." },
+  { title: "Relocation", body: "Considered, fully held moves between markets." },
 ];
 
 export const AboutUs = () => {
@@ -59,15 +59,13 @@ export const AboutUs = () => {
   const lastName = nameParts.slice(1).join(" ");
 
   return (
-    <div className="bg-[var(--surface-ink)] text-[var(--ink)]">
+    <div className="bg-[var(--canvas)] text-[var(--ink)]">
       {/* HERO + STORY — combined */}
-      <section className="relative isolate overflow-hidden">
+      <section className="relative isolate overflow-hidden bg-[var(--canvas)]">
         {/* Background */}
-        <div aria-hidden className="absolute inset-0 -z-10 bg-gradient-to-br from-[var(--surface-obsidian)] via-[var(--surface-ink)] to-[var(--surface-ink)]" />
-        {/* Ambient glow */}
-        <div aria-hidden className="absolute top-0 right-1/4 w-[700px] h-[700px] rounded-full opacity-[0.06] blur-[180px] bg-[var(--gold-500)] pointer-events-none -z-10" />
+        <div aria-hidden className="absolute inset-0 -z-10 bg-gradient-to-br from-[var(--canvas-2)] via-[var(--canvas)] to-[var(--canvas)]" />
 
-        <div className="container-wide pt-32 pb-20 md:pt-40">
+        <div className="container-wide pt-36 pb-20 md:pt-44">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-0 lg:gap-12 items-start">
 
             {/* ── LEFT COLUMN ── */}
@@ -76,8 +74,8 @@ export const AboutUs = () => {
               {/* Eyebrow */}
               <Reveal>
                 <span className="eyebrow inline-flex items-center gap-3">
-                  <span className="h-px w-10 bg-[var(--gold-500)]" />
-                  About
+                  <span className="h-px w-10 bg-[var(--gold)]" />
+                  The Practice
                 </span>
               </Reveal>
 
@@ -87,7 +85,7 @@ export const AboutUs = () => {
                   {/* Ghost watermark behind */}
                   <span
                     aria-hidden
-                    className="absolute -top-4 -left-3 font-serif font-bold leading-none text-[var(--ink)]/[0.04] whitespace-nowrap pointer-events-none"
+                    className="absolute -top-4 -left-3 font-serif leading-none text-[var(--ink)]/[0.05] whitespace-nowrap pointer-events-none"
                     style={{ fontSize: "clamp(72px, 14vw, 180px)" }}
                   >
                     {firstName}
@@ -95,13 +93,13 @@ export const AboutUs = () => {
                   {/* Actual name */}
                   <div className="relative flex flex-col gap-0.5">
                     <span
-                      className="font-serif font-bold text-[var(--ink)] leading-[1]"
+                      className="font-serif text-[var(--ink)] leading-[1]"
                       style={{ fontSize: "clamp(44px, 7vw, 88px)" }}
                     >
                       {firstName || "Your"}
                     </span>
                     <span
-                      className="font-serif italic text-[var(--gold-500)] leading-[1]"
+                      className="font-serif italic text-[var(--gold-deep)] leading-[1]"
                       style={{ fontSize: "clamp(44px, 7vw, 88px)" }}
                     >
                       {lastName || "Name"}
@@ -109,8 +107,8 @@ export const AboutUs = () => {
                   </div>
                   {/* Role tag */}
                   <div className="flex items-center gap-3 mt-5">
-                    <span className="h-px w-8 bg-[var(--gold-500)]/50" />
-                    <span className="text-[11px] text-[var(--ink-faint)] uppercase tracking-[0.2em] font-semibold">
+                    <span className="h-px w-8 bg-[var(--gold)]/60" />
+                    <span className="text-[11px] text-[var(--ink-faint)] uppercase tracking-[0.2em] font-[family-name:var(--font-accent)]">
                       Real Estate Advisor
                     </span>
                   </div>
@@ -119,10 +117,10 @@ export const AboutUs = () => {
 
               {/* Pull quote */}
               <Reveal delay={0.14}>
-                <blockquote className="border-l-2 border-[var(--gold-500)]/50 pl-6">
+                <blockquote className="border-l-2 border-[var(--gold)]/60 pl-6">
                   <p className="font-serif italic text-[clamp(17px,2vw,22px)] text-[var(--ink-soft)] leading-[1.6]">
                     &ldquo;{shortDescription ||
-                      "Real estate made personal — every client gets the attention a generational decision deserves."}&rdquo;
+                      "Real estate, made personal — every client given the care a once-in-a-generation decision deserves."}&rdquo;
                   </p>
                 </blockquote>
               </Reveal>
@@ -130,9 +128,9 @@ export const AboutUs = () => {
               {/* Thin divider + Story label */}
               <Reveal delay={0.18}>
                 <div className="flex items-center gap-4">
-                  <span className="h-px flex-1 bg-[var(--line-soft)]" />
+                  <span className="h-px flex-1 bg-[var(--line)]" />
                   <span className="eyebrow text-[var(--ink-faint)]">The Story</span>
-                  <span className="h-px w-8 bg-[var(--line-soft)]" />
+                  <span className="h-px w-8 bg-[var(--line)]" />
                 </div>
               </Reveal>
 
@@ -144,13 +142,13 @@ export const AboutUs = () => {
                   ) : (
                     <>
                       <p>
-                        What began nearly two decades ago as a single representation has grown into a quiet practice with national reach — built one relationship at a time. My role is to translate market noise into clarity, and to bring discipline to one of the most important decisions a family makes.
+                        What began nearly two decades ago as a single representation has become a quiet practice with far reach — built one relationship at a time. My work is to turn market noise into clarity, and to bring calm discipline to one of the most consequential decisions a family ever makes.
                       </p>
                       <p>
-                        I represent both sides of the table — buyers and sellers — across the country&rsquo;s most discerning markets. The approach is always the same: prepare relentlessly, advocate fiercely, close cleanly.
+                        I sit on both sides of the table — buyers and sellers alike — across the region&rsquo;s most considered markets. The approach never changes: prepare thoroughly, advocate quietly, close with care.
                       </p>
                       <p>
-                        Beyond the closing, I stay close. Referrals from referrals, second and third moves, neighbors becoming clients becoming friends.
+                        And the relationship rarely ends at the closing. Introductions become referrals, first homes become second and third moves, neighbors become clients become friends.
                       </p>
                     </>
                   )}
@@ -161,10 +159,10 @@ export const AboutUs = () => {
               <Reveal delay={0.28}>
                 <div className="flex flex-wrap items-center gap-4">
                   <Link href="/connect" className="btn-gold-new">
-                    Schedule a conversation
+                    Begin a conversation
                   </Link>
                   <Link href="/properties" className="link-underline">
-                    Browse current listings
+                    View current listings
                     <FiArrowRight size={14} />
                   </Link>
                 </div>
@@ -179,11 +177,11 @@ export const AboutUs = () => {
                   {/* Decorative offset frame */}
                   <div
                     aria-hidden
-                    className="absolute -top-5 -right-5 w-full h-full border border-[var(--gold-500)]/30 pointer-events-none"
+                    className="absolute -top-5 -right-5 w-full h-full rounded-[var(--radius-md)] border border-[var(--gold)]/40 pointer-events-none"
                   />
 
                   {/* Portrait */}
-                  <div className="relative aspect-[3/4] overflow-hidden bg-[var(--surface-obsidian)]">
+                  <div className="relative aspect-[3/4] overflow-hidden rounded-[var(--radius-md)] bg-[var(--pine)]">
                     <Image
                       src={portrait}
                       alt={name || "Advisor"}
@@ -192,17 +190,17 @@ export const AboutUs = () => {
                       className="object-cover object-top"
                       priority
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent pointer-events-none" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[var(--pine)] via-[var(--pine)]/15 to-transparent pointer-events-none" />
 
                     {/* Name nameplate on photo */}
                     <div className="absolute bottom-0 left-0 right-0 px-7 py-6">
-                      <p className="font-serif text-[22px] text-white leading-tight">
+                      <p className="font-serif text-[22px] text-[var(--on-pine)] leading-tight">
                         {firstName}{" "}
-                        <span className="italic text-[var(--gold-500)]">{lastName}</span>
+                        <span className="italic text-[var(--gold-300)]">{lastName}</span>
                       </p>
                       <div className="flex items-center gap-2 mt-2">
-                        <span className="h-px w-5 bg-[var(--gold-500)]/60" />
-                        <span className="text-[11px] uppercase tracking-[0.18em] text-white/70 font-medium">
+                        <span className="h-px w-5 bg-[var(--gold-300)]/70" />
+                        <span className="text-[11px] uppercase tracking-[0.18em] text-[var(--on-pine-soft)] font-[family-name:var(--font-accent)]">
                           Real Estate Advisor
                         </span>
                       </div>
@@ -212,7 +210,7 @@ export const AboutUs = () => {
                   {/* Corner accent dot */}
                   <div
                     aria-hidden
-                    className="absolute -bottom-3 -left-3 w-6 h-6 border border-[var(--gold-500)]/50"
+                    className="absolute -bottom-3 -left-3 w-6 h-6 rounded-[var(--radius-xs)] border border-[var(--gold)]/60"
                   />
                 </div>
               </Reveal>
@@ -223,11 +221,11 @@ export const AboutUs = () => {
                 className="hidden lg:flex absolute -right-6 top-1/2 -translate-y-1/2 items-center gap-2"
                 style={{ transform: "translateY(-50%) rotate(90deg)", transformOrigin: "center" }}
               >
-                <span className="h-px w-6 bg-[var(--gold-500)]/40" />
-                <span className="text-[10px] uppercase tracking-[0.25em] text-[var(--ink-faint)] font-semibold whitespace-nowrap">
-                  Est. in Excellence
+                <span className="h-px w-6 bg-[var(--gold)]/50" />
+                <span className="text-[10px] uppercase tracking-[0.25em] text-[var(--ink-faint)] font-[family-name:var(--font-accent)] whitespace-nowrap">
+                  A Boutique Practice
                 </span>
-                <span className="h-px w-6 bg-[var(--gold-500)]/40" />
+                <span className="h-px w-6 bg-[var(--gold)]/50" />
               </div>
             </div>
 
@@ -236,17 +234,17 @@ export const AboutUs = () => {
       </section>
 
       {/* PILLARS */}
-      <section className="bg-[var(--surface-obsidian)] border-y border-[var(--line-soft)]">
+      <section className="bg-[var(--canvas-2)] border-y border-[var(--line)]">
         <div className="container-wide section-pad">
           <Reveal className="max-w-2xl mb-12">
             <span className="eyebrow inline-flex items-center gap-3 mb-5">
-              <span className="inline-block h-px w-10 bg-[var(--gold-500)]" />
+              <span className="inline-block h-px w-10 bg-[var(--gold)]" />
               How I Work
             </span>
             <h2 className="display-md text-[var(--ink)]">
-              Three commitments,
+              Three quiet commitments,
               <br />
-              kept consistently.
+              kept without exception.
             </h2>
           </Reveal>
 
@@ -268,9 +266,9 @@ export const AboutUs = () => {
                     transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] },
                   },
                 }}
-                className="border-t border-[var(--line)] pt-6 flex flex-col gap-3"
+                className="bg-[var(--cream)] rounded-[var(--radius-md)] border border-[var(--line)] p-7 flex flex-col gap-3 hover:shadow-[var(--shadow-soft)] hover:-translate-y-1 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]"
               >
-                <span className="font-serif text-[var(--gold-500)] text-lg">
+                <span className="font-serif text-[var(--gold-deep)] text-lg">
                   {p.n}
                 </span>
                 <h3 className="font-serif text-2xl text-[var(--ink)] leading-tight">
@@ -286,28 +284,28 @@ export const AboutUs = () => {
       </section>
 
       {/* SERVICES */}
-      <section className="section-pad">
+      <section className="section-pad bg-[var(--canvas)]">
         <div className="container-wide grid grid-cols-1 lg:grid-cols-12 gap-10">
           <div className="lg:col-span-4">
             <Reveal>
               <span className="eyebrow inline-flex items-center gap-3 mb-5">
-                <span className="inline-block h-px w-10 bg-[var(--gold-500)]" />
+                <span className="inline-block h-px w-10 bg-[var(--gold)]" />
                 Services
               </span>
               <h2 className="display-md text-[var(--ink)]">
-                Engagements built around{" "}
-                <em className="italic text-[var(--gold-500)]">your goal</em>.
+                Engagements shaped around{" "}
+                <em className="text-[var(--gold-deep)]">your goal</em>.
               </h2>
               <p className="lede mt-5 max-w-md">
-                Every relationship begins with a conversation. From there, the
-                engagement is shaped to fit the moment.
+                Every relationship opens with a conversation. From there, the
+                work is shaped to fit the moment in front of you.
               </p>
             </Reveal>
           </div>
           <div className="lg:col-span-8 grid grid-cols-1 sm:grid-cols-2 gap-6">
             {SERVICES.map((s, i) => (
               <Reveal key={s.title} delay={i * 0.06}>
-                <div className="bg-[var(--surface-obsidian)] border border-[var(--line-soft)] hover:border-[var(--gold-500)]/40 p-6 md:p-7 h-full transition-colors">
+                <div className="bg-[var(--cream)] rounded-[var(--radius-md)] border border-[var(--line)] hover:shadow-[var(--shadow-soft)] hover:-translate-y-1 p-6 md:p-7 h-full transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]">
                   <h3 className="font-serif text-xl text-[var(--ink)] mb-2">{s.title}</h3>
                   <p className="text-[14px] text-[var(--ink-soft)] leading-relaxed">
                     {s.body}
@@ -319,25 +317,31 @@ export const AboutUs = () => {
         </div>
       </section>
 
-      {/* CTA + SOCIAL */}
-      <section className="bg-[var(--surface-obsidian)] border-t border-[var(--line-soft)]">
-        <div className="container-wide section-pad flex flex-col items-center text-center gap-6">
+      {/* CTA + SOCIAL — pine band */}
+      <section className="relative isolate overflow-hidden bg-[var(--pine)]">
+        <span
+          aria-hidden
+          className="pointer-events-none select-none absolute -bottom-16 right-[3vw] font-serif text-[clamp(7rem,18vw,16rem)] leading-none text-[var(--on-pine)]/[0.04]"
+        >
+          Hello
+        </span>
+        <div className="container-wide section-pad flex flex-col items-center text-center gap-6 relative">
           <Reveal>
-            <span className="eyebrow inline-flex items-center gap-3">
-              <span className="inline-block h-px w-10 bg-[var(--gold-500)]" />
+            <span className="eyebrow on-dark inline-flex items-center gap-3">
+              <span className="inline-block h-px w-10 bg-[var(--gold-300)]" />
               Connect
-              <span className="inline-block h-px w-10 bg-[var(--gold-500)]" />
+              <span className="inline-block h-px w-10 bg-[var(--gold-300)]" />
             </span>
           </Reveal>
           <Reveal delay={0.08}>
-            <h2 className="display-md max-w-2xl">
-              Let&rsquo;s start with a conversation about your{" "}
-              <em className="italic text-[var(--gold-500)]">next move</em>.
+            <h2 className="display-md max-w-2xl text-[var(--on-pine)]">
+              Let&rsquo;s begin with a quiet conversation about your{" "}
+              <em className="text-[var(--gold-300)]">next move</em>.
             </h2>
           </Reveal>
           <Reveal delay={0.14}>
-            <Link href="/connect" className="btn-gold-new mt-2">
-              Book a private consultation
+            <Link href="/connect" className="btn-outline-new on-dark mt-2">
+              Arrange a private consultation
             </Link>
           </Reveal>
           {socials.length > 0 && (
@@ -350,7 +354,7 @@ export const AboutUs = () => {
                     aria-label={label}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-11 h-11 rounded-full border border-[var(--line)] flex items-center justify-center text-[var(--ink-soft)] hover:text-[var(--gold-500)] hover:border-[var(--gold-500)] transition-colors"
+                    className="w-11 h-11 rounded-full border border-[rgba(241,237,227,0.2)] flex items-center justify-center text-[var(--on-pine-soft)] hover:text-[var(--pine)] hover:bg-[var(--gold-300)] hover:border-[var(--gold-300)] transition-colors duration-300"
                   >
                     <Icon size={15} />
                   </a>

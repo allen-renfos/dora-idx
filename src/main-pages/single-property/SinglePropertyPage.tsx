@@ -66,10 +66,10 @@ function DetailSkeleton() {
     <div className="pt-[88px] pb-16">
       <div className="container-wide space-y-8">
         <div className="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-2">
-          <div className="aspect-[16/10] bg-[var(--surface-charcoal)] animate-pulse" />
+          <div className="aspect-[16/10] bg-[var(--surface-graphite)] rounded-[var(--radius-md)] animate-pulse" />
           <div className="hidden lg:grid grid-rows-2 gap-2">
-            <div className="bg-[var(--surface-charcoal)] animate-pulse" />
-            <div className="bg-[var(--surface-charcoal)] animate-pulse" />
+            <div className="bg-[var(--surface-graphite)] rounded-[var(--radius-md)] animate-pulse" />
+            <div className="bg-[var(--surface-graphite)] rounded-[var(--radius-md)] animate-pulse" />
           </div>
         </div>
         <div className="flex flex-col gap-3 animate-pulse">
@@ -94,16 +94,17 @@ function DetailError() {
   return (
     <div className="pt-[120px] pb-20 container-wide">
       <div className="max-w-md mx-auto text-center flex flex-col items-center">
-        <div className="w-16 h-16 rounded-full bg-[var(--gold-500)]/10 border border-[var(--gold-500)]/30 flex items-center justify-center mb-6">
-          <FiAlertCircle size={24} className="text-[var(--gold-500)]" />
+        <div className="w-16 h-16 rounded-full bg-[var(--sage)]/12 border border-[var(--sage)]/40 flex items-center justify-center mb-6">
+          <FiAlertCircle size={24} className="text-[var(--sage-deep)]" />
         </div>
-        <h1 className="font-serif text-3xl mb-3">We couldn&rsquo;t load this listing</h1>
+        <span className="eyebrow mb-4">A quiet pause</span>
+        <h1 className="font-serif text-[clamp(1.8rem,2.5vw+1rem,2.6rem)] text-[var(--ink)] mb-3">This listing has slipped away</h1>
         <p className="text-[var(--ink-soft)] mb-8 leading-relaxed">
-          The property may have been delisted or the link is out of date. Try
-          browsing the current inventory.
+          The residence may have found its keeper, or the link has aged. Step
+          back into the current collection — something fitting may be waiting.
         </p>
         <Link href="/properties" className="btn-gold-new">
-          Browse listings
+          Return to the collection
         </Link>
       </div>
     </div>

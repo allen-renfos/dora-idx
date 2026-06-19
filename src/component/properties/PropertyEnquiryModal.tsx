@@ -163,7 +163,7 @@ function ScheduleTourForm({ property, profileData, onClose }: SharedFormProps) {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
         <DateTimeField
-          icon={<FiCalendar size={14} className="text-[var(--accent-text)]" />}
+          icon={<FiCalendar size={14} className="text-[var(--sage-deep)]" />}
           label="Preferred date"
           error={errors.tourDate}
         >
@@ -177,7 +177,7 @@ function ScheduleTourForm({ property, profileData, onClose }: SharedFormProps) {
           />
         </DateTimeField>
         <DateTimeField
-          icon={<FiClock size={14} className="text-[var(--accent-text)]" />}
+          icon={<FiClock size={14} className="text-[var(--sage-deep)]" />}
           label="Preferred time"
           error={errors.tourTime}
         >
@@ -214,7 +214,7 @@ function ScheduleTourForm({ property, profileData, onClose }: SharedFormProps) {
           onChange={onChange}
           rows={3}
           placeholder="Anything we should know?"
-          className="bg-[var(--surface-charcoal)] border border-[var(--line-soft)] focus:border-[var(--gold-500)]/60 px-4 py-3 text-[14px] text-[var(--ink)] placeholder:text-[var(--ink-faint)] outline-none transition-colors resize-y min-h-[90px]"
+          className="bg-[var(--canvas)] border border-[var(--line)] rounded-[var(--radius-sm)] focus:border-[var(--sage-deep)]/60 px-4 py-3 text-[14px] text-[var(--ink)] placeholder:text-[var(--ink-faint)] outline-none transition-colors resize-y min-h-[90px]"
         />
       </div>
 
@@ -367,10 +367,10 @@ function SendInquiryForm({ property, profileData, onClose }: SharedFormProps) {
                 key={w.value}
                 type="button"
                 onClick={() => setFormData((p) => ({ ...p, whenToSell: w.value }))}
-                className={`h-10 px-4 text-[12px] uppercase tracking-[0.18em] border transition-colors ${
+                className={`h-10 px-4 text-[12px] uppercase tracking-[0.18em] border rounded-[var(--radius-pill)] transition-colors font-[family-name:var(--font-accent)] ${
                   active
-                    ? "bg-[var(--gold-500)]/15 border-[var(--gold-500)] text-[var(--accent-text)]"
-                    : "bg-[var(--surface-charcoal)] border-[var(--line-soft)] text-[var(--ink-soft)] hover:border-[var(--gold-500)]/50"
+                    ? "bg-[var(--pine)] border-[var(--pine)] text-[var(--on-pine)]"
+                    : "bg-[var(--canvas)] border-[var(--line)] text-[var(--ink-soft)] hover:border-[var(--sage-deep)]/50"
                 }`}
               >
                 {w.label}
@@ -391,7 +391,7 @@ function SendInquiryForm({ property, profileData, onClose }: SharedFormProps) {
           onChange={onChange}
           rows={3}
           placeholder="Anything we should know?"
-          className="bg-[var(--surface-charcoal)] border border-[var(--line-soft)] focus:border-[var(--gold-500)]/60 px-4 py-3 text-[14px] text-[var(--ink)] placeholder:text-[var(--ink-faint)] outline-none transition-colors resize-y min-h-[90px]"
+          className="bg-[var(--canvas)] border border-[var(--line)] rounded-[var(--radius-sm)] focus:border-[var(--sage-deep)]/60 px-4 py-3 text-[14px] text-[var(--ink)] placeholder:text-[var(--ink-faint)] outline-none transition-colors resize-y min-h-[90px]"
         />
       </div>
 
@@ -445,7 +445,7 @@ export const PropertyEnquiryModal = ({ isOpen, onClose, property }: Props) => {
       size="lg"
     >
       {/* Tabs */}
-      <div className="relative flex items-center gap-1 mb-6 border-b border-[var(--line-soft)]">
+      <div className="relative flex items-center gap-1 mb-6 border-b border-[var(--line)]">
         {TABS.map((tab) => {
           const active = activeTab === tab.key;
           return (
@@ -454,14 +454,14 @@ export const PropertyEnquiryModal = ({ isOpen, onClose, property }: Props) => {
               type="button"
               onClick={() => setActiveTab(tab.key)}
               className={`relative px-4 py-3 text-[12px] font-bold tracking-[0.18em] uppercase transition-colors ${
-                active ? "text-[var(--accent-text)]" : "text-[var(--ink-faint)] hover:text-[var(--ink)]"
+                active ? "text-[var(--sage-deep)]" : "text-[var(--ink-faint)] hover:text-[var(--ink)]"
               }`}
             >
               {tab.label}
               {active && (
                 <motion.span
                   layoutId="enquiry-tab-indicator"
-                  className="absolute left-3 right-3 -bottom-px h-px bg-[var(--gold-500)]"
+                  className="absolute left-3 right-3 -bottom-px h-px bg-[var(--gold)]"
                   transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
                 />
               )}
@@ -498,8 +498,8 @@ function DateTimeField({
         {label}
       </label>
       <div
-        className={`flex items-center gap-3 bg-[var(--surface-charcoal)] border h-12 px-4 transition-colors focus-within:border-[var(--gold-500)]/60 ${
-          error ? "border-[#b3261e]/60" : "border-[var(--line-soft)]"
+        className={`flex items-center gap-3 bg-[var(--canvas)] border h-12 px-4 rounded-[var(--radius-sm)] transition-colors focus-within:border-[var(--sage-deep)]/60 ${
+          error ? "border-[#b3261e]/60" : "border-[var(--line)]"
         }`}
       >
         {icon}

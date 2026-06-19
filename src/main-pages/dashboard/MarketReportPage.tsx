@@ -17,14 +17,14 @@ const MarketReportPage = () => {
       active="Market Report"
       eyebrow="Insights"
       title="Market reports"
-      description="Track local market momentum, run a quick comparison, and have insights texted directly to your phone."
+      description="Follow local momentum, run a quick comparison, and have the highlights texted straight to your phone."
     >
       {/* Build a report */}
-      <section className="bg-[var(--surface-obsidian)] border border-[var(--line-soft)] grid grid-cols-1 lg:grid-cols-[1fr_360px] overflow-hidden">
+      <section className="bg-[var(--cream)] border border-[var(--line)] rounded-[var(--radius-md)] grid grid-cols-1 lg:grid-cols-[1fr_360px] overflow-hidden shadow-[var(--shadow-soft)]">
         <div className="p-8 md:p-10 flex flex-col gap-6">
           <div className="flex flex-col gap-3">
             <span className="eyebrow inline-flex items-center gap-3">
-              <span className="inline-block h-px w-8 bg-[var(--gold-500)]" />
+              <span className="inline-block h-px w-8 bg-[var(--gold)]" />
               Build a report
             </span>
             <h2 className="font-serif text-2xl md:text-3xl text-[var(--ink)] leading-tight">
@@ -36,8 +36,8 @@ const MarketReportPage = () => {
             </p>
           </div>
 
-          <div className="flex items-center bg-[var(--surface-charcoal)] border border-[var(--line-soft)] focus-within:border-[var(--gold-500)]/60 transition-colors">
-            <span className="pl-4 text-[var(--gold-500)]">
+          <div className="flex items-center bg-[var(--canvas)] border border-[var(--line)] rounded-[var(--radius-sm)] focus-within:border-[var(--sage-deep)] transition-colors overflow-hidden">
+            <span className="pl-4 text-[var(--sage-deep)]">
               {isSearching ? (
                 <svg className="animate-spin" width={16} height={16} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                   <circle cx="12" cy="12" r="10" strokeOpacity="0.25" />
@@ -63,27 +63,27 @@ const MarketReportPage = () => {
               placeholder="Search by location"
               className="flex-1 px-3 h-12 bg-transparent outline-none text-[14px] text-[var(--ink)] placeholder:text-[var(--ink-faint)] font-serif"
             />
-            <button className="h-12 px-5 text-[12px] font-bold tracking-[0.18em] uppercase bg-[var(--ink)] text-white hover:bg-[var(--accent-text)] transition-colors">
+            <button className="h-12 px-5 text-[12px] tracking-[0.18em] uppercase font-[family-name:var(--font-accent)] bg-[var(--pine)] text-[var(--on-pine)] hover:bg-[var(--pine-soft)] transition-colors">
               Generate
             </button>
           </div>
         </div>
 
-        <div className="hidden lg:block relative bg-[var(--surface-charcoal)] min-h-[280px]">
+        <div className="hidden lg:block relative bg-[var(--canvas-2)] min-h-[280px]">
           <Image
             src="/images/market-report-sale.png"
             alt="Market report visual"
             fill
             className="object-cover object-center"
           />
-          <div className="absolute inset-0 bg-gradient-to-l from-transparent to-[var(--surface-obsidian)]/55" />
+          <div className="absolute inset-0 bg-gradient-to-l from-transparent to-[var(--cream)]/55" />
         </div>
       </section>
 
       {/* App banner */}
-      <section className="mt-6 bg-[var(--surface-obsidian)] border border-[var(--line-soft)] p-8 md:p-10 grid grid-cols-1 md:grid-cols-[auto_1fr] gap-8 items-center">
+      <section className="mt-6 bg-[var(--cream)] border border-[var(--line)] rounded-[var(--radius-md)] p-8 md:p-10 grid grid-cols-1 md:grid-cols-[auto_1fr] gap-8 items-center">
         <div className="flex items-center gap-4">
-          <div className="w-14 h-14 rounded-full bg-[var(--gold-500)]/10 border border-[var(--gold-500)]/30 flex items-center justify-center text-[var(--gold-500)] shrink-0">
+          <div className="w-14 h-14 rounded-full bg-[var(--canvas)] border border-[var(--line)] flex items-center justify-center text-[var(--sage-deep)] shrink-0">
             <FiSmartphone size={22} />
           </div>
           <div className="max-w-xs">
@@ -104,7 +104,7 @@ const MarketReportPage = () => {
             onChange={(e) => setMobile(formatUSPhoneInput(e.target.value))}
             maxLength={14}
             placeholder="(555) 123-4567"
-            className="bg-[var(--surface-charcoal)] border border-[var(--line-soft)] focus:border-[var(--gold-500)]/60 px-4 h-12 text-[14px] text-[var(--ink)] placeholder:text-[var(--ink-faint)] outline-none transition-colors w-full md:max-w-[240px]"
+            className="bg-[var(--canvas)] border border-[var(--line)] rounded-[var(--radius-sm)] focus:border-[var(--sage-deep)] px-4 h-12 text-[14px] text-[var(--ink)] placeholder:text-[var(--ink-faint)] outline-none transition-colors w-full md:max-w-[240px]"
           />
           <button className="btn-gold-new shrink-0 justify-center">
             Text me the app
@@ -113,7 +113,7 @@ const MarketReportPage = () => {
         </div>
       </section>
 
-      <p className="mt-3 text-[11px] uppercase tracking-[0.18em] text-[var(--ink-faint)] text-center md:text-right">
+      <p className="mt-3 text-[11px] uppercase tracking-[0.18em] text-[var(--ink-faint)] font-[family-name:var(--font-accent)] text-center md:text-right">
         Standard messaging rates apply.
       </p>
     </DashboardLayout>

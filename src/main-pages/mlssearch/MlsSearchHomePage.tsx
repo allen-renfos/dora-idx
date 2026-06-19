@@ -384,8 +384,8 @@ const MlsSerchHomePage = () => {
 
       <div className="container-wide py-6">
         {/* Results bar */}
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 pb-4 border-b border-[var(--line-soft)]">
-          <div className="text-[13px] text-[var(--ink-faint)] tracking-wide">
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 pb-4 border-b border-[var(--line)]">
+          <div className="text-[13px] text-[var(--ink-faint)] tracking-wide font-[family-name:var(--font-accent)]">
             {isLoading ? (
               <span className="inline-flex items-center gap-2">
                 <svg
@@ -400,21 +400,21 @@ const MlsSerchHomePage = () => {
                   <circle cx="12" cy="12" r="10" strokeOpacity="0.25" />
                   <path d="M12 2a10 10 0 0 1 10 10" strokeLinecap="round" />
                 </svg>
-                Loading listings…
+                Gathering listings…
               </span>
             ) : properties.length ? (
               <span>
-                <strong className="text-[var(--accent-text)] font-semibold">
+                <strong className="text-[var(--sage-deep)] font-normal">
                   {properties.length}
                 </strong>{" "}
                 <span className="text-[var(--ink-faint)]">of</span>{" "}
-                <strong className="text-[var(--ink)] font-semibold">
+                <strong className="text-[var(--ink)] font-normal">
                   {totalCount > 0 ? totalCount.toLocaleString() : "…"}
                 </strong>{" "}
-                listings loaded
+                residences in view
               </span>
             ) : (
-              <span>No listings match your filters</span>
+              <span>No residences answer to these filters</span>
             )}
           </div>
           <MlsListingOptions
@@ -492,7 +492,7 @@ const MlsSerchHomePage = () => {
                       {Array.from({ length: 4 }).map((_, i) => (
                         <div
                           key={i}
-                          className="bg-[var(--surface-obsidian)] border border-[var(--line-soft)] overflow-hidden animate-pulse"
+                          className="bg-[var(--cream)] border border-[var(--line)] rounded-[var(--radius-md)] overflow-hidden animate-pulse"
                         >
                           <div className="aspect-[4/3] bg-[var(--surface-graphite)]" />
                           <div className="p-6 flex flex-col gap-3">
@@ -508,8 +508,8 @@ const MlsSerchHomePage = () => {
                   )}
 
                   {!hasNextPage && properties.length > 0 && (
-                    <p className="text-center text-[var(--ink-faint)] text-[13px] py-10 tracking-wide">
-                      All {properties.length.toLocaleString()} listings loaded
+                    <p className="text-center text-[var(--ink-faint)] text-[13px] py-10 tracking-[0.2em] uppercase font-[family-name:var(--font-accent)]">
+                      You have reached the end of the collection · {properties.length.toLocaleString()} residences
                     </p>
                   )}
                 </>
@@ -521,7 +521,7 @@ const MlsSerchHomePage = () => {
 
           {openMapGrid && (
             properties.length ? (
-              <div className="h-[calc(100vh-200px)] min-h-[560px] overflow-hidden border border-[var(--line-soft)]">
+              <div className="h-[calc(100vh-200px)] min-h-[560px] overflow-hidden rounded-[var(--radius-md)] border border-[var(--line)]">
                 <GoogleMapComponent
                   markers={mappableProperties}
                   onMarkerHover={(p: any) => setHoveredProperty(p)}
@@ -547,7 +547,7 @@ function GridSkeleton() {
       {Array.from({ length: 8 }).map((_, i) => (
         <div
           key={i}
-          className="bg-[var(--surface-obsidian)] border border-[var(--line-soft)] overflow-hidden animate-pulse"
+          className="bg-[var(--cream)] border border-[var(--line)] rounded-[var(--radius-md)] overflow-hidden animate-pulse"
         >
           <div className="aspect-[4/3] bg-[var(--surface-graphite)]" />
           <div className="p-6 flex flex-col gap-3">
@@ -568,18 +568,19 @@ function GridSkeleton() {
 function EmptyState({ onClear }: { onClear: () => void }) {
   return (
     <div className="py-24 flex flex-col items-center justify-center text-center max-w-xl mx-auto">
-      <div className="w-16 h-16 rounded-full border border-[var(--gold-500)]/30 bg-[var(--gold-500)]/5 flex items-center justify-center mb-6">
-        <FiSearch size={24} className="text-[var(--gold-500)]" />
+      <div className="w-16 h-16 rounded-full border border-[var(--sage)]/40 bg-[var(--sage)]/10 flex items-center justify-center mb-6">
+        <FiSearch size={24} className="text-[var(--sage-deep)]" />
       </div>
+      <span className="eyebrow mb-4">Nothing yet</span>
       <h3 className="font-serif text-3xl text-[var(--ink)] mb-3">
-        No properties match these filters
+        No residences answer to this search
       </h3>
       <p className="text-[var(--ink-soft)] mb-8 leading-relaxed">
-        Try broadening your location, adjusting price, or clearing a filter or two
-        to see what else is on the market.
+        Widen your locale, ease the price, or lift a filter or two — there may be
+        something lovely waiting just outside these bounds.
       </p>
       <button onClick={onClear} className="btn-outline-new">
-        Clear all filters
+        Reset the search
       </button>
     </div>
   );

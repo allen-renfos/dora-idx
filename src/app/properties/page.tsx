@@ -3,35 +3,39 @@ import MlsSerchHomePage from "@/main-pages/mlssearch/MlsSearchHomePage";
 
 const MLSSearchPage = () => {
   return (
-    <main className="bg-[var(--surface-ink)] text-[var(--ink)]">
-        {/* Page banner */}
-        <section className="relative isolate pt-32 pb-10 md:pt-40 md:pb-14 overflow-hidden">
+    <main className="bg-[var(--canvas)] text-[var(--ink)]">
+        {/* Page banner — full-bleed pine band */}
+        <section className="relative isolate bg-[var(--pine)] text-[var(--on-pine)] overflow-hidden pt-32 pb-12 md:pt-44 md:pb-16">
+          {/* Soft gold top hairline marking the dark band */}
           <div
             aria-hidden
-            className="absolute inset-0 -z-10 bg-gradient-to-b from-[var(--surface-obsidian)] via-[var(--surface-ink)] to-[var(--surface-ink)]"
+            className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[var(--gold)]/45 to-transparent"
           />
-          <div
+          {/* Oversized quiet serif mark */}
+          <span
             aria-hidden
-            className="absolute -top-24 right-0 w-[520px] h-[520px] rounded-full opacity-[0.07] blur-[120px] bg-[var(--gold-500)]"
-          />
+            className="absolute -top-8 right-6 md:right-16 font-serif italic text-[clamp(8rem,18vw,18rem)] leading-none text-[var(--on-pine)]/[0.05] select-none pointer-events-none"
+          >
+            Dora
+          </span>
 
           <div className="container-wide relative">
-            <div className="flex flex-col gap-4 max-w-3xl">
-              <span className="eyebrow inline-flex items-center gap-3">
-                <span className="inline-block h-px w-10 bg-[var(--gold-500)]" />
-                Listings
+            <div className="flex flex-col gap-6 max-w-3xl">
+              <span className="eyebrow on-dark inline-flex items-center gap-4">
+                <span className="inline-block h-px w-12 bg-[var(--gold-300)]" />
+                The Collection
               </span>
-              <h1 className="display-lg text-[var(--ink)]">
-                Every home tells a story.
+              <h1 className="display-lg text-[var(--on-pine)]">
+                A gathering of homes,
                 <br />
-                <span className="italic text-[var(--gold-500)] font-normal">
-                  Find yours.
-                </span>
+                <em className="italic text-[var(--gold-300)] font-normal">
+                  awaiting the right keeper.
+                </em>
               </h1>
-              <p className="lede max-w-xl">
-                Browse a curated inventory of residential and commercial properties,
-                refined by the filters that actually matter — price, place, and the
-                feel of a home.
+              <p className="lede max-w-xl text-[var(--on-pine-soft)]">
+                Move through a considered inventory of residences and estates,
+                shaped by the things that truly matter — place, proportion, and
+                the quiet feel of arriving home.
               </p>
             </div>
           </div>

@@ -66,18 +66,18 @@ export default function HomeNeighborhoods() {
   };
 
   return (
-    <section className="bg-[var(--surface-ink)] text-[var(--ink)] section-pad relative overflow-hidden">
+    <section className="bg-[var(--canvas)] text-[var(--ink)] section-pad relative overflow-hidden">
       <div className="container-wide">
         <SectionHeading
           eyebrow="Neighborhoods"
           title={
             <>
-              Find your <em className="not-italic italic text-[var(--gold-500)]">place</em>
+              Find your <em className="not-italic italic text-[var(--gold-deep)]">place</em>
               <br />
-              in the story of a place.
+              in the life of a place.
             </>
           }
-          description="From coastal enclaves to historic districts, explore the neighborhoods we know intimately — and where we place clients with care."
+          description="From shoreline pockets to streets with history, wander the corners we know by heart — and where we settle clients with real care."
           align="between"
           action={
             <div className="flex items-center gap-3">
@@ -85,7 +85,7 @@ export default function HomeNeighborhoods() {
                 onClick={() => scrollBy(-1)}
                 disabled={!canLeft}
                 aria-label="Scroll left"
-                className="w-11 h-11 rounded-full border border-[var(--line)] flex items-center justify-center text-[var(--ink-soft)] disabled:opacity-30 disabled:cursor-not-allowed hover:border-[var(--accent)] hover:text-[var(--accent-text)] transition-colors"
+                className="w-12 h-12 rounded-full border border-[var(--line-medium)] flex items-center justify-center text-[var(--ink-soft)] disabled:opacity-30 disabled:cursor-not-allowed hover:border-[var(--sage-deep)] hover:text-[var(--sage-deep)] transition-colors"
               >
                 <FiArrowLeft size={16} />
               </button>
@@ -93,7 +93,7 @@ export default function HomeNeighborhoods() {
                 onClick={() => scrollBy(1)}
                 disabled={!canRight}
                 aria-label="Scroll right"
-                className="w-11 h-11 rounded-full border border-[var(--line)] flex items-center justify-center text-[var(--ink-soft)] disabled:opacity-30 disabled:cursor-not-allowed hover:border-[var(--accent)] hover:text-[var(--accent-text)] transition-colors"
+                className="w-12 h-12 rounded-full border border-[var(--line-medium)] flex items-center justify-center text-[var(--ink-soft)] disabled:opacity-30 disabled:cursor-not-allowed hover:border-[var(--sage-deep)] hover:text-[var(--sage-deep)] transition-colors"
               >
                 <FiArrowRight size={16} />
               </button>
@@ -103,13 +103,13 @@ export default function HomeNeighborhoods() {
 
         <div
           ref={scrollRef}
-          className="mt-12 flex gap-5 overflow-x-auto hide-scrollbar snap-x snap-mandatory pb-2 -mx-[clamp(1.25rem,3vw,3rem)] px-[clamp(1.25rem,3vw,3rem)]"
+          className="mt-14 flex gap-6 overflow-x-auto hide-scrollbar snap-x snap-mandatory pb-2 -mx-[clamp(1.25rem,3vw,3rem)] px-[clamp(1.25rem,3vw,3rem)]"
         >
           {isLoading
             ? Array.from({ length: 5 }).map((_, i) => (
                 <div
                   key={i}
-                  className="shrink-0 snap-start w-[min(78vw,320px)] aspect-[3/4] bg-[var(--surface-charcoal)] animate-pulse"
+                  className="shrink-0 snap-start w-[min(78vw,320px)] aspect-[3/4] rounded-[var(--radius-md)] bg-[var(--canvas-2)] animate-pulse"
                 />
               ))
             : neighborhoods.map((item, i) => (
@@ -131,14 +131,14 @@ export default function HomeNeighborhoods() {
 
           {!isLoading && neighborhoods.length === 0 && (
             <div className="w-full py-20 text-center text-[var(--ink-faint)]">
-              No neighborhoods to display yet.
+              The map is filling in — neighborhoods coming soon.
             </div>
           )}
         </div>
 
-        <div className="flex justify-center md:justify-end mt-10">
+        <div className="flex justify-center md:justify-end mt-12">
           <Link href="/neighborhoods" className="link-underline">
-            Explore all neighborhoods
+            Wander every neighborhood
             <FiArrowRight size={14} />
           </Link>
         </div>
@@ -155,7 +155,7 @@ function NeighborhoodCard({ item }: { item: Neighborhood }) {
   return (
     <Link
       href={href}
-      className="group relative block aspect-[3/4] overflow-hidden bg-[var(--surface-obsidian)]"
+      className="group relative block aspect-[3/4] overflow-hidden rounded-[var(--radius-md)] bg-[var(--canvas-2)] border border-[var(--line)]"
       aria-label={`Explore ${label}`}
     >
       <Image
@@ -165,18 +165,18 @@ function NeighborhoodCard({ item }: { item: Neighborhood }) {
         sizes="(max-width: 768px) 78vw, 320px"
         className="object-cover transition-transform duration-[900ms] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.08]"
       />
-      <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-black/10 pointer-events-none" />
+      <div className="absolute inset-0 bg-gradient-to-t from-[var(--pine)]/90 via-[var(--pine)]/25 to-transparent pointer-events-none" />
       <div className="absolute inset-x-0 bottom-0 p-6 flex flex-col gap-3">
         <div className="flex items-end justify-between gap-3">
-          <h3 className="font-serif text-2xl text-white leading-tight tracking-tight">
+          <h3 className="font-serif text-2xl text-[var(--on-pine)] leading-tight tracking-tight">
             {label}
           </h3>
-          <span className="shrink-0 w-9 h-9 rounded-full border border-white/25 flex items-center justify-center text-white group-hover:bg-[var(--accent)] group-hover:border-[var(--accent)] group-hover:text-white transition-all duration-300">
+          <span className="shrink-0 w-9 h-9 rounded-full border border-[rgba(241,237,227,0.3)] flex items-center justify-center text-[var(--on-pine)] group-hover:bg-[var(--gold-300)] group-hover:border-[var(--gold-300)] group-hover:text-[var(--pine)] transition-all duration-300">
             <FiArrowRight size={14} />
           </span>
         </div>
         {item.description && (
-          <p className="text-[13px] text-white/70 line-clamp-2 max-w-xs">
+          <p className="text-[13px] text-[var(--on-pine-soft)] line-clamp-2 max-w-xs">
             {item.description}
           </p>
         )}

@@ -70,96 +70,102 @@ export default function HomeNewsletter() {
   };
 
   return (
-    <section className="relative text-[var(--ink)] overflow-hidden">
-      {/* Background */}
-      <div className="absolute inset-0 -z-10">
-        <Image
-          src="/images/sample8.jpg"
-          alt=""
-          fill
-          sizes="100vw"
-          className="object-cover"
-          style={{ objectPosition: "center" }}
-        />
-        <div className="absolute inset-0 bg-[var(--surface-ink)]/90" />
-        <div className="absolute inset-0 bg-gradient-to-b from-[var(--surface-ink)] via-transparent to-[var(--surface-ink)]" />
-      </div>
+    <section className="bg-[var(--canvas)] section-pad">
+      <div className="container-page">
+        <div className="relative overflow-hidden rounded-[var(--radius-lg)] bg-[var(--pine)] text-[var(--on-pine)] shadow-[var(--shadow-lift)]">
+          {/* Photography texture — contained inside the card's own stacking context */}
+          <Image
+            src="/images/sample8.jpg"
+            alt=""
+            fill
+            sizes="100vw"
+            className="object-cover opacity-[0.14]"
+            style={{ objectPosition: "center" }}
+          />
+          <div className="absolute inset-0 bg-gradient-to-br from-[var(--pine)] via-[var(--pine)]/92 to-[#18241f]" />
+          {/* Gold hairline framing */}
+          <div className="pointer-events-none absolute inset-4 md:inset-6 rounded-[calc(var(--radius-lg)-12px)] border border-[var(--gold-300)]/15" />
 
-      <div className="container-page section-pad">
-        <div className="max-w-2xl mx-auto text-center">
-          <Reveal>
-            <span className="eyebrow inline-flex items-center gap-3">
-              <span className="inline-block h-px w-10 bg-[var(--gold-500)]" />
-              Stay close
-              <span className="inline-block h-px w-10 bg-[var(--gold-500)]" />
-            </span>
-          </Reveal>
-          <Reveal delay={0.08}>
-            <h2 className="display-lg mt-6">
-              Receive the{" "}
-              <em className="italic text-[var(--gold-500)]">quiet</em> newsletter.
-            </h2>
-          </Reveal>
-          <Reveal delay={0.15}>
-            <p className="lede mt-5 max-w-lg mx-auto">
-              New listings, market perspective, and the occasional private
-              preview — thoughtful dispatches, never noise.
-            </p>
-          </Reveal>
+          <div className="relative grid lg:grid-cols-[1.05fr_1fr] gap-10 lg:gap-16 items-center p-8 sm:p-12 lg:p-16">
+            {/* Copy */}
+            <div className="text-center lg:text-left">
+              <Reveal>
+                <span className="eyebrow on-dark inline-flex items-center gap-4">
+                  <span className="inline-block h-px w-10 bg-[var(--gold-300)]" />
+                  Stay Close
+                </span>
+              </Reveal>
+              <Reveal delay={0.08}>
+                <h2 className="display-lg mt-6 text-[var(--on-pine)]">
+                  The <em className="italic text-[var(--gold-300)]">quiet</em>{" "}
+                  dispatch.
+                </h2>
+              </Reveal>
+              <Reveal delay={0.15}>
+                <p className="lede mt-5 max-w-md mx-auto lg:mx-0 text-[var(--on-pine-soft)]">
+                  New homes, a measured word on the market, and the rare private
+                  preview — sent with care, never noise.
+                </p>
+              </Reveal>
+            </div>
 
-          <motion.form
-            initial={{ opacity: 0, y: 18 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.3 }}
-            transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-            onSubmit={handleSubmit}
-            className="mt-10 flex flex-col gap-6"
-          >
-            <div className="flex items-stretch border-b border-[var(--line-medium)] focus-within:border-[var(--accent)] transition-colors">
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => {
-                  setEmail(e.target.value);
-                  setTouched(true);
-                }}
-                onBlur={() => setTouched(true)}
-                disabled={mutation.isPending}
-                readOnly={!!profileData?.data?.email}
-                placeholder="your@email.com"
-                required
-                className="flex-1 bg-transparent border-0 outline-none text-[var(--ink)] placeholder:text-[var(--ink-faint)] py-4 text-[15px]"
-              />
-              <div className="flex items-center pr-3 text-[var(--ink-faint)]">
-                {touched && email && (
-                  isValid ? (
-                    <FiCheckCircle className="text-[#2e7d32]" size={18} />
-                  ) : (
-                    <FiAlertCircle className="text-[#b3261e]" size={18} />
-                  )
-                )}
+            {/* Form */}
+            <motion.form
+              initial={{ opacity: 0, y: 18 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.3 }}
+              transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+              onSubmit={handleSubmit}
+              className="flex flex-col gap-5"
+            >
+              <div className="flex flex-col sm:flex-row gap-3">
+                <div className="relative flex-1">
+                  <input
+                    type="email"
+                    value={email}
+                    onChange={(e) => {
+                      setEmail(e.target.value);
+                      setTouched(true);
+                    }}
+                    onBlur={() => setTouched(true)}
+                    disabled={mutation.isPending}
+                    readOnly={!!profileData?.data?.email}
+                    placeholder="your@email.com"
+                    required
+                    className="w-full bg-white/[0.07] border border-[var(--on-pine-faint)] focus:border-[var(--gold-300)] rounded-full pl-5 pr-11 py-3.5 text-[15px] text-[var(--on-pine)] placeholder:text-[var(--on-pine-faint)] outline-none transition-colors"
+                  />
+                  {touched && email && (
+                    <span className="absolute right-4 top-1/2 -translate-y-1/2">
+                      {isValid ? (
+                        <FiCheckCircle className="text-[#8fb98a]" size={18} />
+                      ) : (
+                        <FiAlertCircle className="text-[#e0a3a0]" size={18} />
+                      )}
+                    </span>
+                  )}
+                </div>
+                <button
+                  type="submit"
+                  disabled={mutation.isPending}
+                  className="shrink-0 inline-flex items-center justify-center gap-2 rounded-full px-7 py-3.5 text-[12px] font-[family-name:var(--font-accent)] tracking-[0.22em] uppercase bg-[var(--gold-300)] text-[var(--pine)] hover:bg-[var(--on-pine)] transition-colors disabled:opacity-50"
+                >
+                  {mutation.isPending ? "Sending" : "Subscribe"}
+                  <FiArrowRight size={14} />
+                </button>
               </div>
-              <button
-                type="submit"
-                disabled={mutation.isPending}
-                className="pl-5 pr-2 flex items-center gap-2 text-[12px] font-bold tracking-[0.22em] uppercase text-[var(--accent-text)] hover:text-[var(--ink)] transition-colors disabled:opacity-50"
-              >
-                {mutation.isPending ? "Sending" : "Subscribe"}
-                <FiArrowRight size={14} />
-              </button>
-            </div>
 
-            <div className="text-left">
-              <FormDisclaimer
-                checked={consent}
-                onChange={(v) => {
-                  setConsent(v);
-                  setConsentError(null);
-                }}
-                error={consentError || ""}
-              />
-            </div>
-          </motion.form>
+              <div className="text-left rounded-[var(--radius-md)] bg-[var(--cream)] border border-[var(--line)] p-5">
+                <FormDisclaimer
+                  checked={consent}
+                  onChange={(v) => {
+                    setConsent(v);
+                    setConsentError(null);
+                  }}
+                  error={consentError || ""}
+                />
+              </div>
+            </motion.form>
+          </div>
         </div>
       </div>
     </section>

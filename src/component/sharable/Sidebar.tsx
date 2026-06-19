@@ -42,43 +42,43 @@ interface Props {
 
 export const Sidebar = ({ activeSidebar }: Props) => {
   return (
-    <aside className="hidden lg:flex flex-col w-[260px] shrink-0 bg-[var(--surface-obsidian)] border-r border-[var(--line-soft)] py-8 px-5 sticky top-[88px] self-start max-h-[calc(100vh-88px)] overflow-y-auto custom-scrollbar">
-      <div className="flex items-center gap-3 mb-8 px-2">
+    <aside className="hidden lg:flex flex-col w-[268px] shrink-0 bg-[var(--cream)] border border-[var(--line)] rounded-[var(--radius-md)] py-9 px-5 sticky top-[104px] self-start max-h-[calc(100vh-128px)] overflow-y-auto custom-scrollbar">
+      <div className="flex items-center gap-3 mb-8 px-3">
         <span className="eyebrow inline-flex items-center gap-3">
-          <span className="inline-block h-px w-8 bg-[var(--gold-500)]" />
-          Dashboard
+          <span className="inline-block h-px w-8 bg-[var(--gold)]" />
+          Your Dashboard
         </span>
       </div>
 
-      <nav className="flex flex-col gap-1">
+      <nav className="flex flex-col gap-0.5">
         {sidebarLinks.map((link) => {
           const isActive = link.label === activeSidebar;
           return (
             <Link
               key={link.label}
               href={link.href}
-              className={`relative flex items-center gap-3 px-4 py-3 text-[13px] tracking-[0.06em] uppercase transition-colors ${
+              className={`relative flex items-center gap-3.5 px-4 py-3 rounded-[var(--radius-sm)] text-[13px] tracking-[0.14em] uppercase font-[family-name:var(--font-accent)] transition-colors ${
                 isActive
-                  ? "text-[var(--accent-text)]"
-                  : "text-[var(--ink-soft)] hover:text-[var(--ink)]"
+                  ? "bg-[var(--canvas)] text-[var(--pine)]"
+                  : "text-[var(--ink-soft)] hover:text-[var(--ink)] hover:bg-[var(--canvas)]/60"
               }`}
             >
               {isActive && (
-                <span className="absolute left-0 top-2.5 bottom-2.5 w-[2px] bg-[var(--gold-500)]" />
+                <span className="absolute left-0 top-2.5 bottom-2.5 w-[2.5px] rounded-full bg-[var(--gold)]" />
               )}
               <span
-                className={`shrink-0 ${isActive ? "text-[var(--accent-text)]" : "text-[var(--ink-faint)]"}`}
+                className={`shrink-0 ${isActive ? "text-[var(--gold-deep)]" : "text-[var(--ink-faint)]"}`}
               >
                 {isActive ? link.activeIcon : link.icon}
               </span>
-              <span className="font-medium">{link.label}</span>
+              <span>{link.label}</span>
             </Link>
           );
         })}
       </nav>
 
-      <div className="mt-auto pt-8 border-t border-[var(--line-soft)]">
-        <p className="text-[11px] uppercase tracking-[0.2em] text-[var(--ink-faint)] px-2">
+      <div className="mt-auto pt-8 border-t border-[var(--line)]">
+        <p className="text-[11px] uppercase tracking-[0.2em] text-[var(--ink-faint)] font-[family-name:var(--font-accent)] px-3">
           © {new Date().getFullYear()} RealtiPro
         </p>
       </div>

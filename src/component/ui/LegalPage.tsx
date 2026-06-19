@@ -13,32 +13,30 @@ interface Props {
 export function LegalPage({ eyebrow, title, children }: Props) {
   return (
     <>
-      <main className="bg-[var(--surface-ink)] text-[var(--ink)] min-h-screen">
-        <section className="relative isolate pt-32 pb-12 md:pt-40 md:pb-14 overflow-hidden">
-          <div
+      <main className="bg-[var(--canvas)] text-[var(--ink)] min-h-screen">
+        <section className="relative isolate overflow-hidden bg-[var(--pine)] pt-36 pb-14 md:pt-44 md:pb-20">
+          <span
             aria-hidden
-            className="absolute inset-0 -z-10 bg-gradient-to-b from-[var(--surface-obsidian)] via-[var(--surface-ink)] to-[var(--surface-ink)]"
-          />
-          <div
-            aria-hidden
-            className="absolute -top-24 right-0 w-[420px] h-[420px] rounded-full opacity-[0.06] blur-[120px] bg-[var(--gold-500)]"
-          />
+            className="pointer-events-none select-none absolute -bottom-14 right-[2vw] font-serif text-[clamp(6rem,18vw,15rem)] leading-none text-[var(--on-pine)]/[0.04]"
+          >
+            Legal
+          </span>
 
-          <div className="container-page max-w-4xl">
+          <div className="container-page max-w-4xl relative">
             <Reveal>
-              <span className="eyebrow inline-flex items-center gap-3">
-                <span className="inline-block h-px w-10 bg-[var(--gold-500)]" />
+              <span className="eyebrow on-dark inline-flex items-center gap-3">
+                <span className="inline-block h-px w-10 bg-[var(--gold-300)]" />
                 {eyebrow}
               </span>
             </Reveal>
             <Reveal delay={0.08}>
-              <h1 className="display-lg text-[var(--ink)] mt-5">{title}</h1>
+              <h1 className="display-lg text-[var(--on-pine)] mt-5">{title}</h1>
             </Reveal>
           </div>
         </section>
 
-        <section className="container-page max-w-4xl pb-20">
-          <article className="bg-[var(--surface-obsidian)] border border-[var(--line-soft)] p-7 md:p-10 lg:p-14 legal-prose">
+        <section className="container-page max-w-4xl section-pad">
+          <article className="bg-[var(--cream)] rounded-[var(--radius-lg)] border border-[var(--line)] shadow-[var(--shadow-soft)] p-7 md:p-10 lg:p-14 legal-prose">
             {children}
           </article>
         </section>
@@ -72,7 +70,7 @@ export function LegalPage({ eyebrow, title, children }: Props) {
           display: inline-block;
           width: 28px;
           height: 1px;
-          background: var(--gold-500);
+          background: var(--gold);
           flex: 0 0 auto;
         }
         .legal-prose p {
@@ -97,7 +95,7 @@ export function LegalPage({ eyebrow, title, children }: Props) {
           margin-bottom: 0.4em;
         }
         .legal-prose ul li::marker {
-          color: var(--gold-500);
+          color: var(--gold-deep);
         }
         .legal-prose strong {
           color: var(--ink);

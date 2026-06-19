@@ -41,7 +41,7 @@ export default function TermsOfServicePage() {
       <p>
         DMCA notices should be sent to:
         <br />
-        RealtiPro Corp
+        Dora
         <br />
         22722 29th DR SE, STE 100
         <br />

@@ -108,14 +108,14 @@ export default function LoginModal({
       onClose={handleClose}
       eyebrow="Welcome Back"
       title="Sign in"
-      description="Access saved searches, favorites, and tailored listings."
+      description="Return to your saved homes, followed searches, and listings chosen for you."
       footer={
         <>
-          New here?{" "}
+          New to Dora?{" "}
           <button
             type="button"
             onClick={() => onOpenRegistration?.()}
-            className="text-[var(--accent-text)] hover:text-[var(--ink)] transition-colors font-semibold"
+            className="text-[var(--sage-deep)] hover:text-[var(--ink)] transition-colors font-medium"
           >
             Create an account
           </button>
@@ -142,14 +142,14 @@ export default function LoginModal({
           <div className="flex items-center justify-between">
             <label
               htmlFor="modal-password"
-              className="text-[10px] uppercase tracking-[0.22em] text-[var(--ink-faint)]"
+              className="text-[11px] uppercase tracking-[0.22em] text-[var(--ink-faint)] font-[family-name:var(--font-accent)]"
             >
               Password
             </label>
             <button
               type="button"
               onClick={() => onOpenForgotPassword?.()}
-              className="text-[10px] uppercase tracking-[0.2em] text-[var(--accent-text)] hover:text-[var(--ink)] transition-colors"
+              className="text-[10px] uppercase tracking-[0.2em] text-[var(--sage-deep)] hover:text-[var(--ink)] transition-colors"
             >
               Forgot?
             </button>
@@ -164,12 +164,12 @@ export default function LoginModal({
               placeholder="••••••••"
               required
               autoComplete="current-password"
-              className="w-full bg-[var(--surface-charcoal)] border border-[var(--line-soft)] focus:border-[var(--gold-500)]/60 px-4 pr-11 h-12 text-[14px] text-[var(--ink)] placeholder:text-[var(--ink-faint)] outline-none transition-colors"
+              className="w-full bg-[var(--cream)] border border-[var(--line)] rounded-[var(--radius-sm)] focus:border-[var(--sage-deep)] px-4 pr-11 h-12 text-[14.5px] text-[var(--ink)] placeholder:text-[var(--ink-faint)] outline-none transition-colors"
             />
             <button
               type="button"
               onClick={() => setShowPassword((s) => !s)}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--ink-faint)] hover:text-[var(--accent-text)] transition-colors"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--ink-faint)] hover:text-[var(--sage-deep)] transition-colors"
               aria-label={showPassword ? "Hide password" : "Show password"}
             >
               {showPassword ? <IoEyeOffOutline size={18} /> : <IoEyeOutline size={18} />}

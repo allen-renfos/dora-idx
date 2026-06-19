@@ -63,7 +63,7 @@ const FeaturedProperties = ({ maxRows }: FeaturedPropertiesProps) => {
                         ))}
                     </>
                 ) : (
-                    <div>No listings found.</div>
+                    <div className="text-[var(--ink-faint)]">No listings just yet.</div>
                 )}
             </div>
             {/* <div className="section-cta">

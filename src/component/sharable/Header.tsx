@@ -122,6 +122,38 @@ export const Header = ({ activeHeader }: HeaderProps = {}) => {
   const handleLoginSuccess = () => setIsLoginModalOpen(false);
   const handleRegistrationSuccess = () => setIsRegistrationModalOpen(false);
 
+  // Symmetric split around the centered logo
+  const leftItems = NAV_ITEMS.slice(0, 3);
+  const rightItems = NAV_ITEMS.slice(3);
+
+  const renderNavLink = (item: NavItem) => {
+    const active = activeKey === item.key;
+    return (
+      <Link
+        key={item.key}
+        href={item.path}
+        className={`relative px-3.5 py-2 text-[12.5px] font-semibold tracking-[0.18em] uppercase font-[family-name:var(--font-accent)] transition-colors duration-300 ${
+          !solid ? "[text-shadow:0_1px_14px_rgba(0,0,0,0.55)]" : ""
+        } ${
+          active
+            ? solid
+              ? "text-[var(--accent-text)]"
+              : "text-[var(--gold-300)]"
+            : solid
+            ? "text-[var(--ink-soft)] hover:text-[var(--accent-text)]"
+            : "text-white hover:text-[var(--gold-300)]"
+        }`}
+      >
+        {item.label}
+        <span
+          className={`absolute left-3.5 right-3.5 -bottom-0.5 h-px bg-[var(--gold-500)] origin-center transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+            active ? "scale-x-100" : "scale-x-0"
+          }`}
+        />
+      </Link>
+    );
+  };
+
   // Logout helper for header cluster
   const handleLogout = async () => {
     try {
@@ -175,11 +207,11 @@ export const Header = ({ activeHeader }: HeaderProps = {}) => {
             isScrolled ? "py-3" : "py-5"
           }`}
         >
-          {/* Logo / Brand — absolutely centered on mobile, in-flow on desktop */}
+          {/* Logo / Brand — absolutely centered across all breakpoints */}
           <Link
             href="/home"
             aria-label={company_name || name || "Home"}
-            className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 lg:static lg:translate-x-0 lg:translate-y-0 flex items-center gap-3 min-w-0 shrink"
+            className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 lg:static lg:translate-x-0 lg:translate-y-0 lg:order-2 flex items-center gap-3 shrink-0 z-10"
           >
             {cachedLogo ? (
               <div className="relative flex items-center min-w-0 shrink">
@@ -198,42 +230,22 @@ export const Header = ({ activeHeader }: HeaderProps = {}) => {
                   solid ? "text-[var(--ink)]" : "text-white"
                 }`}
               >
-                {name || "RealtiPro"}
+                {name || "Dora"}
               </span>
             )}
           </Link>
 
-          {/* Desktop Nav */}
-          <nav className="hidden lg:flex items-center gap-1">
-            {NAV_ITEMS.map((item) => {
-              const active = activeKey === item.key;
-              return (
-                <Link
-                  key={item.key}
-                  href={item.path}
-                  className={`relative px-4 py-2 text-[13px] font-medium tracking-[0.08em] uppercase transition-colors duration-300 ${
-                    active
-                      ? solid
-                        ? "text-[var(--accent-text)]"
-                        : "text-[var(--gold-300)]"
-                      : solid
-                      ? "text-[var(--ink-soft)] hover:text-[var(--accent-text)]"
-                      : "text-white/85 hover:text-white"
-                  }`}
-                >
-                  {item.label}
-                  <span
-                    className={`absolute left-4 right-4 -bottom-0.5 h-px bg-[var(--gold-500)] origin-left transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
-                      active ? "scale-x-100" : "scale-x-0"
-                    }`}
-                  />
-                </Link>
-              );
-            })}
+          {/* Desktop Nav — left flank */}
+          <nav className="hidden lg:flex lg:order-1 lg:flex-1 min-w-0 items-center gap-1 justify-end pr-6 xl:pr-10">
+            {leftItems.map(renderNavLink)}
           </nav>
 
-          {/* CTA cluster */}
-          <div className="flex items-center gap-3 ml-auto lg:ml-0">
+          {/* Desktop Nav — right flank + sign-in / mobile hamburger */}
+          <div className="flex items-center gap-3 ml-auto lg:ml-0 lg:order-3 lg:flex-1 lg:min-w-0 lg:justify-start lg:pl-6 xl:pl-10">
+            <nav className="hidden lg:flex items-center gap-1">
+              {rightItems.map(renderNavLink)}
+            </nav>
+            <span className="hidden lg:block lg:ml-auto" />
             {/* Desktop CTA cluster */}
             {isUserDashboard ? (
               <>
@@ -261,18 +273,34 @@ export const Header = ({ activeHeader }: HeaderProps = {}) => {
               </>
             ) : (
               <>
-                {/* Sign In only in sidebar for mobile */}
+                {/* Sign In — pill with gold icon badge */}
                 <button
                   onClick={handleDashboard}
-                  className={`hidden md:inline-flex items-center gap-2 px-4 py-2 text-[12px] font-semibold tracking-[0.14em] uppercase transition ${
+                  className={`group hidden md:inline-flex items-center gap-2.5 pl-1.5 pr-5 py-1.5 rounded-full border transition-all duration-300 ${
                     solid
-                      ? "text-[var(--ink-soft)] hover:text-[var(--accent-text)]"
-                      : "text-white/85 hover:text-white"
+                      ? "border-[var(--line)] hover:border-[var(--gold-500)] hover:bg-[var(--gold-500)]/[0.06]"
+                      : "border-white/25 hover:border-[var(--gold-300)] hover:bg-white/[0.06]"
                   }`}
                   aria-label="Sign in"
                 >
-                  <FiUser size={16} />
-                  Sign In
+                  <span
+                    className={`flex items-center justify-center w-8 h-8 rounded-full transition-colors duration-300 group-hover:bg-[var(--gold-500)] group-hover:text-white ${
+                      solid
+                        ? "bg-[var(--gold-500)]/10 text-[var(--gold-deep)]"
+                        : "bg-white/10 text-[var(--gold-300)]"
+                    }`}
+                  >
+                    <FiUser size={15} />
+                  </span>
+                  <span
+                    className={`text-[12px] font-semibold tracking-[0.16em] uppercase transition-colors duration-300 ${
+                      solid
+                        ? "text-[var(--ink-soft)] group-hover:text-[var(--accent-text)]"
+                        : "text-white [text-shadow:0_1px_14px_rgba(0,0,0,0.55)]"
+                    }`}
+                  >
+                    Sign In
+                  </span>
                 </button>
                 {/* Book a Showing already handled above for mobile */}
               </>
@@ -324,7 +352,7 @@ export const Header = ({ activeHeader }: HeaderProps = {}) => {
                     />
                   ) : (
                     <span className="font-serif text-[var(--ink)] text-xl">
-                      {name || "RealtiPro"}
+                      {name || "Dora"}
                     </span>
                   )}
                 </Link>

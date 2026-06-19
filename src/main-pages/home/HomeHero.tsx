@@ -1,198 +1,162 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
-import { FiArrowDown } from "react-icons/fi";
+import { FiArrowDownRight } from "react-icons/fi";
 import HomeSearch from "./HomeSearch";
 import { useState } from "react";
 
-const PILLARS = [
-  { title: "Discreet", body: "Representation built on confidentiality." },
-  { title: "Curated", body: "Only listings worth your attention." },
-  { title: "Connected", body: "Access to off-market opportunities." },
-  { title: "Devoted", body: "One client, one relationship at a time." },
-];
+const MARKETS = ["Lynnwood", "Everett", "Bothell", "Edmonds", "Mukilteo", "Kirkland"];
+
+// staggered line-by-line reveal for the display headline
+const lineVariants = {
+  hidden: { y: "115%" },
+  visible: (i: number) => ({
+    y: "0%",
+    transition: { duration: 1.05, delay: 0.15 + i * 0.12, ease: [0.16, 1, 0.3, 1] as const },
+  }),
+};
 
 export default function HomeHero() {
   const [keyword, setKeyword] = useState("");
   const reduce = useReducedMotion();
 
+  const HEADLINE = ["Homes with a quiet", "sense of arrival —"];
+
   return (
-    <section className="relative isolate min-h-[100svh] w-full flex flex-col text-white overflow-hidden">
-      {/* Background image */}
-      <div className="absolute inset-0 -z-10">
-        <Image
-          src="/images/sample-6.jpeg"
-          alt=""
-          fill
-          priority
-          sizes="100vw"
-          className="object-cover"
-          style={{ objectPosition: "center" }}
-        />
-        {/* Cinematic gradient */}
-        <div className="absolute inset-0 bg-gradient-to-b from-black/75 via-black/45 to-black/90" />
-        <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-transparent to-transparent" />
+    <section className="relative isolate min-h-[100svh] w-full flex flex-col overflow-hidden bg-[var(--pine)]">
+      {/* Full-bleed background video with slow Ken-Burns */}
+      <div className="absolute inset-0 -z-10 overflow-hidden">
+        <div className={`absolute inset-0 ${reduce ? "" : "anim-kenburns"}`}>
+          <video
+            src="/images/vid-1.mp4"
+            poster="/images/sample-4.jpg"
+            autoPlay
+            muted
+            loop
+            playsInline
+            className="absolute inset-0 h-full w-full object-cover"
+            style={{ objectPosition: "center" }}
+          />
+        </div>
+        {/* Warm pine wash instead of flat black */}
+        <div className="absolute inset-0 bg-gradient-to-t from-[var(--pine)] via-[var(--pine)]/45 to-[var(--pine)]/25" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[var(--pine)]/70 via-transparent to-transparent" />
       </div>
 
-      {/* Content */}
+      {/* Main content — search dock on top, headline beneath */}
       <div className="flex-1 flex items-center">
-        <div className="container-wide w-full pt-40 pb-28 md:pb-32">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 lg:items-center">
-            {/* Left: copy */}
-            <div className="lg:col-span-6 flex flex-col gap-6 md:gap-8">
-              <motion.span
-                initial={{ opacity: 0, y: 12 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-                className="eyebrow on-dark inline-flex items-center gap-3"
-              >
-                <span className="inline-block h-px w-10 bg-[var(--gold-300)]" />
-                Curated Real Estate
-              </motion.span>
+        <div className="container-wide w-full pt-32 pb-14 md:pt-40 md:pb-20">
+          <motion.span
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
+            className="eyebrow on-dark inline-flex items-center gap-4"
+          >
+            <span className="inline-block h-px w-12 bg-[var(--gold-300)]" />
+            Dora · Curated Living
+          </motion.span>
 
-              <motion.h1
-                initial={{ opacity: 0, y: reduce ? 0 : 24 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 1.1, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-                className="display-xl text-white"
-              >
-                Exceptional homes.
-                <br />
-                <span className="italic text-[var(--gold-500)] font-normal">
-                  Extraordinary
-                </span>{" "}
-                service.
-              </motion.h1>
-
-              <motion.p
-                initial={{ opacity: 0, y: reduce ? 0 : 16 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.9, delay: 0.28, ease: [0.16, 1, 0.3, 1] }}
-                className="lede max-w-xl"
-              >
-                Discover thoughtfully curated listings, explore standout
-                neighborhoods, and work with a trusted global advisor who
-                understands the weight of a generational purchase.
-              </motion.p>
-            </div>
-
-            {/* Right: editorial search panel */}
-            <motion.div
-              initial={{ opacity: 0, y: reduce ? 0 : 24 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 1, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
-              className="lg:col-span-6 relative"
-            >
-              {/* Offset gold frame — large screens only (overflows on narrow widths) */}
-              <div
-                aria-hidden
-                className="hidden lg:block absolute -inset-2 border border-[var(--accent)]/40 translate-x-3 translate-y-3 pointer-events-none"
-              />
-
-              <div className="relative bg-[var(--surface)]/95 backdrop-blur-xl border border-[var(--line)] shadow-[var(--shadow-lift)]">
-                {/* Header */}
-                <div className="px-5 md:px-9 pt-6 md:pt-10 pb-5 md:pb-6">
-                  <span className="eyebrow inline-flex items-center gap-3">
-                    <span className="inline-block h-px w-8 bg-[var(--accent)]" />
-                    Property Search
-                  </span>
-                  <h2 className="font-serif text-[26px] md:text-[30px] text-[var(--ink)] leading-[1.15] mt-4">
-                    Begin your search
-                  </h2>
-                  <p className="text-[13px] text-[var(--ink-faint)] mt-2 leading-relaxed">
-                    City, neighborhood, address, or zip — start anywhere.
-                  </p>
-                </div>
-
-                <div className="border-t border-[var(--line)] px-5 md:px-9 py-6 md:py-7">
+          {/* Search dock — elevated to the top of the hero */}
+          <motion.div
+            initial={{ opacity: 0, y: reduce ? 0 : 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.9, delay: 0.25, ease: [0.16, 1, 0.3, 1] }}
+            className="mt-7 max-w-[58rem]"
+          >
+            <div className="bg-[var(--cream)]/95 backdrop-blur-xl border border-[var(--line)] rounded-[var(--radius-lg)] shadow-[var(--shadow-lift)] overflow-hidden">
+              <div className="px-5 md:px-9 py-7 md:py-8">
+                <span className="eyebrow inline-flex items-center gap-3">
+                  <span className="inline-block h-px w-8 bg-[var(--gold)]" />
+                  Begin the search
+                </span>
+                <div className="mt-5">
                   <HomeSearch keyword={keyword} setKeyword={setKeyword} />
                 </div>
-
-                {/* Sought-after markets — editorial list */}
-                <div className="border-t border-[var(--line)] px-5 md:px-9 py-5">
-                  <div className="flex items-center gap-3 mb-1">
-                    <span className="text-[10px] uppercase tracking-[0.24em] text-[var(--ink-faint)]">
-                      Sought-after Markets
-                    </span>
-                    <span className="h-px flex-1 bg-[var(--line)]" />
-                  </div>
-                  <ul>
-                    {["Lynnwood", "Everett", "Bothell", "Edmonds"].map(
-                      (n, i) => (
-                        <li
-                          key={n}
-                          className={`${
-                            i === 0 ? "" : "border-t border-[var(--line)]"
-                          }`}
-                        >
-                          <Link
-                            href={`/properties?keyword=${encodeURIComponent(n)}`}
-                            className="group flex items-center justify-between py-3"
-                          >
-                            <span className="font-serif text-[15px] text-[var(--ink-soft)] group-hover:text-[var(--ink)] transition-colors">
-                              {n}
-                            </span>
-                            <span className="text-[10px] uppercase tracking-[0.24em] text-[var(--ink-faint)] group-hover:text-[var(--accent-text)] transition-colors">
-                              Browse
-                            </span>
-                          </Link>
-                        </li>
-                      )
-                    )}
-                  </ul>
-                </div>
               </div>
-            </motion.div>
+
+              {/* Markets rail */}
+              <div className="border-t border-[var(--line)] px-5 md:px-9 py-4 flex flex-wrap items-center gap-x-2 gap-y-1">
+                <span className="text-[11px] uppercase tracking-[0.28em] text-[var(--ink-faint)] font-[family-name:var(--font-accent)] mr-2">
+                  Sought-after
+                </span>
+                {MARKETS.map((n, i) => (
+                  <span key={n} className="inline-flex items-center">
+                    {i > 0 && (
+                      <span className="mx-2 inline-block h-1 w-1 rounded-full bg-[var(--gold)]/50" />
+                    )}
+                    <Link
+                      href={`/properties?keyword=${encodeURIComponent(n)}`}
+                      className="group inline-flex items-center gap-1 font-serif text-[15px] text-[var(--ink-soft)] hover:text-[var(--ink)] transition-colors"
+                    >
+                      {n}
+                      <FiArrowDownRight
+                        size={13}
+                        className="text-[var(--ink-faint)] group-hover:text-[var(--gold-deep)] group-hover:translate-x-0.5 transition-all duration-300"
+                      />
+                    </Link>
+                  </span>
+                ))}
+              </div>
+            </div>
+          </motion.div>
+
+          {/* Headline + lede beneath the search */}
+          <div className="mt-10 md:mt-12 max-w-[64rem]">
+            <h1 className="display-lg text-[var(--on-pine)]">
+              {HEADLINE.map((line, i) => (
+                <span key={i} className="line-wrap">
+                  <motion.span
+                    custom={i}
+                    variants={lineVariants}
+                    initial={reduce ? "visible" : "hidden"}
+                    animate="visible"
+                  >
+                    {line}
+                  </motion.span>
+                </span>
+              ))}
+              <span className="line-wrap">
+                <motion.span
+                  custom={HEADLINE.length}
+                  variants={lineVariants}
+                  initial={reduce ? "visible" : "hidden"}
+                  animate="visible"
+                  className="italic text-[var(--gold-300)]"
+                >
+                  found, never settled for.
+                </motion.span>
+              </span>
+            </h1>
+
+            <motion.p
+              initial={{ opacity: 0, y: reduce ? 0 : 18 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.9, delay: 0.7, ease: [0.16, 1, 0.3, 1] }}
+              className="lede mt-6 max-w-xl text-[var(--on-pine-soft)]"
+            >
+              A boutique practice that pairs distinctive homes with the people who
+              belong in them — guiding every move with patience, taste, and an
+              insider&rsquo;s feel for place.
+            </motion.p>
           </div>
         </div>
       </div>
 
-      {/* Trust strip */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.9, delay: 0.9, ease: [0.16, 1, 0.3, 1] }}
-        className="border-t border-white/10 bg-black/30 backdrop-blur-md"
-      >
-        <div className="container-wide py-6 md:py-8 grid grid-cols-2 md:grid-cols-4 gap-6">
-          {PILLARS.map((pillar) => (
-            <div
-              key={pillar.title}
-              className="flex flex-col gap-2 md:border-l md:first:border-l-0 md:border-white/10 md:pl-6"
+      {/* Bottom marquee — full-bleed market ribbon */}
+      <div className="border-t border-[var(--on-pine-faint)]/20 bg-[var(--pine)]/60 backdrop-blur-md overflow-hidden marquee-mask">
+        <div className="marquee-track py-3.5">
+          {[...MARKETS, ...MARKETS, ...MARKETS, ...MARKETS].map((m, i) => (
+            <span
+              key={i}
+              className="inline-flex items-center gap-4 px-7 text-[12px] uppercase tracking-[0.3em] text-[var(--on-pine-soft)] font-[family-name:var(--font-accent)]"
             >
-              <span className="eyebrow inline-flex items-center gap-2 text-white/70">
-                <span className="inline-block h-px w-5 bg-[var(--gold-500)]" />
-                {pillar.title}
-              </span>
-              <span className="font-serif text-[15px] md:text-[16px] leading-snug text-white/85">
-                {pillar.body}
-              </span>
-            </div>
+              {m}
+              <span className="inline-block h-1 w-1 rounded-full bg-[var(--gold-300)]" />
+            </span>
           ))}
         </div>
-      </motion.div>
-
-      {/* Scroll indicator */}
-      <motion.div
-        aria-hidden
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 0.6 }}
-        transition={{ duration: 1.5, delay: 1.4 }}
-        className="hidden lg:flex absolute bottom-[148px] left-12 flex-col items-center gap-3 text-white/70"
-      >
-        <span className="text-[10px] uppercase tracking-[0.3em] [writing-mode:vertical-rl] rotate-180">
-          Scroll
-        </span>
-        <motion.span
-          animate={{ y: [0, 8, 0] }}
-          transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
-        >
-          <FiArrowDown size={14} />
-        </motion.span>
-      </motion.div>
+      </div>
     </section>
   );
 }
-

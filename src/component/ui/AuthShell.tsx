@@ -14,6 +14,8 @@ interface Props {
   footer?: React.ReactNode;
 }
 
+const EASE = [0.16, 1, 0.3, 1] as const;
+
 export function AuthShell({
   eyebrow,
   title,
@@ -25,88 +27,127 @@ export function AuthShell({
   const cachedLogo = useCachedImage(company_logo);
 
   return (
-    <main className="min-h-screen bg-[var(--surface-ink)] text-[var(--ink)] relative overflow-hidden">
-      <div
-        aria-hidden
-        className="absolute inset-0 -z-10 bg-gradient-to-b from-[var(--surface-obsidian)] via-[var(--surface-ink)] to-[var(--surface-ink)]"
-      />
-      <div
-        aria-hidden
-        className="absolute -top-40 right-[-160px] w-[560px] h-[560px] rounded-full opacity-[0.06] blur-[140px] bg-[var(--gold-500)]"
-      />
-      <div
-        aria-hidden
-        className="absolute bottom-[-220px] left-[-120px] w-[480px] h-[480px] rounded-full opacity-[0.05] blur-[140px] bg-[var(--gold-500)]"
-      />
-
-      <div className="container-page py-8 flex items-center justify-between">
-        <Link
-          href="/home"
-          className="inline-flex items-center gap-3"
-          aria-label="Home"
-        >
-          {cachedLogo ? (
-            /* eslint-disable-next-line @next/next/no-img-element */
+    <main className="min-h-screen w-full bg-[var(--canvas)] text-[var(--ink)] lg:grid lg:grid-cols-[1.05fr_1fr]">
+      {/* ============ LEFT · full-bleed photo with pine wash ============ */}
+      <aside className="relative hidden lg:flex flex-col justify-between overflow-hidden bg-[var(--pine)]">
+        <div aria-hidden className="absolute inset-0 -z-10 overflow-hidden">
+          <div className="absolute inset-0 anim-kenburns">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src={cachedLogo}
-              alt={company_name || name || "Logo"}
-              style={{ objectFit: "contain", height: 44, width: "auto" }}
+              src="/images/sample-4.jpg"
+              alt=""
+              className="h-full w-full object-cover"
             />
-          ) : (
-            <span className="font-serif text-2xl text-[var(--ink)]">
-              {name || "RealtiPro"}
-            </span>
-          )}
-        </Link>
-        <Link
-          href="/home"
-          className="inline-flex items-center gap-2 text-[12px] uppercase tracking-[0.18em] text-[var(--ink-soft)] hover:text-[var(--accent-text)] transition-colors"
-        >
-          <FiArrowLeft size={14} />
-          Back home
-        </Link>
-      </div>
+          </div>
+          <div className="absolute inset-0 bg-gradient-to-t from-[var(--pine)] via-[var(--pine)]/55 to-[var(--pine)]/35" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[var(--pine)]/70 via-transparent to-[var(--pine)]/30" />
+        </div>
 
-      <div className="container-page pt-8 pb-16 flex items-center justify-center">
+        <div className="relative z-10 p-10 xl:p-14">
+          <Link
+            href="/home"
+            className="inline-flex items-center gap-3"
+            aria-label="Home"
+          >
+            {cachedLogo ? (
+              /* eslint-disable-next-line @next/next/no-img-element */
+              <img
+                src={cachedLogo}
+                alt={company_name || name || "Logo"}
+                style={{ objectFit: "contain", height: 48, width: "auto" }}
+              />
+            ) : (
+              <span className="font-serif text-3xl text-[var(--on-pine)]">
+                {name || "Dora"}
+              </span>
+            )}
+          </Link>
+        </div>
+
         <motion.div
-          initial={{ opacity: 0, y: 18 }}
+          initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-          className="w-full max-w-[460px]"
+          transition={{ duration: 0.9, ease: EASE, delay: 0.2 }}
+          className="relative z-10 p-10 xl:p-14 max-w-[34rem]"
         >
-          <div className="bg-[var(--surface)] border border-[var(--line)] p-8 md:p-10 relative">
-            <div
-              aria-hidden
-              className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[var(--gold-500)]/55 to-transparent"
-            />
+          <span className="eyebrow on-dark inline-flex items-center gap-4">
+            <span className="inline-block h-px w-12 bg-[var(--gold-300)]" />
+            Dora · Curated Living
+          </span>
+          <p className="display-md text-[var(--on-pine)] mt-6">
+            A private vantage on the homes{" "}
+            <em className="text-[var(--gold-300)]">worth waiting for.</em>
+          </p>
+          <p className="lede mt-5 text-[var(--on-pine-soft)] max-w-md">
+            Sign in to keep your favorites close, follow saved searches, and
+            move with quiet confidence when the right home appears.
+          </p>
+        </motion.div>
+      </aside>
 
-            <div className="flex flex-col gap-3 mb-8">
+      {/* ============ RIGHT · form panel ============ */}
+      <section className="relative flex flex-col min-h-screen">
+        {/* Mobile/top bar */}
+        <div className="flex items-center justify-between px-6 sm:px-10 py-7">
+          <Link
+            href="/home"
+            className="inline-flex items-center gap-3 lg:hidden"
+            aria-label="Home"
+          >
+            {cachedLogo ? (
+              /* eslint-disable-next-line @next/next/no-img-element */
+              <img
+                src={cachedLogo}
+                alt={company_name || name || "Logo"}
+                style={{ objectFit: "contain", height: 40, width: "auto" }}
+              />
+            ) : (
+              <span className="font-serif text-2xl text-[var(--ink)]">
+                {name || "Dora"}
+              </span>
+            )}
+          </Link>
+          <span className="hidden lg:block" />
+          <Link href="/home" className="link-underline">
+            <FiArrowLeft size={14} />
+            Back home
+          </Link>
+        </div>
+
+        <div className="flex-1 flex items-center justify-center px-6 sm:px-10 pb-16">
+          <motion.div
+            initial={{ opacity: 0, y: 18 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, ease: EASE }}
+            className="w-full max-w-[440px]"
+          >
+            <div className="flex flex-col gap-3 mb-9">
               {eyebrow && (
                 <span className="eyebrow inline-flex items-center gap-3">
-                  <span className="inline-block h-px w-8 bg-[var(--gold-500)]" />
+                  <span className="inline-block h-px w-8 bg-[var(--gold)]" />
                   {eyebrow}
                 </span>
               )}
-              <h1 className="font-serif text-3xl md:text-4xl text-[var(--ink)] leading-tight tracking-[-0.01em]">
+              <h1 className="font-serif text-3xl md:text-[2.6rem] leading-[1.05] tracking-[-0.015em] text-[var(--ink)]">
                 {title}
               </h1>
               {description && (
-                <p className="text-[14px] text-[var(--ink-soft)] leading-relaxed">
+                <p className="text-[14.5px] text-[var(--ink-soft)] leading-relaxed">
                   {description}
                 </p>
               )}
             </div>
 
             {children}
-          </div>
 
-          {footer && (
-            <div className="text-center mt-6 text-[14px] text-[var(--ink-faint)]">
-              {footer}
-            </div>
-          )}
-        </motion.div>
-      </div>
+            {footer && (
+              <div className="mt-8 pt-6 border-t border-[var(--line)] text-center text-[14px] text-[var(--ink-faint)]">
+                {footer}
+              </div>
+            )}
+          </motion.div>
+        </div>
+      </section>
     </main>
   );
 }
@@ -145,7 +186,7 @@ export function AuthField({
       <div className="flex items-center justify-between">
         <label
           htmlFor={name}
-          className="text-[10px] uppercase tracking-[0.22em] text-[var(--ink-faint)]"
+          className="text-[11px] uppercase tracking-[0.22em] text-[var(--ink-faint)] font-[family-name:var(--font-accent)]"
         >
           {label}
         </label>
@@ -162,12 +203,12 @@ export function AuthField({
         autoComplete={autoComplete}
         required={required}
         readOnly={readOnly}
-        className={`bg-[var(--surface-charcoal)] border px-4 h-12 text-[14px] outline-none transition-colors ${
+        className={`bg-[var(--cream)] border rounded-[var(--radius-sm)] px-4 h-12 text-[14.5px] outline-none transition-colors ${
           readOnly
-            ? "border-[var(--line-medium)] text-[var(--ink-faint)] cursor-not-allowed select-none"
+            ? "border-[var(--line)] text-[var(--ink-faint)] cursor-not-allowed select-none"
             : error
-              ? "border-[#b3261e] text-[var(--ink)] placeholder:text-[var(--ink-faint)]"
-              : "border-[var(--line-medium)] focus:border-[var(--accent)] text-[var(--ink)] placeholder:text-[var(--ink-faint)]"
+              ? "border-[#b3261e] text-[var(--ink)] placeholder:text-[var(--ink-faint)] focus:border-[#b3261e]"
+              : "border-[var(--line)] focus:border-[var(--sage-deep)] text-[var(--ink)] placeholder:text-[var(--ink-faint)]"
         }`}
       />
       {error && <span className="text-[12px] text-[#b3261e]">{error}</span>}
@@ -184,10 +225,12 @@ export function AuthAlert({
 }) {
   const styles =
     tone === "error"
-      ? "bg-[#fdeceb] border-[#b3261e]/30 text-[#b3261e]"
-      : "bg-[#eef6ee] border-[#2e7d32]/40 text-[#2e7d32]";
+      ? "bg-[#fbeceb] border-[#b3261e]/25 text-[#8f2018]"
+      : "bg-[var(--cream)] border-[var(--sage-deep)]/35 text-[var(--sage-deep)]";
   return (
-    <div className={`mb-5 px-4 py-3 border text-[13px] ${styles}`}>
+    <div
+      className={`mb-5 px-4 py-3 border rounded-[var(--radius-sm)] text-[13px] leading-relaxed ${styles}`}
+    >
       {children}
     </div>
   );

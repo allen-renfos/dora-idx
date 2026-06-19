@@ -74,7 +74,7 @@ export const MlsMapModalCard = ({ item, onClose }: PropertyCardProps) => {
                     fontSize: 23,
                     fontWeight: 400,
                     fontFamily: 'var(--font-arapey), Georgia, serif',
-                    background: 'linear-gradient(135deg, #a6824c 0%, #8a6a3b 100%)',
+                    background: 'linear-gradient(135deg, #c2a878 0%, #957a4b 100%)',
                     WebkitBackgroundClip: 'text',
                     WebkitTextFillColor: 'transparent',
                     backgroundClip: 'text',
@@ -86,16 +86,16 @@ export const MlsMapModalCard = ({ item, onClose }: PropertyCardProps) => {
                 {/* Beds / Baths / Sqft */}
                 <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 5, color: '#555350', fontSize: 13 }}>
-                        <IoBedOutline size={15} color="#a6824c" />
+                        <IoBedOutline size={15} color="#c2a878" />
                         <span>{item.beds ?? '—'} Beds</span>
                     </div>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 5, color: '#555350', fontSize: 13 }}>
-                        <PiBathtub size={15} color="#a6824c" />
+                        <PiBathtub size={15} color="#c2a878" />
                         <span>{item.baths ?? '—'} Baths</span>
                     </div>
                     {sqft && (
                         <div style={{ display: 'flex', alignItems: 'center', gap: 5, color: '#555350', fontSize: 13 }}>
-                            <BiArea size={15} color="#a6824c" />
+                            <BiArea size={15} color="#c2a878" />
                             <span>{Number(sqft).toLocaleString()} Sq Ft</span>
                         </div>
                     )}
@@ -104,7 +104,7 @@ export const MlsMapModalCard = ({ item, onClose }: PropertyCardProps) => {
                 {/* Address */}
                 {item.address && (
                     <div style={{ display: 'flex', alignItems: 'flex-start', gap: 6 }}>
-                        <FiMapPin size={13} color="#a6824c" style={{ flexShrink: 0, marginTop: 2 }} />
+                        <FiMapPin size={13} color="#c2a878" style={{ flexShrink: 0, marginTop: 2 }} />
                         <span style={{ fontSize: 14, color: '#8a8780', lineHeight: 1.4, fontFamily: 'var(--font-arapey), Georgia, serif' }}>
                             {String(item.address).replace(/±/g, '#')}
                         </span>

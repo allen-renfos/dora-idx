@@ -28,28 +28,28 @@ export const SingleBlogBanner = ({ blog }: Props) => {
           onError={() => setImgError(true)}
           className="object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/55 via-black/55 to-black/95" />
-        <div className="absolute inset-0 bg-gradient-to-r from-black/65 via-transparent to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[var(--pine)] via-[var(--pine)]/55 to-[var(--pine)]/30" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[var(--pine)]/70 via-transparent to-transparent" />
       </div>
 
       <div className="container-wide w-full pt-32 pb-16 md:pb-20">
         <div className="max-w-3xl flex flex-col gap-5">
-          <div className="flex items-center gap-3 text-[11px] uppercase tracking-[0.22em] text-[var(--gold-500)]">
+          <div className="flex items-center gap-3 text-[11px] uppercase tracking-[0.22em] text-[var(--gold-300)] font-[family-name:var(--font-accent)]">
             {blog?.publishDate && <span>{dateToString(blog.publishDate)}</span>}
             {blog?.publishDate && blog?.category && (
-              <span className="inline-block w-6 h-px bg-[var(--gold-500)]/60" />
+              <span className="inline-block w-6 h-px bg-[var(--gold-300)]/60" />
             )}
             {blog?.category && (
-              <span className="text-white/65">{blog.category}</span>
+              <span className="text-[var(--on-pine-soft)]">{blog.category}</span>
             )}
           </div>
-          <h1 className="display-xl text-white">{blog?.title}</h1>
+          <h1 className="display-xl text-[var(--on-pine)]">{blog?.title}</h1>
           {blog?.subtitle && (
-            <p className="lede max-w-2xl">{blog.subtitle}</p>
+            <p className="lede max-w-2xl text-[var(--on-pine-soft)]">{blog.subtitle}</p>
           )}
           {blog?.author && (
-            <div className="flex items-center gap-3 mt-2 text-[13px] text-white/60">
-              <span className="inline-block h-px w-8 bg-[var(--gold-500)]" />
+            <div className="flex items-center gap-3 mt-2 text-[13px] text-[var(--on-pine-faint)] font-[family-name:var(--font-accent)]">
+              <span className="inline-block h-px w-8 bg-[var(--gold-300)]" />
               <span>By {blog.author}</span>
             </div>
           )}

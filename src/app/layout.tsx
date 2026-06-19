@@ -1,7 +1,6 @@
 import type { Metadata, Viewport } from "next";
 
-import { Lato } from "next/font/google";
-import localFont from "next/font/local";
+import { Fraunces, Jost, Marcellus } from "next/font/google";
 import "./globals.css";
 import "@/styles/dashboard.css";
 import Providers from "@/provider/QueryClientProvider";
@@ -9,55 +8,37 @@ import SocialUrlFetcher from "@/component/SocialUrlFetcher";
 import { NameProvider } from "@/component/NameProvider";
 import { LayoutShell } from "@/component/sharable/LayoutShell";
 
-const lato = Lato({
+// === Dora · Verdant Atelier type system ===
+// Display: Fraunces (soft optical serif). Accent caps: Marcellus (elegant
+// Roman). Body/UI: Jost (refined geometric sans). Variable names below are
+// aliased to the legacy --font-* names in globals.css so existing references
+// pick up the new fonts automatically.
+const fraunces = Fraunces({
   subsets: ["latin"],
-  weight: ["300", "400", "700", "900"],
-  variable: "--font-lato",
+  weight: ["300", "400", "500", "600", "700"],
+  style: ["normal", "italic"],
+  variable: "--font-display",
   display: "swap",
 });
 
-const playfair = localFont({
-  src: [
-    {
-      path: "../fonts/playfair/Playfair_Display/static/PlayfairDisplay-Regular.ttf",
-      weight: "400",
-      style: "normal",
-    },
-    {
-      path: "../fonts/playfair/Playfair_Display/static/PlayfairDisplay-Bold.ttf",
-      weight: "700",
-      style: "normal",
-    },
-    {
-      path: "../fonts/playfair/Playfair_Display/static/PlayfairDisplay-Italic.ttf",
-      weight: "400",
-      style: "italic",
-    },
-  ],
-  variable: "--font-playfair",
+const jost = Jost({
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700"],
+  variable: "--font-body",
   display: "swap",
 });
 
-const arapey = localFont({
-  src: [
-    {
-      path: "../../public/fonts/Arapey/Arapey-Regular.ttf",
-      weight: "400",
-      style: "normal",
-    },
-    {
-      path: "../../public/fonts/Arapey/Arapey-Italic.ttf",
-      weight: "400",
-      style: "italic",
-    },
-  ],
-  variable: "--font-arapey",
+const marcellus = Marcellus({
+  subsets: ["latin"],
+  weight: "400",
+  variable: "--font-accent",
   display: "swap",
 });
 
 export const metadata: Metadata = {
-  title: "Ashuhomes",
-  description: "Ashuhomes",
+  title: "Dora — Curated Real Estate",
+  description:
+    "Dora is a boutique real estate practice pairing distinctive homes with discerning clients across the region's most sought-after addresses.",
   icons: {
     icon: "/logo.ico",
   },
@@ -75,7 +56,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${lato.variable} ${playfair.variable} ${arapey.variable}`}>
+    <html lang="en" className={`${fraunces.variable} ${jost.variable} ${marcellus.variable}`}>
       <NameProvider>
         <Providers>
           <SocialUrlFetcher />

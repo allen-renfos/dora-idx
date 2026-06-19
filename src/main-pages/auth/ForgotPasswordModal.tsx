@@ -67,7 +67,7 @@ export default function ForgotPasswordModal({
           <button
             type="button"
             onClick={() => onOpenLogin?.()}
-            className="text-[var(--accent-text)] hover:text-[var(--ink)] transition-colors font-semibold"
+            className="text-[var(--sage-deep)] hover:text-[var(--ink)] transition-colors font-medium"
           >
             Back to sign in
           </button>

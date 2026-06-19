@@ -23,7 +23,7 @@ const darkMapStyles: google.maps.MapTypeStyle[] = [
   { featureType: 'administrative.country', elementType: 'labels.text.fill', stylers: [{ color: '#8a8780' }] },
   { featureType: 'administrative.land_parcel', stylers: [{ visibility: 'off' }] },
   { featureType: 'administrative.locality', elementType: 'labels.text.fill', stylers: [{ color: '#555350' }] },
-  { featureType: 'poi', elementType: 'labels.text.fill', stylers: [{ color: '#a6824c' }] },
+  { featureType: 'poi', elementType: 'labels.text.fill', stylers: [{ color: '#c2a878' }] },
   { featureType: 'poi', elementType: 'geometry', stylers: [{ color: '#efebe4' }] },
   { featureType: 'poi.park', elementType: 'geometry', stylers: [{ color: '#e2ead9' }] },
   { featureType: 'poi.park', elementType: 'labels.text.fill', stylers: [{ color: '#6b9a5e' }] },
@@ -33,10 +33,10 @@ const darkMapStyles: google.maps.MapTypeStyle[] = [
   { featureType: 'road.arterial', elementType: 'geometry', stylers: [{ color: '#ffffff' }] },
   { featureType: 'road.highway', elementType: 'geometry', stylers: [{ color: '#f0e7d6' }] },
   { featureType: 'road.highway', elementType: 'geometry.stroke', stylers: [{ color: '#e7d9bf' }] },
-  { featureType: 'road.highway', elementType: 'labels.text.fill', stylers: [{ color: '#8a6a3b' }] },
+  { featureType: 'road.highway', elementType: 'labels.text.fill', stylers: [{ color: '#957a4b' }] },
   { featureType: 'road.local', elementType: 'labels.text.fill', stylers: [{ color: '#8a8780' }] },
   { featureType: 'transit', elementType: 'geometry', stylers: [{ color: '#efebe4' }] },
-  { featureType: 'transit.station', elementType: 'labels.text.fill', stylers: [{ color: '#a6824c' }] },
+  { featureType: 'transit.station', elementType: 'labels.text.fill', stylers: [{ color: '#c2a878' }] },
   { featureType: 'water', elementType: 'geometry', stylers: [{ color: '#cfdde6' }] },
   { featureType: 'water', elementType: 'labels.text.fill', stylers: [{ color: '#7a93a3' }] },
   { featureType: 'water', elementType: 'labels.text.stroke', stylers: [{ color: '#ffffff' }] },
@@ -66,7 +66,7 @@ const LocalInformation = ({ coordinates }: LocalInformationProps) => {
     return (
       <div style={{ height: 460, display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#f4f2ec' }}>
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12 }}>
-          <div style={{ width: 32, height: 32, border: '2px solid #a6824c', borderTopColor: 'transparent', borderRadius: '50%', animation: 'spin 0.8s linear infinite' }} />
+          <div style={{ width: 32, height: 32, border: '2px solid #c2a878', borderTopColor: 'transparent', borderRadius: '50%', animation: 'spin 0.8s linear infinite' }} />
           <span style={{ color: '#8a8780', fontSize: 13, letterSpacing: '0.05em' }}>Loading map…</span>
         </div>
       </div>
@@ -97,7 +97,7 @@ const LocalInformation = ({ coordinates }: LocalInformationProps) => {
           zIndex={100}
           icon={{
             path: google.maps.SymbolPath.CIRCLE,
-            fillColor: '#a6824c',
+            fillColor: '#c2a878',
             fillOpacity: 1,
             strokeColor: '#fff',
             strokeWeight: 2,
@@ -133,7 +133,7 @@ const LocalInformation = ({ coordinates }: LocalInformationProps) => {
                 cursor: 'pointer',
                 border: 'none',
                 borderRight: type === 'roadmap' ? '1px solid #e7e4de' : 'none',
-                background: active ? '#a6824c' : 'transparent',
+                background: active ? '#c2a878' : 'transparent',
                 color: active ? '#ffffff' : '#555350',
                 transition: 'background 0.18s, color 0.18s',
                 fontFamily: 'var(--font-lato), sans-serif',

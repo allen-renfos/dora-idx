@@ -59,13 +59,13 @@ const NeighborhoodList = ({ searchQuery = "" }: Props) => {
   }, [neighborhood, searchQuery]);
 
   return (
-    <section className="container-wide pb-20">
+    <section className="container-wide">
       {isLoading ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {Array.from({ length: 6 }).map((_, i) => (
             <div
               key={i}
-              className="aspect-[3/4] bg-[var(--surface-charcoal)] animate-pulse"
+              className="aspect-[3/4] rounded-[var(--radius-md)] bg-[var(--canvas-2)] animate-pulse"
             />
           ))}
         </div>
@@ -98,17 +98,17 @@ const NeighborhoodList = ({ searchQuery = "" }: Props) => {
         </motion.div>
       ) : (
         <div className="py-24 flex flex-col items-center justify-center text-center max-w-xl mx-auto">
-          <div className="w-16 h-16 rounded-full border border-[var(--gold-500)]/30 bg-[var(--gold-500)]/5 flex items-center justify-center mb-6">
-            <FiSearch size={22} className="text-[var(--gold-500)]" />
+          <div className="w-16 h-16 rounded-full border border-[var(--gold)]/40 bg-[var(--cream)] flex items-center justify-center mb-6">
+            <FiSearch size={22} className="text-[var(--gold-deep)]" />
           </div>
-          <h3 className="font-serif text-3xl text-[var(--ink)] mb-3">
+          <h3 className="display-md text-[var(--ink)] mb-3">
             {neighborhood.length && searchQuery
-              ? "No neighborhoods match that search"
-              : "Neighborhoods are on the way"}
+              ? "Nothing matches that search just yet"
+              : "New neighborhoods, arriving soon"}
           </h3>
           <p className="text-[var(--ink-soft)] leading-relaxed">
-            Try a different name, city, or county — or check back shortly as
-            our list grows.
+            Try another name, city, or county — or return shortly as the
+            collection continues to grow.
           </p>
         </div>
       )}
@@ -122,7 +122,7 @@ function NeighborhoodCard({ item }: { item: Neighborhood }) {
   return (
     <Link
       href={href}
-      className="group relative block aspect-[3/4] overflow-hidden bg-[var(--surface-obsidian)] border border-[var(--line-soft)] hover:border-[var(--gold-500)]/40 transition-colors"
+      className="group relative block aspect-[3/4] overflow-hidden rounded-[var(--radius-md)] bg-[var(--pine)] border border-[var(--line)] hover:shadow-[var(--shadow-lift)] hover:-translate-y-1 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]"
       aria-label={`Explore ${label}`}
     >
       <Image
@@ -132,18 +132,18 @@ function NeighborhoodCard({ item }: { item: Neighborhood }) {
         sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
         className="object-cover transition-transform duration-[900ms] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.06]"
       />
-      <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-black/10 pointer-events-none" />
+      <div className="absolute inset-0 bg-gradient-to-t from-[var(--pine)] via-[var(--pine)]/30 to-transparent pointer-events-none" />
       <div className="absolute inset-x-0 bottom-0 p-6 flex flex-col gap-3">
         <div className="flex items-end justify-between gap-3">
-          <h3 className="font-serif text-2xl text-white leading-tight">
+          <h3 className="font-serif text-2xl text-[var(--on-pine)] leading-tight">
             {label}
           </h3>
-          <span className="shrink-0 w-9 h-9 rounded-full border border-white/25 flex items-center justify-center text-white group-hover:bg-[var(--gold-500)] group-hover:border-[var(--gold-500)] group-hover:text-[var(--surface-ink)] transition-all duration-300">
+          <span className="shrink-0 w-9 h-9 rounded-full border border-[var(--on-pine-faint)] flex items-center justify-center text-[var(--on-pine)] group-hover:bg-[var(--gold-300)] group-hover:border-[var(--gold-300)] group-hover:text-[var(--pine)] transition-all duration-300">
             <FiArrowRight size={14} />
           </span>
         </div>
         {item.description && (
-          <p className="text-[13px] text-white/70 line-clamp-2 max-w-xs">
+          <p className="text-[13px] text-[var(--on-pine-soft)] line-clamp-2 max-w-xs">
             {item.description}
           </p>
         )}

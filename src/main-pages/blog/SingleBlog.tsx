@@ -43,7 +43,7 @@ const SingleBlog = () => {
 
   return (
     <>
-      <main className="bg-[var(--surface-ink)] text-[var(--ink)] min-h-screen">
+      <main className="bg-[var(--canvas)] text-[var(--ink)] min-h-screen">
         {isLoading ? (
           <BlogSkeleton />
         ) : error ? (
@@ -63,12 +63,12 @@ const SingleBlog = () => {
 function BlogSkeleton() {
   return (
     <div className="container-wide pt-32 pb-20 animate-pulse">
-      <div className="h-[40vh] min-h-[260px] bg-[var(--surface-charcoal)] mb-10" />
+      <div className="h-[40vh] min-h-[260px] rounded-[var(--radius-md)] bg-[var(--canvas-2)] mb-10" />
       <div className="max-w-3xl mx-auto flex flex-col gap-4">
-        <div className="h-3 w-32 bg-[var(--surface-graphite)]" />
-        <div className="h-10 w-full bg-[var(--surface-graphite)]" />
-        <div className="h-5 w-[80%] bg-[var(--surface-graphite)]" />
-        <div className="h-5 w-[60%] bg-[var(--surface-graphite)]" />
+        <div className="h-3 w-32 bg-[var(--canvas-2)]" />
+        <div className="h-10 w-full bg-[var(--canvas-2)]" />
+        <div className="h-5 w-[80%] bg-[var(--canvas-2)]" />
+        <div className="h-5 w-[60%] bg-[var(--canvas-2)]" />
       </div>
     </div>
   );
@@ -77,13 +77,13 @@ function BlogSkeleton() {
 function BlogError() {
   return (
     <div className="container-wide pt-40 pb-20 max-w-md mx-auto text-center">
-      <div className="w-16 h-16 mx-auto rounded-full bg-[var(--gold-500)]/10 border border-[var(--gold-500)]/30 flex items-center justify-center mb-6">
-        <FiAlertCircle size={24} className="text-[var(--gold-500)]" />
+      <div className="w-16 h-16 mx-auto rounded-full bg-[var(--cream)] border border-[var(--gold)]/40 flex items-center justify-center mb-6">
+        <FiAlertCircle size={24} className="text-[var(--gold-deep)]" />
       </div>
-      <h1 className="font-serif text-3xl mb-3">Article unavailable</h1>
-      <p className="text-[var(--ink-faint)] mb-8 leading-relaxed">
-        The article may have moved or been removed. Browse the journal for the
-        latest writing.
+      <h1 className="display-md mb-3">This piece is unavailable</h1>
+      <p className="text-[var(--ink-soft)] mb-8 leading-relaxed">
+        It may have moved or been retired. Return to the journal for our most
+        recent writing.
       </p>
       <Link href="/blog" className="btn-gold-new">
         Read the journal

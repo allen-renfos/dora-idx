@@ -67,13 +67,13 @@ export default function LoginPage() {
     <AuthShell
       eyebrow="Welcome Back"
       title="Sign in to your account"
-      description="Access saved searches, favorites, and tailored listings."
+      description="Return to your saved homes, followed searches, and listings chosen for you."
       footer={
         <>
-          New here?{" "}
+          New to Dora?{" "}
           <Link
             href="/register"
-            className="text-[var(--accent-text)] hover:text-[var(--ink)] transition-colors font-semibold"
+            className="text-[var(--sage-deep)] hover:text-[var(--ink)] transition-colors font-medium"
           >
             Create an account
           </Link>
@@ -107,7 +107,7 @@ export default function LoginPage() {
           rightAction={
             <Link
               href="/forgot-password"
-              className="text-[10px] uppercase tracking-[0.2em] text-[var(--accent-text)] hover:text-[var(--ink)] transition-colors"
+              className="text-[10px] uppercase tracking-[0.2em] text-[var(--sage-deep)] hover:text-[var(--ink)] transition-colors"
             >
               Forgot?
             </Link>

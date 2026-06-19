@@ -121,9 +121,9 @@ export const SinglePropertyDetails = ({ property: prop }: Props) => {
         style: {
           background: "#fff",
           color: "#1a1a1a",
-          border: "1px solid #a6824c",
+          border: "1px solid #c2a878",
         },
-        iconTheme: { primary: "#a6824c", secondary: "#fff" },
+        iconTheme: { primary: "#c2a878", secondary: "#fff" },
       });
       queryClient.invalidateQueries({ queryKey: ["userWishlistInfo"] });
       queryClient.invalidateQueries({ queryKey: ["mlsProperties"] });
@@ -144,7 +144,7 @@ export const SinglePropertyDetails = ({ property: prop }: Props) => {
         style: {
           background: "#fff",
           color: "#1a1a1a",
-          border: "1px solid #a6824c",
+          border: "1px solid #c2a878",
         },
       });
       queryClient.invalidateQueries({ queryKey: ["userWishlistInfo"] });
@@ -466,30 +466,30 @@ export const SinglePropertyDetails = ({ property: prop }: Props) => {
         <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6 pb-8">
           <div className="flex flex-col gap-3">
             <div className="inline-flex items-center gap-3 flex-wrap">
-              <span className="inline-flex items-center gap-2 px-3 py-1 text-[11px] font-bold tracking-[0.2em] uppercase text-[var(--gold-500)] bg-[var(--gold-500)]/10 border border-[var(--gold-500)]/30">
-                <span className="w-1.5 h-1.5 rounded-full bg-[var(--gold-500)] animate-pulse" />
+              <span className="inline-flex items-center gap-2 px-3 py-1.5 text-[11px] tracking-[0.2em] uppercase text-[var(--on-pine)] bg-[var(--pine)] rounded-[var(--radius-pill)] font-[family-name:var(--font-accent)]">
+                <span className="w-1.5 h-1.5 rounded-full bg-[var(--gold-300)] animate-pulse" />
                 {property.status || property.MlsStatus || "Active"}
               </span>
               {(property.DaysOnSite|| property.dom) && (
                 <span className="inline-flex items-center gap-2 text-[12px] text-[var(--ink-faint)]">
-                  <FiClock size={12} />
+                  <FiClock size={12} className="text-[var(--sage-deep)]" />
                   {property.DaysOnSite || property.dom} days on
                   market
                 </span>
               )}
             </div>
 
-            <h1 className="font-sans font-bold text-[clamp(2.6rem,3.5vw+1rem,4.1rem)] leading-[1.05] tracking-[-0.025em] text-[var(--gold-500)]">
+            <h1 className="font-serif text-[clamp(2.6rem,3.5vw+1rem,4.1rem)] leading-[1.05] tracking-[-0.015em] text-[var(--ink)]">
               {property.price
                 ? `$${Number(property.price).toLocaleString()}`
                 : "Price upon request"}
             </h1>
 
             {showAddress && property.address && (
-              <p className="flex items-start gap-2 text-[22px] text-[var(--ink-soft)] font-sans font-semibold">
+              <p className="flex items-start gap-2 text-[22px] text-[var(--ink-soft)] font-serif">
                 <FiMapPin
                   size={22}
-                  className="mt-1 text-[var(--gold-500)] shrink-0"
+                  className="mt-1 text-[var(--sage-deep)] shrink-0"
                 />
                 {String(property.address).replace(/±/g, "#")}
               </p>
@@ -497,7 +497,7 @@ export const SinglePropertyDetails = ({ property: prop }: Props) => {
           </div>
 
           {/* Stats */}
-          <div className="flex items-stretch divide-x divide-[var(--line-soft)] border border-[var(--line-soft)] bg-[var(--surface-obsidian)]">
+          <div className="flex items-stretch divide-x divide-[var(--line)] border border-[var(--line)] bg-[var(--cream)] rounded-[var(--radius-md)] overflow-hidden">
             <Stat
               value={property.beds || property.BedroomsTotal || "0"}
               label="Beds"
@@ -573,19 +573,27 @@ export const SinglePropertyDetails = ({ property: prop }: Props) => {
             </div>
 
             {/* Inline CTA */}
-            <div className="bg-gradient-to-br from-[var(--gold-500)]/10 to-transparent border border-[var(--gold-500)]/25 px-6 md:px-8 py-7 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+            <div className="relative bg-[var(--pine)] text-[var(--on-pine)] rounded-[var(--radius-md)] px-6 md:px-10 py-9 flex flex-col md:flex-row md:items-center md:justify-between gap-5 overflow-hidden">
+              <div
+                aria-hidden
+                className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[var(--gold)]/45 to-transparent"
+              />
               <div>
-                <h3 className="font-serif text-2xl text-[var(--ink)]">
-                  Interested in this home?
+                <span className="eyebrow on-dark inline-flex items-center gap-3 mb-3">
+                  <span className="inline-block h-px w-8 bg-[var(--gold-300)]" />
+                  A private word
+                </span>
+                <h3 className="font-serif text-[clamp(1.6rem,2vw+1rem,2.2rem)] text-[var(--on-pine)] leading-tight">
+                  Taken with this <em className="italic text-[var(--gold-300)] font-normal">home</em>?
                 </h3>
-                <p className="text-[14px] text-[var(--ink-soft)] mt-1.5 max-w-md">
-                  Schedule a private viewing or request more information from a
-                  trusted advisor.
+                <p className="text-[14px] text-[var(--on-pine-soft)] mt-2 max-w-md">
+                  Arrange a private viewing or ask anything you wish — your
+                  advisor is a message away.
                 </p>
               </div>
               <button
                 onClick={() => setIsModalOpen(true)}
-                className="btn-gold-new shrink-0"
+                className="btn-outline-new on-dark shrink-0"
               >
                 Request a Showing
               </button>
@@ -595,7 +603,7 @@ export const SinglePropertyDetails = ({ property: prop }: Props) => {
             {showMortgageCalculator && (
               <div>
                 <SectionHeader title="Mortgage Calculator" />
-                <div className="bg-[var(--surface-obsidian)] border border-[var(--line-soft)] p-6 md:p-8">
+                <div className="bg-[var(--cream)] border border-[var(--line)] rounded-[var(--radius-md)] p-6 md:p-8">
                   <div className="flex flex-col md:flex-row md:items-center gap-8 md:gap-10 mb-8">
                     {/* Donut */}
                     <div className="shrink-0 mx-auto md:mx-0">
@@ -610,7 +618,7 @@ export const SinglePropertyDetails = ({ property: prop }: Props) => {
                           cy="100"
                           r={donutR}
                           fill="none"
-                          stroke="var(--surface-charcoal)"
+                          stroke="var(--canvas-2)"
                           strokeWidth="22"
                         />
                         <circle
@@ -618,7 +626,7 @@ export const SinglePropertyDetails = ({ property: prop }: Props) => {
                           cy="100"
                           r={donutR}
                           fill="none"
-                          stroke="var(--gold-500)"
+                          stroke="var(--pine)"
                           strokeWidth="22"
                           strokeDasharray={`${piDash} ${circumference}`}
                           transform="rotate(-90 100 100)"
@@ -629,7 +637,7 @@ export const SinglePropertyDetails = ({ property: prop }: Props) => {
                           cy="100"
                           r={donutR}
                           fill="none"
-                          stroke="rgba(26,26,26,0.32)"
+                          stroke="var(--gold)"
                           strokeWidth="22"
                           strokeDasharray={`${taxDash} ${circumference}`}
                           strokeDashoffset={-piDash}
@@ -640,9 +648,9 @@ export const SinglePropertyDetails = ({ property: prop }: Props) => {
                           x="100"
                           y="94"
                           textAnchor="middle"
-                          fill="var(--gold-500)"
+                          fill="var(--ink)"
                           fontSize="20"
-                          fontFamily="var(--font-playfair), serif"
+                          fontFamily="var(--font-serif), serif"
                           fontWeight="400"
                         >
                           ${mortgage.total.toLocaleString("en-US", {
@@ -654,7 +662,7 @@ export const SinglePropertyDetails = ({ property: prop }: Props) => {
                           x="100"
                           y="114"
                           textAnchor="middle"
-                          fill="rgba(138,135,128,1)"
+                          fill="var(--ink-faint)"
                           fontSize="11"
                           letterSpacing="2"
                         >
@@ -667,10 +675,10 @@ export const SinglePropertyDetails = ({ property: prop }: Props) => {
                     <div className="flex-1 min-w-[200px] flex flex-col gap-4">
                       <div className="flex justify-between items-center pb-3 border-b border-[var(--line)]">
                         <span className="flex items-center gap-3 text-[14px] text-[var(--ink-soft)]">
-                          <span className="w-3 h-3 rounded-full bg-[var(--gold-500)]" />
+                          <span className="w-3 h-3 rounded-full bg-[var(--pine)]" />
                           Principal &amp; Interest
                         </span>
-                        <span className="text-[var(--accent-text)] font-medium">
+                        <span className="text-[var(--ink)] font-medium">
                           $
                           {mortgage.pi.toLocaleString("en-US", {
                             minimumFractionDigits: 2,
@@ -681,7 +689,7 @@ export const SinglePropertyDetails = ({ property: prop }: Props) => {
                       {mortgage.monthlyTax > 0 && (
                         <div className="flex justify-between items-center">
                           <span className="flex items-center gap-3 text-[14px] text-[var(--ink-soft)]">
-                            <span className="w-3 h-3 rounded-full bg-[var(--ink)]/35" />
+                            <span className="w-3 h-3 rounded-full bg-[var(--gold)]" />
                             Taxes
                           </span>
                           <span className="text-[var(--ink)] font-medium">
@@ -737,11 +745,11 @@ export const SinglePropertyDetails = ({ property: prop }: Props) => {
                         </span>
                       </CalcField>
                       {loanDropdownOpen && (
-                        <div className="absolute top-full left-0 right-0 mt-2 bg-[var(--surface-charcoal)] border border-[var(--gold-500)]/40 p-5 z-30 shadow-[0_20px_40px_-15px_rgba(0,0,0,0.18)]">
-                          <label className="block text-[10px] uppercase tracking-[0.2em] text-[var(--ink-faint)] mb-1.5">
+                        <div className="absolute top-full left-0 right-0 mt-2 bg-[var(--cream)] border border-[var(--line)] rounded-[var(--radius-sm)] p-5 z-30 shadow-[var(--shadow-lift)]">
+                          <label className="block text-[10px] uppercase tracking-[0.2em] text-[var(--ink-faint)] mb-1.5 font-[family-name:var(--font-accent)]">
                             Interest Rate
                           </label>
-                          <div className="flex items-center bg-[var(--surface-ink)] border border-[var(--line-soft)] px-3 py-2.5 mb-4">
+                          <div className="flex items-center bg-[var(--canvas)] border border-[var(--line)] px-3 py-2.5 mb-4 rounded-[var(--radius-sm)]">
                             <input
                               type="number"
                               step="0.01"
@@ -755,7 +763,7 @@ export const SinglePropertyDetails = ({ property: prop }: Props) => {
                             />
                             <span className="text-[var(--ink-faint)] ml-1">%</span>
                           </div>
-                          <label className="block text-[10px] uppercase tracking-[0.2em] text-[var(--ink-faint)] mb-1.5">
+                          <label className="block text-[10px] uppercase tracking-[0.2em] text-[var(--ink-faint)] mb-1.5 font-[family-name:var(--font-accent)]">
                             Loan Type
                           </label>
                           <select
@@ -763,7 +771,7 @@ export const SinglePropertyDetails = ({ property: prop }: Props) => {
                             onChange={(e) =>
                               setTempYears(Number(e.target.value))
                             }
-                            className="w-full bg-[var(--surface-ink)] border border-[var(--line-soft)] px-3 py-2.5 text-[var(--ink)] text-[14px] mb-5 outline-none focus:border-[var(--gold-500)]/60"
+                            className="w-full bg-[var(--canvas)] border border-[var(--line)] px-3 py-2.5 text-[var(--ink)] text-[14px] mb-5 outline-none focus:border-[var(--sage-deep)]/60 rounded-[var(--radius-sm)]"
                           >
                             <option value={10}>10 years</option>
                             <option value={15}>15 years</option>
@@ -815,7 +823,7 @@ export const SinglePropertyDetails = ({ property: prop }: Props) => {
 
             {/* Mortgage calculator disclaimer */}
             {showMortgageCalculator && (
-              <div className="p-5 bg-[var(--surface-obsidian)] border border-[var(--line-soft)] text-[12px] text-[var(--ink-faint)] leading-relaxed flex flex-col gap-2">
+              <div className="p-5 bg-[var(--canvas-2)] border border-[var(--line)] rounded-[var(--radius-md)] text-[12px] text-[var(--ink-faint)] leading-relaxed flex flex-col gap-2">
                 <p>
                   All calculations are estimates and today&rsquo;s rates are provided by Realtipro for informational purposes only.
                 </p>
@@ -829,7 +837,7 @@ export const SinglePropertyDetails = ({ property: prop }: Props) => {
             {showVirtualTour && (
               <div>
                 <SectionHeader title="Virtual Tour" />
-                <div className="relative w-full aspect-video bg-[var(--surface-obsidian)] border border-[var(--line-soft)] overflow-hidden">
+                <div className="relative w-full aspect-video bg-[var(--canvas-2)] border border-[var(--line)] rounded-[var(--radius-md)] overflow-hidden">
                   <iframe
                     src={property.VirtualTourURLUnbranded}
                     title="Virtual Tour"
@@ -848,7 +856,7 @@ export const SinglePropertyDetails = ({ property: prop }: Props) => {
             {showPropertyMap && property.latitude && property.longitude && (
               <div>
                 <SectionHeader title="Location & Neighborhood" />
-                <div className="border border-[var(--line-soft)] bg-[var(--surface-obsidian)] overflow-hidden">
+                <div className="border border-[var(--line)] bg-[var(--canvas-2)] rounded-[var(--radius-md)] overflow-hidden">
                   <LocalInformation
                     coordinates={{
                       lat: Number(property.latitude),
@@ -860,7 +868,7 @@ export const SinglePropertyDetails = ({ property: prop }: Props) => {
             )}
 
             {/* MLS disclaimer */}
-            <div className="mt-4 p-6 md:p-8 bg-[var(--surface-obsidian)] border border-[var(--line-soft)] flex flex-col gap-3 text-[12px] text-[var(--ink-faint)] leading-relaxed">
+            <div className="mt-4 p-6 md:p-8 bg-[var(--canvas-2)] border border-[var(--line)] rounded-[var(--radius-md)] flex flex-col gap-3 text-[12px] text-[var(--ink-faint)] leading-relaxed">
               <p>
                 Estimated payment, market insight calculations, school and
                 neighborhood information provided by Realtipro.
@@ -877,7 +885,7 @@ export const SinglePropertyDetails = ({ property: prop }: Props) => {
                 be independently verified. The three-tree icon represents
                 listings courtesy of NWMLS.
               </p>
-              <div className="flex flex-wrap items-center justify-between gap-4 pt-3 border-t border-[var(--line-soft)] mt-1">
+              <div className="flex flex-wrap items-center justify-between gap-4 pt-3 border-t border-[var(--line)] mt-1">
                 <div className="flex flex-col gap-1">
                   <span>{formattedMlsUpdated}</span>
                   <span>
@@ -903,10 +911,10 @@ export const SinglePropertyDetails = ({ property: prop }: Props) => {
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-              className="bg-[var(--surface-obsidian)] border border-[var(--line-soft)] p-6"
+              className="bg-[var(--cream)] border border-[var(--line)] rounded-[var(--radius-md)] p-6 shadow-[var(--shadow-soft)]"
             >
-              <div className="flex items-center gap-4 pb-5 border-b border-[var(--line-soft)]">
-                <div className="relative w-16 h-16 overflow-hidden rounded-full border border-[var(--gold-500)]/40">
+              <div className="flex items-center gap-4 pb-5 border-b border-[var(--line)]">
+                <div className="relative w-16 h-16 overflow-hidden rounded-full border border-[var(--gold)]/50">
                   <Image
                     src={profile_image || "/images/agent-1.png"}
                     alt={name || "Advisor"}
@@ -920,7 +928,7 @@ export const SinglePropertyDetails = ({ property: prop }: Props) => {
                   </span>
                   <Link
                     href="/about-us"
-                    className="text-[12px] uppercase tracking-[0.18em] text-[var(--accent-text)] hover:text-[var(--ink)] transition-colors inline-flex items-center gap-1.5"
+                    className="text-[12px] uppercase tracking-[0.18em] text-[var(--sage-deep)] hover:text-[var(--ink)] transition-colors inline-flex items-center gap-1.5 font-[family-name:var(--font-accent)]"
                   >
                     View profile
                     <FiArrowRight size={12} />
@@ -933,7 +941,7 @@ export const SinglePropertyDetails = ({ property: prop }: Props) => {
                   {hasEmail && (
                     <a
                       href={`mailto:${email}`}
-                      className="inline-flex items-center justify-center gap-2 h-11 border border-[var(--line-soft)] text-[var(--ink-soft)] text-[12px] tracking-[0.14em] uppercase font-semibold hover:border-[var(--gold-500)] hover:text-[var(--accent-text)] transition-colors"
+                      className="inline-flex items-center justify-center gap-2 h-11 border border-[var(--line-medium)] text-[var(--ink-soft)] text-[12px] tracking-[0.14em] uppercase rounded-[var(--radius-pill)] hover:border-[var(--sage-deep)] hover:text-[var(--sage-deep)] transition-colors font-[family-name:var(--font-accent)]"
                     >
                       <FiMail size={14} />
                       Email
@@ -942,7 +950,7 @@ export const SinglePropertyDetails = ({ property: prop }: Props) => {
                   {hasPhone && (
                     <a
                       href={`tel:${formattedPhone}`}
-                      className="inline-flex items-center justify-center gap-2 h-11 border border-[var(--line-soft)] text-[var(--ink-soft)] text-[12px] tracking-[0.14em] uppercase font-semibold hover:border-[var(--gold-500)] hover:text-[var(--accent-text)] transition-colors"
+                      className="inline-flex items-center justify-center gap-2 h-11 border border-[var(--line-medium)] text-[var(--ink-soft)] text-[12px] tracking-[0.14em] uppercase rounded-[var(--radius-pill)] hover:border-[var(--sage-deep)] hover:text-[var(--sage-deep)] transition-colors font-[family-name:var(--font-accent)]"
                     >
                       <FiPhone size={14} />
                       Call
@@ -959,14 +967,14 @@ export const SinglePropertyDetails = ({ property: prop }: Props) => {
               </button>
             </motion.div>
 
-            <div className="bg-[var(--surface-obsidian)] border border-[var(--line-soft)] p-6 flex flex-col gap-3">
+            <div className="bg-[var(--cream)] border border-[var(--line)] rounded-[var(--radius-md)] p-6 flex flex-col gap-3 shadow-[var(--shadow-soft)]">
               <button
                 onClick={handleToggleFavorites}
                 disabled={isAddingToFavorites}
-                className={`inline-flex items-center justify-center gap-2.5 h-11 border transition-all duration-300 text-[12px] font-bold tracking-[0.18em] uppercase ${
+                className={`inline-flex items-center justify-center gap-2.5 h-11 border rounded-[var(--radius-pill)] transition-all duration-300 text-[12px] tracking-[0.18em] uppercase font-[family-name:var(--font-accent)] ${
                   isFavorited
-                    ? "bg-[var(--ink)] border-[var(--ink)] text-white"
-                    : "border-[var(--gold-500)] text-[var(--accent-text)] hover:bg-[var(--gold-500)]/10"
+                    ? "bg-[var(--pine)] border-[var(--pine)] text-[var(--on-pine)]"
+                    : "border-[var(--line-medium)] text-[var(--ink-soft)] hover:border-[var(--sage-deep)] hover:text-[var(--sage-deep)]"
                 } disabled:opacity-50 disabled:cursor-not-allowed`}
               >
                 {isAddingToFavorites ? (
@@ -1031,8 +1039,8 @@ function Stat({ value, label }: { value: any; label: string }) {
 function SectionHeader({ title }: { title: string }) {
   return (
     <div className="flex items-center gap-3 mb-5">
-      <span className="inline-block h-px w-8 bg-[var(--gold-500)]" />
-      <h2 className="font-serif text-2xl text-[var(--ink)]">{title}</h2>
+      <span className="inline-block h-px w-8 bg-[var(--gold)]" />
+      <h2 className="font-serif text-[clamp(1.5rem,1.5vw+1rem,2rem)] text-[var(--ink)]">{title}</h2>
     </div>
   );
 }
@@ -1045,9 +1053,9 @@ function Card({
   children: React.ReactNode;
 }) {
   return (
-    <div className="bg-[var(--surface-obsidian)] border border-[var(--line-soft)] hover:border-[var(--line-medium)] transition-colors p-6 md:p-7">
-      <h3 className="flex items-center gap-3 mb-5 font-serif text-lg text-[var(--ink)]">
-        <span className="inline-block w-1 h-5 bg-[var(--gold-500)]" />
+    <div className="bg-[var(--cream)] border border-[var(--line)] hover:border-[var(--line-medium)] hover:shadow-[var(--shadow-soft)] transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] rounded-[var(--radius-md)] p-6 md:p-7">
+      <h3 className="flex items-center gap-3 mb-5 font-serif text-xl text-[var(--ink)]">
+        <span className="inline-block w-1 h-5 rounded-full bg-[var(--gold)]" />
         {title}
       </h3>
       <div>{children}</div>
@@ -1069,7 +1077,7 @@ function SpecList({ rows }: { rows: SpecRow[] }) {
         return (
           <div
             key={i}
-            className="flex items-start justify-between gap-4 py-2.5 border-b border-[var(--line-soft)] last:border-0 text-[14px]"
+            className="flex items-start justify-between gap-4 py-2.5 border-b border-[var(--line)] last:border-0 text-[14px]"
           >
             <dt className="text-[var(--ink-faint)] shrink-0">{row.label}</dt>
             <dd className="text-[var(--ink-soft)] text-right">{display}</dd>
@@ -1093,13 +1101,13 @@ function CalcField({
 }) {
   return (
     <div
-      className={`bg-[var(--surface-charcoal)] border px-4 py-3.5 transition-colors ${
+      className={`bg-[var(--canvas)] border rounded-[var(--radius-sm)] px-4 py-3.5 transition-colors ${
         active
-          ? "border-[var(--gold-500)]/60"
-          : "border-[var(--line-soft)] hover:border-[var(--line-medium)]"
+          ? "border-[var(--sage-deep)]/60"
+          : "border-[var(--line)] hover:border-[var(--line-medium)]"
       }`}
     >
-      <div className="text-[10px] uppercase tracking-[0.22em] text-[var(--ink-faint)] mb-1.5">
+      <div className="text-[10px] uppercase tracking-[0.22em] text-[var(--ink-faint)] mb-1.5 font-[family-name:var(--font-accent)]">
         {label}
       </div>
       <div className="flex items-center justify-between gap-2">
@@ -1107,7 +1115,7 @@ function CalcField({
         {onEdit && (
           <button
             onClick={onEdit}
-            className="text-[var(--ink-faint)] hover:text-[var(--accent-text)] transition-colors p-0.5"
+            className="text-[var(--ink-faint)] hover:text-[var(--sage-deep)] transition-colors p-0.5"
             aria-label="Edit"
           >
             <FiEdit2 size={14} />

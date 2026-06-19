@@ -86,18 +86,18 @@ export const MlsPropertyCard = ({
   return (
     <article
       onClick={handleOpen}
-      className="group relative flex flex-col h-full cursor-pointer bg-[var(--surface)] border border-[var(--line)] hover:border-[var(--accent)]/60 hover:shadow-[var(--shadow-soft)] transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]"
-      style={{ borderRadius: "var(--radius-sm)" }}
+      className="group relative flex flex-col h-full cursor-pointer bg-[var(--cream)] border border-[var(--line)] hover:border-[var(--gold)]/60 hover:shadow-[var(--shadow-lift)] hover:-translate-y-1 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]"
+      style={{ borderRadius: "var(--radius-md)" }}
     >
-      <div className="relative overflow-hidden aspect-[4/3] bg-[var(--surface-charcoal)]">
+      <div className="relative overflow-hidden aspect-[4/3] bg-[var(--canvas-2)] rounded-t-[var(--radius-md)]">
         {!item.cover_photo || imgError ? (
-          <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-gradient-to-br from-[var(--surface-graphite)] to-[var(--surface-charcoal)]">
+          <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-gradient-to-br from-[var(--surface-graphite)] to-[var(--canvas-2)]">
             <svg
               width="42"
               height="42"
               viewBox="0 0 24 24"
               fill="none"
-              stroke="var(--accent)"
+              stroke="var(--gold)"
               strokeWidth="1.2"
               strokeLinecap="round"
               strokeLinejoin="round"
@@ -121,12 +121,12 @@ export const MlsPropertyCard = ({
           />
         )}
 
-        <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/15 to-black/10 pointer-events-none" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[var(--pine)]/55 via-[var(--pine)]/5 to-transparent pointer-events-none" />
 
         {item.status && (
           <span
-            className="absolute top-4 left-4 px-3 py-1.5 text-[10px] font-bold tracking-[0.16em] uppercase bg-[var(--ink)] text-white"
-            style={{ borderRadius: "var(--radius-xs)" }}
+            className="absolute top-4 left-4 px-3 py-1.5 text-[10px] tracking-[0.18em] uppercase bg-[var(--pine)] text-[var(--on-pine)] font-[family-name:var(--font-accent)]"
+            style={{ borderRadius: "var(--radius-pill)" }}
           >
             {item.status}
           </span>
@@ -139,8 +139,8 @@ export const MlsPropertyCard = ({
           className="absolute top-4 right-4 w-11 h-11 flex items-center justify-center border transition-all duration-300 backdrop-blur-md"
           style={{
             borderRadius: "999px",
-            background: isFavorited ? "rgba(166,130,76,0.95)" : "rgba(0,0,0,0.35)",
-            borderColor: isFavorited ? "rgba(166,130,76,1)" : "rgba(255,255,255,0.35)",
+            background: isFavorited ? "rgba(194, 168, 120,0.95)" : "rgba(0,0,0,0.35)",
+            borderColor: isFavorited ? "rgba(194, 168, 120,1)" : "rgba(255,255,255,0.35)",
             color: isFavorited ? "#ffffff" : "#fff",
           }}
         >
@@ -176,15 +176,15 @@ export const MlsPropertyCard = ({
 
       <div className="flex flex-col gap-4 p-6">
         <div className="flex items-baseline justify-between gap-3">
-          <h3 className="font-sans font-bold text-[clamp(1.35rem,1.2vw+0.8rem,1.65rem)] text-[var(--ink)] leading-none tracking-[-0.02em]">
+          <h3 className="font-serif text-[clamp(1.5rem,1.2vw+0.9rem,1.85rem)] text-[var(--ink)] leading-none tracking-[-0.01em]">
             {formattedPrice}
           </h3>
         </div>
 
         {item.address && (
           <div className="flex items-start gap-2.5 min-h-[44px]">
-            <FiMapPin size={16} className="text-[var(--gold-500)] mt-[3px] shrink-0" />
-            <p className="text-[17px] leading-[1.5] text-[var(--ink-soft)] font-sans font-semibold">
+            <FiMapPin size={16} className="text-[var(--sage-deep)] mt-[3px] shrink-0" />
+            <p className="text-[16px] leading-[1.5] text-[var(--ink-soft)]">
               {String(item.address).replace(/±/g, "#")}
             </p>
           </div>
@@ -193,19 +193,19 @@ export const MlsPropertyCard = ({
         <div className="flex items-center gap-5 pt-4 border-t border-[var(--line)] text-[13px] text-[var(--ink-soft)]">
           {item.beds ? (
             <span className="inline-flex items-center gap-2">
-              <IoBedOutline size={16} className="text-[var(--gold-500)]" />
+              <IoBedOutline size={16} className="text-[var(--sage-deep)]" />
               <span>{item.beds} Beds</span>
             </span>
           ) : null}
           {item.baths ? (
             <span className="inline-flex items-center gap-2">
-              <PiBathtub size={16} className="text-[var(--gold-500)]" />
+              <PiBathtub size={16} className="text-[var(--sage-deep)]" />
               <span>{item.baths} Baths</span>
             </span>
           ) : null}
           {item.bua ? (
             <span className="inline-flex items-center gap-2">
-              <BiArea size={16} className="text-[var(--gold-500)]" />
+              <BiArea size={16} className="text-[var(--sage-deep)]" />
               <span>{Number(item.bua).toLocaleString()} SqFt</span>
             </span>
           ) : null}

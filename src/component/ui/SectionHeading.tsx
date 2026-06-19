@@ -24,13 +24,15 @@ export function SectionHeading({
   tone = "dark",
   className,
 }: SectionHeadingProps) {
-  // White-theme mapping: "dark" tone = ink text for default (white) sections;
-  // "light" tone = white text for sections sitting over dark photography.
-  const textColor = tone === "dark" ? "text-[var(--ink)]" : "text-white";
-  const mutedColor =
-    tone === "dark"
-      ? "text-[var(--ink-soft)]"
-      : "text-[rgba(255,255,255,0.72)]";
+  // "dark" tone = ink text for sand/cream sections;
+  // "light" tone = on-pine text for sections over the deep forest band or photography.
+  const isLight = tone === "light";
+  const textColor = isLight ? "text-[var(--on-pine)]" : "text-[var(--ink)]";
+  const mutedColor = isLight
+    ? "text-[var(--on-pine-soft)]"
+    : "text-[var(--ink-soft)]";
+  const eyebrowClass = isLight ? "eyebrow on-dark" : "eyebrow";
+  const ruleColor = isLight ? "bg-[var(--gold-300)]" : "bg-[var(--gold)]";
 
   const containerAlign =
     align === "center"
@@ -41,12 +43,12 @@ export function SectionHeading({
 
   return (
     <div
-      className={`flex flex-col gap-6 ${containerAlign} ${className ?? ""}`}
+      className={`flex flex-col gap-8 ${containerAlign} ${className ?? ""}`}
     >
-      <Reveal className="flex flex-col gap-4 max-w-2xl">
+      <Reveal className="flex flex-col gap-5 max-w-3xl">
         {eyebrow ? (
-          <span className="eyebrow inline-flex items-center gap-3">
-            <span className="inline-block h-px w-8 bg-[var(--gold-500)]" />
+          <span className={`${eyebrowClass} inline-flex items-center gap-4`}>
+            <span className={`inline-block h-px w-10 ${ruleColor}`} />
             {eyebrow}
           </span>
         ) : null}

@@ -61,13 +61,13 @@ const FeaturedArticleList = () => {
                         </div>
                     ) : (
                         <div className="empty-state">
-                            <p>No articles found.</p>
+                            <p>No picks just yet.</p>
                         </div>
                     )}
                 </>
             ) : (
                 <div className="empty-state">
-                    <p>No blogs found.</p>
+                    <p>No picks just yet.</p>
                 </div>
             )}
         </div>
