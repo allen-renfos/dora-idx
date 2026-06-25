@@ -1,12 +1,19 @@
 "use client";
 
 import Link from "next/link";
-import { motion, useReducedMotion } from "framer-motion";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { FiArrowDownRight } from "react-icons/fi";
 import HomeSearch from "./HomeSearch";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const MARKETS = ["Lynnwood", "Everett", "Bothell", "Edmonds", "Mukilteo", "Kirkland"];
+
+// The advisor's three promises, cycling in the hero footer band.
+const PROMISES = [
+  { title: "Quiet Representation", note: "Private, unhurried counsel, held in confidence." },
+  { title: "A Reading of the Market", note: "Pricing shaped by instinct and evidence." },
+  { title: "An Attended Close", note: "Inspectors, stylists, and counsel — held end to end." },
+];
 
 // staggered line-by-line reveal for the display headline
 const lineVariants = {
@@ -20,8 +27,19 @@ const lineVariants = {
 export default function HomeHero() {
   const [keyword, setKeyword] = useState("");
   const reduce = useReducedMotion();
+  const [promise, setPromise] = useState(0);
+  const [paused, setPaused] = useState(false);
 
   const HEADLINE = ["Homes with a quiet", "sense of arrival —"];
+
+  useEffect(() => {
+    if (paused) return;
+    const id = setInterval(
+      () => setPromise((p) => (p + 1) % PROMISES.length),
+      4500
+    );
+    return () => clearInterval(id);
+  }, [paused]);
 
   return (
     <section className="relative isolate min-h-[100svh] w-full flex flex-col overflow-hidden bg-[var(--pine)]">
@@ -40,8 +58,11 @@ export default function HomeHero() {
           />
         </div>
         {/* Warm pine wash instead of flat black */}
-        <div className="absolute inset-0 bg-gradient-to-t from-[var(--pine)] via-[var(--pine)]/45 to-[var(--pine)]/25" />
-        <div className="absolute inset-0 bg-gradient-to-r from-[var(--pine)]/70 via-transparent to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[var(--pine)] via-[var(--pine)]/65 to-[var(--pine)]/35" />
+        {/* Left-anchored scrim to seat the headline + lede over any frame */}
+        <div className="absolute inset-0 bg-gradient-to-r from-[var(--pine)]/90 via-[var(--pine)]/45 to-transparent" />
+        {/* Lower scrim reinforcing the text band */}
+        <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-[var(--pine)]/85 to-transparent" />
       </div>
 
       {/* Main content — search dock on top, headline beneath */}
@@ -103,7 +124,7 @@ export default function HomeHero() {
 
           {/* Headline + lede beneath the search */}
           <div className="mt-10 md:mt-12 max-w-[64rem]">
-            <h1 className="display-lg text-[var(--on-pine)]">
+            <h1 className="display-lg text-[var(--on-pine)] [text-shadow:0_2px_30px_rgba(15,22,18,0.55)]">
               {HEADLINE.map((line, i) => (
                 <span key={i} className="line-wrap">
                   <motion.span
@@ -133,7 +154,8 @@ export default function HomeHero() {
               initial={{ opacity: 0, y: reduce ? 0 : 18 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.9, delay: 0.7, ease: [0.16, 1, 0.3, 1] }}
-              className="lede mt-6 max-w-xl text-[var(--on-pine-soft)]"
+              className="lede mt-6 max-w-xl [text-shadow:0_1px_18px_rgba(15,22,18,0.65)]"
+            style={{ color: "var(--on-pine)", fontWeight: 400 }}
             >
               A boutique practice that pairs distinctive homes with the people who
               belong in them — guiding every move with patience, taste, and an
@@ -143,18 +165,62 @@ export default function HomeHero() {
         </div>
       </div>
 
-      {/* Bottom marquee — full-bleed market ribbon */}
-      <div className="border-t border-[var(--on-pine-faint)]/20 bg-[var(--pine)]/60 backdrop-blur-md overflow-hidden marquee-mask">
-        <div className="marquee-track py-3.5">
-          {[...MARKETS, ...MARKETS, ...MARKETS, ...MARKETS].map((m, i) => (
-            <span
-              key={i}
-              className="inline-flex items-center gap-4 px-7 text-[12px] uppercase tracking-[0.3em] text-[var(--on-pine-soft)] font-[family-name:var(--font-accent)]"
-            >
-              {m}
-              <span className="inline-block h-1 w-1 rounded-full bg-[var(--gold-300)]" />
+      {/* Bottom band — the advisor's promises, cycling */}
+      <div
+        className="relative bg-[var(--pine)]"
+        onMouseEnter={() => setPaused(true)}
+        onMouseLeave={() => setPaused(false)}
+      >
+        {/* gold hairline marking the band */}
+        <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[var(--gold)]/55 to-transparent" />
+
+        <div className="container-wide py-6 md:py-7 flex items-center justify-between gap-6">
+          <div className="flex items-center gap-5 md:gap-7 min-w-0">
+            {/* index counter */}
+            <span className="shrink-0 font-[family-name:var(--font-accent)] text-[12px] tracking-[0.3em] text-[var(--gold-300)]">
+              0{promise + 1}
+              <span className="text-[var(--on-pine-faint)]"> / 0{PROMISES.length}</span>
             </span>
-          ))}
+            <span aria-hidden className="hidden sm:block h-px w-10 bg-[var(--gold-300)]/50 shrink-0" />
+
+            {/* rotating promise */}
+            <div className="relative min-w-0 overflow-hidden">
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={promise}
+                  initial={reduce ? { opacity: 0 } : { opacity: 0, y: 12 }}
+                  animate={reduce ? { opacity: 1 } : { opacity: 1, y: 0 }}
+                  exit={reduce ? { opacity: 0 } : { opacity: 0, y: -12 }}
+                  transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                  className="flex flex-col sm:flex-row sm:items-baseline gap-x-4 gap-y-0.5 min-w-0"
+                  aria-live="polite"
+                >
+                  <span className="font-serif text-[clamp(1.15rem,1.4vw,1.6rem)] text-[var(--on-pine)] leading-tight whitespace-nowrap">
+                    {PROMISES[promise].title}
+                  </span>
+                  <span className="text-[13px] md:text-[14px] text-[var(--on-pine-soft)] truncate">
+                    {PROMISES[promise].note}
+                  </span>
+                </motion.div>
+              </AnimatePresence>
+            </div>
+          </div>
+
+          {/* progress controls */}
+          <div className="flex items-center gap-2.5 shrink-0">
+            {PROMISES.map((p, i) => (
+              <button
+                key={p.title}
+                onClick={() => setPromise(i)}
+                aria-label={`Show ${p.title}`}
+                className={`h-1.5 rounded-full transition-all duration-500 ${
+                  i === promise
+                    ? "w-7 bg-[var(--gold-300)]"
+                    : "w-1.5 bg-[var(--on-pine-faint)]/40 hover:bg-[var(--on-pine-faint)]/70"
+                }`}
+              />
+            ))}
+          </div>
         </div>
       </div>
     </section>

@@ -10,8 +10,17 @@ import {
   useAutocomplete,
   AutocompleteSuggestion,
 } from "@/services/search/AutocompleteQueries";
+import {
+  AUTOCOMPLETE_MIN_CHARS,
+  groupAutocompleteSuggestions,
+} from "@/services/search/AutocompleteServices";
 import { FilterTopProps } from "@/types/Property";
 import MLSAdvanceSearch from "./MLSAdvanceSearch";
+import {
+  DEFAULT_PROPERTY_STATUS,
+  ADVANCED_DISABLED_MESSAGE,
+  isValidAreaSearch,
+} from "./filterDefaults";
 
 const PRICE_STEPS = [
   50000, 100000, 150000, 200000, 250000, 300000, 400000, 500000, 750000,
@@ -40,6 +49,7 @@ const FilterTop = ({
 
   const [inputValue, setInputValue] = useState(searchFilters.keyword || "");
   const [showDropdown, setShowDropdown] = useState(false);
+  const [activeIndex, setActiveIndex] = useState(-1);
   const [openPopover, setOpenPopover] = useState<
     "price" | "beds" | "baths" | null
   >(null);
@@ -60,6 +70,7 @@ const FilterTop = ({
     if (!isFetching) setIsSearching(false);
   }, [isFetching]);
   const trimmedInput = inputValue.trim();
+  const canShowResults = trimmedInput.length >= AUTOCOMPLETE_MIN_CHARS;
 
   useEffect(() => {
     if (keywordFromParams) setInputValue(keywordFromParams);
@@ -79,36 +90,56 @@ const FilterTop = ({
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  // Group by category preserving the server's deterministic ranking order.
   const groupedSuggestions = useMemo(() => {
-    const visible = trimmedInput.length >= 1 ? autocompleteResults || [] : [];
-    const grouped = visible.reduce((acc, curr) => {
-      if (!acc[curr.category]) acc[curr.category] = [];
-      const dup = acc[curr.category].some(
-        (s: AutocompleteSuggestion) =>
-          s.label.toLowerCase() === curr.label.toLowerCase()
-      );
-      if (!dup) acc[curr.category].push(curr);
-      return acc;
-    }, {} as Record<string, AutocompleteSuggestion[]>);
+    const visible = canShowResults ? autocompleteResults || [] : [];
+    return groupAutocompleteSuggestions(visible);
+  }, [autocompleteResults, canShowResults]);
 
-    const priority: Record<string, number> = {
-      address: 0,
-      zip: 1,
-      zipcode: 1,
-      county: 2,
-      city: 3,
-    };
-    return Object.entries(grouped).sort(
-      ([a], [b]) =>
-        (priority[a.toLowerCase()] ?? 99) -
-        (priority[b.toLowerCase()] ?? 99)
-    );
-  }, [autocompleteResults, trimmedInput]);
+  // Flat list (in display order) for keyboard navigation across groups.
+  const flatSuggestions = useMemo(
+    () => groupedSuggestions.flatMap(([, items]) => items),
+    [groupedSuggestions]
+  );
+
+  // Reset the highlighted option whenever the result set changes.
+  useEffect(() => {
+    setActiveIndex(-1);
+  }, [flatSuggestions]);
+
+  // Only show "No matches" once a fetch settles empty for a >= 2-char term.
+  const showNoMatches =
+    canShowResults && !isFetching && flatSuggestions.length === 0;
 
   // Active states
   const isPriceActive = !!(searchFilters.price_min || searchFilters.price_max);
   const isBedActive = !!(searchFilters.bed_min || searchFilters.bed_max);
   const isBathActive = !!(searchFilters.bath_min || searchFilters.bath_max);
+
+  // Property status carries an automatic default (Active) on the /properties
+  // page. Treat it as "active" only when the user has changed it away from the
+  // default, so the default selection isn't surfaced in the search bar.
+  const isPropertyStatusCustom =
+    !!searchFilters.property_status &&
+    searchFilters.property_status !== DEFAULT_PROPERTY_STATUS;
+
+  // Advanced Search is unlocked ONLY when the main search box holds a valid
+  // area value — a city (non-numeric text) or a ZIP (5-digit / ZIP+4) — or the
+  // user has picked a resolved city/zip/county from autocomplete. Advanced
+  // filters are a refinement of that area, never a standalone global query.
+  const isAreaSelected =
+    isValidAreaSearch(searchFilters.keyword) ||
+    Boolean(searchFilters.mls_city) ||
+    Boolean(searchFilters.mls_county) ||
+    Boolean(searchFilters.zip);
+
+  // When the area is cleared, make sure no advanced control is left open.
+  useEffect(() => {
+    if (!isAreaSelected) {
+      setOpenAdvanced(false);
+    }
+  }, [isAreaSelected]);
+
   const hasAny =
     !!inputValue ||
     isPriceActive ||
@@ -116,9 +147,10 @@ const FilterTop = ({
     isBathActive ||
     !!searchFilters.property_type ||
     !!searchFilters.property_for ||
-    !!searchFilters.property_status ||
+    isPropertyStatusCustom ||
     !!(searchFilters.square_footage_min || searchFilters.square_footage_max) ||
     !!(searchFilters.mls_city || searchFilters.mls_state || searchFilters.zip) ||
+    !!searchFilters.mls_county ||
     !!searchFilters.community_amenities ||
     !!searchFilters.property_view ||
     !!searchFilters.interior_features ||
@@ -133,7 +165,7 @@ const FilterTop = ({
     isBathActive,
     !!searchFilters.property_type,
     !!searchFilters.property_for,
-    !!searchFilters.property_status,
+    isPropertyStatusCustom,
     !!(searchFilters.square_footage_min || searchFilters.square_footage_max),
     !!(searchFilters.mls_city || searchFilters.mls_state || searchFilters.zip),
     !!inputValue,
@@ -154,10 +186,16 @@ const FilterTop = ({
   };
 
   const onSuggestionClick = (s: AutocompleteSuggestion) => {
-    setInputValue(s.value);
-    handleSearch(s.value, "keyword");
     // Map autocomplete category to the correct filter field
     const cat = (s.category ?? "").toLowerCase();
+    // A listing maps to a single property — route straight to its detail page.
+    if (cat === "listing") {
+      setShowDropdown(false);
+      window.location.href = `/properties/${encodeURIComponent(s.value)}`;
+      return;
+    }
+    setInputValue(s.value);
+    handleSearch(s.value, "keyword");
     if (cat === "city") {
       handleSearch(s.value, "mls_city");
       handleSearch("", "zip");
@@ -169,6 +207,38 @@ const FilterTop = ({
       handleSearch("", "zip");
     }
     setShowDropdown(false);
+  };
+
+  const handleInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "ArrowDown" && (showDropdown || canShowResults)) {
+      e.preventDefault();
+      if (!showDropdown) setShowDropdown(true);
+      setActiveIndex((i) =>
+        flatSuggestions.length ? (i + 1) % flatSuggestions.length : -1
+      );
+      return;
+    }
+    if (e.key === "ArrowUp" && showDropdown) {
+      e.preventDefault();
+      setActiveIndex((i) =>
+        flatSuggestions.length ? (i <= 0 ? flatSuggestions.length - 1 : i - 1) : -1
+      );
+      return;
+    }
+    if (e.key === "Escape") {
+      setShowDropdown(false);
+      setActiveIndex(-1);
+      return;
+    }
+    if (e.key === "Enter") {
+      if (activeIndex >= 0 && flatSuggestions[activeIndex]) {
+        e.preventDefault();
+        onSuggestionClick(flatSuggestions[activeIndex]);
+      } else {
+        setShowDropdown(false);
+        handleSearch(inputValue, "keyword");
+      }
+    }
   };
 
   const togglePopover = (key: "price" | "beds" | "baths") => {
@@ -237,6 +307,9 @@ const FilterTop = ({
   advancedGroups.forEach(({ key, label }) => {
     const val = searchFilters[key] as string;
     if (!val) return;
+    // Hide the automatic default status selection from the bar — it remains
+    // visible and editable inside the Advanced Search modal.
+    if (key === "property_status" && val === DEFAULT_PROPERTY_STATUS) return;
     const items = val.split("|").filter(Boolean);
     if (!items.length) return;
     chips.push({
@@ -246,15 +319,15 @@ const FilterTop = ({
   });
 
   return (
-    <div className="sticky top-[68px] z-30 border-y border-[var(--line)] bg-[var(--canvas-2)]/95 backdrop-blur-xl">
+    <div className="sticky top-[68px] z-30 border-y border-[var(--line-soft)] bg-[var(--surface-obsidian)]/95 backdrop-blur-xl">
       <div className="container-wide py-4 flex flex-wrap items-center gap-3">
         {/* Search input */}
         <div
           ref={dropdownRef}
           className="relative flex-1 min-w-[260px] md:min-w-[320px]"
         >
-          <div className="flex items-center h-11 rounded-[var(--radius-pill)] bg-[var(--cream)] border border-[var(--line)] hover:border-[var(--line-medium)] focus-within:border-[var(--sage-deep)]/60 transition-colors">
-            <span className="pl-4 text-[var(--sage-deep)]">
+          <div className="flex items-center h-11 bg-[var(--surface-charcoal)] border border-[var(--line-soft)] hover:border-[var(--line-medium)] focus-within:border-[var(--gold-500)]/60 transition-colors">
+            <span className="pl-3 text-[var(--gold-500)]">
               {isSearching ? (
                 <svg className="animate-spin" width={16} height={16} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                   <circle cx="12" cy="12" r="10" strokeOpacity="0.25" />
@@ -269,15 +342,17 @@ const FilterTop = ({
               value={inputValue}
               onChange={handleInputChange}
               onFocus={() => setShowDropdown(true)}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") {
-                  setShowDropdown(false);
-                  handleSearch(inputValue, "keyword");
-                }
-              }}
+              onKeyDown={handleInputKeyDown}
               type="text"
-              placeholder="Search by city, county, or zip"
+              placeholder="Search city, county, or zip"
               autoComplete="off"
+              role="combobox"
+              aria-expanded={showDropdown && canShowResults}
+              aria-controls="mls-search-listbox"
+              aria-autocomplete="list"
+              aria-activedescendant={
+                activeIndex >= 0 ? `mls-search-option-${activeIndex}` : undefined
+              }
               className="flex-1 px-3 bg-transparent outline-none text-[15px] font-sans text-[var(--ink)] placeholder:text-[var(--ink-faint)]"
             />
             {inputValue && (
@@ -300,55 +375,63 @@ const FilterTop = ({
           </div>
 
           <AnimatePresence>
-            {showDropdown && (
+            {showDropdown && canShowResults && (
               <motion.div
                 initial={{ opacity: 0, y: -6 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -4 }}
                 transition={{ duration: 0.2 }}
-                className="absolute left-0 right-0 top-full mt-2 bg-[var(--cream)] rounded-[var(--radius-md)] shadow-[var(--shadow-lift)] z-50 max-h-[380px] overflow-y-auto custom-scrollbar border border-[var(--line)] overflow-hidden"
+                id="mls-search-listbox"
+                role="listbox"
+                className="absolute left-0 right-0 top-full mt-1 bg-[var(--cream)] shadow-[var(--shadow-lift)] z-50 max-h-[380px] overflow-y-auto custom-scrollbar border-t border-[var(--gold-500)]/30"
               >
-                {trimmedInput.length === 0 ? (
-                  <EmptyRow
-                    title="Begin typing to find a home"
-                    subtitle="Try a city, neighborhood, or zip"
-                  />
-                ) : groupedSuggestions.length > 0 ? (
+                {flatSuggestions.length > 0 ? (
                   groupedSuggestions.map(([category, suggestions]) => (
                     <div
                       key={category}
                       className="border-b last:border-0 border-[var(--line)]"
                     >
-                      <div className="px-5 py-2 bg-[var(--canvas-2)] text-[10px] text-[var(--ink-faint)] uppercase tracking-[0.24em] flex items-center justify-between font-[family-name:var(--font-accent)]">
+                      <div className="px-5 py-2 bg-[var(--canvas-2)] text-[10px] font-bold text-[var(--ink-faint)] uppercase tracking-[0.24em] flex items-center justify-between">
                         <span>{category}</span>
                         <span className="h-px flex-1 ml-4 bg-[var(--line)]" />
                       </div>
-                      {suggestions.map((s, i) => (
-                        <button
-                          key={i}
-                          type="button"
-                          onClick={() => onSuggestionClick(s)}
-                          className="w-full text-left px-5 py-3 hover:bg-[var(--canvas)] transition-colors duration-150 flex items-center gap-3"
-                        >
-                          <div className="w-8 h-8 rounded-full bg-[var(--sage)]/15 flex items-center justify-center shrink-0">
-                            <HiOutlineLocationMarker
-                              className="text-[var(--sage-deep)]"
-                              size={14}
-                            />
-                          </div>
-                          <span className="text-[14px] text-[var(--ink)] truncate">
-                            {s.label}
-                          </span>
-                        </button>
-                      ))}
+                      {suggestions.map((s) => {
+                        const flatIndex = flatSuggestions.indexOf(s);
+                        const isActive = flatIndex === activeIndex;
+                        return (
+                          <button
+                            key={flatIndex}
+                            id={`mls-search-option-${flatIndex}`}
+                            role="option"
+                            aria-selected={isActive}
+                            type="button"
+                            onMouseDown={(e) => e.preventDefault()}
+                            onMouseEnter={() => setActiveIndex(flatIndex)}
+                            onClick={() => onSuggestionClick(s)}
+                            className={`w-full text-left px-5 py-3 transition-colors duration-150 flex items-center gap-3 ${
+                              isActive ? "bg-[var(--canvas)]" : "hover:bg-[var(--canvas-2)]"
+                            }`}
+                          >
+                            <div className="w-8 h-8 rounded-full bg-[var(--sage)]/15 flex items-center justify-center shrink-0">
+                              <HiOutlineLocationMarker
+                                className="text-[var(--sage-deep)]"
+                                size={14}
+                              />
+                            </div>
+                            <span className="text-[14px] text-[var(--ink)] font-medium truncate">
+                              {s.label}
+                            </span>
+                          </button>
+                        );
+                      })}
                     </div>
                   ))
-                ) : (
+                ) : showNoMatches ? (
                   <EmptyRow
-                    title="Nothing matches that yet"
+                    title="No matches"
                     subtitle="Try a broader keyword"
                   />
-                )}
+                ) : null}
               </motion.div>
             )}
           </AnimatePresence>
@@ -357,7 +440,7 @@ const FilterTop = ({
         {/* Pill filters */}
         <div
           ref={popoverRef}
-          className="flex items-center gap-2 flex-wrap"
+          className="group relative flex items-center gap-2 flex-wrap"
         >
           <FilterPill
             label="Price"
@@ -438,21 +521,38 @@ const FilterTop = ({
             />
           </FilterPill>
 
-          <button
-            onClick={() => setOpenAdvanced(true)}
-            className="relative h-11 px-4 inline-flex items-center gap-2 bg-[var(--cream)] border border-[var(--line)] rounded-[var(--radius-pill)] hover:border-[var(--sage-deep)]/60 text-[var(--ink)] transition-colors"
-            aria-label="All filters"
-          >
-            <FiSliders size={14} className="text-[var(--sage-deep)]" />
-            <span className="text-[13px] tracking-[0.06em] font-[family-name:var(--font-accent)]">
-              All Filters
-            </span>
-            {activeCount > 0 && (
-              <span className="ml-1 inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 bg-[var(--pine)] text-[var(--on-pine)] text-[10px] font-bold rounded-full">
-                {activeCount}
+          <div className="relative group">
+            <button
+              onClick={() => isAreaSelected && setOpenAdvanced(true)}
+              disabled={!isAreaSelected}
+              aria-disabled={!isAreaSelected}
+              title={!isAreaSelected ? ADVANCED_DISABLED_MESSAGE : undefined}
+              aria-describedby={
+                !isAreaSelected ? "advanced-disabled-tooltip" : undefined
+              }
+              className="relative h-11 px-4 inline-flex items-center gap-2 bg-[var(--cream)] border border-[var(--line)] hover:border-[var(--gold-500)]/60 text-[var(--ink)] transition-colors disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:border-[var(--line)]"
+              aria-label="Advanced filters"
+            >
+              <FiSliders size={14} className="text-[var(--gold-500)]" />
+              <span className="text-[13px] font-medium tracking-[0.06em]">
+                All Filters
+              </span>
+              {activeCount > 0 && (
+                <span className="ml-1 inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 bg-[var(--gold-500)] text-[var(--surface-ink)] text-[10px] font-bold rounded-full">
+                  {activeCount}
+                </span>
+              )}
+            </button>
+            {!isAreaSelected && (
+              <span
+                role="tooltip"
+                id="advanced-disabled-tooltip"
+                className="pointer-events-none absolute left-0 top-full mt-2 z-50 w-[260px] whitespace-normal rounded bg-[var(--surface-ink)] border border-[var(--line-soft)] px-3 py-2 text-[12px] leading-snug text-[var(--ink-soft)] shadow-[var(--shadow-lift)] opacity-0 translate-y-1 transition-all duration-150 group-hover:opacity-100 group-hover:translate-y-0 group-focus-within:opacity-100 group-focus-within:translate-y-0"
+              >
+                {ADVANCED_DISABLED_MESSAGE}
               </span>
             )}
-          </button>
+          </div>
         </div>
 
         {/* Right side — actions */}
@@ -460,7 +560,7 @@ const FilterTop = ({
           {hasAny && (
             <button
               onClick={clearAll}
-              className="h-11 px-4 inline-flex items-center gap-2 text-[13px] text-[var(--sage-deep)] hover:text-[var(--ink)] transition-colors"
+              className="h-11 px-4 inline-flex items-center gap-2 text-[13px] text-[var(--gold-500)] hover:text-[var(--ink)] transition-colors"
             >
               <FiX size={14} />
               Clear
@@ -469,7 +569,7 @@ const FilterTop = ({
           <button
             onClick={handleSaveSearch}
             disabled={isSavingSearch}
-            className="h-11 px-5 inline-flex items-center gap-2 bg-[var(--pine)] hover:bg-[var(--pine-soft)] text-[var(--on-pine)] text-[12px] tracking-[0.18em] uppercase rounded-[var(--radius-pill)] disabled:opacity-60 disabled:cursor-not-allowed transition-colors font-[family-name:var(--font-accent)]"
+            className="h-11 px-5 inline-flex items-center gap-2 bg-[var(--gold-500)] hover:bg-[var(--gold-600)] text-[var(--surface-ink)] text-[12px] font-bold tracking-[0.18em] uppercase disabled:opacity-60 disabled:cursor-not-allowed transition-colors"
           >
             {isSavingSearch ? (
               <svg
@@ -496,7 +596,7 @@ const FilterTop = ({
           {chips.map((c, i) => (
             <span
               key={i}
-              className="inline-flex items-center gap-2 h-8 px-3 bg-[var(--sage)]/12 border border-[var(--sage)]/35 text-[12px] text-[var(--sage-deep)] rounded-full"
+              className="inline-flex items-center gap-2 h-8 px-3 bg-[var(--gold-500)]/10 border border-[var(--gold-500)]/30 text-[12px] text-[var(--gold-500)] rounded-full"
             >
               {c.label}
               <button
@@ -518,6 +618,7 @@ const FilterTop = ({
           onApply={() => undefined}
           handleSearch={handleSearch}
           searchFilters={searchFilters}
+          areaSelected={isAreaSelected}
         />,
         document.body
       )}
@@ -550,6 +651,8 @@ function FilterPill({
   open,
   onClick,
   children,
+  disabled = false,
+  disabledHint,
 }: {
   label: string;
   activeValue?: string;
@@ -557,15 +660,20 @@ function FilterPill({
   open: boolean;
   onClick: () => void;
   children: React.ReactNode;
+  disabled?: boolean;
+  disabledHint?: string;
 }) {
   return (
     <div className="relative">
       <button
-        onClick={onClick}
-        className={`h-11 px-4 inline-flex items-center gap-2 border rounded-[var(--radius-pill)] transition-colors text-[13px] ${
+        onClick={disabled ? undefined : onClick}
+        disabled={disabled}
+        aria-disabled={disabled}
+        title={disabled ? disabledHint : undefined}
+        className={`h-11 px-4 inline-flex items-center gap-2 border transition-colors text-[13px] disabled:opacity-50 disabled:cursor-not-allowed ${
           active
-            ? "bg-[var(--sage)]/12 border-[var(--sage-deep)]/60 text-[var(--sage-deep)]"
-            : "bg-[var(--cream)] border-[var(--line)] text-[var(--ink)] hover:border-[var(--sage-deep)]/60"
+            ? "bg-[var(--gold-500)]/10 border-[var(--gold-500)]/60 text-[var(--gold-500)]"
+            : "bg-[var(--cream)] border-[var(--line)] text-[var(--ink)] hover:border-[var(--gold-500)]/60 disabled:hover:border-[var(--line)]"
         }`}
       >
         <span className="font-medium">{activeValue || label}</span>
@@ -575,13 +683,13 @@ function FilterPill({
         />
       </button>
       <AnimatePresence>
-        {open && (
+        {!disabled && open && (
           <motion.div
             initial={{ opacity: 0, y: -6 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -4 }}
             transition={{ duration: 0.2 }}
-            className="absolute left-0 top-full mt-2 min-w-[340px] bg-[var(--cream)] border border-[var(--line)] rounded-[var(--radius-md)] shadow-[var(--shadow-lift)] z-40 p-5"
+            className="absolute left-0 top-full mt-2 min-w-[340px] bg-[var(--surface-ink)] border border-[var(--line-soft)] shadow-[var(--shadow-lift)] z-40 p-5"
           >
             {children}
           </motion.div>
@@ -618,7 +726,7 @@ function RangeSelect({
         <span className="text-[10px] uppercase tracking-[0.2em] text-[var(--ink-faint)] font-semibold">
           {minLabel}
         </span>
-        <div className="flex flex-col overflow-y-auto max-h-[220px] border border-[var(--line)] rounded-[var(--radius-sm)] custom-scrollbar">
+        <div className="flex flex-col overflow-y-auto max-h-[220px] border border-[var(--line-soft)] custom-scrollbar">
           {minOptions.map((o) => {
             const selected = o.value === min;
             return (
@@ -626,10 +734,10 @@ function RangeSelect({
                 key={o.value}
                 type="button"
                 onClick={() => onChangeMin(o.value)}
-                className={`text-left px-4 py-2.5 text-[13px] transition-colors duration-150 border-b border-[var(--line)] last:border-0 ${
+                className={`text-left px-4 py-2.5 text-[13px] transition-colors duration-150 border-b border-[var(--line-soft)] last:border-0 ${
                   selected
-                    ? "bg-[var(--pine)] text-[var(--on-pine)] font-semibold"
-                    : "text-[var(--ink-soft)] hover:bg-[var(--canvas-2)] hover:text-[var(--ink)]"
+                    ? "bg-[var(--gold-500)] text-[var(--surface-ink)] font-semibold"
+                    : "text-[var(--ink-soft)] hover:bg-[var(--surface-charcoal)] hover:text-[var(--ink)]"
                 }`}
               >
                 {o.label}
@@ -644,7 +752,7 @@ function RangeSelect({
         <span className="text-[10px] uppercase tracking-[0.2em] text-[var(--ink-faint)] font-semibold">
           {maxLabel}
         </span>
-        <div className="flex flex-col overflow-y-auto max-h-[220px] border border-[var(--line)] rounded-[var(--radius-sm)] custom-scrollbar">
+        <div className="flex flex-col overflow-y-auto max-h-[220px] border border-[var(--line-soft)] custom-scrollbar">
           {maxOptions.map((o) => {
             const selected = o.value === max;
             return (
@@ -652,10 +760,10 @@ function RangeSelect({
                 key={o.value}
                 type="button"
                 onClick={() => onChangeMax(o.value)}
-                className={`text-left px-4 py-2.5 text-[13px] transition-colors duration-150 border-b border-[var(--line)] last:border-0 ${
+                className={`text-left px-4 py-2.5 text-[13px] transition-colors duration-150 border-b border-[var(--line-soft)] last:border-0 ${
                   selected
-                    ? "bg-[var(--pine)] text-[var(--on-pine)] font-semibold"
-                    : "text-[var(--ink-soft)] hover:bg-[var(--canvas-2)] hover:text-[var(--ink)]"
+                    ? "bg-[var(--gold-500)] text-[var(--surface-ink)] font-semibold"
+                    : "text-[var(--ink-soft)] hover:bg-[var(--surface-charcoal)] hover:text-[var(--ink)]"
                 }`}
               >
                 {o.label}

@@ -2,9 +2,9 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
-import { FiArrowRight, FiArrowLeft } from "react-icons/fi";
-import { motion } from "framer-motion";
+import { useState } from "react";
+import { FiArrowRight } from "react-icons/fi";
+import { motion, useReducedMotion } from "framer-motion";
 import { useNeighborhoodList } from "@/services/neighborhood/NeighborhoodQueries";
 import { SectionHeading } from "@/component/ui/SectionHeading";
 
@@ -27,109 +27,67 @@ function resolveImage(item: Neighborhood): string {
   if (typeof img === "string" && img.trim() !== "") {
     if (img.startsWith("http")) return img;
     const base =
-      process.env.NEXT_PUBLIC_API_BASE_URL || "https://adminapi.realtipro.com/api";
+      process.env.NEXT_PUBLIC_API_BASE_URL || "https://stgadm.realtipro.com/api";
     return `${base.replace("/api", "")}/${img}`;
   }
   return fallbackImg;
 }
 
+const labelOf = (item: Neighborhood) =>
+  item.name || item.city || item.county || item.state || "Neighborhood";
+
 export default function HomeNeighborhoods() {
   const { data, isLoading } = useNeighborhoodList();
-  const neighborhoods: Neighborhood[] = data?.data || [];
-  const [canLeft, setCanLeft] = useState(false);
-  const [canRight, setCanRight] = useState(false);
-  const scrollRef = useRef<HTMLDivElement>(null);
-
-  const refresh = () => {
-    if (!scrollRef.current) return;
-    const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current;
-    setCanLeft(scrollLeft > 4);
-    setCanRight(scrollLeft + clientWidth < scrollWidth - 4);
-  };
-
-  useEffect(() => {
-    requestAnimationFrame(refresh);
-    const el = scrollRef.current;
-    if (!el) return;
-    el.addEventListener("scroll", refresh, { passive: true });
-    window.addEventListener("resize", refresh);
-    return () => {
-      el.removeEventListener("scroll", refresh);
-      window.removeEventListener("resize", refresh);
-    };
-  }, [neighborhoods.length]);
-
-  const scrollBy = (dir: 1 | -1) => {
-    if (!scrollRef.current) return;
-    const step = Math.min(scrollRef.current.clientWidth * 0.8, 560);
-    scrollRef.current.scrollBy({ left: dir * step, behavior: "smooth" });
-  };
+  const neighborhoods: Neighborhood[] = (data?.data || []).slice(0, 6);
+  const [active, setActive] = useState(0);
 
   return (
     <section className="bg-[var(--canvas)] text-[var(--ink)] section-pad relative overflow-hidden">
-      <div className="container-wide">
+      {/* oversized quiet word mark */}
+      <span
+        aria-hidden
+        className="pointer-events-none select-none absolute -bottom-16 -right-6 font-serif italic text-[clamp(7rem,16vw,15rem)] leading-none text-[var(--ink)]/[0.03]"
+      >
+        place
+      </span>
+
+      <div className="container-wide relative">
         <SectionHeading
           eyebrow="Neighborhoods"
           title={
             <>
-              Find your <em className="not-italic italic text-[var(--gold-deep)]">place</em>
+              Find your{" "}
+              <em className="not-italic italic text-[var(--gold-deep)]">place</em>
               <br />
               in the life of a place.
             </>
           }
           description="From shoreline pockets to streets with history, wander the corners we know by heart — and where we settle clients with real care."
-          align="between"
-          action={
-            <div className="flex items-center gap-3">
-              <button
-                onClick={() => scrollBy(-1)}
-                disabled={!canLeft}
-                aria-label="Scroll left"
-                className="w-12 h-12 rounded-full border border-[var(--line-medium)] flex items-center justify-center text-[var(--ink-soft)] disabled:opacity-30 disabled:cursor-not-allowed hover:border-[var(--sage-deep)] hover:text-[var(--sage-deep)] transition-colors"
-              >
-                <FiArrowLeft size={16} />
-              </button>
-              <button
-                onClick={() => scrollBy(1)}
-                disabled={!canRight}
-                aria-label="Scroll right"
-                className="w-12 h-12 rounded-full border border-[var(--line-medium)] flex items-center justify-center text-[var(--ink-soft)] disabled:opacity-30 disabled:cursor-not-allowed hover:border-[var(--sage-deep)] hover:text-[var(--sage-deep)] transition-colors"
-              >
-                <FiArrowRight size={16} />
-              </button>
-            </div>
-          }
         />
 
-        <div
-          ref={scrollRef}
-          className="mt-14 flex gap-6 overflow-x-auto hide-scrollbar snap-x snap-mandatory pb-2 -mx-[clamp(1.25rem,3vw,3rem)] px-[clamp(1.25rem,3vw,3rem)]"
-        >
-          {isLoading
-            ? Array.from({ length: 5 }).map((_, i) => (
+        <div className="mt-14">
+          {isLoading ? (
+            <div className="flex flex-col lg:flex-row gap-3 lg:h-[600px]">
+              {Array.from({ length: 5 }).map((_, i) => (
                 <div
                   key={i}
-                  className="shrink-0 snap-start w-[min(78vw,320px)] aspect-[3/4] rounded-[var(--radius-md)] bg-[var(--canvas-2)] animate-pulse"
+                  className="h-[240px] lg:h-auto lg:flex-1 rounded-[var(--radius-md)] bg-[var(--canvas-2)] animate-pulse"
                 />
-              ))
-            : neighborhoods.map((item, i) => (
-                <motion.div
-                  key={item.id}
-                  initial={{ opacity: 0, y: 24 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, amount: 0.2 }}
-                  transition={{
-                    duration: 0.7,
-                    delay: Math.min(i * 0.05, 0.3),
-                    ease: [0.16, 1, 0.3, 1],
-                  }}
-                  className="shrink-0 snap-start w-[min(78vw,320px)]"
-                >
-                  <NeighborhoodCard item={item} />
-                </motion.div>
               ))}
-
-          {!isLoading && neighborhoods.length === 0 && (
+            </div>
+          ) : neighborhoods.length ? (
+            <div className="flex flex-col lg:flex-row gap-3 lg:h-[600px]">
+              {neighborhoods.map((item, i) => (
+                <Panel
+                  key={item.id}
+                  item={item}
+                  index={i}
+                  isActive={i === active}
+                  onActivate={() => setActive(i)}
+                />
+              ))}
+            </div>
+          ) : (
             <div className="w-full py-20 text-center text-[var(--ink-faint)]">
               The map is filling in — neighborhoods coming soon.
             </div>
@@ -147,40 +105,104 @@ export default function HomeNeighborhoods() {
   );
 }
 
-function NeighborhoodCard({ item }: { item: Neighborhood }) {
-  const label =
-    item.name || item.city || item.county || item.state || "Neighborhood";
+function Panel({
+  item,
+  index,
+  isActive,
+  onActivate,
+}: {
+  item: Neighborhood;
+  index: number;
+  isActive: boolean;
+  onActivate: () => void;
+}) {
+  const reduce = useReducedMotion();
+  const label = labelOf(item);
   const href = `/properties?keyword=${encodeURIComponent(label)}`;
+  const num = String(index + 1).padStart(2, "0");
 
   return (
-    <Link
-      href={href}
-      className="group relative block aspect-[3/4] overflow-hidden rounded-[var(--radius-md)] bg-[var(--canvas-2)] border border-[var(--line)]"
-      aria-label={`Explore ${label}`}
+    <motion.div
+      onMouseEnter={onActivate}
+      animate={{ flexGrow: isActive ? 4 : 1 }}
+      transition={{ duration: reduce ? 0 : 0.7, ease: [0.16, 1, 0.3, 1] }}
+      className="relative h-[240px] lg:h-auto lg:basis-0"
     >
-      <Image
-        src={resolveImage(item)}
-        alt={label}
-        fill
-        sizes="(max-width: 768px) 78vw, 320px"
-        className="object-cover transition-transform duration-[900ms] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.08]"
-      />
-      <div className="absolute inset-0 bg-gradient-to-t from-[var(--pine)]/90 via-[var(--pine)]/25 to-transparent pointer-events-none" />
-      <div className="absolute inset-x-0 bottom-0 p-6 flex flex-col gap-3">
-        <div className="flex items-end justify-between gap-3">
-          <h3 className="font-serif text-2xl text-[var(--on-pine)] leading-tight tracking-tight">
+      <Link
+        href={href}
+        onFocus={onActivate}
+        aria-label={`Explore ${label}`}
+        className="group relative block w-full h-full overflow-hidden rounded-[var(--radius-md)] bg-[var(--canvas-2)] border border-[var(--line)] outline-none focus-visible:ring-2 focus-visible:ring-[var(--gold)]"
+      >
+        <Image
+          src={resolveImage(item)}
+          alt={label}
+          fill
+          sizes="(max-width: 1024px) 100vw, 50vw"
+          className={`object-cover transition-all duration-[900ms] ease-[cubic-bezier(0.16,1,0.3,1)] ${
+            isActive ? "scale-100" : "scale-105 grayscale-[0.25]"
+          }`}
+        />
+
+        {/* pine veil — deeper when collapsed */}
+        <div
+          className={`absolute inset-0 pointer-events-none transition-opacity duration-700 ${
+            isActive
+              ? "bg-gradient-to-t from-[var(--pine)]/90 via-[var(--pine)]/20 to-transparent"
+              : "bg-[var(--pine)]/55"
+          }`}
+        />
+
+        {/* Collapsed: vertical name label (lg only, when inactive) */}
+        <div
+          className={`absolute inset-0 hidden items-center justify-center transition-opacity duration-500 ${
+            isActive ? "lg:hidden" : "lg:flex"
+          }`}
+        >
+          <span className="[writing-mode:vertical-rl] rotate-180 font-serif text-xl text-[var(--on-pine)] tracking-wide whitespace-nowrap drop-shadow">
             {label}
-          </h3>
-          <span className="shrink-0 w-9 h-9 rounded-full border border-[rgba(241,237,227,0.3)] flex items-center justify-center text-[var(--on-pine)] group-hover:bg-[var(--gold-300)] group-hover:border-[var(--gold-300)] group-hover:text-[var(--pine)] transition-all duration-300">
-            <FiArrowRight size={14} />
+          </span>
+          <span className="absolute top-6 left-1/2 -translate-x-1/2 font-[family-name:var(--font-accent)] text-[11px] tracking-[0.25em] text-[var(--gold-300)]">
+            {num}
           </span>
         </div>
-        {item.description && (
-          <p className="text-[13px] text-[var(--on-pine-soft)] line-clamp-2 max-w-xs">
-            {item.description}
-          </p>
-        )}
-      </div>
-    </Link>
+
+        {/* Expanded content (active on lg; always on mobile) */}
+        <div
+          className={`absolute inset-x-0 bottom-0 p-6 lg:p-8 flex-col gap-3 ${
+            isActive ? "lg:flex" : "lg:hidden"
+          } flex`}
+        >
+          <span className="font-[family-name:var(--font-accent)] text-[12px] tracking-[0.3em] text-[var(--gold-300)]">
+            {num}
+          </span>
+          <div className="flex items-end justify-between gap-4">
+            <h3 className="font-serif text-[clamp(1.5rem,1.6vw+1rem,2.4rem)] text-[var(--on-pine)] leading-[1.05] tracking-tight">
+              {label}
+            </h3>
+            <span className="shrink-0 w-11 h-11 rounded-full border border-[rgba(241,237,227,0.35)] flex items-center justify-center text-[var(--on-pine)] group-hover:bg-[var(--gold-300)] group-hover:border-[var(--gold-300)] group-hover:text-[var(--pine)] transition-all duration-300">
+              <FiArrowRight size={15} />
+            </span>
+          </div>
+
+          {item.description && (
+            <motion.p
+              initial={false}
+              animate={{ opacity: isActive ? 1 : 0 }}
+              transition={{ duration: reduce ? 0 : 0.4, delay: isActive ? 0.15 : 0 }}
+              className="text-[13.5px] leading-relaxed text-[var(--on-pine-soft)] line-clamp-3 max-w-md hidden lg:block"
+            >
+              {item.description}
+            </motion.p>
+          )}
+          {/* mobile description (no fade dependency on flex grow) */}
+          {item.description && (
+            <p className="text-[13px] leading-relaxed text-[var(--on-pine-soft)] line-clamp-2 max-w-md lg:hidden">
+              {item.description}
+            </p>
+          )}
+        </div>
+      </Link>
+    </motion.div>
   );
 }

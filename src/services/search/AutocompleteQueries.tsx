@@ -5,11 +5,12 @@ import { useQuery } from "@tanstack/react-query";
 import {
   fetchAutocomplete,
   AutocompleteSuggestion,
+  AUTOCOMPLETE_MIN_CHARS,
 } from "./AutocompleteServices";
 
 export type { AutocompleteSuggestion };
 
-const MIN_CHARS = 1;
+const MIN_CHARS = AUTOCOMPLETE_MIN_CHARS;
 const DEBOUNCE_MS = 120;
 
 export const useAutocomplete = (keyword: string, debounceMs = DEBOUNCE_MS) => {
@@ -33,7 +34,9 @@ export const useAutocomplete = (keyword: string, debounceMs = DEBOUNCE_MS) => {
     placeholderData: (previousData) => previousData,
     refetchOnWindowFocus: false,
     retry: false,
-    staleTime: 1000 * 60 * 10,
-    gcTime: 1000 * 60 * 30,
+    // Short window: dedupe rapid keystrokes / Strict-Mode remounts while keeping
+    // MLS-derived suggestions fresh (inventory changes through the day).
+    staleTime: 1000 * 30,
+    gcTime: 1000 * 60 * 5,
   });
 };

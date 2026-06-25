@@ -9,17 +9,35 @@ import {
   FiDollarSign,
   FiCalendar,
   FiArrowRight,
+  FiTrash2,
 } from "react-icons/fi";
-import { useSavedSearches } from "@/services/properties/PropertyQueries";
+import toast from "react-hot-toast";
+import { useSavedSearches, useDeleteSavedSearch } from "@/services/properties/PropertyQueries";
 import { DashboardLayout } from "@/component/ui/DashboardLayout";
 
 const SAVED_FILTERS_KEY = "saved_search_filters";
 
 const SavedSearchesPage = () => {
   const { data, isLoading } = useSavedSearches();
+  const deleteSavedSearch = useDeleteSavedSearch();
   const router = useRouter();
 
   const savedSearches: any[] = data?.data || [];
+
+  const handleDelete = (e: React.MouseEvent, id: string | number) => {
+    e.stopPropagation();
+    deleteSavedSearch.mutate(id, {
+      onSuccess: () => {
+        toast.success("Saved search removed", {
+          style: { background: "#ffffff", color: "#1a1a1a", border: "1px solid #c2a878" },
+          iconTheme: { primary: "#c2a878", secondary: "#ffffff" },
+        });
+      },
+      onError: () => {
+        toast.error("Failed to delete saved search");
+      },
+    });
+  };
 
   const handleClick = (search: any) => {
     const filters = search.filters;
@@ -146,9 +164,21 @@ const SavedSearchesPage = () => {
                   <div className="w-10 h-10 rounded-full bg-[var(--canvas)] border border-[var(--line)] flex items-center justify-center text-[var(--sage-deep)]">
                     <FiBookmark size={16} />
                   </div>
-                  <span className="text-[10px] uppercase tracking-[0.22em] text-[var(--ink-faint)] font-[family-name:var(--font-accent)]">
-                    #{String(i + 1).padStart(2, "0")}
-                  </span>
+                  <button
+                    onClick={(e) => handleDelete(e, s.id)}
+                    disabled={deleteSavedSearch.isPending && deleteSavedSearch.variables === s.id}
+                    aria-label="Delete saved search"
+                    className="w-8 h-8 flex items-center justify-center text-[var(--ink-faint)] hover:text-red-500 transition-colors disabled:opacity-40"
+                  >
+                    {deleteSavedSearch.isPending && deleteSavedSearch.variables === s.id ? (
+                      <svg className="animate-spin" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                        <circle cx="12" cy="12" r="10" strokeOpacity="0.25" />
+                        <path d="M12 2a10 10 0 0 1 10 10" strokeLinecap="round" />
+                      </svg>
+                    ) : (
+                      <FiTrash2 size={15} />
+                    )}
+                  </button>
                 </div>
 
                 <h3 className="font-serif text-xl text-[var(--ink)] leading-tight line-clamp-2">

@@ -3,7 +3,8 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { FiHeart, FiSearch } from "react-icons/fi";
-import { useUserWishlist } from "@/services/profile/ProfileQueries";
+import toast from "react-hot-toast";
+import { useUserWishlist, useRemoveWishlistItem } from "@/services/profile/ProfileQueries";
 import { PropertyCard } from "@/component/properties/PropertyCard";
 import { DashboardLayout } from "@/component/ui/DashboardLayout";
 import { PropertyWishlistCard } from "@/component/properties/PropertyWishlistCard";
@@ -12,6 +13,18 @@ const FavouritesPage = () => {
   const [favorites, setFavorites] = useState<any[]>([]);
   const [count, setCount] = useState(0);
   const { data, isLoading } = useUserWishlist();
+  const removeWishlist = useRemoveWishlistItem();
+
+  const handleRemove = (wishlistId: string) => {
+    removeWishlist.mutate(wishlistId, {
+      onSuccess: () =>
+        toast.success("Removed from favourites", {
+          style: { background: "#ffffff", color: "#1a1a1a", border: "1px solid #c2a878" },
+          iconTheme: { primary: "#c2a878", secondary: "#ffffff" },
+        }),
+      onError: () => toast.error("Failed to remove listing"),
+    });
+  };
 
   useEffect(() => {
     setFavorites(data?.data || []);
@@ -55,6 +68,8 @@ const FavouritesPage = () => {
               item={item}
               hideWishlist={false}
               handleModal={() => undefined}
+              onRemove={handleRemove}
+              isRemoving={removeWishlist.isPending && removeWishlist.variables === String(item.wishlist_id)}
             />
           ))}
         </div>

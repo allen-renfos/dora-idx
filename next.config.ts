@@ -11,7 +11,7 @@ const nextConfig: import('next').NextConfig = {
   reactStrictMode: true,
   output: 'standalone',
   async rewrites() {
-    const upstreamApiBase = process.env.NEXT_API_BASE_URL || 'http://adminapi.realtipro.com';
+    const upstreamApiBase = process.env.NEXT_API_BASE_URL || 'https://stgadm.realtipro.com/api';
 
     return [
       {

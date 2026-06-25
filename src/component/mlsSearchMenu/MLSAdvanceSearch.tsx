@@ -3,49 +3,16 @@
 import { MLSAdvanceSearchProps } from "@/types/Property";
 import React, { useState, useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { FiChevronDown, FiChevronUp, FiSliders, FiX } from "react-icons/fi";
+import { FiChevronDown, FiChevronUp, FiLock, FiSliders, FiX } from "react-icons/fi";
+import { useSearchMetadata } from "@/services/search/SearchMetadataQueries";
+import type { MetadataOption } from "@/services/search/SearchMetadataServices";
 
-const PROPERTY_TYPES = [
-  "Business Opportunity", "Commercial Sale", "Apartment", "Condo", "Villa",
-  "Townhouse", "Penthouse", "Single Family", "Multi-Family", "Land", "Mobile Home", "Farm",
-];
-const PROPERTY_STATUSES = ["Active", "Contingent", "Pending"];
-const CONSTRUCTION_STATUSES = ["Ready to Move", "Under Construction", "Pre-Launch", "Off Plan"];
-const COMMUNITY_AMENITIES = [
-  "Swimming Pool", "Gym / Fitness Center", "Clubhouse", "Gated Access / Security",
-  "Children's Play Area / Park", "Tennis Courts", "Basketball Courts", "Golf Course",
-  "Jogging/Walking Trails", "BBQ / Picnic Area", "Community Garden", "Business Center",
-  "Elevator (in condos/apartments)", "Rooftop Deck", "Covered Parking / Guest Parking",
-  "Pet Area / Dog Park", "Lake / Waterfront Access", "Marina / Boat Docks",
-  "Sauna / Spa / Hot Tub", "On-site Maintenance or Management",
-];
-const PROPERTY_VIEWS = [
-  "Ocean View", "Beach View", "Lake View", "Mountain View", "City View / Skyline View",
-  "Golf Course View", "Park / Greenbelt View", "Water View (General)", "River / Canal View",
-  "Desert View", "Pool View", "Courtyard View", "Garden View", "Hills View",
-  "Panoramic View", "Bay View", "Harbor View", "Marina View", "Forest / Woods View",
-  "Pasture View", "No View / None",
-];
-const INTERIOR_FEATURES = [
-  "Hardwood Floors", "Carpet", "Tile Floors", "Marble Floors", "Granite Countertops",
-  "Quartz Countertops", "Stainless Steel Appliances", "Built-in Appliances",
-  "Walk-in Closet", "Master Suite", "En-suite Bathroom", "Jacuzzi Tub", "Walk-in Shower",
-  "Double Vanity", "Kitchen Island", "Breakfast Nook", "Formal Dining Room",
-  "Family Room", "Home Office", "Mudroom", "Laundry Room", "Pantry", "Wine Cellar",
-  "Home Theater", "Game Room", "Exercise Room", "Library/Study", "Fireplace",
-  "Ceiling Fans", "Recessed Lighting", "Crown Molding", "Bay Windows", "Skylights",
-  "French Doors", "Sliding Glass Doors", "Central Air Conditioning", "Central Heating",
-  "Smart Home Features", "Security System", "Elevator", "Loft", "Basement", "Attic", "Storage Space",
-];
-const SITE_FEATURES = [
-  "Corner Lot", "Cul-de-Sac", "Waterfront", "Greenbelt", "Paved Road",
-  "Private Driveway", "Fenced Yard", "Swimming Pool", "Outdoor Kitchen",
-  "Deck / Patio", "Solar Panels", "Sprinkler System", "Fruit Trees", "Shed / Workshop", "Guest House / ADU",
-];
-const LOT_FEATURES = [
-  "Flat / Level", "Sloped", "Wooded", "Open", "Cleared", "Flood Zone",
-  "Easement", "Corner", "Irregular Shape", "Rectangular", "Oversized", "Pie-shaped",
-];
+/**
+ * Numeric RANGE options are intrinsic numeric buckets (not MLS enumerations),
+ * so they stay client-side. Every ENUMERATED option (types, statuses, views,
+ * features, basement, sewer …) is driven by `/v1/properties/search-metadata`
+ * — we render only what the backend returns and submit the canonical value.
+ */
 const GARAGE_OPTS = ["1", "2", "3", "4", "5", "6+"].map(v => ({ value: v, label: v }));
 const LOT_SIZE_OPTS = [
   { value: "2000", label: "2,000 sq ft" }, { value: "4500", label: "4,500 sq ft" },
@@ -74,15 +41,9 @@ const YEAR_OPTS = [
   "2016", "2015", "2010", "2005", "2000", "1990", "1980", "1970", "1960", "1950", "1940", "1920", "1900",
 ].map(y => ({ value: y, label: y }));
 const STORIES_OPTS = ["1", "2", "3", "4", "5+"].map(v => ({ value: v, label: v }));
-const BASEMENT_OPTS = [
-  { value: "None", label: "None" }, { value: "Partial", label: "Partial" },
-  { value: "Full", label: "Full" }, { value: "Finished", label: "Finished" },
-  { value: "Unfinished", label: "Unfinished" }, { value: "Walk-out", label: "Walk-out" },
-];
-const SEWER_OPTS = [
-  { value: "Public Sewer", label: "Public Sewer" }, { value: "Septic Tank", label: "Septic Tank" },
-  { value: "Cesspool", label: "Cesspool" }, { value: "None", label: "None" },
-];
+
+const ADVANCED_DISABLED_MESSAGE =
+  "Enter a city, ZIP code, or neighbourhood to unlock advanced filters.";
 
 function filterMaxOpts(opts: { value: string; label: string }[], minVal: string) {
   if (!minVal) return opts;
@@ -96,8 +57,8 @@ function splitPipe(s: string | number): string[] {
 
 function SectionTitle({ children }: { children: React.ReactNode }) {
   return (
-    <h3 className="text-[11px] tracking-[0.22em] uppercase text-[var(--sage-deep)] mb-4 inline-flex items-center gap-3 font-[family-name:var(--font-accent)]">
-      <span className="inline-block h-px w-8 bg-[var(--gold)]" />
+    <h3 className="text-[11px] font-bold tracking-[0.22em] uppercase text-[var(--gold-500)] mb-4 inline-flex items-center gap-3">
+      <span className="inline-block h-px w-8 bg-[var(--gold-500)]" />
       {children}
     </h3>
   );
@@ -110,17 +71,20 @@ function Divider() {
 function Select({
   value,
   onChange,
+  disabled,
   children,
 }: {
   value: string;
   onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
+  disabled?: boolean;
   children: React.ReactNode;
 }) {
   return (
     <select
       value={value}
       onChange={onChange}
-      className="h-10 px-3 bg-[var(--canvas)] border border-[var(--line)] rounded-[var(--radius-sm)] text-[13px] text-[var(--ink)] focus:outline-none focus:border-[var(--sage-deep)]/60 transition-colors"
+      disabled={disabled}
+      className="h-10 px-3 bg-[var(--surface-charcoal)] border border-[var(--line-soft)] text-[13px] text-[var(--ink)] focus:outline-none focus:border-[var(--gold-500)]/60 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
     >
       {children}
     </select>
@@ -170,27 +134,32 @@ function TagGroup({
   selected,
   onToggle,
 }: {
-  items: string[];
+  items: MetadataOption[];
   selected: string[];
-  onToggle: (item: string) => void;
+  onToggle: (value: string) => void;
 }) {
+  if (!items.length) {
+    return (
+      <p className="text-[12px] text-[var(--ink-faint)] italic">No options available.</p>
+    );
+  }
   return (
     <div className="flex flex-wrap gap-2">
       {items.map(item => {
-        const active = selected.includes(item);
+        const active = selected.includes(item.value);
         return (
           <button
-            key={item}
+            key={item.value}
             type="button"
-            onClick={() => onToggle(item)}
-            className={`inline-flex items-center gap-1.5 h-9 px-3.5 text-[12px] tracking-wide border rounded-[var(--radius-pill)] transition-all duration-200 ${
+            onClick={() => onToggle(item.value)}
+            className={`inline-flex items-center gap-1.5 h-9 px-3.5 text-[12px] tracking-wide border transition-all duration-200 ${
               active
-                ? "bg-[var(--pine)] border-[var(--pine)] text-[var(--on-pine)]"
-                : "bg-[var(--canvas)] border-[var(--line)] text-[var(--ink-soft)] hover:border-[var(--sage-deep)]/50 hover:text-[var(--ink)]"
+                ? "bg-[var(--gold-500)]/15 border-[var(--gold-500)] text-[var(--gold-500)]"
+                : "bg-[var(--surface-charcoal)] border-[var(--line-soft)] text-[var(--ink-soft)] hover:border-[var(--gold-500)]/50 hover:text-[var(--ink)]"
             }`}
           >
-            {active && <span className="inline-block w-1.5 h-1.5 rounded-full bg-[var(--gold-300)]" />}
-            {item}
+            {active && <span className="inline-block w-1.5 h-1.5 rounded-full bg-[var(--gold-500)]" />}
+            {item.label}
           </button>
         );
       })}
@@ -212,16 +181,16 @@ function Accordion({
   children: React.ReactNode;
 }) {
   return (
-    <div className="border border-[var(--line)] rounded-[var(--radius-sm)] bg-[var(--canvas-2)] mb-3 overflow-hidden">
+    <div className="border border-[var(--line-soft)] bg-[var(--surface-obsidian)] mb-3">
       <button
         type="button"
         onClick={onToggle}
-        className="w-full flex items-center justify-between py-3.5 px-4 text-left hover:bg-black/[0.02] transition-colors"
+        className="w-full flex items-center justify-between py-3.5 px-4 text-left hover:bg-[var(--ink)]/[0.02] transition-colors"
       >
         <span className="inline-flex items-center gap-3 text-[14px] font-medium text-[var(--ink)]">
           {label}
           {count > 0 && (
-            <span className="inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 bg-[var(--pine)] text-[var(--on-pine)] text-[10px] font-bold rounded-full">
+            <span className="inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 bg-[var(--gold-500)] text-[var(--surface-ink)] text-[10px] font-bold rounded-full">
               {count}
             </span>
           )}
@@ -245,13 +214,65 @@ function Accordion({
   );
 }
 
+/**
+ * Area gate. Advanced predicates (features/size/year/lot/interior) are
+ * non-indexable on the MLS side; without a location anchor they scan millions
+ * of rows and time out. When `locked`, children are hidden and replaced with a
+ * disabled empty-state (the same copy is exposed as a tooltip on hover).
+ */
+function AdvancedGate({
+  locked,
+  children,
+}: {
+  locked: boolean;
+  children: React.ReactNode;
+}) {
+  if (!locked) return <>{children}</>;
+  return (
+    <div className="group relative" title={ADVANCED_DISABLED_MESSAGE} aria-disabled="true">
+      <div
+        className="flex items-start gap-3 border border-dashed border-[var(--line-soft)] bg-[var(--surface-charcoal)]/40 px-5 py-6 text-[var(--ink-faint)]"
+        role="note"
+      >
+        <FiLock size={16} className="mt-0.5 shrink-0 text-[var(--gold-500)]/70" />
+        <p className="text-[13px] leading-snug">{ADVANCED_DISABLED_MESSAGE}</p>
+      </div>
+    </div>
+  );
+}
+
+type Props = MLSAdvanceSearchProps & { areaSelected?: boolean };
+
 const MLSAdvanceSearch = ({
   open,
   onClose,
   onApply,
   handleSearch,
   searchFilters,
-}: MLSAdvanceSearchProps) => {
+  areaSelected = false,
+}: Props) => {
+  const { data: metadata } = useSearchMetadata();
+
+  const propertyTypeOpts = metadata?.property_types ?? [];
+  const statusOpts = metadata?.statuses ?? [];
+  const communityOpts = metadata?.community_amenities ?? [];
+  const viewOpts = metadata?.property_views ?? [];
+  const interiorOpts = metadata?.interior_features ?? [];
+  const siteOpts = metadata?.site_features ?? [];
+  const lotFeatureOpts = metadata?.lot_features ?? [];
+  const basementOpts = metadata?.basement_options ?? [];
+  const sewerOpts = metadata?.sewer_options ?? [];
+
+  // Whether the "Features & Amenities" umbrella has any populated group.
+  const hasFeatureGroups =
+    communityOpts.length > 0 ||
+    viewOpts.length > 0 ||
+    interiorOpts.length > 0 ||
+    siteOpts.length > 0 ||
+    lotFeatureOpts.length > 0;
+
+  const locked = !areaSelected;
+
   const [garageMin, setGarageMin] = useState("");
   const [garageMax, setGarageMax] = useState("");
   const [sqftMin, setSqftMin] = useState("");
@@ -267,7 +288,6 @@ const MLSAdvanceSearch = ({
   const [interiorFeats, setInteriorFeats] = useState<string[]>([]);
   const [siteFeats, setSiteFeats] = useState<string[]>([]);
   const [lotFeats, setLotFeats] = useState<string[]>([]);
-  const [constructionStatus, setConstructionStatus] = useState("");
   const [stories, setStories] = useState("");
   const [basement, setBasement] = useState("");
   const [sewer, setSewer] = useState("");
@@ -291,7 +311,6 @@ const MLSAdvanceSearch = ({
       setInteriorFeats(splitPipe(searchFilters.interior_features));
       setSiteFeats(splitPipe(searchFilters.mls_site_features));
       setLotFeats(splitPipe(searchFilters.mls_lot_feature));
-      setConstructionStatus(searchFilters.construction_status || "");
       setBasement(searchFilters.mls_basement || "");
       setSewer(searchFilters.mls_sewer || "");
     }
@@ -311,6 +330,20 @@ const MLSAdvanceSearch = ({
     };
   }, [open, onClose]);
 
+  // Helper: toggle one value within a pipe-joined multi-select field.
+  const toggleMulti = (
+    current: string[],
+    setter: React.Dispatch<React.SetStateAction<string[]>>,
+    key: keyof typeof searchFilters,
+    value: string,
+  ) => {
+    const next = current.includes(value)
+      ? current.filter(i => i !== value)
+      : [...current, value];
+    setter(next);
+    handleSearch(next.join("|"), key);
+  };
+
   const handleClear = () => {
     setGarageMin(""); setGarageMax("");
     setSqftMin(""); setSqftMax("");
@@ -320,14 +353,13 @@ const MLSAdvanceSearch = ({
     setPropTypes([]); setPropStatuses([]);
     setAmenities([]); setViews([]);
     setInteriorFeats([]); setSiteFeats([]); setLotFeats([]);
-    setConstructionStatus("");
     setBasement(""); setSewer("");
     const keys: (keyof typeof searchFilters)[] = [
       "property_type", "property_status", "community_amenities", "property_view",
       "interior_features", "mls_site_features", "mls_lot_feature",
       "garage_min", "garage_max", "square_footage_min", "square_footage_max",
       "lot_size_min", "lot_size_max", "year_built_min", "year_built_max",
-      "stories", "construction_status", "mls_basement", "mls_sewer",
+      "stories", "mls_basement", "mls_sewer",
     ];
     keys.forEach(k => handleSearch("", k));
   };
@@ -337,7 +369,7 @@ const MLSAdvanceSearch = ({
     views.length + interiorFeats.length + siteFeats.length + lotFeats.length +
     (garageMin || garageMax ? 1 : 0) + (sqftMin || sqftMax ? 1 : 0) +
     (lotMin || lotMax ? 1 : 0) + (yearMin || yearMax ? 1 : 0) +
-    (stories ? 1 : 0) + (constructionStatus ? 1 : 0) +
+    (stories ? 1 : 0) +
     (basement ? 1 : 0) + (sewer ? 1 : 0);
 
   return (
@@ -359,14 +391,14 @@ const MLSAdvanceSearch = ({
             exit={{ opacity: 0, y: 16, scale: 0.98 }}
             transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
             onClick={(e) => e.stopPropagation()}
-            className="relative w-full max-w-3xl max-h-full flex flex-col bg-[var(--cream)] border border-[var(--line)] rounded-[var(--radius-lg)] overflow-hidden shadow-[var(--shadow-lift)]"
+            className="relative w-full max-w-3xl max-h-full flex flex-col bg-[var(--surface-ink)] border border-[var(--line-soft)] shadow-[0_40px_80px_-20px_rgba(0,0,0,0.7)]"
           >
-            <div className="flex items-center justify-between px-6 md:px-8 py-5 border-b border-[var(--line)] bg-[var(--canvas-2)]">
+            <div className="flex items-center justify-between px-6 md:px-8 py-5 border-b border-[var(--line-soft)] bg-[var(--surface-obsidian)]">
               <div className="flex items-center gap-3">
-                <FiSliders size={18} className="text-[var(--sage-deep)]" />
-                <h2 className="font-serif text-xl text-[var(--ink)]">Refine Your Search</h2>
+                <FiSliders size={18} className="text-[var(--gold-500)]" />
+                <h2 className="font-serif text-xl text-[var(--ink)]">Advanced Filters</h2>
                 {totalActive > 0 && (
-                  <span className="inline-flex items-center justify-center min-w-[22px] h-6 px-2 bg-[var(--pine)] text-[var(--on-pine)] text-[11px] font-bold rounded-full">
+                  <span className="inline-flex items-center justify-center min-w-[22px] h-6 px-2 bg-[var(--gold-500)] text-[var(--surface-ink)] text-[11px] font-bold rounded-full">
                     {totalActive}
                   </span>
                 )}
@@ -381,223 +413,211 @@ const MLSAdvanceSearch = ({
             </div>
 
             <div className="flex-1 overflow-y-auto custom-scrollbar px-6 md:px-8 py-7">
-              <SectionTitle>Property Type</SectionTitle>
-              <TagGroup
-                items={PROPERTY_TYPES}
-                selected={propTypes}
-                onToggle={item => {
-                  const next = propTypes.includes(item)
-                    ? propTypes.filter(i => i !== item)
-                    : [...propTypes, item];
-                  setPropTypes(next);
-                  handleSearch(next.join("|"), "property_type");
-                }}
-              />
+              {/* Property Type — rendered only when metadata supplies options. */}
+              {propertyTypeOpts.length > 0 && (
+                <>
+                  <SectionTitle>Property Type</SectionTitle>
+                  <TagGroup
+                    items={propertyTypeOpts}
+                    selected={propTypes}
+                    onToggle={value =>
+                      toggleMulti(propTypes, setPropTypes, "property_type", value)
+                    }
+                  />
+                  <Divider />
+                </>
+              )}
 
-              <Divider />
+              {/* Property Status — rendered only when metadata supplies options. */}
+              {statusOpts.length > 0 && (
+                <>
+                  <SectionTitle>Property Status</SectionTitle>
+                  <TagGroup
+                    items={statusOpts}
+                    selected={propStatuses}
+                    onToggle={value =>
+                      toggleMulti(propStatuses, setPropStatuses, "property_status", value)
+                    }
+                  />
+                  <Divider />
+                </>
+              )}
 
-              <SectionTitle>Property Status</SectionTitle>
-              <TagGroup
-                items={PROPERTY_STATUSES}
-                selected={propStatuses}
-                onToggle={item => {
-                  const next = propStatuses.includes(item)
-                    ? propStatuses.filter(i => i !== item)
-                    : [...propStatuses, item];
-                  setPropStatuses(next);
-                  handleSearch(next.join("|"), "property_status");
-                }}
-              />
-
-              <Divider />
-
-              <SectionTitle>Construction</SectionTitle>
-              <TagGroup
-                items={CONSTRUCTION_STATUSES}
-                selected={constructionStatus ? [constructionStatus] : []}
-                onToggle={item => {
-                  const val = constructionStatus === item ? "" : item;
-                  setConstructionStatus(val);
-                  handleSearch(val, "construction_status");
-                }}
-              />
-
-              <Divider />
-
+              {/* Size & Space — numeric ranges are backend-supported (not metadata
+                  enums); basement/sewer selects appear only when metadata has them. */}
               <SectionTitle>Size &amp; Space</SectionTitle>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                <RangeSelect
-                  label="Garage Spaces"
-                  opts={GARAGE_OPTS}
-                  minVal={garageMin}
-                  maxVal={garageMax}
-                  onMinChange={v => { setGarageMin(v); handleSearch(v, "garage_min"); }}
-                  onMaxChange={v => { setGarageMax(v); handleSearch(v, "garage_max"); }}
-                />
-                <RangeSelect
-                  label="Square Footage"
-                  opts={SQ_FT_OPTS}
-                  minVal={sqftMin}
-                  maxVal={sqftMax}
-                  onMinChange={v => { setSqftMin(v); handleSearch(v, "square_footage_min"); }}
-                  onMaxChange={v => { setSqftMax(v); handleSearch(v, "square_footage_max"); }}
-                />
-                <RangeSelect
-                  label="Lot Size"
-                  opts={LOT_SIZE_OPTS}
-                  minVal={lotMin}
-                  maxVal={lotMax}
-                  onMinChange={v => { setLotMin(v); handleSearch(v, "lot_size_min"); }}
-                  onMaxChange={v => { setLotMax(v); handleSearch(v, "lot_size_max"); }}
-                />
-                <RangeSelect
-                  label="Year Built"
-                  opts={YEAR_OPTS}
-                  minVal={yearMin}
-                  maxVal={yearMax}
-                  onMinChange={v => { setYearMin(v); handleSearch(v, "year_built_min"); }}
-                  onMaxChange={v => { setYearMax(v); handleSearch(v, "year_built_max"); }}
-                />
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mt-5">
-                <div className="flex flex-col gap-2">
-                  <label className="text-[10px] uppercase tracking-[0.22em] text-[var(--ink-faint)]">Stories</label>
-                  <Select
-                    value={stories}
-                    onChange={e => { setStories(e.target.value); handleSearch(e.target.value, "stories"); }}
-                  >
-                    <option value="">Any</option>
-                    {STORIES_OPTS.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
-                  </Select>
+              <AdvancedGate locked={locked}>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                  <RangeSelect
+                    label="Garage Spaces"
+                    opts={GARAGE_OPTS}
+                    minVal={garageMin}
+                    maxVal={garageMax}
+                    onMinChange={v => { setGarageMin(v); handleSearch(v, "garage_min"); }}
+                    onMaxChange={v => { setGarageMax(v); handleSearch(v, "garage_max"); }}
+                  />
+                  <RangeSelect
+                    label="Square Footage"
+                    opts={SQ_FT_OPTS}
+                    minVal={sqftMin}
+                    maxVal={sqftMax}
+                    onMinChange={v => { setSqftMin(v); handleSearch(v, "square_footage_min"); }}
+                    onMaxChange={v => { setSqftMax(v); handleSearch(v, "square_footage_max"); }}
+                  />
+                  <RangeSelect
+                    label="Lot Size"
+                    opts={LOT_SIZE_OPTS}
+                    minVal={lotMin}
+                    maxVal={lotMax}
+                    onMinChange={v => { setLotMin(v); handleSearch(v, "lot_size_min"); }}
+                    onMaxChange={v => { setLotMax(v); handleSearch(v, "lot_size_max"); }}
+                  />
+                  <RangeSelect
+                    label="Year Built"
+                    opts={YEAR_OPTS}
+                    minVal={yearMin}
+                    maxVal={yearMax}
+                    onMinChange={v => { setYearMin(v); handleSearch(v, "year_built_min"); }}
+                    onMaxChange={v => { setYearMax(v); handleSearch(v, "year_built_max"); }}
+                  />
                 </div>
-                <div className="flex flex-col gap-2">
-                  <label className="text-[10px] uppercase tracking-[0.22em] text-[var(--ink-faint)]">Basement</label>
-                  <Select
-                    value={basement}
-                    onChange={e => { setBasement(e.target.value); handleSearch(e.target.value, "mls_basement"); }}
-                  >
-                    <option value="">Any</option>
-                    {BASEMENT_OPTS.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
-                  </Select>
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mt-5">
+                  <div className="flex flex-col gap-2">
+                    <label className="text-[10px] uppercase tracking-[0.22em] text-[var(--ink-faint)]">Stories</label>
+                    <Select
+                      value={stories}
+                      onChange={e => { setStories(e.target.value); handleSearch(e.target.value, "stories"); }}
+                    >
+                      <option value="">Any</option>
+                      {STORIES_OPTS.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
+                    </Select>
+                  </div>
+                  {basementOpts.length > 0 && (
+                    <div className="flex flex-col gap-2">
+                      <label className="text-[10px] uppercase tracking-[0.22em] text-[var(--ink-faint)]">Basement</label>
+                      <Select
+                        value={basement}
+                        onChange={e => { setBasement(e.target.value); handleSearch(e.target.value, "mls_basement"); }}
+                      >
+                        <option value="">Any</option>
+                        {basementOpts.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
+                      </Select>
+                    </div>
+                  )}
+                  {sewerOpts.length > 0 && (
+                    <div className="flex flex-col gap-2">
+                      <label className="text-[10px] uppercase tracking-[0.22em] text-[var(--ink-faint)]">Sewer</label>
+                      <Select
+                        value={sewer}
+                        onChange={e => { setSewer(e.target.value); handleSearch(e.target.value, "mls_sewer"); }}
+                      >
+                        <option value="">Any</option>
+                        {sewerOpts.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
+                      </Select>
+                    </div>
+                  )}
                 </div>
-                <div className="flex flex-col gap-2">
-                  <label className="text-[10px] uppercase tracking-[0.22em] text-[var(--ink-faint)]">Sewer</label>
-                  <Select
-                    value={sewer}
-                    onChange={e => { setSewer(e.target.value); handleSearch(e.target.value, "mls_sewer"); }}
-                  >
-                    <option value="">Any</option>
-                    {SEWER_OPTS.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
-                  </Select>
-                </div>
-              </div>
+              </AdvancedGate>
 
-              <Divider />
+              {/* Features & Amenities — entire section hidden if no group has options. */}
+              {hasFeatureGroups && (
+                <>
+                  <Divider />
+                  <SectionTitle>Features &amp; Amenities</SectionTitle>
+                  <AdvancedGate locked={locked}>
+                    {communityOpts.length > 0 && (
+                      <Accordion
+                        label="Community Amenities"
+                        count={amenities.length}
+                        open={openAcc === "amenities"}
+                        onToggle={() => setOpenAcc(openAcc === "amenities" ? null : "amenities")}
+                      >
+                        <TagGroup
+                          items={communityOpts}
+                          selected={amenities}
+                          onToggle={value =>
+                            toggleMulti(amenities, setAmenities, "community_amenities", value)
+                          }
+                        />
+                      </Accordion>
+                    )}
 
-              <SectionTitle>Features &amp; Amenities</SectionTitle>
+                    {viewOpts.length > 0 && (
+                      <Accordion
+                        label="Property View"
+                        count={views.length}
+                        open={openAcc === "views"}
+                        onToggle={() => setOpenAcc(openAcc === "views" ? null : "views")}
+                      >
+                        <TagGroup
+                          items={viewOpts}
+                          selected={views}
+                          onToggle={value => toggleMulti(views, setViews, "property_view", value)}
+                        />
+                      </Accordion>
+                    )}
 
-              <Accordion
-                label="Community Amenities"
-                count={amenities.length}
-                open={openAcc === "amenities"}
-                onToggle={() => setOpenAcc(openAcc === "amenities" ? null : "amenities")}
-              >
-                <TagGroup
-                  items={COMMUNITY_AMENITIES}
-                  selected={amenities}
-                  onToggle={item => {
-                    const next = amenities.includes(item)
-                      ? amenities.filter(i => i !== item)
-                      : [...amenities, item];
-                    setAmenities(next);
-                    handleSearch(next.join("|"), "community_amenities");
-                  }}
-                />
-              </Accordion>
+                    {interiorOpts.length > 0 && (
+                      <Accordion
+                        label="Interior Features"
+                        count={interiorFeats.length}
+                        open={openAcc === "interior"}
+                        onToggle={() => setOpenAcc(openAcc === "interior" ? null : "interior")}
+                      >
+                        <TagGroup
+                          items={interiorOpts}
+                          selected={interiorFeats}
+                          onToggle={value =>
+                            toggleMulti(interiorFeats, setInteriorFeats, "interior_features", value)
+                          }
+                        />
+                      </Accordion>
+                    )}
 
-              <Accordion
-                label="Property View"
-                count={views.length}
-                open={openAcc === "views"}
-                onToggle={() => setOpenAcc(openAcc === "views" ? null : "views")}
-              >
-                <TagGroup
-                  items={PROPERTY_VIEWS}
-                  selected={views}
-                  onToggle={item => {
-                    const next = views.includes(item)
-                      ? views.filter(i => i !== item)
-                      : [...views, item];
-                    setViews(next);
-                    handleSearch(next.join("|"), "property_view");
-                  }}
-                />
-              </Accordion>
+                    {siteOpts.length > 0 && (
+                      <Accordion
+                        label="Site / Exterior Features"
+                        count={siteFeats.length}
+                        open={openAcc === "site"}
+                        onToggle={() => setOpenAcc(openAcc === "site" ? null : "site")}
+                      >
+                        <TagGroup
+                          items={siteOpts}
+                          selected={siteFeats}
+                          onToggle={value =>
+                            toggleMulti(siteFeats, setSiteFeats, "mls_site_features", value)
+                          }
+                        />
+                      </Accordion>
+                    )}
 
-              <Accordion
-                label="Interior Features"
-                count={interiorFeats.length}
-                open={openAcc === "interior"}
-                onToggle={() => setOpenAcc(openAcc === "interior" ? null : "interior")}
-              >
-                <TagGroup
-                  items={INTERIOR_FEATURES}
-                  selected={interiorFeats}
-                  onToggle={item => {
-                    const next = interiorFeats.includes(item)
-                      ? interiorFeats.filter(i => i !== item)
-                      : [...interiorFeats, item];
-                    setInteriorFeats(next);
-                    handleSearch(next.join("|"), "interior_features");
-                  }}
-                />
-              </Accordion>
-
-              <Accordion
-                label="Site Features"
-                count={siteFeats.length}
-                open={openAcc === "site"}
-                onToggle={() => setOpenAcc(openAcc === "site" ? null : "site")}
-              >
-                <TagGroup
-                  items={SITE_FEATURES}
-                  selected={siteFeats}
-                  onToggle={item => {
-                    const next = siteFeats.includes(item)
-                      ? siteFeats.filter(i => i !== item)
-                      : [...siteFeats, item];
-                    setSiteFeats(next);
-                    handleSearch(next.join("|"), "mls_site_features");
-                  }}
-                />
-              </Accordion>
-
-              <Accordion
-                label="Lot Features"
-                count={lotFeats.length}
-                open={openAcc === "lot"}
-                onToggle={() => setOpenAcc(openAcc === "lot" ? null : "lot")}
-              >
-                <TagGroup
-                  items={LOT_FEATURES}
-                  selected={lotFeats}
-                  onToggle={item => {
-                    const next = lotFeats.includes(item)
-                      ? lotFeats.filter(i => i !== item)
-                      : [...lotFeats, item];
-                    setLotFeats(next);
-                    handleSearch(next.join("|"), "mls_lot_feature");
-                  }}
-                />
-              </Accordion>
+                    {lotFeatureOpts.length > 0 && (
+                      <Accordion
+                        label="Lot Features"
+                        count={lotFeats.length}
+                        open={openAcc === "lot"}
+                        onToggle={() => setOpenAcc(openAcc === "lot" ? null : "lot")}
+                      >
+                        <TagGroup
+                          items={lotFeatureOpts}
+                          selected={lotFeats}
+                          onToggle={value =>
+                            toggleMulti(lotFeats, setLotFeats, "mls_lot_feature", value)
+                          }
+                        />
+                      </Accordion>
+                    )}
+                  </AdvancedGate>
+                </>
+              )}
             </div>
 
-            <div className="flex items-center justify-between gap-3 px-6 md:px-8 py-4 border-t border-[var(--line)] bg-[var(--canvas-2)]">
+            <div className="flex items-center justify-between gap-3 px-6 md:px-8 py-4 border-t border-[var(--line-soft)] bg-[var(--surface-obsidian)]">
               <button
                 type="button"
                 onClick={handleClear}
-                className="text-[12px] tracking-[0.18em] uppercase text-[var(--ink-soft)] hover:text-[var(--sage-deep)] transition-colors font-[family-name:var(--font-accent)]"
+                className="text-[12px] font-semibold tracking-[0.18em] uppercase text-[var(--ink-soft)] hover:text-[var(--gold-500)] transition-colors"
               >
                 Clear all
               </button>
@@ -608,7 +628,7 @@ const MLSAdvanceSearch = ({
               >
                 View results
                 {totalActive > 0 && (
-                  <span className="ml-1 inline-flex items-center justify-center min-w-[18px] h-5 px-1.5 bg-[var(--on-pine)]/20 text-[var(--on-pine)] text-[10px] font-bold rounded-full">
+                  <span className="ml-1 inline-flex items-center justify-center min-w-[18px] h-5 px-1.5 bg-[var(--surface-ink)] text-[var(--gold-500)] text-[10px] font-bold rounded-full">
                     {totalActive}
                   </span>
                 )}

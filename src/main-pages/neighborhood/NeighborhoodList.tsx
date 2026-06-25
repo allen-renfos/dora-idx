@@ -31,7 +31,7 @@ function resolveImage(item: Neighborhood): string {
   if (typeof img === "string" && img.trim() !== "") {
     if (img.startsWith("http")) return img;
     const base =
-      process.env.NEXT_PUBLIC_API_BASE_URL || "https://adminapi.realtipro.com/api";
+      process.env.NEXT_PUBLIC_API_BASE_URL || "https://stgadm.realtipro.com/api";
     return `${base.replace("/api", "")}/${img}`;
   }
   return fallbackImg;

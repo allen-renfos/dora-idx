@@ -20,14 +20,9 @@ export const postUserLogout = async () => {
   const response = await axiosInstance.post(`/customer/logout`);
   return response.data;
 }
-export const removeWishlistItem = async (id: string) => {
-
-  try {
-    const response = await axiosInstance.delete('/v1/customer/property/wishlist/' + id);
-    return response.data;
-  } catch (error) {
-    throw error;
-  }
+export const removeWishlistItem = async (wishlistId: string) => {
+  const response = await axiosInstance.delete(`/v1/customer/property/wishlist/${wishlistId}`);
+  return response.data;
 };
 
 export const updateUserProfile = async (data: any) => {

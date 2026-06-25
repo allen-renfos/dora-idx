@@ -1,9 +1,11 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { ImageGalleryModal } from "./ImageGalleryModal";
 import { FiChevronLeft, FiChevronRight, FiMaximize2 } from "react-icons/fi";
+import { normalizePropertyDetails } from "@/services/properties/normalizePropertyDetails";
+import type { PropertyDetails } from "@/types/Property";
 
 interface Props {
   property?: any;
@@ -12,16 +14,17 @@ interface Props {
 
 export const SinglePropertyImageSection = ({ property: prop }: Props) => {
   const property = prop;
-  const rawImages: string[] = property?.images ?? property?.photos ?? [];
-  const coverImage: string | undefined = property?.cover_photo || undefined;
-  const images: string[] = coverImage && !rawImages.includes(coverImage)
-    ? [coverImage, ...rawImages]
-    : rawImages;
-  const originatingSystemName =
-    property?.originatingsystemname ||
-    property?.originatingSystemName ||
-    property?.OriginatingSystemName ||
-    property?.mls_originating_system_name;
+  const details: PropertyDetails = useMemo(
+    () => normalizePropertyDetails(property),
+    [property]
+  );
+
+  const canShowPhotos =
+    details.compliance.canShowPrimaryPhoto ||
+    details.compliance.canShowExtraPhotos;
+  const images: string[] = canShowPhotos ? details.media.images : [];
+  // Extra (sidebar) photos may be independently restricted.
+  const canShowExtraPhotos = details.compliance.canShowExtraPhotos;
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -49,14 +52,14 @@ export const SinglePropertyImageSection = ({ property: prop }: Props) => {
         )
       : [];
 
-  const mustRemovePhotos =
-    property?.NWM_IDXMustRemovePhotosYN === "true" ||
-    property?.NWM_IDXMustRemovePhotosYN === true;
-  const rawDesc = property?.listing_description;
-  const listingAttribution =
-    rawDesc && typeof rawDesc === "object" && !Array.isArray(rawDesc)
-      ? (rawDesc as { listed_with?: string; logo?: string; mls_name?: string })
-      : null;
+  const mustRemovePhotos = !canShowExtraPhotos;
+  const attribution = details.attribution;
+  const hasAttribution =
+    Boolean(attribution.officeTag) ||
+    Boolean(attribution.mlsTag) ||
+    Boolean(attribution.fullName) ||
+    Boolean(attribution.name) ||
+    Boolean(attribution.logo);
 
   return (
     <>
@@ -75,7 +78,7 @@ export const SinglePropertyImageSection = ({ property: prop }: Props) => {
                 {images[currentIndex] && !mainImgError ? (
                   <Image
                     src={images[currentIndex]}
-                    alt={`${property?.address || "Property"} photo ${currentIndex + 1}`}
+                    alt={`${details.address || "Property"} photo ${currentIndex + 1}`}
                     fill
                     priority
                     sizes="(max-width: 1024px) 100vw, 72vw"
@@ -98,14 +101,14 @@ export const SinglePropertyImageSection = ({ property: prop }: Props) => {
                     <button
                       onClick={prev}
                       aria-label="Previous photo"
-                      className="absolute left-4 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-black/55 backdrop-blur-md border border-white/15 text-white hover:bg-[var(--pine)] hover:text-[var(--on-pine)] hover:border-[var(--pine)] transition-colors flex items-center justify-center"
+                      className="absolute left-4 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-black/55 backdrop-blur-md border border-white/15 text-white hover:bg-[var(--gold-500)] hover:text-[var(--surface-ink)] hover:border-[var(--gold-500)] transition-colors flex items-center justify-center"
                     >
                       <FiChevronLeft size={20} />
                     </button>
                     <button
                       onClick={next}
                       aria-label="Next photo"
-                      className="absolute right-4 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-black/55 backdrop-blur-md border border-white/15 text-white hover:bg-[var(--pine)] hover:text-[var(--on-pine)] hover:border-[var(--pine)] transition-colors flex items-center justify-center"
+                      className="absolute right-4 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-black/55 backdrop-blur-md border border-white/15 text-white hover:bg-[var(--gold-500)] hover:text-[var(--surface-ink)] hover:border-[var(--gold-500)] transition-colors flex items-center justify-center"
                     >
                       <FiChevronRight size={20} />
                     </button>
@@ -119,7 +122,7 @@ export const SinglePropertyImageSection = ({ property: prop }: Props) => {
                       e.stopPropagation();
                       setIsModalOpen(true);
                     }}
-                    className="absolute top-4 right-4 inline-flex items-center gap-2 px-4 py-2 bg-black/65 backdrop-blur-md border border-white/15 text-white text-[12px] font-semibold tracking-[0.14em] uppercase hover:bg-[var(--pine)] hover:text-[var(--on-pine)] hover:border-[var(--pine)] transition-colors"
+                    className="absolute top-4 right-4 inline-flex items-center gap-2 px-4 py-2 bg-black/65 backdrop-blur-md border border-white/15 text-white text-[12px] font-semibold tracking-[0.14em] uppercase hover:bg-[var(--gold-500)] hover:text-[var(--surface-ink)] hover:border-[var(--gold-500)] transition-colors"
                   >
                     <FiMaximize2 size={14} />
                     View all {images.length}
@@ -190,56 +193,37 @@ export const SinglePropertyImageSection = ({ property: prop }: Props) => {
             </div>
           )}
 
-          {/* Listing attribution (object form) */}
-          {listingAttribution && (
+          {/* Listing attribution (MLS-compliant) */}
+          {hasAttribution && (
             <div className="mt-4 flex flex-col gap-1">
-              {listingAttribution.listed_with && (
+              {attribution.officeTag && (
                 <span className="text-[13px] font-semibold text-[var(--ink-soft)]">
-                  <span className="font-normal text-[var(--ink-faint)]">Listed by </span>
-                  {listingAttribution.listed_with}
+                  {attribution.officeTag}
                 </span>
               )}
-              <div className="flex items-center gap-2">
-                <span className="text-[12px] text-[var(--ink-faint)]">Provided courtesy of</span>
-                {listingAttribution.logo && (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img
-                    src={listingAttribution.logo}
-                    alt={listingAttribution.mls_name || "MLS"}
-                    className="h-4 object-contain"
-                    referrerPolicy="no-referrer"
-                  />
-                )}
-                {listingAttribution.mls_name && (
-                  <span className="text-[12px] text-[var(--ink-faint)]">
-                    {listingAttribution.mls_name}
-                  </span>
-                )}
-              </div>
+              {(attribution.mlsTag || attribution.fullName || attribution.name || attribution.logo) && (
+                <div className="flex items-center gap-2">
+                  {(attribution.mlsTag ||
+                    attribution.fullName ||
+                    attribution.name) && (
+                    <span className="text-[12px] text-[var(--ink-faint)]">
+                      {attribution.mlsTag ||
+                        `Provided courtesy of ${attribution.fullName || attribution.name}`}
+                    </span>
+                  )}
+                  {attribution.logo && (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img
+                      src={attribution.logo}
+                      alt={attribution.fullName || attribution.name || "MLS"}
+                      className="h-4 object-contain"
+                      referrerPolicy="no-referrer"
+                    />
+                  )}
+                </div>
+              )}
             </div>
           )}
-
-
-          {/* Listing attribution */}
-          {/* {(property?.mls_list_agent || property?.ListOfficeName || originatingSystemName) && (
-            <div className="mt-4 flex flex-wrap items-center gap-x-2 gap-y-1 text-[13px] text-white/55">
-              {(property?.mls_list_agent || property?.ListOfficeName) && (
-                <span>
-                  Listed by
-                  {property?.mls_list_agent ? ` ${property.mls_list_agent}` : ""}
-                  {property?.ListOfficeName ? ` with ${property.ListOfficeName}` : ""}
-                </span>
-              )}
-              {originatingSystemName && (
-                <>
-                  {(property?.mls_list_agent || property?.ListOfficeName) && (
-                    <span className="text-white/25">·</span>
-                  )}
-                  <span className="text-white/45">{originatingSystemName}</span>
-                </>
-              )}
-            </div>
-          )} */}
         </div>
       </section>
 
@@ -261,7 +245,7 @@ function EmptyGallery() {
         height="56"
         viewBox="0 0 24 24"
         fill="none"
-        stroke="var(--gold-deep)"
+        stroke="var(--gold-500)"
         strokeWidth="1.2"
         strokeLinecap="round"
         strokeLinejoin="round"
@@ -284,7 +268,7 @@ function EmptyGalleryInner() {
         height="48"
         viewBox="0 0 24 24"
         fill="none"
-        stroke="var(--gold-deep)"
+        stroke="var(--gold-500)"
         strokeWidth="1.3"
         strokeLinecap="round"
         strokeLinejoin="round"

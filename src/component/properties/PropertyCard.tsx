@@ -11,6 +11,7 @@ import { BiArea } from "react-icons/bi";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import toast from "react-hot-toast";
+import { ListingTags } from "@/component/sharable/ListingTag";
 
 interface PropertyCardProps {
   item: any;
@@ -72,8 +73,8 @@ export const PropertyCard = ({ item, handleModal, hideWishlist }: PropertyCardPr
   return (
     <article
       onClick={handleCardClick}
-      className="group relative flex flex-col h-full cursor-pointer bg-[var(--surface)] border border-[var(--line)] hover:border-[var(--accent)]/60 hover:shadow-[var(--shadow-soft)] transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]"
-      style={{ borderRadius: "var(--radius-sm)" }}
+      className="group relative flex flex-col h-full cursor-pointer overflow-hidden bg-[var(--surface)] border border-[var(--line)] hover:border-[var(--accent)]/60 hover:shadow-[var(--shadow-soft)] transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]"
+      style={{ borderRadius: "var(--radius-md)" }}
     >
       {/* Image */}
       <div className="relative overflow-hidden aspect-[4/3] bg-[var(--surface-charcoal)]">
@@ -111,15 +112,8 @@ export const PropertyCard = ({ item, handleModal, hideWishlist }: PropertyCardPr
         {/* Gradient veil */}
         <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-black/5 to-transparent pointer-events-none" />
 
-        {/* Status Badge */}
-        {item.property_status && (
-          <span
-            className="absolute top-4 left-4 px-3 py-1.5 text-[10px] font-bold tracking-[0.16em] uppercase bg-[var(--ink)] text-white"
-            style={{ borderRadius: "var(--radius-xs)" }}
-          >
-            {item.property_status}
-          </span>
-        )}
+        {/* Status / marketing tags (API-provided, ordered, max 2) */}
+        <ListingTags tags={item.tags} className="absolute top-4 left-4 z-10" />
 
         {/* Favorite */}
         {!hideWishlist && (

@@ -8,6 +8,7 @@ import { BiArea } from "react-icons/bi";
 import { FiHeart, FiMapPin } from "react-icons/fi";
 import { FaHeart } from "react-icons/fa";
 import { useUserWishlist } from "@/services/profile/ProfileQueries";
+import { ListingTags } from "@/component/sharable/ListingTag";
 
 interface PropertyCardProps {
   item: any;
@@ -123,14 +124,8 @@ export const MlsPropertyCard = ({
 
         <div className="absolute inset-0 bg-gradient-to-t from-[var(--pine)]/55 via-[var(--pine)]/5 to-transparent pointer-events-none" />
 
-        {item.status && (
-          <span
-            className="absolute top-4 left-4 px-3 py-1.5 text-[10px] tracking-[0.18em] uppercase bg-[var(--pine)] text-[var(--on-pine)] font-[family-name:var(--font-accent)]"
-            style={{ borderRadius: "var(--radius-pill)" }}
-          >
-            {item.status}
-          </span>
-        )}
+        {/* Status / marketing tags (API-provided, ordered, max 2) */}
+        <ListingTags tags={item.tags} className="absolute top-4 left-4 z-10" />
 
         <button
           onClick={handleAddWishlist}

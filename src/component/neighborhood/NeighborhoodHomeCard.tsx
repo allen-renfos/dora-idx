@@ -20,7 +20,7 @@ export const NeighborhoodHomeCard = ({ item }: NeighborhoodHomeCardProps) => {
       }
       const baseUrl =
         process.env.NEXT_PUBLIC_API_BASE_URL ||
-        "https://adminapi.realtipro.com/api";
+        "https://stgadm.realtipro.com/api";
       const apiBaseUrl = baseUrl.replace("/api", "");
       return `${apiBaseUrl}/${img}`;
     }

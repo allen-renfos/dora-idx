@@ -9,8 +9,6 @@ import toast from "react-hot-toast";
 import { motion } from "framer-motion";
 import {
   FiHeart,
-  FiPhone,
-  FiMail,
   FiMapPin,
   FiEdit2,
   FiClock,
@@ -26,43 +24,28 @@ import {
 import { useUserWishlist } from "@/services/profile/ProfileQueries";
 import { PropertyEnquiryModal } from "./PropertyEnquiryModal";
 import { SharePopup } from "./SharePopup";
+import { MailAppPopup } from "./MailAppPopup";
+import { CallAppPopup } from "./CallAppPopup";
+import { AddToCalendar } from "./AddToCalendar";
+import { buildOpenHouseEvent } from "@/helpers/openHouseEvent";
 import LoginModal from "@/main-pages/auth/LoginModal";
+import { normalizePropertyDetails } from "@/services/properties/normalizePropertyDetails";
+import type { PropertyDetails, PropertyOpenHouse } from "@/types/Property";
 
 const LocalInformation = dynamic(() => import("./LocalInformation"), {
   ssr: false,
 });
 
-const canPinOnMap = (value: unknown): boolean => {
-  if (value === false || value === 0) return false;
-  if (typeof value === "string") {
-    const n = value.trim().toLowerCase();
-    return n !== "false" && n !== "0";
-  }
-  return true;
-};
-
 interface Props {
   property?: any;
 }
 
-const parseJsonArray = (val: any): string => {
-  if (val === null || val === undefined || val === "") return "—";
-  let base = "";
-  if (Array.isArray(val)) base = val.join(", ");
-  else if (typeof val === "string") {
-    try {
-      const p = JSON.parse(val);
-      if (Array.isArray(p)) base = p.join(", ");
-      else base = val;
-    } catch {
-      base = val;
-    }
-  } else base = String(val);
-  return base.replace(/,([^\s\n])/g, ", $1");
-};
-
 export const SinglePropertyDetails = ({ property: prop }: Props) => {
   const property = prop;
+  const details: PropertyDetails = useMemo(
+    () => normalizePropertyDetails(property),
+    [property]
+  );
   const queryClient = useQueryClient();
   const { name, profile_image, phone, email } = useNameContext();
   const { data: wishlistData } = useUserWishlist();
@@ -101,7 +84,7 @@ export const SinglePropertyDetails = ({ property: prop }: Props) => {
       );
       if (matched) {
         setIsFavorited(true);
-        setWishlistItemId(matched.id ? String(matched.id) : null);
+        setWishlistItemId(matched.wishlist_id ? String(matched.wishlist_id) : null);
       } else {
         setIsFavorited(false);
         setWishlistItemId(null);
@@ -116,14 +99,14 @@ export const SinglePropertyDetails = ({ property: prop }: Props) => {
     onSuccess: (data: any) => {
       setIsFavorited(true);
       setIsAddingToFavorites(false);
-      if (data?.data?.id) setWishlistItemId(String(data.data.id));
+      if (data?.data?.wishlist_id) setWishlistItemId(String(data.data.wishlist_id));
       toast.success("Saved to favorites", {
         style: {
-          background: "#fff",
+          background: "#ffffff",
           color: "#1a1a1a",
           border: "1px solid #c2a878",
         },
-        iconTheme: { primary: "#c2a878", secondary: "#fff" },
+        iconTheme: { primary: "#c2a878", secondary: "#ffffff" },
       });
       queryClient.invalidateQueries({ queryKey: ["userWishlistInfo"] });
       queryClient.invalidateQueries({ queryKey: ["mlsProperties"] });
@@ -142,7 +125,7 @@ export const SinglePropertyDetails = ({ property: prop }: Props) => {
       setWishlistItemId(null);
       toast.success("Removed from favorites", {
         style: {
-          background: "#fff",
+          background: "#ffffff",
           color: "#1a1a1a",
           border: "1px solid #c2a878",
         },
@@ -179,8 +162,8 @@ export const SinglePropertyDetails = ({ property: prop }: Props) => {
 
   /* -------- Initial mortgage seed + disclaimer tick -------- */
   useEffect(() => {
-    if (property?.price) setMortgageHomePrice(Number(property.price));
-  }, [property?.price]);
+    if (details.price) setMortgageHomePrice(Number(details.price));
+  }, [details.price]);
 
   useEffect(() => {
     const id = window.setInterval(
@@ -201,8 +184,8 @@ export const SinglePropertyDetails = ({ property: prop }: Props) => {
         ? loan / n
         : (loan * (monthlyRate * Math.pow(1 + monthlyRate, n))) /
           (Math.pow(1 + monthlyRate, n) - 1);
-    const monthlyTax = property?.TaxAnnualAmount
-      ? Number(property.TaxAnnualAmount) / 12
+    const monthlyTax = details.taxAnnualAmount
+      ? Number(details.taxAnnualAmount) / 12
       : 0;
     const total = pi + monthlyTax;
     return { downAmt, loan, pi, monthlyTax, total };
@@ -211,7 +194,7 @@ export const SinglePropertyDetails = ({ property: prop }: Props) => {
     mortgageDownPct,
     mortgageRate,
     mortgageLoanYears,
-    property?.TaxAnnualAmount,
+    details.taxAnnualAmount,
   ]);
 
   const donutR = 80;
@@ -242,222 +225,32 @@ export const SinglePropertyDetails = ({ property: prop }: Props) => {
     minute: "2-digit",
   })}`;
 
-  const showMortgageCalculator =
-    property?.InternetAutomatedValuationDisplayYN !== false &&
-    property?.InternetAutomatedValuationDisplayYN !== "false" &&
-    property?.InternetAutomatedValuationDisplayYN !== 0 &&
-    property?.InternetAutomatedValuationDisplayYN !== "0";
+  const showMortgageCalculator = details.compliance.canShowValuation;
 
-  const showPropertyMap = canPinOnMap(property?.NWM_ShowMapLink);
+  const showPropertyMap =
+    details.compliance.canShowMap &&
+    details.latitude !== null &&
+    details.longitude !== null;
 
   const showVirtualTour =
-    property?.VirtualTourURLUnbranded &&
-    property?.NWM_IDXMustRemoveVirtualTourYN !== false &&
-    property?.NWM_IDXMustRemoveVirtualTourYN !== "false" &&
-    property?.NWM_IDXMustRemoveVirtualTourYN !== 0 &&
-    property?.NWM_IDXMustRemoveVirtualTourYN !== "0";
+    details.compliance.canShowVirtualTour && Boolean(details.media.virtualTourUrl);
 
-  const showAddress =
-    property?.InternetAddressDisplayYN === 1 ||
-    property?.InternetAddressDisplayYN === "1" ||
-    property?.InternetAddressDisplayYN === undefined;
+  const showAddress = details.compliance.canShowAddress;
 
   if (!property) return null;
 
-  /* -------- Spec card data -------- */
-  const interior: SpecRow[] = [
-    { label: "Bedrooms", value: property.beds || property.BedroomsTotal },
-    {
-      label: "Bedrooms Possible",
-      value: property.BedroomsPossible || property.beds,
-    },
-    {
-      label: "Bathrooms Full",
-      value: property.BathroomsFull || property.baths,
-    },
-    { label: "Bathrooms Half", value: property.BathroomsHalf || "0" },
-    {
-      label: "Appliances",
-      value: parseJsonArray(
-        property.NWM_AppliancesIncluded || property.Inclusions
-      ),
-    },
-    {
-      label: "Interior Features",
-      value: parseJsonArray(property.InteriorFeatures),
-    },
-    { label: "Flooring", value: parseJsonArray(property.Flooring) },
-    {
-      label: "Fireplace",
-      value:
-        property.FireplaceYN === "1"
-          ? parseJsonArray(property.FireplaceFeatures)
-          : "None",
-    },
-    { label: "Furnishing", value: property.furnishing || property.Furnished },
-  ];
-
-  const exterior: SpecRow[] = [
-    {
-      label: "Exterior Features",
-      value: parseJsonArray(property.ExteriorFeatures),
-    },
-    { label: "Lot Features", value: parseJsonArray(property.LotFeatures) },
-    {
-      label: "Lot Size",
-      value: property.LotSizeAcres
-        ? `${property.LotSizeAcres} ac · ${Number(
-            property.LotSizeSquareFeet || 0
-          ).toLocaleString()} sq ft`
-        : null,
-    },
-    { label: "View", value: parseJsonArray(property.View || property.views) },
-    {
-      label: "Waterfront",
-      value: property.WaterfrontYN === "1" ? "Yes" : "No",
-    },
-    {
-      label: "Site Features",
-      value: parseJsonArray(property.NWM_SiteFeatures),
-    },
-  ];
-
-  const garage: SpecRow[] = [
-    { label: "Garage", value: property.GarageYN === "1" ? "Yes" : "No" },
-    { label: "Garage Spaces", value: property.GarageSpaces },
-    { label: "Covered Spaces", value: property.CoveredSpaces },
-    { label: "Parking Total", value: property.ParkingTotal || property.parking },
-    {
-      label: "Parking Features",
-      value: parseJsonArray(property.ParkingFeatures),
-    },
-  ];
-
-  const schools: SpecRow[] = [
-    { label: "School District", value: property.HighSchoolDistrict },
-    { label: "Elementary", value: property.ElementarySchool },
-    { label: "Middle School", value: property.MiddleOrJuniorSchool },
-    { label: "High School", value: property.HighSchool },
-  ];
-
-  const building: SpecRow[] = [
-    { label: "Style", value: parseJsonArray(property.ArchitecturalStyle) },
-    { label: "Structure", value: parseJsonArray(property.StructureType) },
-    { label: "Levels", value: parseJsonArray(property.Levels) },
-    { label: "Year Built", value: property.mls_YearBuilt },
-    {
-      label: "Sq Ft Finished",
-      value: property.NWM_SquareFootageFinished
-        ? `${Number(property.NWM_SquareFootageFinished).toLocaleString()} sq ft`
-        : null,
-    },
-    { label: "Roof", value: parseJsonArray(property.Roof) },
-    { label: "Condition", value: parseJsonArray(property.PropertyCondition) },
-    {
-      label: "Foundation",
-      value: parseJsonArray(property.FoundationDetails),
-    },
-  ];
-
-  const financial: SpecRow[] = [
-    {
-      label: "List Price",
-      value: property.price ? `$${Number(property.price).toLocaleString()}` : null,
-    },
-    {
-      label: "Original Price",
-      value: property.OriginalListPrice
-        ? `$${Number(property.OriginalListPrice).toLocaleString()}`
-        : null,
-    },
-    {
-      label: "Annual Tax",
-      value: property.TaxAnnualAmount
-        ? `$${Number(property.TaxAnnualAmount).toLocaleString()}${property.TaxYear ? ` (${property.TaxYear})` : ""}`
-        : null,
-    },
-    {
-      label: "HOA Fee",
-      value: property.AssociationFee
-        ? `$${Number(property.AssociationFee).toLocaleString()} / ${property.AssociationFeeFrequency || "period"}`
-        : "None",
-    },
-    { label: "Listing Terms", value: parseJsonArray(property.ListingTerms) },
-    { label: "Possession", value: parseJsonArray(property.Possession) },
-    {
-      label: "Special Conditions",
-      value: parseJsonArray(property.SpecialListingConditions),
-    },
-  ];
-
-  const utilities: SpecRow[] = [
-    { label: "Sewer", value: parseJsonArray(property.Sewer) },
-    { label: "Water Source", value: parseJsonArray(property.WaterSource) },
-    { label: "Power", value: parseJsonArray(property.PowerProductionType) },
-    { label: "Heating", value: parseJsonArray(property.Heating) },
-    {
-      label: "Cooling",
-      value:
-        property.CoolingYN === "1"
-          ? "Yes"
-          : parseJsonArray(property.Cooling) || null,
-    },
-  ];
-
-  const listingDetails: SpecRow[] = [
-    { label: "MLS Listing ID", value: property.mls_listingid },
-    { label: "MLS Status", value: property.MlsStatus || property.status },
-    { label: "Listed Date", value: property.ListingContractDate },
-    {
-      label: "Days on Market",
-      value: property.DaysOnSite
-        ? String(property.DaysOnSite)
-        : null,
-    },
-    {
-      label: "MLS Source",
-      value: property.listing_source || property.OriginatingSystemName,
-    },
-    { label: "Listing Office", value: property.ListOfficeName },
-    { label: "Office Phone", value: property.ListOfficePhone },
-    { label: "Listing Agent", value: property.mls_list_agent },
-    { label: "Parcel #", value: property.ParcelNumber },
-    { label: "MLS Area", value: property.MLSAreaMajor },
-  ];
-
-  const highlights: SpecRow[] = [
-    {
-      label: "Property Type",
-      value:
-        property.PropertySubType ||
-        property.property_type ||
-        property.category,
-    },
-    {
-      label: "Lot Size",
-      value: property.LotSizeAcres
-        ? `${property.LotSizeAcres} acres`
-        : property.LotSizeSquareFeet
-          ? `${Number(property.LotSizeSquareFeet).toLocaleString()} sq ft`
-          : null,
-    },
-    { label: "Year Built", value: property.YearBuilt },
-    { label: "County", value: property.county  },
-    { label: "State", value: property.mls_state || property.state },
-    { label: "City", value: property.mls_city || property.city },
-    {
-      label: "Neighborhood",
-      value: property.SubdivisionName || property.location_id,
-    },
-    // {
-    //   label: "Listing ID",
-    //   value: property.ListingId
-    //     ? String(property.ListingId)
-    //     : property.idd
-    //       ? String(property.idd)
-    //       : property.ref,
-    // },
-  ];
+  /* -------- Spec card data (normalized) -------- */
+  const {
+    highlights,
+    interior,
+    exterior,
+    parking: garage,
+    schools,
+    building,
+    financial,
+    utilities,
+    listingDetails,
+  } = details;
 
   return (
     <>
@@ -466,53 +259,52 @@ export const SinglePropertyDetails = ({ property: prop }: Props) => {
         <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6 pb-8">
           <div className="flex flex-col gap-3">
             <div className="inline-flex items-center gap-3 flex-wrap">
-              <span className="inline-flex items-center gap-2 px-3 py-1.5 text-[11px] tracking-[0.2em] uppercase text-[var(--on-pine)] bg-[var(--pine)] rounded-[var(--radius-pill)] font-[family-name:var(--font-accent)]">
-                <span className="w-1.5 h-1.5 rounded-full bg-[var(--gold-300)] animate-pulse" />
-                {property.status || property.MlsStatus || "Active"}
+              <span className="inline-flex items-center gap-2 px-3 py-1 text-[11px] font-bold tracking-[0.2em] uppercase text-[var(--gold-500)] bg-[var(--gold-500)]/10 border border-[var(--gold-500)]/30">
+                <span className="w-1.5 h-1.5 rounded-full bg-[var(--gold-500)] animate-pulse" />
+                {details.status || "Active"}
               </span>
-              {(property.DaysOnSite|| property.dom) && (
+              {details.tags.map((tag) => (
+                <span
+                  key={tag}
+                  className="inline-flex items-center px-3 py-1 text-[11px] font-bold tracking-[0.2em] uppercase text-[var(--ink-soft)] bg-[var(--ink)]/5 border border-[var(--line-medium)]"
+                >
+                  {tag}
+                </span>
+              ))}
+              {details.daysOnSite !== null && (
                 <span className="inline-flex items-center gap-2 text-[12px] text-[var(--ink-faint)]">
-                  <FiClock size={12} className="text-[var(--sage-deep)]" />
-                  {property.DaysOnSite || property.dom} days on
-                  market
+                  <FiClock size={12} />
+                  {details.daysOnSite} days on market
                 </span>
               )}
             </div>
 
-            <h1 className="font-serif text-[clamp(2.6rem,3.5vw+1rem,4.1rem)] leading-[1.05] tracking-[-0.015em] text-[var(--ink)]">
-              {property.price
-                ? `$${Number(property.price).toLocaleString()}`
+            <h1 className="font-sans font-bold text-[clamp(2.6rem,3.5vw+1rem,4.1rem)] leading-[1.05] tracking-[-0.025em] text-[var(--gold-500)]">
+              {details.price !== null
+                ? `$${Number(details.price).toLocaleString()}`
                 : "Price upon request"}
             </h1>
 
-            {showAddress && property.address && (
-              <p className="flex items-start gap-2 text-[22px] text-[var(--ink-soft)] font-serif">
+            {showAddress && details.address && (
+              <p className="flex items-start gap-2 text-[22px] text-[var(--ink-soft)] font-sans font-semibold">
                 <FiMapPin
                   size={22}
-                  className="mt-1 text-[var(--sage-deep)] shrink-0"
+                  className="mt-1 text-[var(--gold-500)] shrink-0"
                 />
-                {String(property.address).replace(/±/g, "#")}
+                {String(details.address).replace(/±/g, "#")}
               </p>
             )}
           </div>
 
           {/* Stats */}
-          <div className="flex items-stretch divide-x divide-[var(--line)] border border-[var(--line)] bg-[var(--cream)] rounded-[var(--radius-md)] overflow-hidden">
-            <Stat
-              value={property.beds || property.BedroomsTotal || "0"}
-              label="Beds"
-            />
-            <Stat
-              value={property.baths || property.BathroomsTotalInteger || "0"}
-              label="Baths"
-            />
+          <div className="flex items-stretch divide-x divide-[var(--line-soft)] border border-[var(--line-soft)] bg-[var(--surface-obsidian)]">
+            <Stat value={details.beds ?? "0"} label="Beds" />
+            <Stat value={details.baths ?? "0"} label="Baths" />
             <Stat
               value={
-                property.bua
-                  ? Number(property.bua).toLocaleString()
-                  : property.LivingArea
-                    ? Number(property.LivingArea).toLocaleString()
-                    : "0"
+                details.livingAreaSqft !== null
+                  ? Number(details.livingAreaSqft).toLocaleString()
+                  : "0"
               }
               label="Sqft"
             />
@@ -526,8 +318,7 @@ export const SinglePropertyDetails = ({ property: prop }: Props) => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <Card title="Description">
                 <p className="text-[15px] leading-[1.75] text-[var(--ink-soft)] whitespace-pre-line">
-                  {property.description ||
-                    property.PublicRemarks ||
+                  {details.description ||
                     "No description available for this property."}
                 </p>
               </Card>
@@ -572,28 +363,28 @@ export const SinglePropertyDetails = ({ property: prop }: Props) => {
               </Card>
             </div>
 
-            {/* Inline CTA */}
-            <div className="relative bg-[var(--pine)] text-[var(--on-pine)] rounded-[var(--radius-md)] px-6 md:px-10 py-9 flex flex-col md:flex-row md:items-center md:justify-between gap-5 overflow-hidden">
-              <div
-                aria-hidden
-                className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[var(--gold)]/45 to-transparent"
+            {details.openHouses.length > 0 && (
+              <OpenHouseSection
+                openHouses={details.openHouses}
+                propertyTitle={details.title}
+                address={showAddress ? details.address : null}
               />
+            )}
+
+            {/* Inline CTA */}
+            <div className="bg-gradient-to-br from-[var(--gold-500)]/10 to-transparent border border-[var(--gold-500)]/25 px-6 md:px-8 py-7 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
               <div>
-                <span className="eyebrow on-dark inline-flex items-center gap-3 mb-3">
-                  <span className="inline-block h-px w-8 bg-[var(--gold-300)]" />
-                  A private word
-                </span>
-                <h3 className="font-serif text-[clamp(1.6rem,2vw+1rem,2.2rem)] text-[var(--on-pine)] leading-tight">
-                  Taken with this <em className="italic text-[var(--gold-300)] font-normal">home</em>?
+                <h3 className="font-serif text-2xl text-[var(--ink)]">
+                  Interested in this home?
                 </h3>
-                <p className="text-[14px] text-[var(--on-pine-soft)] mt-2 max-w-md">
-                  Arrange a private viewing or ask anything you wish — your
-                  advisor is a message away.
+                <p className="text-[14px] text-[var(--ink-soft)] mt-1.5 max-w-md">
+                  Schedule a private viewing or request more information from a
+                  trusted advisor.
                 </p>
               </div>
               <button
                 onClick={() => setIsModalOpen(true)}
-                className="btn-outline-new on-dark shrink-0"
+                className="btn-gold-new shrink-0"
               >
                 Request a Showing
               </button>
@@ -603,7 +394,7 @@ export const SinglePropertyDetails = ({ property: prop }: Props) => {
             {showMortgageCalculator && (
               <div>
                 <SectionHeader title="Mortgage Calculator" />
-                <div className="bg-[var(--cream)] border border-[var(--line)] rounded-[var(--radius-md)] p-6 md:p-8">
+                <div className="bg-[var(--surface-obsidian)] border border-[var(--line-soft)] p-6 md:p-8">
                   <div className="flex flex-col md:flex-row md:items-center gap-8 md:gap-10 mb-8">
                     {/* Donut */}
                     <div className="shrink-0 mx-auto md:mx-0">
@@ -618,7 +409,7 @@ export const SinglePropertyDetails = ({ property: prop }: Props) => {
                           cy="100"
                           r={donutR}
                           fill="none"
-                          stroke="var(--canvas-2)"
+                          stroke="var(--surface-charcoal)"
                           strokeWidth="22"
                         />
                         <circle
@@ -626,7 +417,7 @@ export const SinglePropertyDetails = ({ property: prop }: Props) => {
                           cy="100"
                           r={donutR}
                           fill="none"
-                          stroke="var(--pine)"
+                          stroke="var(--gold-500)"
                           strokeWidth="22"
                           strokeDasharray={`${piDash} ${circumference}`}
                           transform="rotate(-90 100 100)"
@@ -637,7 +428,7 @@ export const SinglePropertyDetails = ({ property: prop }: Props) => {
                           cy="100"
                           r={donutR}
                           fill="none"
-                          stroke="var(--gold)"
+                          stroke="var(--ink-faint)"
                           strokeWidth="22"
                           strokeDasharray={`${taxDash} ${circumference}`}
                           strokeDashoffset={-piDash}
@@ -648,9 +439,9 @@ export const SinglePropertyDetails = ({ property: prop }: Props) => {
                           x="100"
                           y="94"
                           textAnchor="middle"
-                          fill="var(--ink)"
+                          fill="var(--gold-500)"
                           fontSize="20"
-                          fontFamily="var(--font-serif), serif"
+                          fontFamily="var(--font-playfair), serif"
                           fontWeight="400"
                         >
                           ${mortgage.total.toLocaleString("en-US", {
@@ -673,12 +464,12 @@ export const SinglePropertyDetails = ({ property: prop }: Props) => {
 
                     {/* Breakdown */}
                     <div className="flex-1 min-w-[200px] flex flex-col gap-4">
-                      <div className="flex justify-between items-center pb-3 border-b border-[var(--line)]">
+                      <div className="flex justify-between items-center pb-3 border-b border-[var(--line-soft)]">
                         <span className="flex items-center gap-3 text-[14px] text-[var(--ink-soft)]">
-                          <span className="w-3 h-3 rounded-full bg-[var(--pine)]" />
+                          <span className="w-3 h-3 rounded-full bg-[var(--gold-500)]" />
                           Principal &amp; Interest
                         </span>
-                        <span className="text-[var(--ink)] font-medium">
+                        <span className="text-[var(--gold-500)] font-medium">
                           $
                           {mortgage.pi.toLocaleString("en-US", {
                             minimumFractionDigits: 2,
@@ -689,7 +480,7 @@ export const SinglePropertyDetails = ({ property: prop }: Props) => {
                       {mortgage.monthlyTax > 0 && (
                         <div className="flex justify-between items-center">
                           <span className="flex items-center gap-3 text-[14px] text-[var(--ink-soft)]">
-                            <span className="w-3 h-3 rounded-full bg-[var(--gold)]" />
+                            <span className="w-3 h-3 rounded-full bg-[var(--ink-faint)]" />
                             Taxes
                           </span>
                           <span className="text-[var(--ink)] font-medium">
@@ -745,11 +536,11 @@ export const SinglePropertyDetails = ({ property: prop }: Props) => {
                         </span>
                       </CalcField>
                       {loanDropdownOpen && (
-                        <div className="absolute top-full left-0 right-0 mt-2 bg-[var(--cream)] border border-[var(--line)] rounded-[var(--radius-sm)] p-5 z-30 shadow-[var(--shadow-lift)]">
-                          <label className="block text-[10px] uppercase tracking-[0.2em] text-[var(--ink-faint)] mb-1.5 font-[family-name:var(--font-accent)]">
+                        <div className="absolute top-full left-0 right-0 mt-2 bg-[var(--surface-charcoal)] border border-[var(--gold-500)]/40 p-5 z-30 shadow-[0_20px_40px_-15px_rgba(0,0,0,0.18)]">
+                          <label className="block text-[10px] uppercase tracking-[0.2em] text-[var(--ink-faint)] mb-1.5">
                             Interest Rate
                           </label>
-                          <div className="flex items-center bg-[var(--canvas)] border border-[var(--line)] px-3 py-2.5 mb-4 rounded-[var(--radius-sm)]">
+                          <div className="flex items-center bg-[var(--surface-ink)] border border-[var(--line-soft)] px-3 py-2.5 mb-4">
                             <input
                               type="number"
                               step="0.01"
@@ -763,7 +554,7 @@ export const SinglePropertyDetails = ({ property: prop }: Props) => {
                             />
                             <span className="text-[var(--ink-faint)] ml-1">%</span>
                           </div>
-                          <label className="block text-[10px] uppercase tracking-[0.2em] text-[var(--ink-faint)] mb-1.5 font-[family-name:var(--font-accent)]">
+                          <label className="block text-[10px] uppercase tracking-[0.2em] text-[var(--ink-faint)] mb-1.5">
                             Loan Type
                           </label>
                           <select
@@ -771,7 +562,7 @@ export const SinglePropertyDetails = ({ property: prop }: Props) => {
                             onChange={(e) =>
                               setTempYears(Number(e.target.value))
                             }
-                            className="w-full bg-[var(--canvas)] border border-[var(--line)] px-3 py-2.5 text-[var(--ink)] text-[14px] mb-5 outline-none focus:border-[var(--sage-deep)]/60 rounded-[var(--radius-sm)]"
+                            className="w-full bg-[var(--surface-ink)] border border-[var(--line-soft)] px-3 py-2.5 text-[var(--ink)] text-[14px] mb-5 outline-none focus:border-[var(--gold-500)]/60"
                           >
                             <option value={10}>10 years</option>
                             <option value={15}>15 years</option>
@@ -823,7 +614,7 @@ export const SinglePropertyDetails = ({ property: prop }: Props) => {
 
             {/* Mortgage calculator disclaimer */}
             {showMortgageCalculator && (
-              <div className="p-5 bg-[var(--canvas-2)] border border-[var(--line)] rounded-[var(--radius-md)] text-[12px] text-[var(--ink-faint)] leading-relaxed flex flex-col gap-2">
+              <div className="p-5 bg-[var(--surface-obsidian)] border border-[var(--line-soft)] text-[12px] text-[var(--ink-faint)] leading-relaxed flex flex-col gap-2">
                 <p>
                   All calculations are estimates and today&rsquo;s rates are provided by Realtipro for informational purposes only.
                 </p>
@@ -837,9 +628,9 @@ export const SinglePropertyDetails = ({ property: prop }: Props) => {
             {showVirtualTour && (
               <div>
                 <SectionHeader title="Virtual Tour" />
-                <div className="relative w-full aspect-video bg-[var(--canvas-2)] border border-[var(--line)] rounded-[var(--radius-md)] overflow-hidden">
+                <div className="relative w-full aspect-video bg-[var(--surface-obsidian)] border border-[var(--line-soft)] overflow-hidden">
                   <iframe
-                    src={property.VirtualTourURLUnbranded}
+                    src={details.media.virtualTourUrl ?? undefined}
                     title="Virtual Tour"
                     allowFullScreen
                     allow="xr-spatial-tracking"
@@ -853,14 +644,14 @@ export const SinglePropertyDetails = ({ property: prop }: Props) => {
             )}
 
             {/* Local information */}
-            {showPropertyMap && property.latitude && property.longitude && (
+            {showPropertyMap && details.latitude !== null && details.longitude !== null && (
               <div>
                 <SectionHeader title="Location & Neighborhood" />
-                <div className="border border-[var(--line)] bg-[var(--canvas-2)] rounded-[var(--radius-md)] overflow-hidden">
+                <div className="border border-[var(--line-soft)] bg-[var(--surface-obsidian)] overflow-hidden">
                   <LocalInformation
                     coordinates={{
-                      lat: Number(property.latitude),
-                      lng: Number(property.longitude),
+                      lat: Number(details.latitude),
+                      lng: Number(details.longitude),
                     }}
                   />
                 </div>
@@ -868,7 +659,7 @@ export const SinglePropertyDetails = ({ property: prop }: Props) => {
             )}
 
             {/* MLS disclaimer */}
-            <div className="mt-4 p-6 md:p-8 bg-[var(--canvas-2)] border border-[var(--line)] rounded-[var(--radius-md)] flex flex-col gap-3 text-[12px] text-[var(--ink-faint)] leading-relaxed">
+            <div className="mt-4 p-6 md:p-8 bg-[var(--surface-obsidian)] border border-[var(--line-soft)] flex flex-col gap-3 text-[12px] text-[var(--ink-soft)] leading-relaxed">
               <p>
                 Estimated payment, market insight calculations, school and
                 neighborhood information provided by Realtipro.
@@ -885,21 +676,36 @@ export const SinglePropertyDetails = ({ property: prop }: Props) => {
                 be independently verified. The three-tree icon represents
                 listings courtesy of NWMLS.
               </p>
-              <div className="flex flex-wrap items-center justify-between gap-4 pt-3 border-t border-[var(--line)] mt-1">
+              <div className="flex flex-wrap items-center justify-between gap-4 pt-3 border-t border-[var(--line-soft)] mt-1">
                 <div className="flex flex-col gap-1">
                   <span>{formattedMlsUpdated}</span>
                   <span>
-                    © {new Date().getFullYear()} Northwest Multiple Listing
-                    Service
+                    © {new Date().getFullYear()}{" "}
+                    {details.attribution.fullName ||
+                      "Northwest Multiple Listing Service"}
                   </span>
                 </div>
                 <div className="relative w-[80px] h-[40px]">
-                  <Image
-                    src="/images/nwmls.png"
-                    alt="Northwest Multiple Listing Service"
-                    fill
-                    className="object-contain"
-                  />
+                  {details.attribution.logo ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img
+                      src={details.attribution.logo}
+                      alt={
+                        details.attribution.fullName ||
+                        details.attribution.name ||
+                        "MLS"
+                      }
+                      className="w-full h-full object-contain"
+                      referrerPolicy="no-referrer"
+                    />
+                  ) : (
+                    <Image
+                      src="/images/nwmls.png"
+                      alt="Northwest Multiple Listing Service"
+                      fill
+                      className="object-contain"
+                    />
+                  )}
                 </div>
               </div>
             </div>
@@ -911,10 +717,10 @@ export const SinglePropertyDetails = ({ property: prop }: Props) => {
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-              className="bg-[var(--cream)] border border-[var(--line)] rounded-[var(--radius-md)] p-6 shadow-[var(--shadow-soft)]"
+              className="bg-[var(--surface-obsidian)] border border-[var(--line-soft)] p-6"
             >
-              <div className="flex items-center gap-4 pb-5 border-b border-[var(--line)]">
-                <div className="relative w-16 h-16 overflow-hidden rounded-full border border-[var(--gold)]/50">
+              <div className="flex items-center gap-4 pb-5 border-b border-[var(--line-soft)]">
+                <div className="relative w-16 h-16 overflow-hidden rounded-full border border-[var(--gold-500)]/40">
                   <Image
                     src={profile_image || "/images/agent-1.png"}
                     alt={name || "Advisor"}
@@ -928,7 +734,7 @@ export const SinglePropertyDetails = ({ property: prop }: Props) => {
                   </span>
                   <Link
                     href="/about-us"
-                    className="text-[12px] uppercase tracking-[0.18em] text-[var(--sage-deep)] hover:text-[var(--ink)] transition-colors inline-flex items-center gap-1.5 font-[family-name:var(--font-accent)]"
+                    className="text-[12px] uppercase tracking-[0.18em] text-[var(--gold-500)] hover:text-[var(--ink)] transition-colors inline-flex items-center gap-1.5"
                   >
                     View profile
                     <FiArrowRight size={12} />
@@ -939,23 +745,16 @@ export const SinglePropertyDetails = ({ property: prop }: Props) => {
               {(hasEmail || hasPhone) && (
                 <div className={`grid gap-3 mt-5 ${hasEmail && hasPhone ? "grid-cols-2" : "grid-cols-1"}`}>
                   {hasEmail && (
-                    <a
-                      href={`mailto:${email}`}
-                      className="inline-flex items-center justify-center gap-2 h-11 border border-[var(--line-medium)] text-[var(--ink-soft)] text-[12px] tracking-[0.14em] uppercase rounded-[var(--radius-pill)] hover:border-[var(--sage-deep)] hover:text-[var(--sage-deep)] transition-colors font-[family-name:var(--font-accent)]"
-                    >
-                      <FiMail size={14} />
-                      Email
-                    </a>
+                    <MailAppPopup
+                      email={String(email)}
+                      subject={
+                        details?.address
+                          ? `Inquiry about ${String(details.address).replace(/±/g, "#")}`
+                          : "Property inquiry"
+                      }
+                    />
                   )}
-                  {hasPhone && (
-                    <a
-                      href={`tel:${formattedPhone}`}
-                      className="inline-flex items-center justify-center gap-2 h-11 border border-[var(--line-medium)] text-[var(--ink-soft)] text-[12px] tracking-[0.14em] uppercase rounded-[var(--radius-pill)] hover:border-[var(--sage-deep)] hover:text-[var(--sage-deep)] transition-colors font-[family-name:var(--font-accent)]"
-                    >
-                      <FiPhone size={14} />
-                      Call
-                    </a>
-                  )}
+                  {hasPhone && <CallAppPopup phone={String(formattedPhone)} />}
                 </div>
               )}
 
@@ -967,14 +766,14 @@ export const SinglePropertyDetails = ({ property: prop }: Props) => {
               </button>
             </motion.div>
 
-            <div className="bg-[var(--cream)] border border-[var(--line)] rounded-[var(--radius-md)] p-6 flex flex-col gap-3 shadow-[var(--shadow-soft)]">
+            <div className="bg-[var(--surface-obsidian)] border border-[var(--line-soft)] p-6 flex flex-col gap-3">
               <button
                 onClick={handleToggleFavorites}
                 disabled={isAddingToFavorites}
-                className={`inline-flex items-center justify-center gap-2.5 h-11 border rounded-[var(--radius-pill)] transition-all duration-300 text-[12px] tracking-[0.18em] uppercase font-[family-name:var(--font-accent)] ${
+                className={`inline-flex items-center justify-center gap-2.5 h-11 border transition-all duration-300 text-[12px] font-bold tracking-[0.18em] uppercase ${
                   isFavorited
-                    ? "bg-[var(--pine)] border-[var(--pine)] text-[var(--on-pine)]"
-                    : "border-[var(--line-medium)] text-[var(--ink-soft)] hover:border-[var(--sage-deep)] hover:text-[var(--sage-deep)]"
+                    ? "bg-[var(--gold-500)] border-[var(--gold-500)] text-[var(--surface-ink)]"
+                    : "border-[var(--gold-500)] text-[var(--gold-500)] hover:bg-[var(--gold-500)]/10"
                 } disabled:opacity-50 disabled:cursor-not-allowed`}
               >
                 {isAddingToFavorites ? (
@@ -1023,6 +822,115 @@ export const SinglePropertyDetails = ({ property: prop }: Props) => {
 
 type SpecRow = { label: string; value: any };
 
+function formatOpenHouseDate(value: string | null): string | null {
+  if (!value) return null;
+  const d = new Date(value);
+  if (Number.isNaN(d.getTime())) return value;
+  return d.toLocaleDateString("en-US", {
+    weekday: "short",
+    month: "long",
+    day: "numeric",
+    year: "numeric",
+  });
+}
+
+function formatOpenHouseTime(value: string | null): string | null {
+  if (!value) return null;
+  const d = new Date(value);
+  if (Number.isNaN(d.getTime())) return value;
+  return d.toLocaleTimeString("en-US", {
+    hour: "numeric",
+    minute: "2-digit",
+  });
+}
+
+function OpenHouseSection({
+  openHouses,
+  propertyTitle,
+  address,
+}: {
+  openHouses: PropertyOpenHouse[];
+  propertyTitle: string | null;
+  address: string | null;
+}) {
+  const listingUrl =
+    typeof window !== "undefined" ? window.location.href : null;
+
+  return (
+    <div>
+      <SectionHeader title="Open House" />
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        {openHouses.map((oh, idx) => {
+          const dateLabel = formatOpenHouseDate(oh.date || oh.startTime);
+          const start = formatOpenHouseTime(oh.startTime);
+          const end = formatOpenHouseTime(oh.endTime);
+          const d = new Date(oh.date || oh.startTime || "");
+          const dayNum = Number.isNaN(d.getTime())
+            ? null
+            : d.toLocaleDateString("en-US", { day: "numeric" });
+          const monthShort = Number.isNaN(d.getTime())
+            ? null
+            : d.toLocaleDateString("en-US", { month: "short" });
+          const weekday = Number.isNaN(d.getTime())
+            ? null
+            : d.toLocaleDateString("en-US", { weekday: "long" });
+          const calendarEvent = buildOpenHouseEvent(oh, {
+            propertyTitle,
+            address,
+            listingUrl,
+          });
+          return (
+            <div
+              key={oh.key || idx}
+              className="group relative flex flex-col gap-4 bg-[var(--surface-obsidian)] border border-[var(--line-soft)] rounded-xl p-5 transition-colors duration-300 hover:border-[var(--gold-500)]/40"
+            >
+              <div className="flex items-center gap-5">
+                {/* Calendar tile */}
+                <div className="shrink-0 flex flex-col items-center justify-center w-16 h-16 rounded-lg bg-[var(--gold-500)]/10 border border-[var(--gold-500)]/25">
+                  <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-[var(--gold-500)]">
+                    {monthShort || "—"}
+                  </span>
+                  <span className="font-serif text-2xl leading-none text-[var(--ink)]">
+                    {dayNum || "—"}
+                  </span>
+                </div>
+
+                {/* Details */}
+                <div className="flex flex-col gap-1.5 min-w-0">
+                  <span className="font-serif text-lg text-[var(--ink)] truncate">
+                    {weekday || dateLabel || "Date to be announced"}
+                  </span>
+                  {(start || end) && (
+                    <span className="inline-flex items-center gap-2 text-[13px] text-[var(--ink-soft)]">
+                      <FiClock size={13} className="text-[var(--gold-500)]" />
+                      {start}
+                      {start && end ? " – " : ""}
+                      {end}
+                    </span>
+                  )}
+                  {oh.type && (
+                    <span className="mt-0.5 self-start px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.16em] text-[var(--gold-500)] bg-[var(--gold-500)]/10 border border-[var(--gold-500)]/30 rounded">
+                      {oh.type}
+                    </span>
+                  )}
+                </div>
+              </div>
+
+              {calendarEvent && (
+                <AddToCalendar
+                  event={calendarEvent}
+                  label="Add to calendar"
+                  className="pt-1"
+                />
+              )}
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
 function Stat({ value, label }: { value: any; label: string }) {
   return (
     <div className="flex flex-col items-center justify-center px-5 md:px-7 py-4 min-w-[88px]">
@@ -1039,8 +947,8 @@ function Stat({ value, label }: { value: any; label: string }) {
 function SectionHeader({ title }: { title: string }) {
   return (
     <div className="flex items-center gap-3 mb-5">
-      <span className="inline-block h-px w-8 bg-[var(--gold)]" />
-      <h2 className="font-serif text-[clamp(1.5rem,1.5vw+1rem,2rem)] text-[var(--ink)]">{title}</h2>
+      <span className="inline-block h-px w-8 bg-[var(--gold-500)]" />
+      <h2 className="font-serif text-2xl text-[var(--ink)]">{title}</h2>
     </div>
   );
 }
@@ -1053,9 +961,9 @@ function Card({
   children: React.ReactNode;
 }) {
   return (
-    <div className="bg-[var(--cream)] border border-[var(--line)] hover:border-[var(--line-medium)] hover:shadow-[var(--shadow-soft)] transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] rounded-[var(--radius-md)] p-6 md:p-7">
-      <h3 className="flex items-center gap-3 mb-5 font-serif text-xl text-[var(--ink)]">
-        <span className="inline-block w-1 h-5 rounded-full bg-[var(--gold)]" />
+    <div className="bg-[var(--surface-obsidian)] border border-[var(--line-soft)] hover:border-[var(--line-medium)] transition-colors p-6 md:p-7">
+      <h3 className="flex items-center gap-3 mb-5 font-serif text-lg text-[var(--ink)]">
+        <span className="inline-block w-1 h-5 bg-[var(--gold-500)]" />
         {title}
       </h3>
       <div>{children}</div>
@@ -1064,6 +972,13 @@ function Card({
 }
 
 function SpecList({ rows }: { rows: SpecRow[] }) {
+  if (!rows.length) {
+    return (
+      <p className="text-[13px] text-[var(--ink-faint)] italic">
+        No information available.
+      </p>
+    );
+  }
   return (
     <dl className="flex flex-col">
       {rows.map((row, i) => {
@@ -1077,10 +992,10 @@ function SpecList({ rows }: { rows: SpecRow[] }) {
         return (
           <div
             key={i}
-            className="flex items-start justify-between gap-4 py-2.5 border-b border-[var(--line)] last:border-0 text-[14px]"
+            className="flex items-start justify-between gap-4 py-2.5 border-b border-[var(--line-soft)] last:border-0 text-[14px]"
           >
             <dt className="text-[var(--ink-faint)] shrink-0">{row.label}</dt>
-            <dd className="text-[var(--ink-soft)] text-right">{display}</dd>
+            <dd className="text-[var(--ink)] text-right">{display}</dd>
           </div>
         );
       })}
@@ -1101,13 +1016,13 @@ function CalcField({
 }) {
   return (
     <div
-      className={`bg-[var(--canvas)] border rounded-[var(--radius-sm)] px-4 py-3.5 transition-colors ${
+      className={`bg-[var(--surface-charcoal)] border px-4 py-3.5 transition-colors ${
         active
-          ? "border-[var(--sage-deep)]/60"
-          : "border-[var(--line)] hover:border-[var(--line-medium)]"
+          ? "border-[var(--gold-500)]/60"
+          : "border-[var(--line-soft)] hover:border-[var(--line-medium)]"
       }`}
     >
-      <div className="text-[10px] uppercase tracking-[0.22em] text-[var(--ink-faint)] mb-1.5 font-[family-name:var(--font-accent)]">
+      <div className="text-[10px] uppercase tracking-[0.22em] text-[var(--ink-faint)] mb-1.5">
         {label}
       </div>
       <div className="flex items-center justify-between gap-2">
@@ -1115,7 +1030,7 @@ function CalcField({
         {onEdit && (
           <button
             onClick={onEdit}
-            className="text-[var(--ink-faint)] hover:text-[var(--sage-deep)] transition-colors p-0.5"
+            className="text-[var(--ink-faint)] hover:text-[var(--gold-500)] transition-colors p-0.5"
             aria-label="Edit"
           >
             <FiEdit2 size={14} />

@@ -1,6 +1,6 @@
 "use client"
-import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
-import { fetchMlsSearchPropertyList, fetchPropertyList, fetchMlsPropertyById, fetchSavedSearches, fetchFeaturedPropertyList, fetchNewListings } from "./PropertyServices";
+import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { fetchMlsSearchPropertyList, fetchPropertyList, fetchMlsPropertyById, fetchSavedSearches, deleteSavedSearch, fetchFeaturedPropertyList, fetchNewListings } from "./PropertyServices";
 
 export const usePropertyList = (data: { pageLimit?: number; search?: string }) => {
     return useQuery({ queryKey: ['propertylist', ], queryFn: () => 
@@ -29,9 +29,15 @@ export const useMlsPropertyListInfinite = (params: Omit<Parameters<typeof fetchM
       fetchMlsSearchPropertyList({ ...params, page: pageParam as number }, signal),
     initialPageParam: 1,
     getNextPageParam: (lastPage: any, allPages: any[]) => {
-      // Supports meta-wrapped ({ data, meta: { current_page, last_page, total, per_page } })
-      // and flat Laravel paginator ({ data, current_page, last_page, total, per_page }).
       const pagination = lastPage?.meta ?? lastPage;
+
+      // Preferred signal: `meta.has_more` (count-free pagination — no COUNT(*)).
+      if (pagination?.has_more !== undefined) {
+        return pagination.has_more ? allPages.length + 1 : undefined;
+      }
+
+      // Supports meta-wrapped ({ data, meta: { current_page, last_page, per_page } })
+      // and flat Laravel paginator ({ data, current_page, last_page, per_page }).
       const current = Number(pagination?.current_page);
       const last = Number(pagination?.last_page);
       if (current > 0 && last > 0) return current < last ? current + 1 : undefined;
@@ -43,6 +49,7 @@ export const useMlsPropertyListInfinite = (params: Omit<Parameters<typeof fetchM
       if (perPage > 0 && lastLen < perPage) return undefined;
       return allPages.length + 1;
     },
+    staleTime: 1000 * 60, // dedupe identical searches within a 1-min window
     refetchOnWindowFocus: false,
   });
 };
@@ -59,5 +66,15 @@ export const useSavedSearches = () => {
   return useQuery({
     queryKey: ["savedSearches"],
     queryFn: () => fetchSavedSearches(),
+  });
+};
+
+export const useDeleteSavedSearch = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (id: string | number) => deleteSavedSearch(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["savedSearches"] });
+    },
   });
 };

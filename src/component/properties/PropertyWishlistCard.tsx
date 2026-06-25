@@ -11,14 +11,17 @@ import { BiArea } from "react-icons/bi";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import toast from "react-hot-toast";
+import { FiTrash2 } from "react-icons/fi";
 
 interface PropertyWishlistCardProps {
   item: any;
   handleModal: () => void;
   hideWishlist?: boolean;
+  onRemove?: (id: string) => void;
+  isRemoving?: boolean;
 }
 
-export const PropertyWishlistCard = ({ item, handleModal, hideWishlist }: PropertyWishlistCardProps) => {
+export const PropertyWishlistCard = ({ item, handleModal, hideWishlist, onRemove, isRemoving }: PropertyWishlistCardProps) => {
   const queryClient = useQueryClient();
   const router = useRouter();
   const [isAddingToFavorites, setIsAddingToFavorites] = useState(false);
@@ -219,6 +222,28 @@ export const PropertyWishlistCard = ({ item, handleModal, hideWishlist }: Proper
               Listed with {item.listed_with}
             </span>
           </div>
+        )}
+
+        {onRemove && (
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              onRemove(String(item.wishlist_id));
+            }}
+            disabled={isRemoving}
+            className="mt-3 inline-flex items-center justify-center gap-2 w-full h-10 border border-[var(--line)] text-[var(--ink-faint)] text-[11px] tracking-[0.16em] uppercase font-semibold hover:border-red-500/50 hover:bg-red-500/5 hover:text-red-500 transition-all duration-200 disabled:opacity-40"
+            style={{ borderRadius: "var(--radius-xs)" }}
+          >
+            {isRemoving ? (
+              <svg className="animate-spin" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                <circle cx="12" cy="12" r="10" strokeOpacity="0.25" />
+                <path d="M12 2a10 10 0 0 1 10 10" strokeLinecap="round" />
+              </svg>
+            ) : (
+              <FiTrash2 size={12} />
+            )}
+            {isRemoving ? "Removing…" : "Remove"}
+          </button>
         )}
       </div>
     </article>

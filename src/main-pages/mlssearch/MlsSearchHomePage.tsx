@@ -21,6 +21,7 @@ import { useUserWishlist } from "@/services/profile/ProfileQueries";
 import { saveSearches } from "@/services/properties/PropertyServices";
 import GoogleMapsProvider from "@/provider/GoogleMapProvider";
 import type { SearchFilters } from "@/types/Property";
+import { DEFAULT_PROPERTY_STATUS, isValidAreaSearch } from "@/component/mlsSearchMenu/filterDefaults";
 import { FiSearch } from "react-icons/fi";
 
 type Property = { id: string; [key: string]: any };
@@ -31,7 +32,7 @@ const DEFAULT_FILTERS: SearchFilters = {
   keyword: "",
   pageLimit: 20,
   page: 1,
-  property_status: "",
+  property_status: DEFAULT_PROPERTY_STATUS,
   property_type: "",
   property_for: "",
   category_type: "",
@@ -63,6 +64,7 @@ const DEFAULT_FILTERS: SearchFilters = {
   mls_city: "",
   mls_state: "",
   zip: "",
+  mls_county: "",
   mls_basement: "",
   mls_sewer: "",
   mls_school_district: "",
@@ -81,6 +83,92 @@ const canPinOnMap = (value: unknown): boolean => {
   }
   return true;
 };
+
+/**
+ * Advanced (area-gated) filter keys. These predicates are non-indexable on the
+ * MLS side and must never be sent without a location anchor, or the backend
+ * scans millions of rows and times out (503).
+ */
+const ADVANCED_FILTER_KEYS: (keyof SearchFilters)[] = [
+  "garage_min", "garage_max", "square_footage_min", "square_footage_max",
+  "lot_size_min", "lot_size_max", "year_built_min", "year_built_max",
+  "max_annual_tax", "stories", "mls_basement", "mls_sewer",
+  "mls_school_district", "mls_builder_name", "mls_list_agent",
+  "mls_site_features", "mls_lot_feature", "community_amenities",
+  "property_view", "interior_features", "furnishing", "available_from",
+];
+
+/** Advanced filters unlock only with a valid AREA: a city or a ZIP code. */
+const hasAreaSelected = (f: SearchFilters): boolean =>
+  isValidAreaSearch(f.keyword) || Boolean(f.mls_city) || Boolean(f.zip);
+
+/**
+ * Produce the filters actually sent to the backend:
+ *  - strip every advanced predicate when no area is selected (defense in depth);
+ *  - auto-correct inverted numeric ranges (min must be <= max).
+ */
+const buildEffectiveFilters = (f: SearchFilters): SearchFilters => {
+  const out: SearchFilters = { ...f };
+
+  if (!hasAreaSelected(out)) {
+    for (const key of ADVANCED_FILTER_KEYS) {
+      (out as Record<string, unknown>)[key] =
+        typeof DEFAULT_FILTERS[key] === "number" ? 0 : "";
+    }
+  }
+
+  const swapIfInverted = (minKey: keyof SearchFilters, maxKey: keyof SearchFilters) => {
+    const min = Number(out[minKey] ?? 0);
+    const max = Number(out[maxKey] ?? 0);
+    if (min && max && min > max) {
+      (out as Record<string, unknown>)[minKey] = max;
+      (out as Record<string, unknown>)[maxKey] = min;
+    }
+  };
+  swapIfInverted("price_min", "price_max");
+  swapIfInverted("bed_min", "bed_max");
+  swapIfInverted("bath_min", "bath_max");
+  swapIfInverted("square_footage_min", "square_footage_max");
+  swapIfInverted("lot_size_min", "lot_size_max");
+  swapIfInverted("year_built_min", "year_built_max");
+
+  return out;
+};
+
+/** Filter keys mirrored to the URL query string for shareable / back-forward UX. */
+const URL_SYNC_KEYS: (keyof SearchFilters)[] = [
+  "keyword", "property_status", "property_type", "property_for", "category_type",
+  "price_min", "price_max", "bed_min", "bed_max", "bath_min", "bath_max",
+  "mls_city", "mls_state", "zip", "mls_county",
+  ...ADVANCED_FILTER_KEYS,
+];
+
+/** Serialize non-default filter values into URLSearchParams (empty/zero omitted). */
+const filtersToSearchParams = (f: SearchFilters): URLSearchParams => {
+  const params = new URLSearchParams();
+  for (const key of URL_SYNC_KEYS) {
+    const value = f[key];
+    if (value === undefined || value === null) continue;
+    if (typeof value === "number") {
+      if (value) params.set(key, String(value));
+    } else if (typeof value === "string") {
+      if (value.trim()) params.set(key, value);
+    }
+  }
+  return params;
+};
+
+/** Hydrate a partial filter object from URL params (numbers coerced). */
+const searchParamsToPartial = (sp: URLSearchParams): Partial<SearchFilters> => {
+  const partial: Record<string, unknown> = {};
+  for (const key of URL_SYNC_KEYS) {
+    const raw = sp.get(key);
+    if (raw == null || raw === "") continue;
+    partial[key] = typeof DEFAULT_FILTERS[key] === "number" ? Number(raw) : raw;
+  }
+  return partial as Partial<SearchFilters>;
+};
+
 
 const MlsSerchHomePage = () => {
   const searchParams = useSearchParams();
@@ -108,6 +196,13 @@ const MlsSerchHomePage = () => {
     const base: SearchFilters = { ...DEFAULT_FILTERS, keyword: locationFromParams };
 
     if (typeof window !== "undefined") {
+      // Hydrate from the URL query string first so shared / bookmarked searches
+      // and browser back/forward restore the full filter state.
+      const urlPartial = searchParamsToPartial(
+        new URLSearchParams(window.location.search),
+      );
+      Object.assign(base, urlPartial);
+
       const legacyType = sessionStorage.getItem("prop_type") ?? "";
       const legacyMaxPrice = sessionStorage.getItem("prop_max_price") ?? "";
       if (legacyType) base.property_type = legacyType;
@@ -202,13 +297,51 @@ const MlsSerchHomePage = () => {
   }, [searchFilters.keyword]);
 
   const mlsQueryFilters = { ...searchFilters, keyword: debouncedKeyword };
+  // Defense in depth: never send advanced predicates without an area anchor,
+  // and auto-correct inverted ranges before the request leaves the client.
+  const effectiveFilters = useMemo(
+    () => buildEffectiveFilters(mlsQueryFilters),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [JSON.stringify(mlsQueryFilters)],
+  );
+  const areaSelected = hasAreaSelected(searchFilters);
+
+  // When the area anchor is removed, advanced filters become invalid (locked).
+  // Reset them while preserving still-valid basic filters across area changes.
+  useEffect(() => {
+    if (areaSelected) return;
+    setSearchFilters((prev) => {
+      let changed = false;
+      const next: SearchFilters = { ...prev };
+      for (const key of ADVANCED_FILTER_KEYS) {
+        const cleared = typeof DEFAULT_FILTERS[key] === "number" ? 0 : "";
+        if (next[key] !== cleared) {
+          (next as Record<string, unknown>)[key] = cleared;
+          changed = true;
+        }
+      }
+      return changed ? next : prev;
+    });
+  }, [areaSelected]);
+
+  // Mirror the full filter state into the URL (shareable + back/forward).
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const params = filtersToSearchParams(searchFilters);
+    const query = params.toString();
+    const next = `${window.location.pathname}${query ? `?${query}` : ""}`;
+    if (next !== `${window.location.pathname}${window.location.search}`) {
+      window.history.replaceState({}, "", next);
+    }
+  }, [searchFilters]);
+
   const {
     data: infiniteData,
     isLoading,
     isFetchingNextPage,
     fetchNextPage,
     hasNextPage,
-  } = useMlsPropertyListInfinite(mlsQueryFilters);
+  } = useMlsPropertyListInfinite(effectiveFilters);
   const { data: wishlistData } = useUserWishlist();
 
   const properties = useMemo(() => {
@@ -407,11 +540,19 @@ const MlsSerchHomePage = () => {
                 <strong className="text-[var(--sage-deep)] font-normal">
                   {properties.length}
                 </strong>{" "}
-                <span className="text-[var(--ink-faint)]">of</span>{" "}
-                <strong className="text-[var(--ink)] font-normal">
-                  {totalCount > 0 ? totalCount.toLocaleString() : "…"}
-                </strong>{" "}
-                residences in view
+                {totalCount > 0 ? (
+                  <>
+                    <span className="text-[var(--ink-faint)]">of</span>{" "}
+                    <strong className="text-[var(--ink)] font-normal">
+                      {totalCount.toLocaleString()}
+                    </strong>{" "}
+                    residences in view
+                  </>
+                ) : (
+                  <span className="text-[var(--ink-faint)]">
+                    {hasNextPage ? "residences in view — draw down for more" : "residences in view"}
+                  </span>
+                )}
               </span>
             ) : (
               <span>No residences answer to these filters</span>

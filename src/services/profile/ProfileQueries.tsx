@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { fetchUserProfile, fetchUserWhishlist, updateUserProfile } from "./ProfileServices";
+import { fetchUserProfile, fetchUserWhishlist, updateUserProfile, removeWishlistItem } from "./ProfileServices";
 
 export const useProfile = () => {
    return useQuery({
@@ -13,6 +13,16 @@ export const useUserWishlist = () => {
       queryKey: ['userWishlistInfo',], queryFn: () =>
          fetchUserWhishlist(),
       enabled: typeof window !== 'undefined' && !!sessionStorage.getItem('access_token'),
+   });
+};
+
+export const useRemoveWishlistItem = () => {
+   const queryClient = useQueryClient();
+   return useMutation({
+      mutationFn: (id: string) => removeWishlistItem(id),
+      onSuccess: () => {
+         queryClient.invalidateQueries({ queryKey: ['userWishlistInfo'] });
+      },
    });
 };
 
