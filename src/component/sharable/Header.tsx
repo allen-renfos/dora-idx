@@ -226,9 +226,9 @@ export const Header = ({ activeHeader }: HeaderProps = {}) => {
                 <img
                   src={cachedLogo}
                   alt={company_name || name || "Logo"}
-                  className={`site-logo block w-auto h-auto object-contain transition-[max-height,max-width] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+                  className={`site-logo relative block w-auto h-auto object-contain transition-[max-height,max-width,filter] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
                     isScrolled ? "is-scrolled" : ""
-                  }`}
+                  } ${!solid ? "brightness-0 invert" : ""}`}
                 />
               </div>
             ) : (

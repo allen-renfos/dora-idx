@@ -263,19 +263,19 @@ body {
 }
 
 .site-logo {
-  max-height: 46px;
-  max-width: 170px;
+  max-height: 60px;
+  max-width: 220px;
 }
 @media (min-width: 640px) {
-  .site-logo { max-height: 54px; max-width: 210px; }
+  .site-logo { max-height: 70px; max-width: 270px; }
 }
 @media (min-width: 768px) {
-  .site-logo { max-height: 48px; max-width: none; }
-  .site-logo.is-scrolled { max-height: 40px; }
+  .site-logo { max-height: 64px; max-width: none; }
+  .site-logo.is-scrolled { max-height: 52px; }
 }
 @media (min-width: 1024px) {
-  .site-logo { max-height: 46px; }
-  .site-logo.is-scrolled { max-height: 38px; }
+  .site-logo { max-height: 62px; }
+  .site-logo.is-scrolled { max-height: 50px; }
 }
 
 .section-pad {
