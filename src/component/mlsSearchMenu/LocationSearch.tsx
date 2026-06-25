@@ -49,7 +49,7 @@ const LocationSearchInput = <T extends string>({ handleSearch, searchKey }: {
         ref={inputRef}
         type="text"
         placeholder="Search"
-        className="border border-gray-300 pl-10 pr-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#151515] focus:ring-opacity-20 w-full"
+        className="border border-gray-300 rounded-[var(--radius-sm)] pl-10 pr-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#151515] focus:ring-opacity-20 w-full"
         onChange={(e) => {
           handleSearch(e.target.value, searchKey);
           if (e.target.value.trim()) {

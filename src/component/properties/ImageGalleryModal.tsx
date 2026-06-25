@@ -128,7 +128,7 @@ export const ImageGalleryModal = ({
                     <button
                       key={idx}
                       onClick={() => setCurrent(idx)}
-                      className={`relative w-full h-[120px] shrink-0 overflow-hidden border-2 transition-colors ${
+                      className={`relative w-full h-[120px] shrink-0 overflow-hidden rounded-[var(--radius-md)] border-2 transition-colors ${
                         active
                           ? "border-[var(--gold-300)]"
                           : "border-transparent hover:border-white/30"

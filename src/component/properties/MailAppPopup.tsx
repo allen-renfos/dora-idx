@@ -70,7 +70,7 @@ export const MailAppPopup = ({ email, subject = "", body = "" }: Props) => {
       <button
         type="button"
         onClick={() => setIsOpen(true)}
-        className="inline-flex items-center justify-center gap-2 h-11 w-full border border-[var(--line-soft)] text-[var(--ink-soft)] text-[12px] tracking-[0.14em] uppercase font-semibold hover:border-[var(--gold-500)] hover:text-[var(--gold-500)] transition-colors"
+        className="inline-flex items-center justify-center gap-2 h-11 w-full border border-[var(--line-soft)] rounded-[var(--radius-sm)] text-[var(--ink-soft)] text-[12px] tracking-[0.14em] uppercase font-semibold hover:border-[var(--gold-500)] hover:text-[var(--gold-500)] transition-colors"
       >
         <FiMail size={14} />
         Email
@@ -94,7 +94,7 @@ export const MailAppPopup = ({ email, subject = "", body = "" }: Props) => {
               transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
               className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-[9999] w-[92%] max-w-[460px]"
             >
-              <div className="bg-[var(--surface-obsidian)] border border-[var(--line-soft)] relative">
+              <div className="bg-[var(--surface-obsidian)] border border-[var(--line-soft)] rounded-[var(--radius-md)] relative">
                 <div
                   aria-hidden
                   className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[var(--gold-500)]/55 to-transparent"
@@ -128,7 +128,7 @@ export const MailAppPopup = ({ email, subject = "", body = "" }: Props) => {
                       <button
                         key={label}
                         onClick={() => handleSelect(href, newTab)}
-                        className="flex flex-col items-center justify-center gap-2.5 py-5 border bg-[var(--surface-charcoal)] border-[var(--line-soft)] text-[var(--ink-soft)] hover:border-[var(--gold-500)]/50 hover:text-[var(--gold-500)] transition-colors"
+                        className="flex flex-col items-center justify-center gap-2.5 py-5 border bg-[var(--surface-charcoal)] border-[var(--line-soft)] rounded-[var(--radius-sm)] text-[var(--ink-soft)] hover:border-[var(--gold-500)]/50 hover:text-[var(--gold-500)] transition-colors"
                       >
                         <Icon size={22} />
                         <span className="text-[11px] uppercase tracking-[0.16em] font-medium">

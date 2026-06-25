@@ -118,7 +118,7 @@ export const PropertyWishlistCard = ({ item, handleModal, hideWishlist, onRemove
         {item.property_status && (
           <span
             className="absolute top-4 left-4 px-3 py-1.5 text-[10px] font-bold tracking-[0.16em] uppercase bg-[var(--pine)] text-[var(--on-pine)]"
-            style={{ borderRadius: "var(--radius-xs)" }}
+            style={{ borderRadius: "var(--radius-pill)" }}
           >
             {item.property_status}
           </span>
@@ -232,7 +232,7 @@ export const PropertyWishlistCard = ({ item, handleModal, hideWishlist, onRemove
             }}
             disabled={isRemoving}
             className="mt-3 inline-flex items-center justify-center gap-2 w-full h-10 border border-[var(--line)] text-[var(--ink-faint)] text-[11px] tracking-[0.16em] uppercase font-semibold hover:border-red-500/50 hover:bg-red-500/5 hover:text-red-500 transition-all duration-200 disabled:opacity-40"
-            style={{ borderRadius: "var(--radius-xs)" }}
+            style={{ borderRadius: "var(--radius-sm)" }}
           >
             {isRemoving ? (
               <svg className="animate-spin" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">

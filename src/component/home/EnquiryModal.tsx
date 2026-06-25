@@ -138,7 +138,7 @@ export const EnquiryModal = ({ isOpen, onClose }: Props) => {
       size="lg"
     >
       {success && (
-        <div className="mb-5 px-4 py-3 border bg-[var(--gold-500)]/10 border-[var(--gold-500)]/40 text-[var(--accent-text)] text-[13px] inline-flex items-center gap-2">
+        <div className="mb-5 px-4 py-3 border rounded-[var(--radius-sm)] bg-[var(--gold-500)]/10 border-[var(--gold-500)]/40 text-[var(--accent-text)] text-[13px] inline-flex items-center gap-2">
           <FiCheckCircle size={14} />
           {success}
         </div>
@@ -202,7 +202,7 @@ export const EnquiryModal = ({ isOpen, onClose }: Props) => {
             onChange={onChange}
             rows={4}
             placeholder="What can we help you with?"
-            className={`bg-[var(--surface-charcoal)] border px-4 py-3 text-[14px] text-[var(--ink)] placeholder:text-[var(--ink-faint)] outline-none transition-colors resize-y min-h-[110px] ${
+            className={`bg-[var(--surface-charcoal)] border rounded-[var(--radius-sm)] px-4 py-3 text-[14px] text-[var(--ink)] placeholder:text-[var(--ink-faint)] outline-none transition-colors resize-y min-h-[110px] ${
               errors.description
                 ? "border-[#b3261e]/60"
                 : "border-[var(--line-soft)] focus:border-[var(--gold-500)]/60"

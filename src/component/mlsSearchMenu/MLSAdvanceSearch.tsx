@@ -84,7 +84,7 @@ function Select({
       value={value}
       onChange={onChange}
       disabled={disabled}
-      className="h-10 px-3 bg-[var(--surface-charcoal)] border border-[var(--line-soft)] text-[13px] text-[var(--ink)] focus:outline-none focus:border-[var(--gold-500)]/60 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+      className="h-10 px-3 bg-[var(--surface-charcoal)] border border-[var(--line-soft)] rounded-[var(--radius-sm)] text-[13px] text-[var(--ink)] focus:outline-none focus:border-[var(--gold-500)]/60 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
     >
       {children}
     </select>
@@ -152,7 +152,7 @@ function TagGroup({
             key={item.value}
             type="button"
             onClick={() => onToggle(item.value)}
-            className={`inline-flex items-center gap-1.5 h-9 px-3.5 text-[12px] tracking-wide border transition-all duration-200 ${
+            className={`inline-flex items-center gap-1.5 h-9 px-3.5 text-[12px] tracking-wide border rounded-[var(--radius-sm)] transition-all duration-200 ${
               active
                 ? "bg-[var(--gold-500)]/15 border-[var(--gold-500)] text-[var(--gold-500)]"
                 : "bg-[var(--surface-charcoal)] border-[var(--line-soft)] text-[var(--ink-soft)] hover:border-[var(--gold-500)]/50 hover:text-[var(--ink)]"
@@ -181,7 +181,7 @@ function Accordion({
   children: React.ReactNode;
 }) {
   return (
-    <div className="border border-[var(--line-soft)] bg-[var(--surface-obsidian)] mb-3">
+    <div className="border border-[var(--line-soft)] rounded-[var(--radius-md)] overflow-hidden bg-[var(--surface-obsidian)] mb-3">
       <button
         type="button"
         onClick={onToggle}
@@ -231,7 +231,7 @@ function AdvancedGate({
   return (
     <div className="group relative" title={ADVANCED_DISABLED_MESSAGE} aria-disabled="true">
       <div
-        className="flex items-start gap-3 border border-dashed border-[var(--line-soft)] bg-[var(--surface-charcoal)]/40 px-5 py-6 text-[var(--ink-faint)]"
+        className="flex items-start gap-3 border border-dashed border-[var(--line-soft)] rounded-[var(--radius-md)] bg-[var(--surface-charcoal)]/40 px-5 py-6 text-[var(--ink-faint)]"
         role="note"
       >
         <FiLock size={16} className="mt-0.5 shrink-0 text-[var(--gold-500)]/70" />
@@ -391,7 +391,7 @@ const MLSAdvanceSearch = ({
             exit={{ opacity: 0, y: 16, scale: 0.98 }}
             transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
             onClick={(e) => e.stopPropagation()}
-            className="relative w-full max-w-3xl max-h-full flex flex-col bg-[var(--surface-ink)] border border-[var(--line-soft)] shadow-[0_40px_80px_-20px_rgba(0,0,0,0.7)]"
+            className="relative w-full max-w-3xl max-h-full flex flex-col bg-[var(--surface-ink)] border border-[var(--line-soft)] rounded-[var(--radius-md)] overflow-hidden shadow-[0_40px_80px_-20px_rgba(0,0,0,0.7)]"
           >
             <div className="flex items-center justify-between px-6 md:px-8 py-5 border-b border-[var(--line-soft)] bg-[var(--surface-obsidian)]">
               <div className="flex items-center gap-3">

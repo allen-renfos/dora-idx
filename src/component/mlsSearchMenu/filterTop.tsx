@@ -326,7 +326,7 @@ const FilterTop = ({
           ref={dropdownRef}
           className="relative flex-1 min-w-[260px] md:min-w-[320px]"
         >
-          <div className="flex items-center h-11 bg-[var(--surface-charcoal)] border border-[var(--line-soft)] hover:border-[var(--line-medium)] focus-within:border-[var(--gold-500)]/60 transition-colors">
+          <div className="flex items-center h-11 bg-[var(--surface-charcoal)] border border-[var(--line-soft)] rounded-[var(--radius-sm)] hover:border-[var(--line-medium)] focus-within:border-[var(--gold-500)]/60 transition-colors">
             <span className="pl-3 text-[var(--gold-500)]">
               {isSearching ? (
                 <svg className="animate-spin" width={16} height={16} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
@@ -383,7 +383,7 @@ const FilterTop = ({
                 transition={{ duration: 0.2 }}
                 id="mls-search-listbox"
                 role="listbox"
-                className="absolute left-0 right-0 top-full mt-1 bg-[var(--cream)] shadow-[var(--shadow-lift)] z-50 max-h-[380px] overflow-y-auto custom-scrollbar border-t border-[var(--gold-500)]/30"
+                className="absolute left-0 right-0 top-full mt-1 bg-[var(--cream)] rounded-[var(--radius-md)] shadow-[var(--shadow-lift)] z-50 max-h-[380px] overflow-y-auto custom-scrollbar border-t border-[var(--gold-500)]/30"
               >
                 {flatSuggestions.length > 0 ? (
                   groupedSuggestions.map(([category, suggestions]) => (
@@ -530,7 +530,7 @@ const FilterTop = ({
               aria-describedby={
                 !isAreaSelected ? "advanced-disabled-tooltip" : undefined
               }
-              className="relative h-11 px-4 inline-flex items-center gap-2 bg-[var(--cream)] border border-[var(--line)] hover:border-[var(--gold-500)]/60 text-[var(--ink)] transition-colors disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:border-[var(--line)]"
+              className="relative h-11 px-4 inline-flex items-center gap-2 bg-[var(--cream)] border border-[var(--line)] rounded-[var(--radius-sm)] hover:border-[var(--gold-500)]/60 text-[var(--ink)] transition-colors disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:border-[var(--line)]"
               aria-label="Advanced filters"
             >
               <FiSliders size={14} className="text-[var(--gold-500)]" />
@@ -569,7 +569,7 @@ const FilterTop = ({
           <button
             onClick={handleSaveSearch}
             disabled={isSavingSearch}
-            className="h-11 px-5 inline-flex items-center gap-2 bg-[var(--gold-500)] hover:bg-[var(--gold-600)] text-[var(--surface-ink)] text-[12px] font-bold tracking-[0.18em] uppercase disabled:opacity-60 disabled:cursor-not-allowed transition-colors"
+            className="h-11 px-5 inline-flex items-center gap-2 rounded-[var(--radius-sm)] bg-[var(--gold-500)] hover:bg-[var(--gold-600)] text-[var(--surface-ink)] text-[12px] font-bold tracking-[0.18em] uppercase disabled:opacity-60 disabled:cursor-not-allowed transition-colors"
           >
             {isSavingSearch ? (
               <svg
@@ -670,7 +670,7 @@ function FilterPill({
         disabled={disabled}
         aria-disabled={disabled}
         title={disabled ? disabledHint : undefined}
-        className={`h-11 px-4 inline-flex items-center gap-2 border transition-colors text-[13px] disabled:opacity-50 disabled:cursor-not-allowed ${
+        className={`h-11 px-4 inline-flex items-center gap-2 border rounded-[var(--radius-sm)] transition-colors text-[13px] disabled:opacity-50 disabled:cursor-not-allowed ${
           active
             ? "bg-[var(--gold-500)]/10 border-[var(--gold-500)]/60 text-[var(--gold-500)]"
             : "bg-[var(--cream)] border-[var(--line)] text-[var(--ink)] hover:border-[var(--gold-500)]/60 disabled:hover:border-[var(--line)]"
@@ -689,7 +689,7 @@ function FilterPill({
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -4 }}
             transition={{ duration: 0.2 }}
-            className="absolute left-0 top-full mt-2 min-w-[340px] bg-[var(--surface-ink)] border border-[var(--line-soft)] shadow-[var(--shadow-lift)] z-40 p-5"
+            className="absolute left-0 top-full mt-2 min-w-[340px] bg-[var(--surface-ink)] border border-[var(--line-soft)] rounded-[var(--radius-md)] shadow-[var(--shadow-lift)] z-40 p-5"
           >
             {children}
           </motion.div>
@@ -726,7 +726,7 @@ function RangeSelect({
         <span className="text-[10px] uppercase tracking-[0.2em] text-[var(--ink-faint)] font-semibold">
           {minLabel}
         </span>
-        <div className="flex flex-col overflow-y-auto max-h-[220px] border border-[var(--line-soft)] custom-scrollbar">
+        <div className="flex flex-col overflow-y-auto max-h-[220px] border border-[var(--line-soft)] rounded-[var(--radius-md)] custom-scrollbar">
           {minOptions.map((o) => {
             const selected = o.value === min;
             return (
@@ -752,7 +752,7 @@ function RangeSelect({
         <span className="text-[10px] uppercase tracking-[0.2em] text-[var(--ink-faint)] font-semibold">
           {maxLabel}
         </span>
-        <div className="flex flex-col overflow-y-auto max-h-[220px] border border-[var(--line-soft)] custom-scrollbar">
+        <div className="flex flex-col overflow-y-auto max-h-[220px] border border-[var(--line-soft)] rounded-[var(--radius-md)] custom-scrollbar">
           {maxOptions.map((o) => {
             const selected = o.value === max;
             return (

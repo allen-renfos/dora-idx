@@ -368,7 +368,7 @@ export const GoogleMapComponent = ({ markers = [], onMarkerHover }: MapProps) =>
         }}
       />
       {/* Satellite / Map toggle */}
-      <div style={{ position: 'absolute', bottom: 24, left: 12, zIndex: 10, display: 'flex', gap: 2, background: '#111', border: '1px solid #333', overflow: 'hidden' }}>
+      <div style={{ position: 'absolute', bottom: 24, left: 12, zIndex: 10, display: 'flex', gap: 2, background: '#111', border: '1px solid #333', borderRadius: 'var(--radius-sm)', overflow: 'hidden' }}>
         {(['roadmap', 'satellite'] as const).map((type) => (
           <button
             key={type}

@@ -230,7 +230,7 @@ export default function SellModal({ handleOpenModal }: Props) {
                   onClick={() =>
                     setForm((p) => ({ ...p, sellTime: w.value }))
                   }
-                  className={`h-10 px-4 text-[12px] uppercase tracking-[0.18em] border transition-colors ${
+                  className={`h-10 px-4 text-[12px] uppercase tracking-[0.18em] border rounded-[var(--radius-sm)] transition-colors ${
                     active
                       ? "bg-[var(--gold-500)]/15 border-[var(--gold-500)] text-[var(--accent-text)]"
                       : "bg-[var(--surface-charcoal)] border-[var(--line-soft)] text-[var(--ink-soft)] hover:border-[var(--gold-500)]/50"

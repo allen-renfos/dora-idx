@@ -62,7 +62,7 @@ export const MlsListingOptions = ({
     <div
       role="tablist"
       aria-label="View mode"
-      className="inline-flex items-center bg-[var(--surface-charcoal)] border border-[var(--line-soft)] p-1"
+      className="inline-flex items-center bg-[var(--surface-charcoal)] border border-[var(--line-soft)] rounded-[var(--radius-sm)] p-1"
     >
       {views
         .filter((v) => !v.hidden)

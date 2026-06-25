@@ -23,6 +23,7 @@ export const MlsMapModalCard = ({ item, onClose }: PropertyCardProps) => {
             width: 280,
             background: '#111',
             border: '1px solid #333',
+            borderRadius: 'var(--radius-md)',
             overflow: 'hidden',
             fontFamily: 'var(--font-lato), sans-serif',
         }}>

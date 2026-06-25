@@ -35,7 +35,7 @@
 
   /* ---- On-pine (text over dark forest bands) ---- */
   --on-pine: #f1ede3;
-  --on-pine-soft: rgba(241, 237, 227, 0.74);
+  --on-pine-soft: rgba(241, 237, 227, 0.86);
   --on-pine-faint: rgba(241, 237, 227, 0.5);
 
   /* ---- Lines ---- */
@@ -220,11 +220,15 @@ body {
 }
 .eyebrow.on-dark { color: var(--gold-300); }
 
-.lede {
-  font-size: clamp(1.05rem, 0.4vw + 0.98rem, 1.2rem);
-  line-height: 1.7;
-  color: var(--ink-soft);
-  font-weight: 300;
+/* In the components layer so a `text-*` utility (e.g. on dark pine banners)
+   overrides the default ink color instead of being silently beaten by it. */
+@layer components {
+  .lede {
+    font-size: clamp(1.05rem, 0.4vw + 0.98rem, 1.2rem);
+    line-height: 1.7;
+    color: var(--ink-soft);
+    font-weight: 300;
+  }
 }
 
 /* =========================================================

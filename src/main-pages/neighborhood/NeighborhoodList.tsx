@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { FiArrowRight, FiSearch } from "react-icons/fi";
+import { FiArrowUpRight, FiSearch } from "react-icons/fi";
 import { useNeighborhoodList } from "@/services/neighborhood/NeighborhoodQueries";
 
 type Neighborhood = {
@@ -37,6 +37,17 @@ function resolveImage(item: Neighborhood): string {
   return fallbackImg;
 }
 
+// Mosaic rhythm — feature / tall / wide tiles by position.
+// Only kicks in at sm+ ; mobile stays a clean 2-up grid.
+function tileSpan(i: number): string {
+  const m = i % 8;
+  if (m === 0) return "sm:col-span-2 sm:row-span-2"; // large feature
+  if (m === 3) return "sm:row-span-2"; // tall
+  if (m === 5) return "lg:col-span-2"; // wide
+  return "";
+}
+const isFeature = (i: number) => i % 8 === 0;
+
 const NeighborhoodList = ({ searchQuery = "" }: Props) => {
   const [neighborhood, setNeighborhood] = useState<Neighborhood[]>([]);
   const { data, isLoading } = useNeighborhoodList();
@@ -52,50 +63,62 @@ const NeighborhoodList = ({ searchQuery = "" }: Props) => {
       const name = item.name?.toLowerCase() || "";
       const city = item.city_id != null ? String(item.city_id).toLowerCase() : "";
       const description = item.description?.toLowerCase() || "";
-      return (
-        name.includes(q) || city.includes(q) || description.includes(q)
-      );
+      return name.includes(q) || city.includes(q) || description.includes(q);
     });
   }, [neighborhood, searchQuery]);
 
   return (
     <section className="container-wide">
       {isLoading ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {Array.from({ length: 6 }).map((_, i) => (
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 auto-rows-[180px] sm:auto-rows-[210px] lg:auto-rows-[230px] [grid-auto-flow:dense]">
+          {Array.from({ length: 8 }).map((_, i) => (
             <div
               key={i}
-              className="aspect-[3/4] rounded-[var(--radius-md)] bg-[var(--canvas-2)] animate-pulse"
+              className={`rounded-[var(--radius-md)] bg-[var(--canvas-2)] animate-pulse ${tileSpan(i)}`}
             />
           ))}
         </div>
       ) : filtered.length ? (
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.05 }}
-          variants={{
-            hidden: {},
-            visible: { transition: { staggerChildren: 0.06 } },
-          }}
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
-        >
-          {filtered.map((item) => (
-            <motion.div
-              key={item.id}
-              variants={{
-                hidden: { opacity: 0, y: 24 },
-                visible: {
-                  opacity: 1,
-                  y: 0,
-                  transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] },
-                },
-              }}
-            >
-              <NeighborhoodCard item={item} />
-            </motion.div>
-          ))}
-        </motion.div>
+        <>
+          {/* Index header */}
+          <div className="flex items-end justify-between gap-6 mb-10">
+            <span className="eyebrow inline-flex items-center gap-3">
+              <span className="inline-block h-px w-10 bg-[var(--gold)]" />
+              The Atlas
+            </span>
+            <span className="font-[family-name:var(--font-accent)] text-[12px] tracking-[0.28em] uppercase text-[var(--ink-faint)]">
+              {filtered.length} {filtered.length === 1 ? "place" : "places"}
+            </span>
+          </div>
+
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.03 }}
+            variants={{
+              hidden: {},
+              visible: { transition: { staggerChildren: 0.05 } },
+            }}
+            className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 auto-rows-[180px] sm:auto-rows-[210px] lg:auto-rows-[230px] [grid-auto-flow:dense]"
+          >
+            {filtered.map((item, i) => (
+              <motion.div
+                key={item.id}
+                variants={{
+                  hidden: { opacity: 0, y: 24 },
+                  visible: {
+                    opacity: 1,
+                    y: 0,
+                    transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] },
+                  },
+                }}
+                className={tileSpan(i)}
+              >
+                <NeighborhoodCard item={item} feature={isFeature(i)} index={i} />
+              </motion.div>
+            ))}
+          </motion.div>
+        </>
       ) : (
         <div className="py-24 flex flex-col items-center justify-center text-center max-w-xl mx-auto">
           <div className="w-16 h-16 rounded-full border border-[var(--gold)]/40 bg-[var(--cream)] flex items-center justify-center mb-6">
@@ -116,34 +139,65 @@ const NeighborhoodList = ({ searchQuery = "" }: Props) => {
   );
 };
 
-function NeighborhoodCard({ item }: { item: Neighborhood }) {
-  const label = item.name||item.city || "Neighborhood";
+function NeighborhoodCard({
+  item,
+  feature,
+  index,
+}: {
+  item: Neighborhood;
+  feature: boolean;
+  index: number;
+}) {
+  const label = item.name || item.city || "Neighborhood";
   const href = `/properties?keyword=${encodeURIComponent(label)}`;
+  const num = String(index + 1).padStart(2, "0");
+
   return (
     <Link
       href={href}
-      className="group relative block aspect-[3/4] overflow-hidden rounded-[var(--radius-md)] bg-[var(--pine)] border border-[var(--line)] hover:shadow-[var(--shadow-lift)] hover:-translate-y-1 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]"
+      className="group relative block w-full h-full overflow-hidden rounded-[var(--radius-md)] bg-[var(--pine)] border border-[var(--line)] hover:shadow-[var(--shadow-lift)] transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]"
       aria-label={`Explore ${label}`}
     >
       <Image
         src={resolveImage(item)}
         alt={label}
         fill
-        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-        className="object-cover transition-transform duration-[900ms] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.06]"
+        sizes={
+          feature
+            ? "(max-width: 1024px) 100vw, 50vw"
+            : "(max-width: 1024px) 50vw, 25vw"
+        }
+        className="object-cover transition-transform duration-[1100ms] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.07]"
       />
-      <div className="absolute inset-0 bg-gradient-to-t from-[var(--pine)] via-[var(--pine)]/30 to-transparent pointer-events-none" />
-      <div className="absolute inset-x-0 bottom-0 p-6 flex flex-col gap-3">
+      <div className="absolute inset-0 bg-gradient-to-t from-[var(--pine)] via-[var(--pine)]/25 to-transparent pointer-events-none" />
+
+      {/* index tick */}
+      <span className="absolute top-4 left-4 font-[family-name:var(--font-accent)] text-[11px] tracking-[0.28em] text-[var(--on-pine-soft)]">
+        {num}
+      </span>
+
+      <div className="absolute inset-x-0 bottom-0 p-5 md:p-6 flex flex-col gap-2.5">
         <div className="flex items-end justify-between gap-3">
-          <h3 className="font-serif text-2xl text-[var(--on-pine)] leading-tight">
+          <h3
+            className={`font-serif text-[var(--on-pine)] leading-tight tracking-tight ${
+              feature ? "text-[clamp(1.8rem,2.4vw+1rem,2.8rem)]" : "text-2xl"
+            }`}
+          >
             {label}
           </h3>
-          <span className="shrink-0 w-9 h-9 rounded-full border border-[var(--on-pine-faint)] flex items-center justify-center text-[var(--on-pine)] group-hover:bg-[var(--gold-300)] group-hover:border-[var(--gold-300)] group-hover:text-[var(--pine)] transition-all duration-300">
-            <FiArrowRight size={14} />
+          <span className="shrink-0 w-9 h-9 rounded-full border border-[var(--on-pine-faint)] flex items-center justify-center text-[var(--on-pine)] group-hover:bg-[var(--gold-300)] group-hover:border-[var(--gold-300)] group-hover:text-[var(--pine)] group-hover:-translate-y-0.5 group-hover:translate-x-0.5 transition-all duration-300">
+            <FiArrowUpRight size={15} />
           </span>
         </div>
-        {item.description && (
-          <p className="text-[13px] text-[var(--on-pine-soft)] line-clamp-2 max-w-xs">
+
+        {/* Feature tiles show the blurb always; small tiles reveal it on hover */}
+        {item.description && feature && (
+          <p className="text-[13.5px] text-[var(--on-pine-soft)] line-clamp-2 max-w-md">
+            {item.description}
+          </p>
+        )}
+        {item.description && !feature && (
+          <p className="text-[12.5px] text-[var(--on-pine-soft)] line-clamp-1 max-w-xs opacity-0 -translate-y-1 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
             {item.description}
           </p>
         )}

@@ -223,7 +223,7 @@ export const NewsLetter = () => {
                     !email ||
                     !isConsentChecked
                   }
-                  className="btn-subscribe marginLeft-10 rounded-none disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="btn-subscribe marginLeft-10 rounded-[var(--radius-sm)] disabled:opacity-50 disabled:cursor-not-allowed"
                   style={{
                     transition: "all 0.3s ease",
                     opacity:

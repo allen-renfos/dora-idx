@@ -123,7 +123,7 @@ export const MlsPropertyMapPage = ({
                     {Array.from({ length: 4 }).map((_, i) => (
                       <div
                         key={i}
-                        className="bg-[var(--surface-obsidian)] border border-[var(--line-soft)] overflow-hidden animate-pulse"
+                        className="bg-[var(--surface-obsidian)] border border-[var(--line-soft)] rounded-[var(--radius-md)] overflow-hidden animate-pulse"
                       >
                         <div className="aspect-[4/3] bg-[var(--canvas-2)]" />
                         <div className="p-5 flex flex-col gap-2.5">
@@ -160,7 +160,7 @@ export const MlsPropertyMapPage = ({
 
           {/* Hint pill */}
           <div
-            className="flex items-center justify-center gap-2 py-3 px-4 border border-[var(--line-soft)] bg-[var(--surface-charcoal)] cursor-pointer hover:border-[var(--gold-500)]/40 transition-colors"
+            className="flex items-center justify-center gap-2 py-3 px-4 border border-[var(--line-soft)] rounded-[var(--radius-sm)] bg-[var(--surface-charcoal)] cursor-pointer hover:border-[var(--gold-500)]/40 transition-colors"
             onClick={() => {
               const el = document.getElementById("mls-search-input");
               if (el) {
@@ -181,7 +181,7 @@ export const MlsPropertyMapPage = ({
         {/* Map column — sticky */}
         {showMapSection && (
           <div className="hidden lg:block lg:col-span-5">
-            <div className="sticky top-[180px] h-[calc(100vh-220px)] min-h-[560px] overflow-hidden border border-[var(--line-soft)]">
+            <div className="sticky top-[180px] h-[calc(100vh-220px)] min-h-[560px] overflow-hidden border border-[var(--line-soft)] rounded-[var(--radius-md)]">
               {isLoading ? (
                 <div className="w-full h-full bg-[var(--surface-charcoal)] animate-pulse" />
               ) : (
@@ -204,7 +204,7 @@ function SplitSkeleton({ count }: { count: number }) {
       {Array.from({ length: count }).map((_, i) => (
         <div
           key={i}
-          className="bg-[var(--surface-obsidian)] border border-[var(--line-soft)] overflow-hidden animate-pulse"
+          className="bg-[var(--surface-obsidian)] border border-[var(--line-soft)] rounded-[var(--radius-md)] overflow-hidden animate-pulse"
         >
           <div className="aspect-[4/3] bg-[var(--canvas-2)]" />
           <div className="p-5 flex flex-col gap-2.5">

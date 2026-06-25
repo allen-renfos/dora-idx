@@ -259,14 +259,14 @@ export const SinglePropertyDetails = ({ property: prop }: Props) => {
         <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6 pb-8">
           <div className="flex flex-col gap-3">
             <div className="inline-flex items-center gap-3 flex-wrap">
-              <span className="inline-flex items-center gap-2 px-3 py-1 text-[11px] font-bold tracking-[0.2em] uppercase text-[var(--gold-500)] bg-[var(--gold-500)]/10 border border-[var(--gold-500)]/30">
+              <span className="inline-flex items-center gap-2 px-3 py-1 text-[11px] font-bold tracking-[0.2em] uppercase text-[var(--gold-500)] bg-[var(--gold-500)]/10 border border-[var(--gold-500)]/30 rounded-[var(--radius-pill)]">
                 <span className="w-1.5 h-1.5 rounded-full bg-[var(--gold-500)] animate-pulse" />
                 {details.status || "Active"}
               </span>
               {details.tags.map((tag) => (
                 <span
                   key={tag}
-                  className="inline-flex items-center px-3 py-1 text-[11px] font-bold tracking-[0.2em] uppercase text-[var(--ink-soft)] bg-[var(--ink)]/5 border border-[var(--line-medium)]"
+                  className="inline-flex items-center px-3 py-1 text-[11px] font-bold tracking-[0.2em] uppercase text-[var(--ink-soft)] bg-[var(--ink)]/5 border border-[var(--line-medium)] rounded-[var(--radius-pill)]"
                 >
                   {tag}
                 </span>
@@ -297,7 +297,7 @@ export const SinglePropertyDetails = ({ property: prop }: Props) => {
           </div>
 
           {/* Stats */}
-          <div className="flex items-stretch divide-x divide-[var(--line-soft)] border border-[var(--line-soft)] bg-[var(--surface-obsidian)]">
+          <div className="flex items-stretch divide-x divide-[var(--line-soft)] border border-[var(--line-soft)] bg-[var(--surface-obsidian)] rounded-[var(--radius-md)]">
             <Stat value={details.beds ?? "0"} label="Beds" />
             <Stat value={details.baths ?? "0"} label="Baths" />
             <Stat
@@ -372,7 +372,7 @@ export const SinglePropertyDetails = ({ property: prop }: Props) => {
             )}
 
             {/* Inline CTA */}
-            <div className="bg-gradient-to-br from-[var(--gold-500)]/10 to-transparent border border-[var(--gold-500)]/25 px-6 md:px-8 py-7 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+            <div className="bg-gradient-to-br from-[var(--gold-500)]/10 to-transparent border border-[var(--gold-500)]/25 rounded-[var(--radius-md)] px-6 md:px-8 py-7 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
               <div>
                 <h3 className="font-serif text-2xl text-[var(--ink)]">
                   Interested in this home?
@@ -394,7 +394,7 @@ export const SinglePropertyDetails = ({ property: prop }: Props) => {
             {showMortgageCalculator && (
               <div>
                 <SectionHeader title="Mortgage Calculator" />
-                <div className="bg-[var(--surface-obsidian)] border border-[var(--line-soft)] p-6 md:p-8">
+                <div className="bg-[var(--surface-obsidian)] border border-[var(--line-soft)] rounded-[var(--radius-md)] p-6 md:p-8">
                   <div className="flex flex-col md:flex-row md:items-center gap-8 md:gap-10 mb-8">
                     {/* Donut */}
                     <div className="shrink-0 mx-auto md:mx-0">
@@ -536,11 +536,11 @@ export const SinglePropertyDetails = ({ property: prop }: Props) => {
                         </span>
                       </CalcField>
                       {loanDropdownOpen && (
-                        <div className="absolute top-full left-0 right-0 mt-2 bg-[var(--surface-charcoal)] border border-[var(--gold-500)]/40 p-5 z-30 shadow-[0_20px_40px_-15px_rgba(0,0,0,0.18)]">
+                        <div className="absolute top-full left-0 right-0 mt-2 bg-[var(--surface-charcoal)] border border-[var(--gold-500)]/40 rounded-[var(--radius-md)] p-5 z-30 shadow-[0_20px_40px_-15px_rgba(0,0,0,0.18)]">
                           <label className="block text-[10px] uppercase tracking-[0.2em] text-[var(--ink-faint)] mb-1.5">
                             Interest Rate
                           </label>
-                          <div className="flex items-center bg-[var(--surface-ink)] border border-[var(--line-soft)] px-3 py-2.5 mb-4">
+                          <div className="flex items-center bg-[var(--surface-ink)] border border-[var(--line-soft)] rounded-[var(--radius-sm)] px-3 py-2.5 mb-4">
                             <input
                               type="number"
                               step="0.01"
@@ -562,7 +562,7 @@ export const SinglePropertyDetails = ({ property: prop }: Props) => {
                             onChange={(e) =>
                               setTempYears(Number(e.target.value))
                             }
-                            className="w-full bg-[var(--surface-ink)] border border-[var(--line-soft)] px-3 py-2.5 text-[var(--ink)] text-[14px] mb-5 outline-none focus:border-[var(--gold-500)]/60"
+                            className="w-full bg-[var(--surface-ink)] border border-[var(--line-soft)] rounded-[var(--radius-sm)] px-3 py-2.5 text-[var(--ink)] text-[14px] mb-5 outline-none focus:border-[var(--gold-500)]/60"
                           >
                             <option value={10}>10 years</option>
                             <option value={15}>15 years</option>
@@ -614,7 +614,7 @@ export const SinglePropertyDetails = ({ property: prop }: Props) => {
 
             {/* Mortgage calculator disclaimer */}
             {showMortgageCalculator && (
-              <div className="p-5 bg-[var(--surface-obsidian)] border border-[var(--line-soft)] text-[12px] text-[var(--ink-faint)] leading-relaxed flex flex-col gap-2">
+              <div className="p-5 bg-[var(--surface-obsidian)] border border-[var(--line-soft)] rounded-[var(--radius-md)] text-[12px] text-[var(--ink-faint)] leading-relaxed flex flex-col gap-2">
                 <p>
                   All calculations are estimates and today&rsquo;s rates are provided by Realtipro for informational purposes only.
                 </p>
@@ -628,7 +628,7 @@ export const SinglePropertyDetails = ({ property: prop }: Props) => {
             {showVirtualTour && (
               <div>
                 <SectionHeader title="Virtual Tour" />
-                <div className="relative w-full aspect-video bg-[var(--surface-obsidian)] border border-[var(--line-soft)] overflow-hidden">
+                <div className="relative w-full aspect-video bg-[var(--surface-obsidian)] border border-[var(--line-soft)] rounded-[var(--radius-md)] overflow-hidden">
                   <iframe
                     src={details.media.virtualTourUrl ?? undefined}
                     title="Virtual Tour"
@@ -647,7 +647,7 @@ export const SinglePropertyDetails = ({ property: prop }: Props) => {
             {showPropertyMap && details.latitude !== null && details.longitude !== null && (
               <div>
                 <SectionHeader title="Location & Neighborhood" />
-                <div className="border border-[var(--line-soft)] bg-[var(--surface-obsidian)] overflow-hidden">
+                <div className="border border-[var(--line-soft)] bg-[var(--surface-obsidian)] rounded-[var(--radius-md)] overflow-hidden">
                   <LocalInformation
                     coordinates={{
                       lat: Number(details.latitude),
@@ -659,7 +659,7 @@ export const SinglePropertyDetails = ({ property: prop }: Props) => {
             )}
 
             {/* MLS disclaimer */}
-            <div className="mt-4 p-6 md:p-8 bg-[var(--surface-obsidian)] border border-[var(--line-soft)] flex flex-col gap-3 text-[12px] text-[var(--ink-soft)] leading-relaxed">
+            <div className="mt-4 p-6 md:p-8 bg-[var(--surface-obsidian)] border border-[var(--line-soft)] rounded-[var(--radius-md)] flex flex-col gap-3 text-[12px] text-[var(--ink-soft)] leading-relaxed">
               <p>
                 Estimated payment, market insight calculations, school and
                 neighborhood information provided by Realtipro.
@@ -717,7 +717,7 @@ export const SinglePropertyDetails = ({ property: prop }: Props) => {
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-              className="bg-[var(--surface-obsidian)] border border-[var(--line-soft)] p-6"
+              className="bg-[var(--surface-obsidian)] border border-[var(--line-soft)] rounded-[var(--radius-md)] p-6"
             >
               <div className="flex items-center gap-4 pb-5 border-b border-[var(--line-soft)]">
                 <div className="relative w-16 h-16 overflow-hidden rounded-full border border-[var(--gold-500)]/40">
@@ -766,11 +766,11 @@ export const SinglePropertyDetails = ({ property: prop }: Props) => {
               </button>
             </motion.div>
 
-            <div className="bg-[var(--surface-obsidian)] border border-[var(--line-soft)] p-6 flex flex-col gap-3">
+            <div className="bg-[var(--surface-obsidian)] border border-[var(--line-soft)] rounded-[var(--radius-md)] p-6 flex flex-col gap-3">
               <button
                 onClick={handleToggleFavorites}
                 disabled={isAddingToFavorites}
-                className={`inline-flex items-center justify-center gap-2.5 h-11 border transition-all duration-300 text-[12px] font-bold tracking-[0.18em] uppercase ${
+                className={`inline-flex items-center justify-center gap-2.5 h-11 border rounded-[var(--radius-sm)] transition-all duration-300 text-[12px] font-bold tracking-[0.18em] uppercase ${
                   isFavorited
                     ? "bg-[var(--gold-500)] border-[var(--gold-500)] text-[var(--surface-ink)]"
                     : "border-[var(--gold-500)] text-[var(--gold-500)] hover:bg-[var(--gold-500)]/10"
@@ -961,7 +961,7 @@ function Card({
   children: React.ReactNode;
 }) {
   return (
-    <div className="bg-[var(--surface-obsidian)] border border-[var(--line-soft)] hover:border-[var(--line-medium)] transition-colors p-6 md:p-7">
+    <div className="bg-[var(--surface-obsidian)] border border-[var(--line-soft)] rounded-[var(--radius-md)] hover:border-[var(--line-medium)] transition-colors p-6 md:p-7">
       <h3 className="flex items-center gap-3 mb-5 font-serif text-lg text-[var(--ink)]">
         <span className="inline-block w-1 h-5 bg-[var(--gold-500)]" />
         {title}
@@ -1016,7 +1016,7 @@ function CalcField({
 }) {
   return (
     <div
-      className={`bg-[var(--surface-charcoal)] border px-4 py-3.5 transition-colors ${
+      className={`bg-[var(--surface-charcoal)] border rounded-[var(--radius-sm)] px-4 py-3.5 transition-colors ${
         active
           ? "border-[var(--gold-500)]/60"
           : "border-[var(--line-soft)] hover:border-[var(--line-medium)]"

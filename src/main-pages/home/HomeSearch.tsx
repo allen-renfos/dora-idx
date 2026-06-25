@@ -121,7 +121,7 @@ export default function HomeSearch({ keyword, setKeyword }: HomeSearchProps) {
               className="relative"
             >
               {/* Search bar */}
-              <div className="flex items-stretch bg-white/97 backdrop-blur-md shadow-[0_24px_60px_-18px_rgba(0,0,0,0.5)]">
+              <div className="flex items-stretch bg-white/97 backdrop-blur-md shadow-[0_24px_60px_-18px_rgba(0,0,0,0.5)] rounded-[var(--radius-md)] overflow-hidden">
                 <div className="pl-4 flex items-center text-[var(--gold-600)] shrink-0">
                   {isSearching ? (
                     <svg className="animate-spin" width={18} height={18} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -160,7 +160,7 @@ export default function HomeSearch({ keyword, setKeyword }: HomeSearchProps) {
               {/* Mobile: full-width button below the bar */}
               <button
                 onClick={() => goToResults(keyword)}
-                className="sm:hidden w-full mt-3 h-[50px] flex items-center justify-center gap-2 text-[11px] font-bold tracking-[0.2em] uppercase bg-[var(--ink)] text-white hover:bg-[var(--accent-text)] transition-colors duration-300"
+                className="sm:hidden w-full mt-3 h-[50px] flex items-center justify-center gap-2 text-[11px] font-bold tracking-[0.2em] uppercase bg-[var(--ink)] text-white hover:bg-[var(--accent-text)] transition-colors duration-300 rounded-[var(--radius-sm)]"
               >
                 <FiSearch size={15} strokeWidth={2.5} />
                 Search
@@ -174,7 +174,7 @@ export default function HomeSearch({ keyword, setKeyword }: HomeSearchProps) {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -4 }}
                     transition={{ duration: 0.2 }}
-                    className="absolute left-0 right-0 top-full mt-1 bg-white shadow-[0_30px_60px_-15px_rgba(0,0,0,0.5)] z-[100] max-h-[380px] overflow-y-auto custom-scrollbar border-t border-[var(--gold-500)]/30"
+                    className="absolute left-0 right-0 top-full mt-1 bg-white shadow-[0_30px_60px_-15px_rgba(0,0,0,0.5)] z-[100] max-h-[380px] overflow-y-auto custom-scrollbar border-t border-[var(--gold-500)]/30 rounded-[var(--radius-md)]"
                   >
                     {trimmedKeyword.length === 0 ? (
                       <EmptyRow
@@ -236,7 +236,7 @@ export default function HomeSearch({ keyword, setKeyword }: HomeSearchProps) {
               className="relative"
             >
               {/* Sell bar */}
-              <div className="flex items-stretch bg-white/97 backdrop-blur-md shadow-[0_24px_60px_-18px_rgba(0,0,0,0.5)]">
+              <div className="flex items-stretch bg-white/97 backdrop-blur-md shadow-[0_24px_60px_-18px_rgba(0,0,0,0.5)] rounded-[var(--radius-md)] overflow-hidden">
                 <div className="flex-1 min-w-0 px-5 h-[58px] sm:h-[64px] flex flex-col justify-center">
                   <span className="font-serif text-[14px] sm:text-[15px] text-[#1a1a1a] leading-tight">
                     Ready to list with intention?
@@ -256,7 +256,7 @@ export default function HomeSearch({ keyword, setKeyword }: HomeSearchProps) {
               {/* Mobile: full-width button below the bar */}
               <button
                 onClick={() => setIsSellModalOpen(true)}
-                className="sm:hidden w-full mt-3 h-[50px] flex items-center justify-center text-[11px] font-bold tracking-[0.2em] uppercase bg-[var(--ink)] text-white hover:bg-[var(--accent-text)] transition-colors duration-300"
+                className="sm:hidden w-full mt-3 h-[50px] flex items-center justify-center text-[11px] font-bold tracking-[0.2em] uppercase bg-[var(--ink)] text-white hover:bg-[var(--accent-text)] transition-colors duration-300 rounded-[var(--radius-sm)]"
               >
                 Request Valuation
               </button>

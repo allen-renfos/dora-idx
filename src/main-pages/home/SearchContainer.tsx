@@ -163,7 +163,7 @@ const SearchContainer = ({
                     display: "flex",
                     alignItems: "center",
                     background: "#fff",
-                    borderRadius: "0px",
+                    borderRadius: "var(--radius-md)",
                     overflow: "visible",
                     position: "relative",
                   }}
@@ -307,7 +307,7 @@ const SearchContainer = ({
                   fontWeight: "700",
                   letterSpacing: "0.5px",
                   cursor: "pointer",
-                  borderRadius: "0px",
+                  borderRadius: "var(--radius-sm)",
                   textTransform: "uppercase",
                   transition: "background 0.2s ease",
                 }}

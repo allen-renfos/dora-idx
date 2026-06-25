@@ -8,7 +8,7 @@ import { useBlogList } from "@/services/blog/BlogQueries";
 import { Blog } from "@/types/Blog";
 import { useQueryClient } from "@tanstack/react-query";
 import { dateToString } from "@/helpers/DateConverters";
-import { FiArrowRight, FiChevronLeft, FiChevronRight } from "react-icons/fi";
+import { FiArrowRight, FiArrowUpRight, FiChevronLeft, FiChevronRight } from "react-icons/fi";
 
 interface Props {
   searchQuery?: string;
@@ -28,7 +28,7 @@ export default function BlogList({ searchQuery = "" }: Props) {
   const queryClient = useQueryClient();
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const perPage = 6;
+  const perPage = 7;
 
   const { data, isLoading, error } = useBlogList({
     page: currentPage,
@@ -60,22 +60,30 @@ export default function BlogList({ searchQuery = "" }: Props) {
 
   const window = buildPageWindow(currentPage, totalPages);
 
+  // Feature the latest piece on the first page when not searching.
+  const showFeature = !searchQuery && currentPage === 1 && filtered.length >= 3;
+  const lead = showFeature ? filtered[0] : null;
+  const rest = showFeature ? filtered.slice(1) : filtered;
+
   if (isLoading) {
     return (
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {Array.from({ length: 6 }).map((_, i) => (
-          <div
-            key={i}
-            className="bg-[var(--cream)] rounded-[var(--radius-md)] border border-[var(--line)] animate-pulse overflow-hidden"
-          >
-            <div className="aspect-[16/10] bg-[var(--canvas-2)]" />
-            <div className="p-6 flex flex-col gap-3">
-              <div className="h-3 w-24 bg-[var(--canvas-2)]" />
-              <div className="h-5 w-full bg-[var(--canvas-2)]" />
-              <div className="h-5 w-[70%] bg-[var(--canvas-2)]" />
+      <div className="flex flex-col gap-6">
+        <div className="bg-[var(--cream)] rounded-[var(--radius-md)] border border-[var(--line)] animate-pulse overflow-hidden aspect-[16/8]" />
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {Array.from({ length: 4 }).map((_, i) => (
+            <div
+              key={i}
+              className="bg-[var(--cream)] rounded-[var(--radius-md)] border border-[var(--line)] animate-pulse overflow-hidden"
+            >
+              <div className="aspect-[16/10] bg-[var(--canvas-2)]" />
+              <div className="p-6 flex flex-col gap-3">
+                <div className="h-3 w-24 bg-[var(--canvas-2)]" />
+                <div className="h-5 w-full bg-[var(--canvas-2)]" />
+                <div className="h-5 w-[70%] bg-[var(--canvas-2)]" />
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
     );
   }
@@ -94,6 +102,8 @@ export default function BlogList({ searchQuery = "" }: Props) {
 
   return (
     <>
+      {lead && <FeaturedLead item={lead} />}
+
       <motion.div
         initial="hidden"
         whileInView="visible"
@@ -104,7 +114,7 @@ export default function BlogList({ searchQuery = "" }: Props) {
         }}
         className="grid grid-cols-1 md:grid-cols-2 gap-6"
       >
-        {filtered.map((item: any) => (
+        {rest.map((item: any) => (
           <motion.div
             key={item.id}
             variants={{
@@ -169,6 +179,69 @@ export default function BlogList({ searchQuery = "" }: Props) {
   );
 }
 
+function Meta({ item, light }: { item: any; light?: boolean }) {
+  const faint = light ? "text-[var(--on-pine-faint)]" : "text-[var(--ink-faint)]";
+  const accent = light ? "text-[var(--gold-300)]" : "text-[var(--gold-deep)]";
+  return (
+    <div
+      className={`flex items-center gap-3 text-[11px] uppercase tracking-[0.2em] ${faint} font-[family-name:var(--font-accent)]`}
+    >
+      {item.publishDate && <time>{dateToString(item.publishDate)}</time>}
+      {item.publishDate && (
+        <span className="inline-block w-6 h-px bg-[var(--gold)]/70" />
+      )}
+      <span className={accent}>{item.category || "Insight"}</span>
+    </div>
+  );
+}
+
+function FeaturedLead({ item }: { item: any }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 28 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+      className="mb-10"
+    >
+      <Link
+        href={`/blog/${item.slug}`}
+        className="group grid grid-cols-1 lg:grid-cols-2 overflow-hidden rounded-[var(--radius-md)] border border-[var(--line)] bg-[var(--pine)] text-[var(--on-pine)] hover:shadow-[var(--shadow-lift)] transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]"
+      >
+        <div className="relative aspect-[16/11] lg:aspect-auto lg:min-h-[340px] overflow-hidden">
+          <Image
+            src={resolveImage(item.image)}
+            alt={item.title || "Article"}
+            fill
+            sizes="(max-width: 1024px) 100vw, 40vw"
+            className="object-cover transition-transform duration-[1100ms] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.05]"
+          />
+          <span className="absolute top-4 left-4 inline-flex items-center rounded-[var(--radius-pill)] bg-[var(--gold-300)] text-[var(--pine)] px-4 py-1.5 text-[10px] uppercase tracking-[0.24em] font-[family-name:var(--font-accent)]">
+            Latest
+          </span>
+        </div>
+        <div className="flex flex-col justify-center gap-4 p-8 lg:p-10">
+          <Meta item={item} light />
+          <h2 className="font-serif text-[clamp(1.7rem,2vw+1rem,2.6rem)] leading-[1.12] text-[var(--on-pine)] group-hover:text-[var(--gold-300)] transition-colors">
+            {item.title}
+          </h2>
+          {item.subtitle && (
+            <p className="text-[15px] leading-relaxed text-[var(--on-pine-soft)] line-clamp-3 max-w-lg">
+              {item.subtitle}
+            </p>
+          )}
+          <span className="mt-2 inline-flex items-center gap-2 text-[12px] uppercase tracking-[0.2em] text-[var(--on-pine)] group-hover:text-[var(--gold-300)] transition-colors font-[family-name:var(--font-accent)]">
+            Read the piece
+            <FiArrowRight
+              size={14}
+              className="transition-transform duration-300 group-hover:translate-x-1"
+            />
+          </span>
+        </div>
+      </Link>
+    </motion.div>
+  );
+}
+
 function BlogCard({ item }: { item: any }) {
   return (
     <Link
@@ -186,15 +259,7 @@ function BlogCard({ item }: { item: any }) {
         <div className="absolute inset-0 bg-gradient-to-t from-[var(--pine)]/25 to-transparent pointer-events-none" />
       </div>
       <div className="flex flex-col gap-3 p-7 flex-1">
-        <div className="flex items-center gap-3 text-[11px] uppercase tracking-[0.2em] text-[var(--ink-faint)] font-[family-name:var(--font-accent)]">
-          {item.publishDate && <time>{dateToString(item.publishDate)}</time>}
-          {item.publishDate && (
-            <span className="inline-block w-6 h-px bg-[var(--gold)]/70" />
-          )}
-          <span className="text-[var(--gold-deep)]">
-            {item.category || "Insight"}
-          </span>
-        </div>
+        <Meta item={item} />
         <h3 className="font-serif text-[1.45rem] md:text-[1.65rem] leading-[1.2] text-[var(--ink)] group-hover:text-[var(--gold-deep)] transition-colors">
           {item.title}
         </h3>
@@ -205,9 +270,9 @@ function BlogCard({ item }: { item: any }) {
         )}
         <span className="mt-auto pt-2 inline-flex items-center gap-2 text-[12px] uppercase tracking-[0.2em] text-[var(--ink-faint)] font-[family-name:var(--font-accent)] group-hover:text-[var(--gold-deep)] transition-colors">
           Read
-          <FiArrowRight
+          <FiArrowUpRight
             size={14}
-            className="transition-transform duration-300 group-hover:translate-x-1"
+            className="transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-0.5"
           />
         </span>
       </div>

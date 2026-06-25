@@ -73,7 +73,7 @@ export const SinglePropertyImageSection = ({ property: prop }: Props) => {
               <button
                 type="button"
                 onClick={() => open(currentIndex)}
-                className="relative overflow-hidden bg-[var(--surface-charcoal)] group w-full h-full"
+                className="relative overflow-hidden rounded-[var(--radius-md)] bg-[var(--surface-charcoal)] group w-full h-full"
               >
                 {images[currentIndex] && !mainImgError ? (
                   <Image
@@ -91,7 +91,7 @@ export const SinglePropertyImageSection = ({ property: prop }: Props) => {
                 )}
 
                 {/* Counter */}
-                <span className="absolute top-4 left-4 px-3 py-1.5 text-[11px] font-bold tracking-[0.16em] uppercase bg-black/55 backdrop-blur-md text-white border border-white/15">
+                <span className="absolute top-4 left-4 px-3 py-1.5 text-[11px] font-bold tracking-[0.16em] uppercase bg-black/55 backdrop-blur-md text-white border border-white/15 rounded-[var(--radius-pill)]">
                   {currentIndex + 1} / {images.length}
                 </span>
 
@@ -122,7 +122,7 @@ export const SinglePropertyImageSection = ({ property: prop }: Props) => {
                       e.stopPropagation();
                       setIsModalOpen(true);
                     }}
-                    className="absolute top-4 right-4 inline-flex items-center gap-2 px-4 py-2 bg-black/65 backdrop-blur-md border border-white/15 text-white text-[12px] font-semibold tracking-[0.14em] uppercase hover:bg-[var(--gold-500)] hover:text-[var(--surface-ink)] hover:border-[var(--gold-500)] transition-colors"
+                    className="absolute top-4 right-4 inline-flex items-center gap-2 px-4 py-2 bg-black/65 backdrop-blur-md border border-white/15 rounded-[var(--radius-sm)] text-white text-[12px] font-semibold tracking-[0.14em] uppercase hover:bg-[var(--gold-500)] hover:text-[var(--surface-ink)] hover:border-[var(--gold-500)] transition-colors"
                   >
                     <FiMaximize2 size={14} />
                     View all {images.length}
@@ -137,7 +137,7 @@ export const SinglePropertyImageSection = ({ property: prop }: Props) => {
                   <button
                     type="button"
                     onClick={() => open((currentIndex + 1) % images.length)}
-                    className="relative overflow-hidden bg-[var(--surface-charcoal)] group"
+                    className="relative overflow-hidden rounded-[var(--radius-md)] bg-[var(--surface-charcoal)] group"
                   >
                     <Image
                       src={sidebar[0]}
@@ -166,7 +166,7 @@ export const SinglePropertyImageSection = ({ property: prop }: Props) => {
                               if (isLast && remaining > 0) setIsModalOpen(true);
                               else open(imgIdx);
                             }}
-                            className="relative overflow-hidden bg-[var(--surface-charcoal)] group"
+                            className="relative overflow-hidden rounded-[var(--radius-md)] bg-[var(--surface-charcoal)] group"
                           >
                             <Image
                               src={img}
