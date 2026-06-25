@@ -57,12 +57,10 @@ export default function HomeHero() {
             style={{ objectPosition: "center" }}
           />
         </div>
-        {/* Warm pine wash instead of flat black */}
-        <div className="absolute inset-0 bg-gradient-to-t from-[var(--pine)] via-[var(--pine)]/65 to-[var(--pine)]/35" />
-        {/* Left-anchored scrim to seat the headline + lede over any frame */}
-        <div className="absolute inset-0 bg-gradient-to-r from-[var(--pine)]/90 via-[var(--pine)]/45 to-transparent" />
-        {/* Lower scrim reinforcing the text band */}
-        <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-[var(--pine)]/85 to-transparent" />
+        {/* Gentle bottom wash (full width, light) — right side stays clear */}
+        <div className="absolute inset-0 bg-gradient-to-t from-[var(--pine)]/45 via-transparent to-transparent" />
+        {/* Left-only scrim — seats the headline + lede, fully clear by mid-frame */}
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(32,48,42,0.92),rgba(32,48,42,0.5)_26%,transparent_56%)]" />
       </div>
 
       {/* Main content — search dock on top, headline beneath */}
