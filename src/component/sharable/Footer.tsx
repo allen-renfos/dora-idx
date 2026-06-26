@@ -74,7 +74,7 @@ export const Footer = () => {
                 <img
                   src={cachedLogo}
                   alt={company_name || name || "Logo"}
-                  style={{ objectFit: "contain", height: 80, width: "auto" }}
+                  style={{ objectFit: "contain", height: 80, width: "auto", filter: "brightness(0) invert(1)" }}
                 />
               ) : (
                 <span className="font-serif text-4xl text-[var(--on-pine)]">{name || "Dora"}</span>

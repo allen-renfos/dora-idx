@@ -10,7 +10,7 @@ type Property = { id: string; [key: string]: any };
 
 export default function HomeFeatured() {
   const { data, isLoading } = useNewListings();
-  const properties: Property[] = (data?.data || []).slice(0, 8);
+  const properties: Property[] = (data?.data || []).slice(0, 6);
 
   const railRef = useRef<HTMLDivElement>(null);
   const [progress, setProgress] = useState(0);
@@ -68,7 +68,7 @@ export default function HomeFeatured() {
           </Reveal>
 
           <Reveal delay={0.08} className="flex items-center gap-6 shrink-0">
-            <div className="hidden sm:flex items-center gap-3">
+            <div className="hidden sm:flex md:hidden items-center gap-3">
               <RailArrow
                 dir="prev"
                 disabled={atStart}
@@ -110,13 +110,13 @@ export default function HomeFeatured() {
               <div
                 ref={railRef}
                 onScroll={sync}
-                className="flex gap-6 overflow-x-auto snap-x snap-mandatory hide-scrollbar pb-2 -mx-1 px-1"
+                className="flex md:grid md:grid-cols-3 gap-6 overflow-x-auto md:overflow-x-visible snap-x md:snap-none snap-mandatory hide-scrollbar pb-2 md:pb-0 -mx-1 md:mx-0 px-1 md:px-0"
               >
                 {properties.map((item) => (
                   <div
                     key={item.id}
                     data-card
-                    className="shrink-0 snap-start w-[82vw] sm:w-[380px] xl:w-[31%]"
+                    className="shrink-0 snap-start w-[82vw] sm:w-[380px] md:w-auto md:shrink"
                   >
                     <PropertyCard
                       item={item}
@@ -127,8 +127,8 @@ export default function HomeFeatured() {
                 ))}
               </div>
 
-              {/* Progress track */}
-              <div className="mt-8 flex items-center gap-5">
+              {/* Progress track — mobile only */}
+              <div className="mt-8 flex md:hidden items-center gap-5">
                 <div className="relative h-px flex-1 bg-[var(--line)] overflow-hidden">
                   <span
                     className="absolute inset-y-0 left-0 bg-[var(--gold-deep)] transition-[width] duration-200 ease-out"
