@@ -65,11 +65,11 @@ export const AboutUs = () => {
         {/* Background */}
         <div aria-hidden className="absolute inset-0 -z-10 bg-gradient-to-br from-[var(--canvas-2)] via-[var(--canvas)] to-[var(--canvas)]" />
 
-        <div className="container-wide pt-24 pb-20 md:pt-32">
+        <div className="container-wide pt-16 pb-10 md:pt-20">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-0 lg:gap-12 items-start">
 
             {/* ── LEFT COLUMN ── */}
-            <div className="lg:col-span-7 flex flex-col gap-10 pb-10 lg:pb-20 lg:pr-8">
+            <div className="lg:col-span-7 flex flex-col gap-10 pb-10 lg:pb-10 lg:pr-8">
 
               {/* Eyebrow */}
               <Reveal>

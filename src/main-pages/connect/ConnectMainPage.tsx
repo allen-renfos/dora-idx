@@ -201,7 +201,7 @@ export default function ConnectMainPage() {
       />
 
       {/* HERO — pine band */}
-      <section className="relative isolate overflow-hidden bg-[var(--pine)] pt-24 pb-16 md:pt-32 md:pb-24">
+      <section className="relative isolate overflow-hidden bg-[var(--pine)] pt-16 pb-8 md:pt-20 md:pb-12">
         <span
           aria-hidden
           className="pointer-events-none select-none absolute -bottom-16 right-[2vw] font-serif text-[clamp(7rem,20vw,18rem)] leading-none text-[var(--on-pine)]/[0.04]"
@@ -209,7 +209,7 @@ export default function ConnectMainPage() {
           Hello
         </span>
 
-        <div className="container-wide flex flex-col gap-6 max-w-3xl relative">
+        <div className="container-wide flex flex-col gap-6 md:gap-7 max-w-3xl relative">
           <Reveal>
             <span className="eyebrow on-dark inline-flex items-center gap-4">
               <span className="inline-block h-px w-12 bg-[var(--gold-300)]" />
@@ -217,13 +217,19 @@ export default function ConnectMainPage() {
             </span>
           </Reveal>
           <Reveal delay={0.08}>
-            <h1 className="display-xl text-[var(--on-pine)]">
+            <h1
+              className="display-xl text-[var(--on-pine)]"
+              style={{ fontSize: "clamp(1.75rem, 2.6vw + 0.5rem, 3.25rem)", lineHeight: 1.22 }}
+            >
               It starts with a quiet{" "}
               <em className="text-[var(--gold-300)]">conversation</em>.
             </h1>
           </Reveal>
           <Reveal delay={0.16}>
-            <p className="lede max-w-xl text-[var(--on-pine-soft)]">
+            <p
+              className="lede max-w-xl text-[var(--on-pine-soft)]"
+              style={{ fontSize: "clamp(0.9rem, 0.3vw + 0.85rem, 1rem)", lineHeight: 1.8 }}
+            >
               Whether you&rsquo;re searching, selling, or simply curious —
               leave a few details below and {name || "we"} will reply
               personally, usually within the day.

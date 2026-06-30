@@ -5,7 +5,7 @@ const MLSSearchPage = () => {
   return (
     <main className="bg-[var(--canvas)] text-[var(--ink)]">
         {/* Page banner — full-bleed pine band */}
-        <section className="relative isolate bg-[var(--pine)] text-[var(--on-pine)] overflow-hidden pt-24 pb-10 md:pt-32 md:pb-12">
+        <section className="relative isolate bg-[var(--pine)] text-[var(--on-pine)] overflow-hidden pt-16 pb-6 md:pt-20 md:pb-8">
           {/* Soft gold top hairline marking the dark band */}
           <div
             aria-hidden
@@ -20,19 +20,25 @@ const MLSSearchPage = () => {
           </span>
 
           <div className="container-wide relative">
-            <div className="flex flex-col gap-6 max-w-3xl">
+            <div className="flex flex-col gap-6 md:gap-7 max-w-3xl">
               <span className="eyebrow on-dark inline-flex items-center gap-4">
                 <span className="inline-block h-px w-12 bg-[var(--gold-300)]" />
                 The Collection
               </span>
-              <h1 className="display-lg text-[var(--on-pine)]">
+              <h1
+                className="display-lg text-[var(--on-pine)]"
+                style={{ fontSize: "clamp(1.75rem, 2.6vw + 0.5rem, 3.25rem)", lineHeight: 1.22 }}
+              >
                 A gathering of homes,
                 <br />
                 <em className="italic text-[var(--gold-300)] font-normal">
                   awaiting the right keeper.
                 </em>
               </h1>
-              <p className="lede max-w-xl text-[var(--on-pine-soft)]">
+              <p
+                className="lede max-w-xl text-[var(--on-pine-soft)]"
+                style={{ fontSize: "clamp(0.9rem, 0.3vw + 0.85rem, 1rem)", lineHeight: 1.8 }}
+              >
                 Move through a considered inventory of residences and estates,
                 shaped by the things that truly matter — place, proportion, and
                 the quiet feel of arriving home.

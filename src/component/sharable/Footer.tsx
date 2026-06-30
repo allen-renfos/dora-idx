@@ -64,17 +64,17 @@ export const Footer = () => {
         {name || "Dora"}
       </span>
 
-      <div className="container-wide pt-14 pb-10 relative">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
+      <div className="container-wide pt-7 pb-5 relative">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
           {/* Brand */}
-          <div className="lg:col-span-5 flex flex-col gap-5">
+          <div className="lg:col-span-5 flex flex-col gap-3">
             <Link href="/home" className="inline-flex items-center gap-3">
               {cachedLogo ? (
                 /* eslint-disable-next-line @next/next/no-img-element */
                 <img
                   src={cachedLogo}
                   alt={company_name || name || "Logo"}
-                  style={{ objectFit: "contain", height: 60, width: "auto", filter: "brightness(0) invert(1)" }}
+                  style={{ objectFit: "contain", height: 44, width: "auto", filter: "brightness(0) invert(1)" }}
                 />
               ) : (
                 <span className="font-serif text-4xl text-[var(--on-pine)]">{name || "Dora"}</span>
@@ -103,11 +103,11 @@ export const Footer = () => {
           </div>
 
           {/* Links */}
-          <div className="lg:col-span-7 grid grid-cols-2 md:grid-cols-3 gap-8">
+          <div className="lg:col-span-7 grid grid-cols-2 md:grid-cols-3 gap-6">
             {FOOTER_COLS.map((col) => (
-              <div key={col.title} className="flex flex-col gap-5">
+              <div key={col.title} className="flex flex-col gap-3">
                 <h4 className="eyebrow on-dark">{col.title}</h4>
-                <ul className="flex flex-col gap-3">
+                <ul className="flex flex-col gap-2">
                   {col.links.map((l) => (
                     <li key={l.href + l.label}>
                       <Link
@@ -126,7 +126,7 @@ export const Footer = () => {
       </div>
 
       {/* NWMLS notice */}
-      <div className="container-wide pb-4 relative">
+      <div className="container-wide pb-2 relative">
         <div className="flex items-center gap-2 text-[12px] text-[var(--on-pine-faint)]">
           <span>The three tree icon represents listings courtesy of NWMLS.</span>
           {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -136,7 +136,7 @@ export const Footer = () => {
 
       {/* Sub-footer */}
       <div className="border-t border-[rgba(241,237,227,0.14)] relative">
-        <div className="container-wide py-6 flex flex-col md:flex-row items-center justify-between gap-4 text-[12px] text-[var(--on-pine-faint)]">
+        <div className="container-wide py-3 flex flex-col md:flex-row items-center justify-between gap-4 text-[12px] text-[var(--on-pine-faint)]">
           <div className="flex items-center gap-3 flex-wrap justify-center md:justify-start">
             <span>
               © {new Date().getFullYear()} {company_name || name || "Dora"}. All rights reserved.
