@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import React from "react";
+import React, { useId } from "react";
 import { FiCheck, FiAlertCircle } from "react-icons/fi";
 
 interface Props {
@@ -15,15 +15,19 @@ export const FormDisclaimer: React.FC<Props> = ({
   onChange,
   error,
 }) => {
+  // Unique per instance — multiple FormDisclaimers can share a page (e.g. an
+  // auth form plus a newsletter), and a hardcoded id would make every label
+  // toggle the first matching checkbox instead of its own.
+  const checkboxId = useId();
   return (
     <div className="flex flex-col gap-2 mt-1">
       <label
-        htmlFor="form-consent-checkbox"
+        htmlFor={checkboxId}
         className="flex items-start gap-3 cursor-pointer select-none group"
       >
         <input
           type="checkbox"
-          id="form-consent-checkbox"
+          id={checkboxId}
           checked={checked}
           onChange={(e) => onChange(e.target.checked)}
           className="sr-only"
