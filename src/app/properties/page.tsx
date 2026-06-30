@@ -5,7 +5,7 @@ const MLSSearchPage = () => {
   return (
     <main className="bg-[var(--canvas)] text-[var(--ink)]">
         {/* Page banner — full-bleed pine band */}
-        <section className="relative isolate bg-[var(--pine)] text-[var(--on-pine)] overflow-hidden pt-32 pb-12 md:pt-44 md:pb-16">
+        <section className="relative isolate bg-[var(--pine)] text-[var(--on-pine)] overflow-hidden pt-24 pb-10 md:pt-32 md:pb-12">
           {/* Soft gold top hairline marking the dark band */}
           <div
             aria-hidden

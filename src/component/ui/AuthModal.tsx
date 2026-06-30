@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import { FiX } from "react-icons/fi";
 
@@ -30,6 +31,11 @@ export function AuthModal({
   footer,
   size = "sm",
 }: Props) {
+  // SSR-safe mount guard: createPortal needs document.body, which doesn't
+  // exist during server render. Only portal after the component has mounted.
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+
   useEffect(() => {
     if (!isOpen) return;
     const original = document.body.style.overflow;
@@ -42,7 +48,9 @@ export function AuthModal({
     };
   }, [isOpen, onClose]);
 
-  return (
+  if (!mounted) return null;
+
+  return createPortal(
     <AnimatePresence>
       {isOpen && (
         <>
@@ -111,6 +119,7 @@ export function AuthModal({
           </div>
         </>
       )}
-    </AnimatePresence>
+    </AnimatePresence>,
+    document.body
   );
 }

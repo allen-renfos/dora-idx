@@ -65,7 +65,7 @@ export const AboutUs = () => {
         {/* Background */}
         <div aria-hidden className="absolute inset-0 -z-10 bg-gradient-to-br from-[var(--canvas-2)] via-[var(--canvas)] to-[var(--canvas)]" />
 
-        <div className="container-wide pt-36 pb-20 md:pt-44">
+        <div className="container-wide pt-24 pb-20 md:pt-32">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-0 lg:gap-12 items-start">
 
             {/* ── LEFT COLUMN ── */}

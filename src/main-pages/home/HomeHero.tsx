@@ -65,7 +65,7 @@ export default function HomeHero() {
 
       {/* Main content — search dock on top, headline beneath */}
       <div className="flex-1 flex items-center">
-        <div className="container-wide w-full pt-32 pb-14 md:pt-40 md:pb-20">
+        <div className="container-wide w-full pt-24 pb-14 md:pt-32 md:pb-20">
           <motion.span
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}

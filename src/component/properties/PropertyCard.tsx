@@ -12,6 +12,7 @@ import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import toast from "react-hot-toast";
 import { ListingTags } from "@/component/sharable/ListingTag";
+import { MlsProviderBadge } from "@/component/sharable/MlsProviderBadge";
 
 interface PropertyCardProps {
   item: any;
@@ -195,25 +196,8 @@ export const PropertyCard = ({ item, handleModal, hideWishlist }: PropertyCardPr
           ) : null}
         </div>
 
-        {/* Listed with */}
-        {item.listed_with && (
-          <div className="flex items-center gap-2 pt-3 mt-auto">
-            {item.logo && (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img
-                src={item.logo}
-                alt="MLS"
-                width={18}
-                height={18}
-                className="rounded-full object-cover shrink-0"
-                style={{ width: 18, height: 18 }}
-              />
-            )}
-            <span className="text-[10px] uppercase tracking-[0.16em] font-semibold text-[var(--ink-faint)]">
-              Listed with {item.listed_with}
-            </span>
-          </div>
-        )}
+        {/* MLS attribution */}
+        <MlsProviderBadge item={item} />
       </div>
     </article>
   );

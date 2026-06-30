@@ -64,17 +64,17 @@ export const Footer = () => {
         {name || "Dora"}
       </span>
 
-      <div className="container-wide pt-24 pb-14 relative">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
+      <div className="container-wide pt-14 pb-10 relative">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
           {/* Brand */}
-          <div className="lg:col-span-5 flex flex-col gap-6">
+          <div className="lg:col-span-5 flex flex-col gap-5">
             <Link href="/home" className="inline-flex items-center gap-3">
               {cachedLogo ? (
                 /* eslint-disable-next-line @next/next/no-img-element */
                 <img
                   src={cachedLogo}
                   alt={company_name || name || "Logo"}
-                  style={{ objectFit: "contain", height: 80, width: "auto", filter: "brightness(0) invert(1)" }}
+                  style={{ objectFit: "contain", height: 60, width: "auto", filter: "brightness(0) invert(1)" }}
                 />
               ) : (
                 <span className="font-serif text-4xl text-[var(--on-pine)]">{name || "Dora"}</span>

@@ -28,6 +28,7 @@ import { MailAppPopup } from "./MailAppPopup";
 import { CallAppPopup } from "./CallAppPopup";
 import { AddToCalendar } from "./AddToCalendar";
 import { buildOpenHouseEvent } from "@/helpers/openHouseEvent";
+import { toEmbedUrl } from "@/helpers/embedUrl";
 import LoginModal from "@/main-pages/auth/LoginModal";
 import { normalizePropertyDetails } from "@/services/properties/normalizePropertyDetails";
 import type { PropertyDetails, PropertyOpenHouse } from "@/types/Property";
@@ -232,8 +233,9 @@ export const SinglePropertyDetails = ({ property: prop }: Props) => {
     details.latitude !== null &&
     details.longitude !== null;
 
+  const virtualTourEmbedUrl = toEmbedUrl(details.media.virtualTourUrl);
   const showVirtualTour =
-    details.compliance.canShowVirtualTour && Boolean(details.media.virtualTourUrl);
+    details.compliance.canShowVirtualTour && Boolean(virtualTourEmbedUrl);
 
   const showAddress = details.compliance.canShowAddress;
 
@@ -628,18 +630,30 @@ export const SinglePropertyDetails = ({ property: prop }: Props) => {
             {showVirtualTour && (
               <div>
                 <SectionHeader title="Virtual Tour" />
-                <div className="relative w-full aspect-video bg-[var(--surface-obsidian)] border border-[var(--line-soft)] rounded-[var(--radius-md)] overflow-hidden">
+                <div className="relative w-full aspect-video bg-[var(--pine)] border border-[var(--line-soft)] rounded-[var(--radius-md)] overflow-hidden">
                   <iframe
-                    src={details.media.virtualTourUrl ?? undefined}
+                    src={virtualTourEmbedUrl ?? undefined}
                     title="Virtual Tour"
                     allowFullScreen
-                    allow="xr-spatial-tracking"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen; xr-spatial-tracking"
+                    referrerPolicy="strict-origin-when-cross-origin"
                     className="absolute inset-0 w-full h-full border-0"
                   />
                 </div>
-                <p className="mt-3 text-[12px] text-[var(--ink-faint)]">
-                  Interactive 3D walkthrough — explore from anywhere.
-                </p>
+                <div className="mt-3 flex flex-wrap items-center justify-between gap-2">
+                  <p className="text-[12px] text-[var(--ink-faint)]">
+                    Interactive 3D walkthrough — explore from anywhere.
+                  </p>
+                  <a
+                    href={virtualTourEmbedUrl ?? undefined}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 text-[12px] text-[var(--ink-soft)] hover:text-[var(--ink-strong)] underline underline-offset-2"
+                  >
+                    Tour not loading? Open in a new tab
+                    <FiArrowRight className="h-3 w-3" />
+                  </a>
+                </div>
               </div>
             )}
 

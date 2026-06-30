@@ -211,7 +211,7 @@ export const Header = ({ activeHeader }: HeaderProps = {}) => {
         )}
         <div
           className={`container-wide relative flex items-center justify-between transition-all duration-500 ${
-            isScrolled ? "py-3" : "py-5"
+            isScrolled ? "py-2" : "py-3.5"
           }`}
         >
           {/* Logo / Brand — absolutely centered across all breakpoints */}

@@ -15,7 +15,7 @@ export default function BlogPage() {
     <>
       <main className="bg-[var(--canvas)] text-[var(--ink)]">
         {/* Hero — pine band */}
-        <section className="relative isolate overflow-hidden bg-[var(--pine)] pt-36 pb-16 md:pt-44 md:pb-24">
+        <section className="relative isolate overflow-hidden bg-[var(--pine)] pt-24 pb-16 md:pt-32 md:pb-24">
           <span
             aria-hidden
             className="pointer-events-none select-none absolute -bottom-16 left-[2vw] font-serif text-[clamp(7rem,20vw,18rem)] leading-none text-[var(--on-pine)]/[0.04]"

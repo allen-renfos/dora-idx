@@ -5,7 +5,7 @@ export const AboutUsBanner = () => {
   const { company_name } = useNameContext();
 
   return (
-    <section className="relative isolate overflow-hidden bg-[var(--pine)] pt-36 pb-20 md:pt-44 md:pb-24">
+    <section className="relative isolate overflow-hidden bg-[var(--pine)] pt-24 pb-20 md:pt-32 md:pb-24">
       <span
         aria-hidden
         className="pointer-events-none select-none absolute -bottom-16 right-[2vw] font-serif text-[clamp(7rem,20vw,18rem)] leading-none text-[var(--on-pine)]/[0.04]"

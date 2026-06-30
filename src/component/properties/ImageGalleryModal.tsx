@@ -55,21 +55,21 @@ export const ImageGalleryModal = ({
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.3 }}
-          className="fixed inset-0 z-[9999] bg-black flex flex-col"
+          className="fixed inset-0 z-[9999] bg-[var(--canvas)] flex flex-col"
         >
           {/* Top bar */}
-          <div className="flex items-center justify-between px-6 md:px-8 h-14 border-b border-white/8 shrink-0">
-            <span className="text-[12px] uppercase tracking-[0.2em] text-white/55 font-[family-name:var(--font-accent)]">
-              <span className="text-[var(--gold-300)]">
+          <div className="flex items-center justify-between px-6 md:px-8 h-14 border-b border-[var(--line-soft)] shrink-0">
+            <span className="text-[12px] uppercase tracking-[0.2em] text-[var(--ink-faint)] font-[family-name:var(--font-accent)]">
+              <span className="text-[var(--gold-deep)]">
                 {String(current + 1).padStart(2, "0")}
               </span>
-              <span className="mx-2 text-white/25">/</span>
+              <span className="mx-2 text-[var(--ink-faint)]/50">/</span>
               {String(images.length).padStart(2, "0")} photos
             </span>
             <button
               onClick={onClose}
               aria-label="Close gallery"
-              className="w-10 h-10 flex items-center justify-center text-white/75 hover:text-white transition-colors"
+              className="w-10 h-10 flex items-center justify-center text-[var(--ink-soft)] hover:text-[var(--ink)] transition-colors"
             >
               <FiX size={22} />
             </button>
@@ -78,7 +78,7 @@ export const ImageGalleryModal = ({
           {/* Body */}
           <div className="flex-1 flex gap-1 p-1 min-h-0 overflow-hidden">
             {/* Main image */}
-            <div className="relative flex-1 bg-black flex items-center justify-center overflow-hidden">
+            <div className="relative flex-1 bg-[var(--canvas-2)] flex items-center justify-center overflow-hidden">
               <AnimatePresence mode="wait">
                 <motion.div
                   key={current}
