@@ -1,26 +1,29 @@
 "use client";
 import { FeaturedNewsListCard } from "@/component/blog/FeaturedNewsListCard";
-import { useNewsList } from "@/services/blog/BlogQueries";
+import { useNewsList, useArticleList } from "@/services/blog/BlogQueries";
 import { Blog } from "@/types/Blog";
-import { useEffect, useState } from "react";
+import { isInCategory } from "@/main-pages/blog/blogCategory";
+import { useEffect, useMemo, useState } from "react";
 
 const FeaturedNewsList = () => {
   const [news, setNews] = useState<Blog[]>([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
-  const [total, setTotal] = useState(0);
-  const [perPage, setPerPage] = useState(10);
-  const { data: newsListDatas, isLoading, error } = useNewsList();
+  // Primary source: the dedicated featured-news endpoint. It often returns
+  // nothing (no posts flagged featured), so fall back to the general blog
+  // list and pull the "news" items from there.
+  const { data: featuredNews } = useNewsList();
+  const { data: blogList, isLoading, error } = useArticleList();
+
   useEffect(() => {
-    if (newsListDatas && !isLoading && !error) {
-      console.log("newsListDatas", newsListDatas);
-      setNews(newsListDatas.data || []);
-      setCurrentPage(newsListDatas.meta?.current_page || 1);
-      setTotalPages(newsListDatas.meta?.last_page || 1);
-      setTotal(newsListDatas.meta?.total || 0);
-      setPerPage(newsListDatas.meta?.per_page || 10);
-    }
-  }, [newsListDatas, isLoading, error]);
+    if (isLoading || error) return;
+    const featured: Blog[] = featuredNews?.data || [];
+    const all: Blog[] = blogList?.data || [];
+    setNews(featured.length ? featured : all);
+  }, [featuredNews, blogList, isLoading, error]);
+
+  const headlines = useMemo(
+    () => news.filter((item) => isInCategory(item.category, "news")).slice(0, 3),
+    [news]
+  );
 
   if (isLoading)
     return (
@@ -45,29 +48,18 @@ const FeaturedNewsList = () => {
 
   return (
     <div className="featured-news-container">
-      {news.length ? (
-        <>
-          {news.filter((item) => item.category === "news").length > 0 ? (
-            <div className="featured-news-grid">
-              {news
-                .filter((item) => item.category === "news")
-                .slice(0, 3)
-                .map((item, index) => (
-                  <div
-                    key={item.id}
-                    className="stagger-up"
-                    style={{ animationDelay: `${index * 0.12}s` }}
-                  >
-                    <FeaturedNewsListCard item={item} />
-                  </div>
-                ))}
+      {headlines.length > 0 ? (
+        <div className="featured-news-grid">
+          {headlines.map((item, index) => (
+            <div
+              key={item.id}
+              className="stagger-up"
+              style={{ animationDelay: `${index * 0.12}s` }}
+            >
+              <FeaturedNewsListCard item={item} />
             </div>
-          ) : (
-            <div className="empty-state">
-              <p>No headlines just yet.</p>
-            </div>
-          )}
-        </>
+          ))}
+        </div>
       ) : (
         <div className="empty-state">
           <p>No headlines just yet.</p>
