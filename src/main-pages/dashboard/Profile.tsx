@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useMutation } from "@tanstack/react-query";
 import { useProfile } from "@/services/profile/ProfileQueries";
 import { postUserLogout } from "@/services/profile/ProfileServices";
+import { clearSession } from "@/services/auth/authStorage";
 import { UserProfile } from "@/types/User";
 import {
   FiEdit2,
@@ -48,12 +49,18 @@ const ProfilePage = () => {
   const logoutMutation = useMutation({
     mutationFn: () => postUserLogout(),
     onSuccess: () => {
-      sessionStorage.clear();
-      if (typeof window !== "undefined") window.location.href = "/home";
+      clearSession(); // scoped clear (not sessionStorage.clear())
+      if (typeof window !== "undefined") {
+        window.dispatchEvent(new Event("auth:logout"));
+        window.location.href = "/home";
+      }
     },
     onError: () => {
-      sessionStorage.clear();
-      if (typeof window !== "undefined") window.location.href = "/home";
+      clearSession();
+      if (typeof window !== "undefined") {
+        window.dispatchEvent(new Event("auth:logout"));
+        window.location.href = "/home";
+      }
     },
   });
 

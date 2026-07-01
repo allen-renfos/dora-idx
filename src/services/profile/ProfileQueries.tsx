@@ -1,18 +1,19 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { fetchUserProfile, fetchUserWhishlist, updateUserProfile, removeWishlistItem } from "./ProfileServices";
+import { isAuthenticated } from "@/services/auth/authStorage";
 
 export const useProfile = () => {
    return useQuery({
       queryKey: ['profileInfo',], queryFn: () =>
          fetchUserProfile(),
-      enabled: typeof window !== 'undefined' && !!sessionStorage.getItem('access_token'),
+      enabled: typeof window !== 'undefined' && isAuthenticated(),
    });
 };
 export const useUserWishlist = () => {
    return useQuery({
       queryKey: ['userWishlistInfo',], queryFn: () =>
          fetchUserWhishlist(),
-      enabled: typeof window !== 'undefined' && !!sessionStorage.getItem('access_token'),
+      enabled: typeof window !== 'undefined' && isAuthenticated(),
    });
 };
 

@@ -1,6 +1,7 @@
 "use client";
 
 import { postUserPropertyWishlist } from "@/services/profile/ProfileServices";
+import { getAccessToken, getCustomerId } from "@/services/auth/authStorage";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { FiHeart, FiMapPin } from "react-icons/fi";
 import { FaHeart } from "react-icons/fa";
@@ -54,7 +55,7 @@ export const PropertyWishlistCard = ({ item, handleModal, hideWishlist, onRemove
 
   const handleAddToFavorites = (e: React.MouseEvent) => {
     e.stopPropagation();
-    const token = sessionStorage.getItem("access_token");
+    const token = getAccessToken();
     if (!token) return handleModal();
     if (isFavorited || isAddingToFavorites) return;
 
@@ -63,7 +64,7 @@ export const PropertyWishlistCard = ({ item, handleModal, hideWishlist, onRemove
       listing_id: item.mls_listingid,
       listing_key: item.mls_listingkey,
       agent_id: 12,
-      user_id: sessionStorage.getItem("customer_id"),
+      user_id: getCustomerId(),
       uuid: process.env.NEXT_PUBLIC_REALTY_PRO_AGENT_ID,
     });
   };

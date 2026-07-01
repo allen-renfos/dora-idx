@@ -9,6 +9,7 @@ import { FormDisclaimer } from "@/component/sharable/FormDisclaimer";
 import { formatUSPhoneInput, getUSPhoneDigits } from "@/helpers/phoneFormat";
 import { AuthModal } from "@/component/ui/AuthModal";
 import { AuthField } from "@/component/ui/AuthShell";
+import { getCustomerId } from "@/services/auth/authStorage";
 
 interface Props {
   isOpen: boolean;
@@ -67,7 +68,7 @@ export const EditProfileModal = ({ isOpen, onClose, userData }: Props) => {
     if (!validate()) return;
     try {
       const numeric = getUSPhoneDigits(formData.phone);
-      const customerId = sessionStorage.getItem("customer_id") || "";
+      const customerId = getCustomerId() || "";
       await mutation.mutateAsync({
         ...formData,
         phone: formData.phone,

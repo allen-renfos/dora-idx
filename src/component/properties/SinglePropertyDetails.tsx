@@ -22,6 +22,7 @@ import {
   removeWishlistItem,
 } from "@/services/profile/ProfileServices";
 import { useUserWishlist } from "@/services/profile/ProfileQueries";
+import { getAccessToken, getCustomerId } from "@/services/auth/authStorage";
 import { PropertyEnquiryModal } from "./PropertyEnquiryModal";
 import { SharePopup } from "./SharePopup";
 import { MailAppPopup } from "./MailAppPopup";
@@ -141,7 +142,7 @@ export const SinglePropertyDetails = ({ property: prop }: Props) => {
   });
 
   const handleToggleFavorites = () => {
-    const token = sessionStorage.getItem("access_token");
+    const token = getAccessToken();
     if (!token) return setIsLoginModalOpen(true);
     if (isAddingToFavorites) return;
 
@@ -156,7 +157,7 @@ export const SinglePropertyDetails = ({ property: prop }: Props) => {
       listing_id: property?.mls_listingid || property?.lid,
       listing_key: property?.mls_listingkey || property?.id,
       agent_id: 12,
-      user_id: sessionStorage.getItem("customer_id"),
+      user_id: getCustomerId(),
       uuid: process.env.NEXT_PUBLIC_REALTY_PRO_AGENT_ID,
     });
   };

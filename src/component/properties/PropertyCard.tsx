@@ -1,6 +1,8 @@
 "use client";
 
 import { postUserPropertyWishlist } from "@/services/profile/ProfileServices";
+import { getAccessToken, getCustomerId } from "@/services/auth/authStorage";
+import { recordCityEvent } from "@/helpers/cityInterest";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { FiHeart, FiMapPin } from "react-icons/fi";
 import { FaHeart } from "react-icons/fa";
@@ -38,6 +40,8 @@ export const PropertyCard = ({ item, handleModal, hideWishlist }: PropertyCardPr
     onSuccess: () => {
       setIsFavorited(true);
       setIsAddingToFavorites(false);
+      // City personalization: a favorite is the strongest interest signal.
+      recordCityEvent(item?.mls_city ?? item?.city, "favorite", item?.price);
       toast.success("Added to favorites", {
         style: { background: "#ffffff", color: "#1a1a1a", border: "1px solid #c2a878" },
         iconTheme: { primary: "#c2a878", secondary: "#ffffff" },
@@ -53,7 +57,7 @@ export const PropertyCard = ({ item, handleModal, hideWishlist }: PropertyCardPr
 
   const handleAddToFavorites = (e: React.MouseEvent) => {
     e.stopPropagation();
-    const token = sessionStorage.getItem("access_token");
+    const token = getAccessToken();
     if (!token) return handleModal();
     if (isFavorited || isAddingToFavorites) return;
 
@@ -62,7 +66,7 @@ export const PropertyCard = ({ item, handleModal, hideWishlist }: PropertyCardPr
       listing_id: item.mls_listingid,
       listing_key: item.mls_listingkey,
       agent_id: 12,
-      user_id: sessionStorage.getItem("customer_id"),
+      user_id: getCustomerId(),
       uuid: process.env.NEXT_PUBLIC_REALTY_PRO_AGENT_ID,
     });
   };

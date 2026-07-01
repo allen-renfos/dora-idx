@@ -1,4 +1,5 @@
 import axiosInstance from "../Api";
+import { getCustomerId } from "@/services/auth/authStorage";
 
 export const fetchPropertyList = async (data: { pageLimit?: number; search?: string }) => {
     const pageLimit = data?.pageLimit || 1;
@@ -128,7 +129,7 @@ export const saveSearches = async (data: object) => {
     return response.data;
 }
 export const fetchSavedSearches = async () => {
-    const customer_id = typeof window !== 'undefined' ? sessionStorage.getItem('customer_id') : null;
+    const customer_id = typeof window !== 'undefined' ? getCustomerId() : null;
     const uuid = process.env.NEXT_PUBLIC_REALTY_PRO_AGENT_ID;
     const response = await axiosInstance.get(`/v1/saved-search?uuid=${uuid}&customer_id=${customer_id}`);
     return response.data;

@@ -18,6 +18,8 @@ import {
   removeWishlistItem,
 } from "@/services/profile/ProfileServices";
 import { useUserWishlist } from "@/services/profile/ProfileQueries";
+import { getAccessToken, getCustomerId } from "@/services/auth/authStorage";
+import { recordCityEvent } from "@/helpers/cityInterest";
 import { saveSearches } from "@/services/properties/PropertyServices";
 import GoogleMapsProvider from "@/provider/GoogleMapProvider";
 import type { SearchFilters } from "@/types/Property";
@@ -182,6 +184,8 @@ const MlsSerchHomePage = () => {
   // Stable ref holding live scroll state — avoids stale closures in the observer callback
   const observerRef = useRef<IntersectionObserver | null>(null);
   const sentinelElRef = useRef<HTMLDivElement | null>(null);
+  // Guard so each distinct confirmed city is recorded at most once per mount.
+  const recordedSearchCities = useRef<Set<string>>(new Set());
   const scrollState = useRef<{ hasNextPage: boolean; isFetchingNextPage: boolean; fetchNextPage: () => void }>({
     hasNextPage: false,
     isFetchingNextPage: false,
@@ -361,6 +365,19 @@ const MlsSerchHomePage = () => {
 
   const totalCount: number = (infiniteData?.pages[0] as any)?.meta?.total ?? 0;
 
+  // City personalization (search signal). Record ONLY the confirmed structured
+  // city filter (mls_city, set when the user picks a city from autocomplete) —
+  // never the raw typed keyword, which would store partial keystrokes as bogus
+  // cities. Fire once per distinct city, and only when results actually returned.
+  useEffect(() => {
+    if (isLoading) return;
+    const city = searchFilters.mls_city?.trim();
+    if (!city || properties.length === 0) return;
+    if (recordedSearchCities.current.has(city)) return;
+    recordedSearchCities.current.add(city);
+    recordCityEvent(city, "search", searchFilters.price_max || undefined);
+  }, [isLoading, properties.length, searchFilters.mls_city, searchFilters.price_max]);
+
   // Sync scroll state into a ref so the observer callback always reads fresh values
   // without needing to reconnect the observer on every state change.
   scrollState.current = { hasNextPage: hasNextPage ?? false, isFetchingNextPage, fetchNextPage };
@@ -446,8 +463,8 @@ const MlsSerchHomePage = () => {
   };
 
   const handleSaveSearch = () => {
-    const token = sessionStorage.getItem("access_token");
-    const customerId = sessionStorage.getItem("customer_id");
+    const token = getAccessToken();
+    const customerId = getCustomerId();
     if (!token || !customerId) {
       toast.info("Please login to save your search.", { autoClose: 3000 });
       setIsLoginModalOpen(true);

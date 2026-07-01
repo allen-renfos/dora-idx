@@ -5,6 +5,11 @@ import { useRouter } from "next/navigation";
 import LoginModal from "@/main-pages/auth/LoginModal";
 import RegistrationModal from "@/main-pages/auth/RegistrationModal";
 import ForgotPasswordModal from "@/main-pages/auth/ForgotPasswordModal";
+import {
+  isAuthenticated as checkAuthenticated,
+  hasAuthHint,
+} from "@/services/auth/authStorage";
+import { refreshSession } from "@/services/auth/sessionManager";
 
 type ActiveModal = "login" | "register" | "forgot";
 
@@ -16,11 +21,29 @@ export default function ProtectedRoute({ children }: { children: React.ReactNode
   const didAuthRef = useRef(false);
 
   useEffect(() => {
-    const token = sessionStorage.getItem("access_token");
-    if (token) {
-      setIsAuthenticated(true);
-    }
-    setChecked(true);
+    let active = true;
+    (async () => {
+      if (checkAuthenticated()) {
+        if (active) {
+          setIsAuthenticated(true);
+          setChecked(true);
+        }
+        return;
+      }
+      // No token in storage — try to silently restore from the refresh cookie.
+      if (hasAuthHint()) {
+        const token = await refreshSession();
+        if (active && token) {
+          setIsAuthenticated(true);
+          setChecked(true);
+          return;
+        }
+      }
+      if (active) setChecked(true); // anonymous → show login modal
+    })();
+    return () => {
+      active = false;
+    };
   }, []);
 
   // Fire after React has committed the auth state so the Header listener receives it reliably

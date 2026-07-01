@@ -7,6 +7,7 @@ import Providers from "@/provider/QueryClientProvider";
 import SocialUrlFetcher from "@/component/SocialUrlFetcher";
 import { NameProvider } from "@/component/NameProvider";
 import { LayoutShell } from "@/component/sharable/LayoutShell";
+import AuthBootstrap from "@/component/auth/AuthBootstrap";
 
 // === Dora · Verdant Atelier type system ===
 // Display: Fraunces (soft optical serif). Accent caps: Marcellus (elegant
@@ -61,6 +62,7 @@ export default function RootLayout({
         <Providers>
           <SocialUrlFetcher />
           <body className="font-sans antialiased">
+            <AuthBootstrap />
             <LayoutShell>{children}</LayoutShell>
           </body>
         </Providers>

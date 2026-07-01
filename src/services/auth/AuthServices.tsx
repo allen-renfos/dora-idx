@@ -10,6 +10,13 @@ export const login = async (data:object) => {
       throw error;
     }
   };
+
+  // Explicit refresh (cookie-based). Returns the new token data or throws on 401.
+  export const refreshAccessToken = async () => {
+    const response = await axiosInstance.post('/customer/refresh');
+    return response.data; // { access_token, expires_in }
+  };
+
   export const register = async (data:object) => {
 
     try {

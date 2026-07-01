@@ -6,6 +6,8 @@ import { usePropertyById } from "@/services/properties/PropertyQueries";
 import { useParams } from "next/navigation";
 import { useEffect } from "react";
 import { getApiBaseUrl } from "@/helpers/apiBaseUrl";
+import { getAccessToken, getCustomerId } from "@/services/auth/authStorage";
+import { useCityInterestTracker } from "@/helpers/useCityInterestTracker";
 import { FiAlertCircle } from "react-icons/fi";
 import Link from "next/link";
 
@@ -15,9 +17,24 @@ export const SinglePropertyPage = () => {
 
   const { data: property, isLoading, error } = usePropertyById(listingKey);
 
+  // City personalization: learn which city (+ price) this visitor browses.
+  // Runs unconditionally (before any early return); a no-op until data loads.
+  // Price nests under sections.financial.list_price — NOT the top-level field.
+  const detail = property?.data;
+  const detailCity =
+    detail?.address?.city ??
+    detail?.mls_city ??
+    detail?.city ??
+    detail?.sections?.highlights?.city;
+  const detailPrice =
+    detail?.sections?.financial?.list_price ??
+    detail?.summary?.price ??
+    detail?.price;
+  useCityInterestTracker(detailCity, "view", detailPrice);
+
   useEffect(() => {
     if (property?.data?.id) {
-      const customerId = sessionStorage.getItem("customer_id");
+      const customerId = getCustomerId();
       if (customerId) trackPropertyVisit(property.data.id);
     }
   }, [property]);
@@ -29,7 +46,7 @@ export const SinglePropertyPage = () => {
         sessionId = `session_${Date.now()}_${Math.random().toString(36).substring(2, 15)}`;
         sessionStorage.setItem("visitor_session_id", sessionId);
       }
-      const token = sessionStorage.getItem("access_token");
+      const token = getAccessToken();
       const headers: HeadersInit = { "Content-Type": "application/json" };
       if (token) headers["Authorization"] = `Bearer ${token}`;
 

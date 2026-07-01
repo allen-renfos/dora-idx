@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useMutation } from "@tanstack/react-query";
 import { login } from "@/services/auth/AuthServices";
+import { setSession } from "@/services/auth/authStorage";
 import { IoEyeOutline, IoEyeOffOutline } from "react-icons/io5";
 import { FiArrowRight } from "react-icons/fi";
 import { FormDisclaimer } from "@/component/sharable/FormDisclaimer";
@@ -52,9 +53,12 @@ export default function LoginModal({
   const mutation = useMutation({
     mutationFn: (user: LoginData) => login(user),
     onSuccess: async (data) => {
-      sessionStorage.setItem("access_token", data?.access_token);
-      sessionStorage.setItem("customer_id", data?.id);
-      sessionStorage.setItem("customer_name", data?.name);
+      setSession({
+        access_token: data?.access_token,
+        id: data?.id ?? data?.customer_id,
+        name: data?.name,
+      });
+      window.dispatchEvent(new Event("auth:login"));
 
       if (isHeader) router.push("/collection");
       setSuccess("Welcome back.");

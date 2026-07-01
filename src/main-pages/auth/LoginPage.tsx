@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useMutation } from "@tanstack/react-query";
 import { login } from "@/services/auth/AuthServices";
+import { setSession } from "@/services/auth/authStorage";
 import { FormDisclaimer } from "@/component/sharable/FormDisclaimer";
 import { AuthShell, AuthField, AuthAlert } from "@/component/ui/AuthShell";
 import { FiArrowRight } from "react-icons/fi";
@@ -28,7 +29,12 @@ export default function LoginPage() {
   const mutation = useMutation({
     mutationFn: (user: LoginData) => login(user),
     onSuccess: (data) => {
-      sessionStorage.setItem("access_token", data?.access_token);
+      setSession({
+        access_token: data?.access_token,
+        id: data?.id ?? data?.customer_id,
+        name: data?.name,
+      });
+      window.dispatchEvent(new Event("auth:login"));
       setSuccess("Welcome back. Redirecting…");
       setTimeout(() => router.push("/collection"), 1200);
     },

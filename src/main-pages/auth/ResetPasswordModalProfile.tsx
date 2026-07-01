@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { changePassword } from "@/services/auth/AuthServices";
+import { getAccessToken, getCustomerName } from "@/services/auth/authStorage";
 import { FiArrowRight, FiEye, FiEyeOff } from "react-icons/fi";
 import toast from "react-hot-toast";
 import { AuthModal } from "@/component/ui/AuthModal";
@@ -70,10 +71,10 @@ export default function ResetPasswordModalProfile({
     }
 
     mutation.mutate({
-      email: userEmail || sessionStorage.getItem("customer_name") || "",
+      email: userEmail || getCustomerName() || "",
       password: newPassword,
       password_confirmation: confirmPassword,
-      token: sessionStorage.getItem("access_token") || "",
+      token: getAccessToken() || "",
     });
   };
 

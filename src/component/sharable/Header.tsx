@@ -7,6 +7,11 @@ import { useRouter, usePathname } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { useNameContext } from "../NameProvider";
 import { useCachedImage } from "@/helpers/useCachedImage";
+import {
+  getAccessToken,
+  clearSession,
+  isAuthenticated,
+} from "@/services/auth/authStorage";
 import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
 import { FiMenu, FiX, FiUser } from "react-icons/fi";
@@ -69,12 +74,23 @@ export const Header = ({ activeHeader }: HeaderProps = {}) => {
   const solid = isScrolled || !isHeroRoute;
 
   useEffect(() => {
-    const token = sessionStorage.getItem("access_token");
-    setIsUserDashboard(!!token);
+    setIsUserDashboard(isAuthenticated());
 
     const onLogin = () => setIsUserDashboard(true);
+    const onLogout = () => setIsUserDashboard(false);
+    // Fires in OTHER tabs when access_token changes (cross-tab login/logout).
+    const onStorage = (e: StorageEvent) => {
+      if (e.key === "access_token") setIsUserDashboard(!!e.newValue);
+    };
+
     window.addEventListener("auth:login", onLogin);
-    return () => window.removeEventListener("auth:login", onLogin);
+    window.addEventListener("auth:logout", onLogout);
+    window.addEventListener("storage", onStorage);
+    return () => {
+      window.removeEventListener("auth:login", onLogin);
+      window.removeEventListener("auth:logout", onLogout);
+      window.removeEventListener("storage", onStorage);
+    };
   }, []);
 
   useEffect(() => {
@@ -109,8 +125,7 @@ export const Header = ({ activeHeader }: HeaderProps = {}) => {
   }, [isMobileMenuOpen]);
 
   const handleDashboard = () => {
-    const token = sessionStorage.getItem("access_token");
-    if (token == null) setIsLoginModalOpen(true);
+    if (!getAccessToken()) setIsLoginModalOpen(true);
     else window.location.href = "/collection";
   };
 
@@ -162,7 +177,8 @@ export const Header = ({ activeHeader }: HeaderProps = {}) => {
     } catch (err) {
       console.error("Logout failed:", err);
     }
-    sessionStorage.clear();
+    clearSession(); // scoped clear (not sessionStorage.clear())
+    window.dispatchEvent(new Event("auth:logout")); // updates this + other tabs
     window.location.href = "/home";
   };
 

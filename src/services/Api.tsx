@@ -1,61 +1,63 @@
-import axios, { AxiosInstance } from 'axios';
+import axios, { AxiosInstance, AxiosError, InternalAxiosRequestConfig } from 'axios';
 import { getApiBaseUrl } from '@/helpers/apiBaseUrl';
+import { getAccessToken, clearSession } from '@/services/auth/authStorage';
+import { refreshSession } from '@/services/auth/sessionManager';
 
 const axiosInstance: AxiosInstance = axios.create({
   baseURL: getApiBaseUrl(),
+  withCredentials: true, // send the HttpOnly refresh cookie to /customer/* endpoints
 });
 
-// Request interceptor to add headers
+// --- Request interceptor: attach the Bearer access token -------------------
 axiosInstance.interceptors.request.use(
   (config) => {
-    const token =
-      typeof window !== 'undefined'
-        ? window.sessionStorage.getItem('access_token')
-        : null;
+    const token = typeof window !== 'undefined' ? getAccessToken() : null;
     if (token) {
       config.headers['Authorization'] = `Bearer ${token}`;
     }
     return config;
   },
-  (error) => {
-    return Promise.reject(error);
-  }
+  (error) => Promise.reject(error)
 );
 
-// Response interceptor for error handling
+// --- Response interceptor: silent refresh on 401 ---------------------------
+type RetriableConfig = InternalAxiosRequestConfig & { _retry?: boolean };
+
 axiosInstance.interceptors.response.use(
   (response) => response,
-  (error) => {
+  async (error: AxiosError) => {
     if (!error.response) {
-      // console.error('Network Error:', error.message);
       return Promise.reject(new Error('Network Error: Please check your internet connection.'));
     }
 
     const status = error.response.status;
-    const message = (error.response.data as any)?.message || 'Unknown error';
+    const original = error.config as RetriableConfig | undefined;
+    const url = original?.url || '';
 
-    switch (status) {
-      case 400:
-        console.error('Bad Request:', message);
-        break;
-      case 401:
-        console.error('Unauthorized:', message);
-        // window.location.href='/login'; // Redirect to login page
-        // sessionStorage.removeItem('token'); // Clear token
-        break;
-      case 403:
-        console.error('Forbidden:', message);
-        break;
-      case 404:
-        console.error('Not Found:', message);
-        break;
-      case 500:
-        console.error('Internal Server Error:', message);
-        break;
-      default:
-        console.error('Error:', message);
+    // Only attempt refresh on a genuine auth failure, once per request, and never for the
+    // auth endpoints themselves (avoids infinite loops).
+    const isAuthEndpoint =
+      url.includes('/customer/refresh') ||
+      url.includes('/customer/login') ||
+      url.includes('/customer/logout');
+
+    if (status === 401 && original && !original._retry && !isAuthEndpoint) {
+      original._retry = true;
+      const newToken = await refreshSession(); // single-flight, shared across callers
+      if (newToken) {
+        original.headers = original.headers ?? {};
+        (original.headers as Record<string, string>)['Authorization'] = `Bearer ${newToken}`;
+        return axiosInstance(original); // replay the original request transparently
+      }
+      // Refresh failed → session is truly gone.
+      clearSession();
+      if (typeof window !== 'undefined') {
+        window.dispatchEvent(new Event('auth:logout'));
+      }
     }
 
+    const message = (error.response.data as { message?: string })?.message || 'Unknown error';
+    if (status >= 500) console.error('Server Error:', message);
     return Promise.reject(error);
   }
 );
