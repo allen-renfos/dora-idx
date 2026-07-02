@@ -15,6 +15,7 @@ const nextConfig: import('next').NextConfig = {
   // failures). Prevents debug/info leakage and noise in prod.
   compiler: {
     removeConsole: process.env.NODE_ENV === 'production' ? { exclude: ['error'] } : false,
+  },
 
   // --- CORS WORKAROUND ---
   // API calls (/api/*) are proxied by the Route Handler at src/app/api/[...path]/route.ts
