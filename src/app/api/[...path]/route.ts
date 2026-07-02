@@ -8,11 +8,22 @@ const API_TARGET =
   process.env.NEXT_API_PROXY_TARGET || "https://stgadm.realtipro.com/api";
 
 // Hop-by-hop / host-specific headers we must not forward verbatim.
+//
+// `origin` / `referer` are stripped deliberately: this backend runs a dual-mode
+// auth scheme. When it sees a browser Origin (a CORS request) it treats the caller
+// as a cookie-session client and OMITS `access_token` from the login/register JSON
+// body (the token goes into an HttpOnly cookie instead). Our frontend is Bearer-based
+// — it needs `access_token` in the body to store in localStorage. Because the proxy
+// is a same-origin server-to-server hop, the backend doesn't need the browser's
+// Origin; dropping it puts the backend in API-client mode so it returns the token in
+// the body. The HttpOnly refresh_token cookie is still set in both modes.
 const STRIP_REQUEST_HEADERS = new Set([
   "host",
   "connection",
   "content-length",
   "accept-encoding",
+  "origin",
+  "referer",
 ]);
 
 const isLocalRequest = (req: NextRequest): boolean => {

@@ -1,7 +1,7 @@
 import axios, { AxiosInstance, AxiosError, InternalAxiosRequestConfig } from 'axios';
 import { getApiBaseUrl } from '@/helpers/apiBaseUrl';
-import { getAccessToken, clearSession } from '@/services/auth/authStorage';
-import { refreshSession, wasSessionRevoked } from '@/services/auth/sessionManager';
+import { getAccessToken } from '@/services/auth/authStorage';
+import { refreshSession } from '@/services/auth/sessionManager';
 
 const axiosInstance: AxiosInstance = axios.create({
   baseURL: getApiBaseUrl(),
@@ -49,18 +49,13 @@ axiosInstance.interceptors.response.use(
         (original.headers as Record<string, string>)['Authorization'] = `Bearer ${newToken}`;
         return axiosInstance(original); // replay the original request transparently
       }
-      // Refresh failed. ONLY tear the session down when the refresh endpoint
-      // explicitly rejected it (genuine revocation / expiry). A missing endpoint,
-      // network error, or absent refresh cookie must NOT sign the user out —
-      // otherwise a single 401 on reload logs them straight back out. We keep the
-      // stored token and let the individual request fail; the user stays logged in
-      // until they explicitly log out or the session is truly revoked.
-      if (wasSessionRevoked()) {
-        clearSession();
-        if (typeof window !== 'undefined') {
-          window.dispatchEvent(new Event('auth:logout'));
-        }
-      }
+      // Refresh failed. We deliberately do NOT clear the session or log the user
+      // out here. A single 401 — from a not-yet-deployed / flaky /customer/refresh,
+      // a network blip, or one endpoint that rejects the token — must never sign
+      // the customer out, because that corrupts activity tracking. The stored token
+      // is kept; this individual request just fails. The session is torn down ONLY
+      // by an explicit logout (Header / Profile). See wasSessionRevoked() if you
+      // later want to re-enable auto-logout once the refresh endpoint is trusted.
     }
 
     const message = (error.response.data as { message?: string })?.message || 'Unknown error';
