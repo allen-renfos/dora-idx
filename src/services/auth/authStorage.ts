@@ -10,10 +10,11 @@
 //   refresh on app load (so we never call /refresh for visitors who never logged in).
 
 const ACCESS_TOKEN = "access_token";
+const REFRESH_TOKEN = "refresh_token";
 const CUSTOMER_ID = "customer_id";
 const CUSTOMER_NAME = "customer_name";
 const AUTH_HINT = "auth_hint";
-const KEYS = [ACCESS_TOKEN, CUSTOMER_ID, CUSTOMER_NAME, AUTH_HINT];
+const KEYS = [ACCESS_TOKEN, REFRESH_TOKEN, CUSTOMER_ID, CUSTOMER_NAME, AUTH_HINT];
 
 const isBrowser = () => typeof window !== "undefined";
 
@@ -29,6 +30,7 @@ const read = (key: string): string | null => {
 };
 
 export const getAccessToken = () => read(ACCESS_TOKEN);
+export const getRefreshToken = () => read(REFRESH_TOKEN);
 export const getCustomerId = () => read(CUSTOMER_ID);
 export const getCustomerName = () => read(CUSTOMER_NAME);
 export const isAuthenticated = () => !!getAccessToken();
@@ -36,6 +38,7 @@ export const hasAuthHint = () => read(AUTH_HINT) === "1";
 
 export interface SessionPayload {
   access_token?: string | null;
+  refresh_token?: string | null; // stored so /customer/refresh can be called explicitly
   id?: string | number | null; // login returns `id` / `customer_id`
   customer_id?: string | number | null;
   name?: string | null;
@@ -47,6 +50,8 @@ export const setSession = (s: SessionPayload) => {
   try {
     const id = s.customer_id ?? s.id;
     window.localStorage.setItem(ACCESS_TOKEN, s.access_token);
+    if (s.refresh_token != null)
+      window.localStorage.setItem(REFRESH_TOKEN, String(s.refresh_token));
     if (id != null) window.localStorage.setItem(CUSTOMER_ID, String(id));
     if (s.name != null) window.localStorage.setItem(CUSTOMER_NAME, String(s.name));
     window.localStorage.setItem(AUTH_HINT, "1");
@@ -57,11 +62,14 @@ export const setSession = (s: SessionPayload) => {
   }
 };
 
-// Update ONLY the access token after a silent refresh (keeps id/name/hint).
-export const updateAccessToken = (token: string) => {
+// Update the access token (and rotated refresh token, if the server returned one)
+// after a silent refresh. Keeps id/name/hint.
+export const updateAccessToken = (token: string, refreshToken?: string | null) => {
   if (!isBrowser() || !token) return;
   try {
     window.localStorage.setItem(ACCESS_TOKEN, token);
+    if (refreshToken != null && refreshToken !== "")
+      window.localStorage.setItem(REFRESH_TOKEN, String(refreshToken));
     window.localStorage.setItem(AUTH_HINT, "1");
   } catch {
     /* ignore */

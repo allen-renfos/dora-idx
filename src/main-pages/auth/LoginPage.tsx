@@ -31,6 +31,7 @@ export default function LoginPage() {
     onSuccess: (data) => {
       setSession({
         access_token: data?.access_token,
+        refresh_token: data?.refresh_token,
         id: data?.id ?? data?.customer_id,
         name: data?.name,
       });

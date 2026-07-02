@@ -4,6 +4,7 @@ import {
   updateAccessToken,
   clearSession,
   getAccessToken,
+  getRefreshToken,
   getCustomerId,
   isAuthenticated,
   hasAuthHint,
@@ -16,12 +17,25 @@ describe("authStorage", () => {
   });
 
   it("persists a session in localStorage (survives tab close)", () => {
-    setSession({ access_token: "tok", id: 42, name: "Jane" });
+    setSession({ access_token: "tok", refresh_token: "rtok", id: 42, name: "Jane" });
     expect(getAccessToken()).toBe("tok");
+    expect(getRefreshToken()).toBe("rtok");
     expect(getCustomerId()).toBe("42");
     expect(hasAuthHint()).toBe(true);
     expect(localStorage.getItem("access_token")).toBe("tok");
+    expect(localStorage.getItem("refresh_token")).toBe("rtok");
     expect(sessionStorage.getItem("access_token")).toBeNull();
+  });
+
+  it("rotates the refresh token when updateAccessToken receives one", () => {
+    setSession({ access_token: "old", refresh_token: "r1", id: 7, name: "X" });
+    updateAccessToken("new", "r2");
+    expect(getAccessToken()).toBe("new");
+    expect(getRefreshToken()).toBe("r2");
+    // Without a rotated token, the existing refresh token is preserved.
+    updateAccessToken("newer");
+    expect(getAccessToken()).toBe("newer");
+    expect(getRefreshToken()).toBe("r2");
   });
 
   it("migrates a legacy sessionStorage token", () => {

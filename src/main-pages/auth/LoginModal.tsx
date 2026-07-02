@@ -55,6 +55,7 @@ export default function LoginModal({
     onSuccess: async (data) => {
       setSession({
         access_token: data?.access_token,
+        refresh_token: data?.refresh_token,
         id: data?.id ?? data?.customer_id,
         name: data?.name,
       });
