@@ -10,20 +10,15 @@
 const nextConfig: import('next').NextConfig = {
   reactStrictMode: true,
   output: 'standalone',
-  async rewrites() {
-    const upstreamApiBase = process.env.NEXT_API_BASE_URL || 'https://stgadm.realtipro.com/api';
-
-    return [
-      {
-        source: '/api/:path*',
-        destination: `${upstreamApiBase}/:path*`,
-      },
-    ];
+  // Strip console.* from production bundles (keep console.error for real
+  // failures). Prevents debug/info leakage and noise in prod.
+  compiler: {
+    removeConsole: process.env.NODE_ENV === 'production' ? { exclude: ['error'] } : false,
   },
-  // images: {
-  //   // allow external images from Google Cloud Storage, demo site images, and Unsplash
-  //   domains: ['storage.googleapis.com', 'demorealestate.webnapps.net', 'demorealestate2.webnapps.net', 'images.unsplash.com'],
-  // },
+  // NOTE: /api/* is proxied by the Route Handler at src/app/api/[...path]/route.ts
+  // (which rewrites Set-Cookie for localhost). Do NOT add a next.config rewrite
+  // for /api here — a route handler takes precedence, so the rewrite would be
+  // dead config and a source of confusion (different env var / default host).
   images: {
     unoptimized: true,
     remotePatterns: [
