@@ -1,5 +1,6 @@
 "use client";
 
+import DOMPurify from "isomorphic-dompurify";
 import { Blog } from "@/types/Blog";
 
 interface Props {
@@ -14,7 +15,7 @@ export const SingleBlogContent = ({ blog }: Props) => {
           {blog?.content ? (
             <div
               className="single-blog-prose"
-              dangerouslySetInnerHTML={{ __html: blog.content }}
+              dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(blog.content) }}
             />
           ) : (
             <p className="text-[var(--ink-faint)] text-center py-10">

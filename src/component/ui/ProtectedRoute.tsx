@@ -13,6 +13,16 @@ import { refreshSession } from "@/services/auth/sessionManager";
 
 type ActiveModal = "login" | "register" | "forgot";
 
+/**
+ * Client-side UX gate — NOT a security boundary.
+ *
+ * This only decides whether to render the page or a login modal, based on the
+ * client-readable session hint (`auth_hint` in localStorage / the
+ * `rp_session_active` cookie), both of which a user can forge. Real
+ * authorization is enforced server-side by the HttpOnly session cookie on every
+ * `/api` call. Never embed data here that an unauthenticated user must not see:
+ * fetch protected data through the API (which will 401), not via props/SSR.
+ */
 export default function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const [checked, setChecked] = useState(false);

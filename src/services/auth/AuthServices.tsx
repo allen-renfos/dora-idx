@@ -31,7 +31,7 @@ export const login = async (data:object) => {
 
     try {
        
-      const response = await axiosInstance.post('customer/forgot-password', data);
+      const response = await axiosInstance.post('/customer/forgot-password', data);
       return response.data;
     } catch (error) {
       throw error;
@@ -40,9 +40,7 @@ export const login = async (data:object) => {
 
   export const resetPassword = async (data: object) => {
     try {
-      const response = await axiosInstance.post('/customer/reset', data, {
-        params: data
-      });
+      const response = await axiosInstance.post('/customer/reset', data);
       return response.data;
     } catch (error) {
       throw error;
