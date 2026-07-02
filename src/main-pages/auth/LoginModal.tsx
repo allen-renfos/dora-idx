@@ -65,8 +65,6 @@ export default function LoginModal({
       //    protected page never renders underneath a leftover overlay.
       setError(null);
       setSuccess(null);
-      setConsentError(null);
-      setConsent(false);
       setFormData({ email: "", password: "" });
       onSuccess?.();
 
