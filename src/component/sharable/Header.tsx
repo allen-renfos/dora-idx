@@ -8,7 +8,6 @@ import { useEffect, useMemo, useState } from "react";
 import { useNameContext } from "../NameProvider";
 import { useCachedImage } from "@/helpers/useCachedImage";
 import {
-  getAccessToken,
   clearSession,
   isAuthenticated,
 } from "@/services/auth/authStorage";
@@ -125,7 +124,7 @@ export const Header = ({ activeHeader }: HeaderProps = {}) => {
   }, [isMobileMenuOpen]);
 
   const handleDashboard = () => {
-    if (!getAccessToken()) setIsLoginModalOpen(true);
+    if (!isAuthenticated()) setIsLoginModalOpen(true);
     else window.location.href = "/collection";
   };
 

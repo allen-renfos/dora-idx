@@ -14,16 +14,17 @@ const REFRESH_URL = `${getApiBaseUrl()}/customer/refresh`;
 // Module-level promise so concurrent callers share ONE in-flight refresh.
 let inFlight: Promise<string | null> | null = null;
 
-// Tracks WHY the most recent refresh failed. Only a 401/403 straight from the
+// Tracks WHY the most recent refresh failed. Only a 401 straight from the
 // refresh endpoint means the session was genuinely revoked/expired server-side.
-// A missing endpoint (404), a network error, or a 5xx means "we couldn't verify"
-// — which must NOT log the user out, or a flaky/undeployed /refresh silently
-// signs everyone out on reload.
+// A 403 (authorization/origin rejection), a missing endpoint (404), a network
+// error, or a 5xx means "we couldn't verify" — which must NOT log the user out,
+// or a flaky/undeployed/origin-gated /refresh silently signs everyone out on
+// reload.
 let lastFailureWasRevocation = false;
 
 /**
  * True only when the last refreshSession() failed because the refresh endpoint
- * explicitly rejected the session (HTTP 401/403). False for network errors,
+ * explicitly rejected the session (HTTP 401). False for 403, network errors,
  * a missing endpoint, 5xx, or success. The 401 interceptor uses this to decide
  * whether a failed refresh should actually tear the session down.
  */
@@ -70,7 +71,11 @@ export const refreshSession = (): Promise<string | null> => {
       // Report failure, but do NOT clear here. Distinguish a genuine revocation
       // (endpoint said 401/403) from "couldn't reach/verify" (404/network/5xx).
       const status = axios.isAxiosError(err) ? err.response?.status : undefined;
-      lastFailureWasRevocation = status === 401 || status === 403;
+      // Only a 401 from the refresh endpoint means the session was genuinely
+      // revoked/expired. A 403 is an authorization/origin rejection (e.g.
+      // "Origin not allowed") — NOT proof the session is dead — so it must not
+      // tear down a cookie-backed session and bounce the user back to login.
+      lastFailureWasRevocation = status === 401;
       return null;
     } finally {
       inFlight = null;

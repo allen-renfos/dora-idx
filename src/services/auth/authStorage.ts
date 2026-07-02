@@ -18,6 +18,24 @@ const KEYS = [ACCESS_TOKEN, REFRESH_TOKEN, CUSTOMER_ID, CUSTOMER_NAME, AUTH_HINT
 
 const isBrowser = () => typeof window !== "undefined";
 
+// Non-HttpOnly hint cookie the backend sets alongside the HttpOnly access-token
+// cookie. Our backend keeps the access token in an HttpOnly cookie (sent
+// automatically via `withCredentials`) and returns only identity fields in the
+// login body — so there is no bearer token to mirror into localStorage. This
+// cookie lets JS know a cookie session is active even when localStorage is empty.
+const SESSION_COOKIE = "rp_session_active";
+
+const hasSessionCookie = (): boolean => {
+  if (!isBrowser()) return false;
+  try {
+    return document.cookie
+      .split(";")
+      .some((c) => c.trim().startsWith(`${SESSION_COOKIE}=`));
+  } catch {
+    return false;
+  }
+};
+
 // Read localStorage first, then fall back to sessionStorage so anyone already logged in
 // under the OLD flow is transparently migrated on their next visit.
 const read = (key: string): string | null => {
@@ -33,8 +51,14 @@ export const getAccessToken = () => read(ACCESS_TOKEN);
 export const getRefreshToken = () => read(REFRESH_TOKEN);
 export const getCustomerId = () => read(CUSTOMER_ID);
 export const getCustomerName = () => read(CUSTOMER_NAME);
-export const isAuthenticated = () => !!getAccessToken();
-export const hasAuthHint = () => read(AUTH_HINT) === "1";
+// A prior session exists if we persisted the hint on login OR the backend's
+// session cookie is still present (e.g. localStorage was cleared but the cookie
+// is valid).
+export const hasAuthHint = () => read(AUTH_HINT) === "1" || hasSessionCookie();
+// Authenticated when we hold a bearer token (legacy/body-token backends) OR a
+// live cookie session (this backend). Never require a body access token that the
+// cookie-based backend never returns.
+export const isAuthenticated = () => !!getAccessToken() || hasAuthHint();
 
 export interface SessionPayload {
   access_token?: string | null;
@@ -46,10 +70,16 @@ export interface SessionPayload {
 
 // Persist a full login session.
 export const setSession = (s: SessionPayload) => {
-  if (!isBrowser() || !s.access_token) return;
+  // Our backend returns identity + `expires_in` in the body and delivers the
+  // access token as an HttpOnly cookie — so `access_token` is usually absent.
+  // Persist the session on any successful login: store whatever we got and set
+  // the hint so the app recognizes the (cookie-backed) session. Only bail when
+  // there is no browser to write to.
+  if (!isBrowser()) return;
   try {
     const id = s.customer_id ?? s.id;
-    window.localStorage.setItem(ACCESS_TOKEN, s.access_token);
+    if (s.access_token)
+      window.localStorage.setItem(ACCESS_TOKEN, s.access_token);
     if (s.refresh_token != null)
       window.localStorage.setItem(REFRESH_TOKEN, String(s.refresh_token));
     if (id != null) window.localStorage.setItem(CUSTOMER_ID, String(id));
@@ -84,6 +114,9 @@ export const clearSession = () => {
       window.localStorage.removeItem(k);
       window.sessionStorage.removeItem(k);
     });
+    // Best-effort clear of the JS-readable session hint so isAuthenticated()
+    // reflects logout immediately, even before the backend response lands.
+    document.cookie = `${SESSION_COOKIE}=; Max-Age=0; path=/`;
   } catch {
     /* ignore */
   }

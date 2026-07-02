@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
 import { useMutation } from "@tanstack/react-query";
 import { login } from "@/services/auth/AuthServices";
 import { setSession } from "@/services/auth/authStorage";
@@ -32,7 +31,6 @@ export default function LoginModal({
   onOpenForgotPassword,
   isHeader,
 }: LoginModalProps) {
-  const router = useRouter();
   const [formData, setFormData] = useState<LoginData>({
     email: "",
     password: "",
@@ -49,22 +47,38 @@ export default function LoginModal({
 
   const mutation = useMutation({
     mutationFn: (user: LoginData) => login(user),
-    onSuccess: async (data) => {
+    onSuccess: (data) => {
+      // 1) Persist the session FIRST so any route guard that reads storage
+      //    (e.g. ProtectedRoute on /collection) sees the token synchronously.
       setSession({
         access_token: data?.access_token,
         refresh_token: data?.refresh_token,
         id: data?.id ?? data?.customer_id,
         name: data?.name,
       });
+
+      // 2) Notify listeners (Header, ProtectedRoute) that auth is now available.
       window.dispatchEvent(new Event("auth:login"));
 
-      if (isHeader) router.push("/collection");
-      setSuccess("Welcome back.");
+      // 3) Reset local state and dismiss the modal IMMEDIATELY — this clears the
+      //    portal backdrop and the body scroll-lock before we navigate, so the
+      //    protected page never renders underneath a leftover overlay.
+      setError(null);
+      setSuccess(null);
+      setConsentError(null);
+      setConsent(false);
+      setFormData({ email: "", password: "" });
       onSuccess?.();
-      setTimeout(() => {
-        onClose();
-        setSuccess(null);
-      }, 1200);
+
+      // 4) Navigate last. Use a full-document navigation (same pattern as the
+      //    header dashboard button) rather than router.push: a client-side
+      //    transition into the protected /collection route can interleave with
+      //    the modal teardown and the route guard's mount, leaving the modal
+      //    backdrop/overlay painted on top until a second sign-in. A hard nav
+      //    unloads every modal/backdrop/scroll-lock and reloads /collection
+      //    fresh with the token already persisted, so the guard authenticates
+      //    on first mount.
+      if (isHeader) window.location.assign("/collection");
     },
     onError: (err: any) => {
       setError(
@@ -82,6 +96,8 @@ export default function LoginModal({
 
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    // Guard against duplicate submissions while a login is already in flight.
+    if (mutation.isPending) return;
     setError(null);
     setSuccess(null);
 
