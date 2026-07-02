@@ -6,7 +6,6 @@ import { login } from "@/services/auth/AuthServices";
 import { setSession } from "@/services/auth/authStorage";
 import { IoEyeOutline, IoEyeOffOutline } from "react-icons/io5";
 import { FiArrowRight } from "react-icons/fi";
-import { FormDisclaimer } from "@/component/sharable/FormDisclaimer";
 import { AuthModal } from "@/component/ui/AuthModal";
 import { AuthField, AuthAlert } from "@/component/ui/AuthShell";
 
@@ -39,8 +38,6 @@ export default function LoginModal({
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
   const [showPassword, setShowPassword] = useState(false);
-  const [consent, setConsent] = useState(false);
-  const [consentError, setConsentError] = useState<string | null>(null);
 
   useEffect(() => {
     if (!success) return;
@@ -68,8 +65,6 @@ export default function LoginModal({
       //    protected page never renders underneath a leftover overlay.
       setError(null);
       setSuccess(null);
-      setConsentError(null);
-      setConsent(false);
       setFormData({ email: "", password: "" });
       onSuccess?.();
 
@@ -109,9 +104,6 @@ export default function LoginModal({
     }
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
       return setError("Please enter a valid email");
-    }
-    if (!consent) {
-      return setConsentError("Please review and accept our disclaimer.");
     }
     mutation.mutate(formData);
   };
@@ -197,15 +189,6 @@ export default function LoginModal({
             </button>
           </div>
         </div>
-
-        <FormDisclaimer
-          checked={consent}
-          onChange={(v) => {
-            setConsent(v);
-            setConsentError(null);
-          }}
-          error={consentError || ""}
-        />
 
         <button
           type="submit"

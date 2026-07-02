@@ -16,8 +16,8 @@ export default function HomePage() {
   return (
     <main className="bg-[var(--canvas)]">
       <HomeHero />
-      <HomeRecommended />
       <HomeAdvisor />
+      <HomeRecommended />
       <HomeFeatured />
       <HomeNeighborhoods />
       <HomePhilosophy />

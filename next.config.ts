@@ -10,10 +10,28 @@
 const nextConfig: import('next').NextConfig = {
   reactStrictMode: true,
   output: 'standalone',
+
   // Strip console.* from production bundles (keep console.error for real
   // failures). Prevents debug/info leakage and noise in prod.
   compiler: {
     removeConsole: process.env.NODE_ENV === 'production' ? { exclude: ['error'] } : false,
+
+  // --- CORS WORKAROUND ---
+  // API calls (/api/*) are proxied by the Route Handler at src/app/api/[...path]/route.ts
+  // so it can strip the browser Origin (forcing the backend into API-client mode so it
+  // returns access_token in the body) and rewrite the backend's Set-Cookie headers for
+  // localhost. Do NOT add an /api rewrite here: an afterFiles rewrite runs before the
+  // dynamic route and would shortcut /api/* straight to the backend, bypassing the proxy
+  // and breaking login persistence. The CDN rewrite stays since it sets no cookies.
+  async rewrites() {
+    return [
+      {
+        // Proxy CDN images so useCachedImage's fetch() isn't blocked by CORS.
+        source: '/cdn-proxy/:path*',
+        destination: 'https://cdn.realtipro.com/:path*',
+      },
+    ];
+
   },
   // NOTE: /api/* is proxied by the Route Handler at src/app/api/[...path]/route.ts
   // (which rewrites Set-Cookie for localhost). Do NOT add a next.config rewrite
