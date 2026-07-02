@@ -53,6 +53,30 @@ export default function ProtectedRoute({ children }: { children: React.ReactNode
     }
   }, [isAuthenticated]);
 
+  // Stay in sync with auth that becomes available AFTER this route mounts — e.g.
+  // when the header sign-in modal persists a session and navigates here. Without
+  // this, a fresh-session login could commit a hair before the token is observed,
+  // leaving this guard's own login modal + backdrop stuck on top of the page until
+  // a second sign-in.
+  useEffect(() => {
+    const syncAuth = () => {
+      if (checkAuthenticated()) {
+        didAuthRef.current = true;
+        setIsAuthenticated(true);
+        setChecked(true);
+      }
+    };
+    const onStorage = (e: StorageEvent) => {
+      if (e.key === "access_token" && e.newValue) syncAuth();
+    };
+    window.addEventListener("auth:login", syncAuth);
+    window.addEventListener("storage", onStorage);
+    return () => {
+      window.removeEventListener("auth:login", syncAuth);
+      window.removeEventListener("storage", onStorage);
+    };
+  }, []);
+
   if (!checked) return null;
   if (isAuthenticated) return <>{children}</>;
 
