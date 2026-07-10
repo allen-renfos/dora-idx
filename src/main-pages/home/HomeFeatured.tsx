@@ -5,10 +5,12 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { useNewListings } from "@/services/properties/PropertyQueries";
 import { PropertyCard } from "@/component/properties/PropertyCard";
 import { Reveal } from "@/component/ui/Reveal";
+import { useLoginPrompt } from "@/hooks/useLoginPrompt";
 
 type Property = { id: string; [key: string]: any };
 
 export default function HomeFeatured() {
+  const { handleModal, loginModal } = useLoginPrompt();
   const { data, isLoading } = useNewListings();
   const properties: Property[] = (data?.data || []).slice(0, 6);
 
@@ -42,6 +44,7 @@ export default function HomeFeatured() {
 
   return (
     <section className="relative bg-[var(--canvas-2)] text-[var(--ink)] section-pad overflow-hidden">
+      {loginModal}
       {/* Soft sage halo */}
       <div
         aria-hidden
@@ -120,8 +123,7 @@ export default function HomeFeatured() {
                   >
                     <PropertyCard
                       item={item}
-                      handleModal={() => undefined}
-                      hideWishlist={true}
+                      handleModal={handleModal}
                     />
                   </div>
                 ))}

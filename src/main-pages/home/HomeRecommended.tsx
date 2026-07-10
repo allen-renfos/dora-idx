@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useMlsPropertyList } from "@/services/properties/PropertyQueries";
 import { PropertyCard } from "@/component/properties/PropertyCard";
 import { Reveal } from "@/component/ui/Reveal";
+import { useLoginPrompt } from "@/hooks/useLoginPrompt";
 import { getTopCity, getTopCityPriceRange, type PriceRange } from "@/helpers/cityInterest";
 
 type Property = { id: string; [key: string]: any };
@@ -31,6 +32,9 @@ export default function HomeRecommended() {
 }
 
 function RecommendedRail({ city, range }: { city: string; range: PriceRange | null }) {
+  // Called unconditionally before any early return (Rules of Hooks).
+  const { handleModal, loginModal } = useLoginPrompt();
+
   // Existing list hook — already scopes by agent id (lagnt) inside the service,
   // so there is no cross-agent leakage.
   const { data, isLoading, error } = useMlsPropertyList({
@@ -53,6 +57,7 @@ function RecommendedRail({ city, range }: { city: string; range: PriceRange | nu
 
   return (
     <section className="relative bg-[var(--canvas)] text-[var(--ink)] section-pad overflow-hidden">
+      {loginModal}
       <div className="container-wide relative">
         <div className="flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
           <Reveal className="flex flex-col gap-5 max-w-2xl">
@@ -84,8 +89,7 @@ function RecommendedRail({ city, range }: { city: string; range: PriceRange | nu
                 <PropertyCard
                   key={item.id}
                   item={item}
-                  handleModal={() => undefined}
-                  hideWishlist={true}
+                  handleModal={handleModal}
                 />
               ))}
             </div>

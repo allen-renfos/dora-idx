@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(echo \"=== lint exit: $? ===\")",
+      "Bash(echo \"=== EXIT $? ===\")",
+      "Bash(echo \"tsc exit: $?\")"
+    ]
+  }
+}

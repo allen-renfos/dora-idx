@@ -11,6 +11,11 @@ const nextConfig: import('next').NextConfig = {
   reactStrictMode: true,
   output: 'standalone',
 
+  // Keep sharp (a native binary) external to the server bundle so the OG-image
+  // route at src/app/og/property/[id]/route.ts can require it at runtime on the
+  // deploy host instead of being (incorrectly) bundled.
+  serverExternalPackages: ['sharp'],
+
   // Strip console.* from production bundles (keep console.error for real
   // failures). Prevents debug/info leakage and noise in prod.
   compiler: {

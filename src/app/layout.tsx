@@ -37,6 +37,12 @@ const marcellus = Marcellus({
 });
 
 export const metadata: Metadata = {
+  // When set, gives relative OG/canonical URLs an absolute base. Per-listing
+  // pages build their own absolute og:url/og:image from the request origin, so
+  // this is a belt-and-suspenders default for the rest of the site.
+  ...(process.env.NEXT_PUBLIC_SITE_URL
+    ? { metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL) }
+    : {}),
   title: "Dora — Curated Real Estate",
   description:
     "Dora is a boutique real estate practice pairing distinctive homes with discerning clients across the region's most sought-after addresses.",

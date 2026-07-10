@@ -818,6 +818,12 @@ export const SinglePropertyDetails = ({ property: prop }: Props) => {
         </div>
       </section>
 
+      {/* Floating Share (mobile/tablet only — desktop keeps the sidebar button).
+          Its z-40 stays below the share modal's z-[9998] backdrop. */}
+      <div className="lg:hidden">
+        <SharePopup property={property} variant="floating" />
+      </div>
+
       <PropertyEnquiryModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}

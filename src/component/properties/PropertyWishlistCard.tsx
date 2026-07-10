@@ -13,6 +13,7 @@ import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import toast from "react-hot-toast";
 import { FiTrash2 } from "react-icons/fi";
+import { SharePopup } from "@/component/properties/SharePopup";
 
 interface PropertyWishlistCardProps {
   item: any;
@@ -125,36 +126,43 @@ export const PropertyWishlistCard = ({ item, handleModal, hideWishlist, onRemove
           </span>
         )}
 
-        {/* Favorite */}
-        {!hideWishlist && (
-          <button
-            onClick={handleAddToFavorites}
-            disabled={isAddingToFavorites}
-            aria-label={isFavorited ? "Saved to favorites" : "Save to favorites"}
-            className="absolute top-4 right-4 w-11 h-11 flex items-center justify-center border transition-all duration-300 backdrop-blur-md"
-            style={{
-              borderRadius: "999px",
-              background: isFavorited
-                ? "rgba(194, 168, 120,0.95)"
-                : "rgba(0,0,0,0.35)",
-              borderColor: isFavorited
-                ? "rgba(194, 168, 120,1)"
-                : "rgba(255,255,255,0.35)",
-              color: "#fff",
-            }}
-          >
-            {isAddingToFavorites ? (
-              <svg className="animate-spin" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                <circle cx="12" cy="12" r="10" strokeOpacity="0.25" />
-                <path d="M12 2a10 10 0 0 1 10 10" strokeLinecap="round" />
-              </svg>
-            ) : isFavorited ? (
-              <FaHeart size={16} />
-            ) : (
-              <FiHeart size={18} strokeWidth={2} />
-            )}
-          </button>
-        )}
+        {/* Share + Favorite */}
+        <div className="absolute top-4 right-4 flex items-center gap-2 z-10">
+          <SharePopup
+            variant="icon"
+            url={`/properties/${item?.property_hid}`}
+            property={item}
+          />
+          {!hideWishlist && (
+            <button
+              onClick={handleAddToFavorites}
+              disabled={isAddingToFavorites}
+              aria-label={isFavorited ? "Saved to favorites" : "Save to favorites"}
+              className="w-11 h-11 flex items-center justify-center border transition-all duration-300 backdrop-blur-md"
+              style={{
+                borderRadius: "999px",
+                background: isFavorited
+                  ? "rgba(194, 168, 120,0.95)"
+                  : "rgba(0,0,0,0.35)",
+                borderColor: isFavorited
+                  ? "rgba(194, 168, 120,1)"
+                  : "rgba(255,255,255,0.35)",
+                color: "#fff",
+              }}
+            >
+              {isAddingToFavorites ? (
+                <svg className="animate-spin" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                  <circle cx="12" cy="12" r="10" strokeOpacity="0.25" />
+                  <path d="M12 2a10 10 0 0 1 10 10" strokeLinecap="round" />
+                </svg>
+              ) : isFavorited ? (
+                <FaHeart size={16} />
+              ) : (
+                <FiHeart size={18} strokeWidth={2} />
+              )}
+            </button>
+          )}
+        </div>
 
         {/* Price overlay (appears on hover) */}
         <div className="absolute bottom-4 left-4 right-4 flex items-end justify-between gap-3 opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-500">

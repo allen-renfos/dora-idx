@@ -6,6 +6,7 @@ import { BiArea } from "react-icons/bi";
 import { FiMapPin } from "react-icons/fi";
 import Image from "next/image";
 import { MlsProviderBadge } from "@/component/sharable/MlsProviderBadge";
+import { SharePopup } from "@/component/properties/SharePopup";
 
 interface PropertyCardProps {
     item: any;
@@ -69,6 +70,15 @@ export const MlsMapModalCard = ({ item, onClose }: PropertyCardProps) => {
                 >
                     <IoMdClose size={16} />
                 </button>
+
+                {/* Share */}
+                <div style={{ position: 'absolute', bottom: 8, left: 8, zIndex: 10 }}>
+                    <SharePopup
+                        variant="icon"
+                        url={`/properties/${item?.id}`}
+                        property={item}
+                    />
+                </div>
             </div>
 
             {/* Info */}
