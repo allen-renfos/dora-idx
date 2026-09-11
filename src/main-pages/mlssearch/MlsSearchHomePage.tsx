@@ -18,13 +18,15 @@ import {
   removeWishlistItem,
 } from "@/services/profile/ProfileServices";
 import { useUserWishlist } from "@/services/profile/ProfileQueries";
-import { getAccessToken, getCustomerId } from "@/services/auth/authStorage";
+import { getAccessToken, getCustomerId, getCustomerName } from "@/services/auth/authStorage";
 import { recordCityEvent } from "@/helpers/cityInterest";
 import { saveSearches } from "@/services/properties/PropertyServices";
 import GoogleMapsProvider from "@/provider/GoogleMapProvider";
 import type { SearchFilters } from "@/types/Property";
 import { DEFAULT_PROPERTY_STATUS, isValidAreaSearch } from "@/component/mlsSearchMenu/filterDefaults";
 import { FiSearch } from "react-icons/fi";
+import { useProfile } from "@/services/profile/ProfileQueries";
+import { triggerLeadIntake } from "@/services/automation/n8n";
 
 type Property = { id: string; [key: string]: any };
 
@@ -177,6 +179,7 @@ const MlsSerchHomePage = () => {
   const locationFromParams = searchParams.get("keyword") || "";
 
   const queryClient = useQueryClient();
+  const { data: profileData } = useProfile();
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [isRegistrationModalOpen, setIsRegistrationModalOpen] = useState(false);
   const [showMap, setShowMap] = useState(true);
@@ -255,9 +258,29 @@ const MlsSerchHomePage = () => {
   /* -------- Mutations -------- */
   const postSaveSearchMutation = useMutation({
     mutationFn: (data: any) => saveSearches(data),
-    onSuccess: () => {
+    onSuccess: (_res, variables) => {
       queryClient.invalidateQueries({ queryKey: ["savedSearches"] });
       toast.success("Search saved successfully", { autoClose: 3000 });
+
+      const filters: SearchFilters | undefined = variables?.filters;
+      const profile = profileData?.data;
+      triggerLeadIntake({
+        agent_id: process.env.NEXT_PUBLIC_REALTY_PRO_AGENT_ID || "",
+        name: profile?.name || getCustomerName() || "",
+        email: profile?.email || null,
+        mobile: profile?.phone || profile?.mobile || null,
+        source: "Website",
+        sub_source: "Saved Search",
+        category: filters?.property_type || null,
+        category_type: filters?.category_type || null,
+        listing_type: filters?.property_for || null,
+        min_price: filters?.price_min || null,
+        max_price: filters?.price_max || null,
+        min_bed: filters?.bed_min || null,
+        max_bed: filters?.bed_max || null,
+        message: variables?.name || null,
+        source_url: typeof window !== "undefined" ? window.location.href : "",
+      });
     },
     onError: () => {
       toast.error("Failed to save search", { autoClose: 3000 });

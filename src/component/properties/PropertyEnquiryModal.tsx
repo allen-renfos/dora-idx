@@ -11,6 +11,7 @@ import { formatUSPhoneInput, getUSPhoneDigits } from "@/helpers/phoneFormat";
 import { FormDisclaimer } from "@/component/sharable/FormDisclaimer";
 import { AuthModal } from "@/component/ui/AuthModal";
 import { AuthField } from "@/component/ui/AuthShell";
+import { triggerShowingPropose } from "@/services/automation/n8n";
 
 interface Props {
   isOpen: boolean;
@@ -82,8 +83,28 @@ function ScheduleTourForm({ property, profileData, onClose }: SharedFormProps) {
 
   const mutation = useMutation({
     mutationFn: (data: object) => postEnquiry(data),
-    onSuccess: () => {
+    onSuccess: (res: any) => {
       toast.success("Showing requested. We'll confirm shortly.");
+
+      const leadId = res?.id ?? res?.data?.id ?? res?.enquiry?.id ?? null;
+      const tourStart = formData.tourDate && formData.tourTime
+        ? new Date(`${formData.tourDate} ${formData.tourTime}`)
+        : null;
+      triggerShowingPropose({
+        agent_id: process.env.NEXT_PUBLIC_REALTY_PRO_AGENT_ID || "",
+        lead_id: leadId,
+        listing_id: property?.id || property?.idd || property?.ListingId || property?.ref || "",
+        building_id: property?.building_id ?? null,
+        property_for: "Sales",
+        initiated_by: "buyer",
+        ...(tourStart && !isNaN(tourStart.getTime())
+          ? {
+              preferred_from: tourStart.toISOString(),
+              preferred_to: new Date(tourStart.getTime() + 24 * 60 * 60 * 1000).toISOString(),
+            }
+          : {}),
+      });
+
       setFormData({ firstName: "", lastName: "", email: "", phone: "", message: "", tourDate: "", tourTime: "" , });
       setErrors({});
       setConsent(false);
