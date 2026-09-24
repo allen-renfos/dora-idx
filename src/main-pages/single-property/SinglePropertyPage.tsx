@@ -33,13 +33,14 @@ export const SinglePropertyPage = () => {
   useCityInterestTracker(detailCity, "view", detailPrice);
 
   useEffect(() => {
-    if (property?.data?.id) {
+    const data = property?.data;
+    if (data?.id || data?.listing_key || data?.mls_listingkey) {
       const customerId = getCustomerId();
-      if (customerId) trackPropertyVisit(property.data.id);
+      if (customerId) trackPropertyVisit(data);
     }
   }, [property]);
 
-  const trackPropertyVisit = async (id: number | string) => {
+  const trackPropertyVisit = async (data: any) => {
     try {
       let sessionId = sessionStorage.getItem("visitor_session_id");
       if (!sessionId) {
@@ -50,8 +51,13 @@ export const SinglePropertyPage = () => {
       const headers: HeadersInit = { "Content-Type": "application/json" };
       if (token) headers["Authorization"] = `Bearer ${token}`;
 
-      const propertyId = String(id);
-      if (!propertyId) return;
+      // IDX/MLS listings are identified by their listing_key; property_id is the
+      // internal record id. Send both so the backend can resolve either.
+      const propertyId = data?.id != null ? String(data.id) : "";
+      const mlsListingKey = String(
+        data?.listing_key ?? data?.mls_listingkey ?? listingKey ?? ""
+      );
+      if (!propertyId && !mlsListingKey) return;
 
       const uuid = process.env.NEXT_PUBLIC_REALTY_PRO_AGENT_ID;
       const visitApiUrl = `${getApiBaseUrl()}/v1/property/visit`;
@@ -59,7 +65,12 @@ export const SinglePropertyPage = () => {
       await fetch(visitApiUrl, {
         method: "POST",
         headers,
-        body: JSON.stringify({ property_id: propertyId, session_id: sessionId, uuid }),
+        body: JSON.stringify({
+          property_id: propertyId,
+          listing_key: mlsListingKey,
+          session_id: sessionId,
+          uuid,
+        }),
         redirect: "manual",
       });
     } catch (err) {
