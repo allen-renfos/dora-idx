@@ -6,6 +6,7 @@ import {
   getRequestOrigin,
 } from "@/services/properties/propertyServer";
 import { normalizePropertyDetails } from "@/services/properties/normalizePropertyDetails";
+import { canDisplayListing } from "@/helpers/listingDisplay";
 
 // Listing data changes; never statically cache this route or its metadata.
 export const dynamic = "force-dynamic";
@@ -29,8 +30,10 @@ export async function generateMetadata({
 
   const raw = await fetchListingRaw(id);
 
-  if (!raw) {
-    // Fallback preview — still absolute URLs, no image (fetch failed).
+  // Not found, or not displayable (e.g. revoked NWMLS First Look consent):
+  // generic preview only — never the listing's photo, address or price.
+  if (!raw || !canDisplayListing(raw)) {
+    // Fallback preview — still absolute URLs, no image.
     return {
       title: "Property · Dora",
       description: "Explore this listing on Dora.",
@@ -50,9 +53,10 @@ export async function generateMetadata({
 
   const details = normalizePropertyDetails(raw);
 
-  const address = details.address
-    ? String(details.address).replace(/±/g, "#")
-    : "Property";
+  const address =
+    details.compliance.canShowAddress && details.address
+      ? String(details.address).replace(/±/g, "#")
+      : "Property";
   const priceLabel =
     details.price !== null
       ? `$${Number(details.price).toLocaleString()}`

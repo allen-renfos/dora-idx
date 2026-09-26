@@ -7,6 +7,7 @@ import { FiMapPin } from "react-icons/fi";
 import Image from "next/image";
 import { MlsProviderBadge } from "@/component/sharable/MlsProviderBadge";
 import { SharePopup } from "@/component/properties/SharePopup";
+import { canDisplayListing } from "@/helpers/listingDisplay";
 
 interface PropertyCardProps {
     item: any;
@@ -19,6 +20,9 @@ export const MlsMapModalCard = ({ item, onClose }: PropertyCardProps) => {
     };
 
     const sqft = item.bua || item.LivingArea || item.square_footage || item.square_feet;
+
+    // MLS display gate (defense-in-depth; the API already omits these).
+    if (!canDisplayListing(item)) return null;
 
     return (
         <div style={{

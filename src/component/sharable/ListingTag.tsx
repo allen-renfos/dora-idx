@@ -15,7 +15,14 @@ import { memo } from "react";
  * unknown value falls back to the neutral tone automatically (never throws).
  */
 
-type Tone = "highlight" | "fresh" | "active" | "caution" | "progress" | "neutral";
+type Tone =
+  | "highlight"
+  | "firstLook"
+  | "fresh"
+  | "active"
+  | "caution"
+  | "progress"
+  | "neutral";
 
 /**
  * Single source of truth for tone → styling. Colors are solid pills with
@@ -30,6 +37,10 @@ const TAG_TONES: Record<Tone, string> = {
   // OPEN HOUSE — most prominent: champagne gold pill on dark ink text.
   highlight:
     "bg-[var(--gold)] text-[var(--pine)] ring-1 ring-black/10",
+  // FIRST LOOK (NWMLS Coming Soon) — pre-market preview: light pill on dark
+  // ink with an accent ring, distinct from OPEN HOUSE's solid accent.
+  firstLook:
+    "bg-[var(--on-pine)] text-[var(--pine)] ring-1 ring-[var(--gold)]",
   // NEW — positive / fresh: deep forest pine.
   fresh: "bg-[var(--pine)] text-[var(--on-pine)] ring-1 ring-white/10",
   // ACTIVE — neutral-positive: AA-safe sage.
@@ -50,6 +61,7 @@ const TAG_TONE_MAP: Record<string, Tone> = {
   "OPEN HOUSE": "highlight",
   NEW: "fresh",
   ACTIVE: "active",
+  "FIRST LOOK": "firstLook",
   CONTINGENT: "caution",
   PENDING: "progress",
   "PENDING FEASIBILITY": "progress",
@@ -60,6 +72,12 @@ const TAG_TONE_MAP: Record<string, Tone> = {
 
 const toneFor = (tag: string): Tone =>
   TAG_TONE_MAP[tag?.trim()?.toUpperCase()] ?? "neutral";
+
+/**
+ * Tone classes for any tag/status string, for surfaces that render their own
+ * pill shape (e.g. the property detail header) but must share card colors.
+ */
+export const tagToneClass = (tag: string): string => TAG_TONES[toneFor(tag)];
 
 interface ListingTagProps {
   tag: string;

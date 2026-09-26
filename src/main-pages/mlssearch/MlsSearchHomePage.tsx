@@ -27,6 +27,7 @@ import { DEFAULT_PROPERTY_STATUS, isValidAreaSearch } from "@/component/mlsSearc
 import { FiSearch } from "react-icons/fi";
 import { useProfile } from "@/services/profile/ProfileQueries";
 import { triggerLeadIntake } from "@/services/automation/n8n";
+import { filterDisplayableListings } from "@/helpers/listingDisplay";
 
 type Property = { id: string; [key: string]: any };
 
@@ -372,7 +373,10 @@ const MlsSerchHomePage = () => {
   const { data: wishlistData } = useUserWishlist();
 
   const properties = useMemo(() => {
-    const raw: Property[] = infiniteData?.pages.flatMap((p: any) => p.data || []) ?? [];
+    // MLS display gate at the source, so cards, count and map pins agree.
+    const raw: Property[] = filterDisplayableListings<Property>(
+      infiniteData?.pages.flatMap((p: any) => p.data || []) ?? []
+    );
     const wishlistItems: any[] = wishlistData?.data || [];
     const keys = new Set(wishlistItems.map((w: any) => w.listing_key || w.mls_listingkey));
     const ids = new Set(wishlistItems.map((w: any) => w.listing_id || w.mls_listingid));

@@ -19,9 +19,11 @@ export const SinglePropertyImageSection = ({ property: prop }: Props) => {
     [property]
   );
 
+  // Non-displayable listings (e.g. revoked First Look) never expose photos.
   const canShowPhotos =
-    details.compliance.canShowPrimaryPhoto ||
-    details.compliance.canShowExtraPhotos;
+    details.compliance.canDisplayListing &&
+    (details.compliance.canShowPrimaryPhoto ||
+      details.compliance.canShowExtraPhotos);
   const images: string[] = canShowPhotos ? details.media.images : [];
   // Extra (sidebar) photos may be independently restricted.
   const canShowExtraPhotos = details.compliance.canShowExtraPhotos;

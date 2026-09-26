@@ -3,6 +3,7 @@ import sharp from "sharp";
 
 import { fetchListingRaw } from "@/services/properties/propertyServer";
 import { normalizePropertyDetails } from "@/services/properties/normalizePropertyDetails";
+import { canDisplayListing, isFirstLookListing } from "@/helpers/listingDisplay";
 
 // Must run on Node (sharp is a native binary, unavailable on the edge runtime).
 export const runtime = "nodejs";
@@ -24,9 +25,18 @@ export async function GET(
   const { id } = await ctx.params;
 
   const raw = await fetchListingRaw(id);
-  const coverUrl = raw
-    ? normalizePropertyDetails(raw).media.coverPhoto
-    : null;
+  const details =
+    raw && canDisplayListing(raw) ? normalizePropertyDetails(raw) : null;
+  // Only the primary photo may back a preview, and only when MLS allows it.
+  const coverUrl =
+    details && details.compliance.canShowPrimaryPhoto
+      ? details.media.coverPhoto
+      : null;
+  // First Look consent can be revoked at any time — never let CDNs/crawlers
+  // hold its photo for long.
+  const cacheControl = isFirstLookListing(raw)
+    ? "public, max-age=300, s-maxage=900"
+    : "public, max-age=86400, s-maxage=604800, immutable";
 
   if (!coverUrl) {
     return new NextResponse("No cover photo", { status: 404 });
@@ -60,8 +70,8 @@ export async function GET(
       headers: {
         "Content-Type": "image/jpeg",
         "Content-Length": String(out.length),
-        // Long cache — the resized derivative is stable per listing photo.
-        "Cache-Control": "public, max-age=86400, s-maxage=604800, immutable",
+        // Long cache for stable listings; short for revocable First Look.
+        "Cache-Control": cacheControl,
       },
     });
   } catch (err) {

@@ -32,6 +32,8 @@ import { buildOpenHouseEvent } from "@/helpers/openHouseEvent";
 import { toEmbedUrl } from "@/helpers/embedUrl";
 import LoginModal from "@/main-pages/auth/LoginModal";
 import { normalizePropertyDetails } from "@/services/properties/normalizePropertyDetails";
+import { isFirstLookListing } from "@/helpers/listingDisplay";
+import { tagToneClass } from "@/component/sharable/ListingTag";
 import type { PropertyDetails, PropertyOpenHouse } from "@/types/Property";
 
 const LocalInformation = dynamic(() => import("./LocalInformation"), {
@@ -240,7 +242,12 @@ export const SinglePropertyDetails = ({ property: prop }: Props) => {
 
   const showAddress = details.compliance.canShowAddress;
 
-  if (!property) return null;
+  if (!property || !details.compliance.canDisplayListing) return null;
+
+  // First Look (NWMLS Coming Soon) reports Days_On_Site = 0 by design — it
+  // isn't fully on-market yet, so "0 days on market" would mislead.
+  const isFirstLook = isFirstLookListing(property);
+  const statusLabel = details.status || "Active";
 
   /* -------- Spec card data (normalized) -------- */
   const {
@@ -262,9 +269,11 @@ export const SinglePropertyDetails = ({ property: prop }: Props) => {
         <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6 pb-8">
           <div className="flex flex-col gap-3">
             <div className="inline-flex items-center gap-3 flex-wrap">
-              <span className="inline-flex items-center gap-2 px-3 py-1 text-[11px] font-bold tracking-[0.2em] uppercase text-[var(--gold-500)] bg-[var(--gold-500)]/10 border border-[var(--gold-500)]/30 rounded-[var(--radius-pill)]">
-                <span className="w-1.5 h-1.5 rounded-full bg-[var(--gold-500)] animate-pulse" />
-                {details.status || "Active"}
+              <span
+                className={`inline-flex items-center gap-2 px-3 py-1 text-[11px] font-bold tracking-[0.2em] uppercase rounded-[var(--radius-pill)] ${tagToneClass(statusLabel)}`}
+              >
+                <span className="w-1.5 h-1.5 rounded-full bg-current animate-pulse" />
+                {statusLabel}
               </span>
               {details.tags.map((tag) => (
                 <span
@@ -274,11 +283,18 @@ export const SinglePropertyDetails = ({ property: prop }: Props) => {
                   {tag}
                 </span>
               ))}
-              {details.daysOnSite !== null && (
+              {isFirstLook ? (
                 <span className="inline-flex items-center gap-2 text-[12px] text-[var(--ink-faint)]">
                   <FiClock size={12} />
-                  {details.daysOnSite} days on market
+                  Coming soon — First Look
                 </span>
+              ) : (
+                details.daysOnSite !== null && (
+                  <span className="inline-flex items-center gap-2 text-[12px] text-[var(--ink-faint)]">
+                    <FiClock size={12} />
+                    {details.daysOnSite} days on market
+                  </span>
+                )
               )}
             </div>
 

@@ -16,6 +16,7 @@ import toast from "react-hot-toast";
 import { ListingTags } from "@/component/sharable/ListingTag";
 import { MlsProviderBadge } from "@/component/sharable/MlsProviderBadge";
 import { SharePopup } from "@/component/properties/SharePopup";
+import { canDisplayListing } from "@/helpers/listingDisplay";
 
 interface PropertyCardProps {
   item: any;
@@ -75,6 +76,9 @@ export const PropertyCard = ({ item, handleModal, hideWishlist }: PropertyCardPr
   const formattedPrice = item?.price
     ? `$${Number(item.price).toLocaleString()}`
     : "Price upon request";
+
+  // MLS display gate (defense-in-depth; the API already omits these).
+  if (!canDisplayListing(item)) return null;
 
   return (
     <article

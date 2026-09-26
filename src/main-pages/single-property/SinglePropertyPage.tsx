@@ -8,6 +8,7 @@ import { useEffect } from "react";
 import { getApiBaseUrl } from "@/helpers/apiBaseUrl";
 import { getAccessToken, getCustomerId } from "@/services/auth/authStorage";
 import { useCityInterestTracker } from "@/helpers/useCityInterestTracker";
+import { canDisplayListing } from "@/helpers/listingDisplay";
 import { FiAlertCircle } from "react-icons/fi";
 import Link from "next/link";
 
@@ -21,6 +22,9 @@ export const SinglePropertyPage = () => {
   // Runs unconditionally (before any early return); a no-op until data loads.
   // Price nests under sections.financial.list_price — NOT the top-level field.
   const detail = property?.data;
+  // MLS display gate (defense-in-depth; the API already 404s these). Catches a
+  // stale/cached payload fetched before a seller revoked First Look consent.
+  const displayable = canDisplayListing(detail);
   const detailCity =
     detail?.address?.city ??
     detail?.mls_city ??
@@ -30,10 +34,15 @@ export const SinglePropertyPage = () => {
     detail?.sections?.financial?.list_price ??
     detail?.summary?.price ??
     detail?.price;
-  useCityInterestTracker(detailCity, "view", detailPrice);
+  useCityInterestTracker(
+    displayable ? detailCity : undefined,
+    "view",
+    displayable ? detailPrice : undefined
+  );
 
   useEffect(() => {
     const data = property?.data;
+    if (!canDisplayListing(data)) return;
     if (data?.id || data?.listing_key || data?.mls_listingkey) {
       const customerId = getCustomerId();
       if (customerId) trackPropertyVisit(data);
@@ -79,7 +88,9 @@ export const SinglePropertyPage = () => {
   };
 
   if (isLoading) return <DetailSkeleton />;
-  if (error || !property) return <DetailError />;
+  // Single "can this listing be shown at all?" gate: not displayable is
+  // treated identically to not found.
+  if (error || !property || !displayable) return <DetailError />;
 
   return (
     <div className="pt-[88px] lg:pt-[104px]">
@@ -120,7 +131,7 @@ function DetailSkeleton() {
 
 function DetailError() {
   return (
-    <div className="pt-[120px] pb-20 container-wide">
+    <div className="pt-[120px] pb-20 container-wide" data-testid="detail-error">
       <div className="max-w-md mx-auto text-center flex flex-col items-center">
         <div className="w-16 h-16 rounded-full bg-[var(--sage)]/12 border border-[var(--sage)]/40 flex items-center justify-center mb-6">
           <FiAlertCircle size={24} className="text-[var(--sage-deep)]" />

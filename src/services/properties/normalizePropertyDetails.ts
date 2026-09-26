@@ -16,6 +16,7 @@ import {
   toBool,
   toNumber,
 } from "@/helpers/propertyNormalize";
+import { canDisplayListing } from "@/helpers/listingDisplay";
 
 type AnyRecord = Record<string, any>;
 
@@ -516,7 +517,8 @@ function resolveCompliance(data: AnyRecord): PropertyCompliance {
     data.NWM_IDXMustRemoveVirtualTourYN === "true";
 
   return {
-    canDisplayListing: c?.canDisplayListing ?? true,
+    // Shared gate: explicit false hides; First Look requires explicit true.
+    canDisplayListing: canDisplayListing(data),
     canShowAddress: c?.canShowAddress ?? legacyAddress,
     canShowValuation: c?.canShowValuation ?? legacyValuation,
     canShowMap: c?.canShowMap ?? legacyMap,

@@ -14,6 +14,8 @@ import { useState, useEffect } from "react";
 import toast from "react-hot-toast";
 import { FiTrash2 } from "react-icons/fi";
 import { SharePopup } from "@/component/properties/SharePopup";
+import { ListingTags } from "@/component/sharable/ListingTag";
+import { canDisplayListing } from "@/helpers/listingDisplay";
 
 interface PropertyWishlistCardProps {
   item: any;
@@ -74,6 +76,49 @@ export const PropertyWishlistCard = ({ item, handleModal, hideWishlist, onRemove
     ? `$${Number(item.price).toLocaleString()}`
     : "Price upon request";
 
+  // Same tone system as the grid/search cards. Wishlist rows may not carry the
+  // API `tags` array, so fall back to the row's status as a single tag.
+  const tags: string[] =
+    Array.isArray(item?.tags) && item.tags.length
+      ? item.tags
+      : item?.property_status
+        ? [String(item.property_status)]
+        : [];
+
+  // A saved listing can outlive its display permission (e.g. the seller
+  // revoked NWMLS First Look consent). Show no listing data — only a way to
+  // remove it.
+  if (!canDisplayListing(item)) {
+    return (
+      <article
+        className="relative flex flex-col h-full bg-[var(--surface)] border border-dashed border-[var(--line-medium)]"
+        style={{ borderRadius: "var(--radius-md)" }}
+      >
+        <div className="flex flex-1 flex-col items-center justify-center gap-3 p-8 text-center">
+          <span className="text-[10px] uppercase tracking-[0.18em] font-semibold text-[var(--ink-faint)]">
+            No longer available
+          </span>
+          <p className="text-sm text-[var(--ink-soft)] leading-relaxed">
+            This listing can no longer be displayed.
+          </p>
+        </div>
+        {onRemove && (
+          <div className="px-6 pb-6">
+            <button
+              onClick={() => onRemove(String(item.wishlist_id))}
+              disabled={isRemoving}
+              className="inline-flex items-center justify-center gap-2 w-full h-10 border border-[var(--line)] text-[var(--ink-faint)] text-[11px] tracking-[0.16em] uppercase font-semibold hover:border-red-500/50 hover:bg-red-500/5 hover:text-red-500 transition-all duration-200 disabled:opacity-40"
+              style={{ borderRadius: "var(--radius-sm)" }}
+            >
+              <FiTrash2 size={12} />
+              {isRemoving ? "Removing…" : "Remove"}
+            </button>
+          </div>
+        )}
+      </article>
+    );
+  }
+
   return (
     <article
       onClick={handleCardClick}
@@ -116,15 +161,8 @@ export const PropertyWishlistCard = ({ item, handleModal, hideWishlist, onRemove
         {/* Gradient veil */}
         <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-black/5 to-transparent pointer-events-none" />
 
-        {/* Status Badge */}
-        {item.property_status && (
-          <span
-            className="absolute top-4 left-4 px-3 py-1.5 text-[10px] font-bold tracking-[0.16em] uppercase bg-[var(--pine)] text-[var(--on-pine)]"
-            style={{ borderRadius: "var(--radius-pill)" }}
-          >
-            {item.property_status}
-          </span>
-        )}
+        {/* Status / listing tags — shared tone system */}
+        <ListingTags tags={tags} className="absolute top-4 left-4 z-10" />
 
         {/* Share + Favorite */}
         <div className="absolute top-4 right-4 flex items-center gap-2 z-10">

@@ -241,7 +241,8 @@ The most content-rich page on the platform. Every listing gets its own full deta
 - Lot size
 - Year built
 - Property type
-- Property status (Active, Active with contingency, Pending)
+- Property status (Active, Active with contingency, Pending, First Look / Coming Soon)
+  - First Look (NWMLS "Coming Soon") listings render only while the seller has opted in (`compliance.canDisplayListing === true`); otherwise they are treated as not found. Their header shows "Coming soon — First Look" instead of days on market.
 - MLS list agent name
 - All fields pulled live from the MLS data feed
 
@@ -819,7 +820,7 @@ The MLS Advanced Search drawer (`MLSAdvanceSearch.tsx`) exposes granular filteri
 | Filter | Options |
 |---|---|
 | **Property Type** | Business Opportunity, Commercial Sale, Apartment, Condo, Villa, Townhouse, Penthouse, Single Family, Multi-Family, Land, Mobile Home, Farm |
-| **Property Status** | Active, Active with Contingency, Pending |
+| **Property Status** | Active, Active with Contingency, Pending, First Look / Coming Soon |
 | **For** | Sale / Rent |
 | **Price Range** | Min / Max (full range of dollar values) |
 | **Bedrooms** | Min / Max (numeric) |
