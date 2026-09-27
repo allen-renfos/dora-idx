@@ -7,7 +7,7 @@ import { FiMapPin } from "react-icons/fi";
 import Image from "next/image";
 import { MlsProviderBadge } from "@/component/sharable/MlsProviderBadge";
 import { SharePopup } from "@/component/properties/SharePopup";
-import { canDisplayListing } from "@/helpers/listingDisplay";
+import { canDisplayListing, canShowPrimaryPhoto } from "@/helpers/listingDisplay";
 
 interface PropertyCardProps {
     item: any;
@@ -37,7 +37,7 @@ export const MlsMapModalCard = ({ item, onClose }: PropertyCardProps) => {
             {/* Image */}
             <div style={{ position: 'relative', height: 160, cursor: 'pointer' }} onClick={() => handleViewProperty(item)}>
                 <Image
-                    src={Array.isArray(item.cover_photo) ? item.cover_photo[0] : (item.cover_photo || "/property-placeholder.png")}
+                    src={!canShowPrimaryPhoto(item) ? "/property-placeholder.png" : Array.isArray(item.cover_photo) ? item.cover_photo[0] : (item.cover_photo || "/property-placeholder.png")}
                     alt="Property"
                     fill
                     style={{ objectFit: 'cover' }}

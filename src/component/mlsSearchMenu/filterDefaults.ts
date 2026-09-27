@@ -1,7 +1,34 @@
 // Default advanced-filter selections applied automatically on the /properties page.
 // Centralized so the search-bar can recognize (and suppress the indication of)
 // the default selections, while the Advanced Search modal still displays them.
-export const DEFAULT_PROPERTY_STATUS = "Active";
+//
+// "Coming Soon" is how NWMLS First Look listings are filtered; the API only
+// returns the ones the seller opted into. Multi-status values are pipe-joined
+// and fanned out per status by `fetchMlsSearchPropertyList`.
+export const DEFAULT_PROPERTY_STATUS = "Active|Coming Soon";
+
+// What saved searches store for the default status. The saved-search backend
+// (alerts) only understands a single status, so the default is saved as the
+// pre-First-Look default rather than a pipe-joined value.
+export const SAVED_SEARCH_DEFAULT_STATUS = "Active";
+
+/** Split a pipe-joined status filter into distinct, trimmed values. */
+export const splitStatuses = (value?: string | null): string[] =>
+  Array.from(
+    new Set(
+      String(value ?? "")
+        .split("|")
+        .map((s) => s.trim())
+        .filter(Boolean)
+    )
+  );
+
+/** Order-insensitive check for the automatic default status selection. */
+export const isDefaultPropertyStatus = (value?: string | null): boolean => {
+  const a = splitStatuses(value);
+  const b = splitStatuses(DEFAULT_PROPERTY_STATUS);
+  return a.length === b.length && b.every((s) => a.includes(s));
+};
 
 // Message shown when Advanced Search is locked (no city/ZIP entered yet).
 export const ADVANCED_DISABLED_MESSAGE =

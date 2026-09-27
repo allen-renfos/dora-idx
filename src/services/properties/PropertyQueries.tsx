@@ -59,6 +59,9 @@ export const usePropertyById = (id: string | undefined) => {
     queryKey: ["property", id],
     queryFn: () => fetchMlsPropertyById(id as string),
     enabled: !!id,
+    // 404 = not found / not displayable (e.g. revoked First Look) — final.
+    retry: (failureCount, error: any) =>
+      error?.response?.status !== 404 && failureCount < 3,
   });
 };
 

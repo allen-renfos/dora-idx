@@ -17,7 +17,7 @@ import {
 import { FilterTopProps } from "@/types/Property";
 import MLSAdvanceSearch from "./MLSAdvanceSearch";
 import {
-  DEFAULT_PROPERTY_STATUS,
+  isDefaultPropertyStatus,
   ADVANCED_DISABLED_MESSAGE,
   isValidAreaSearch,
 } from "./filterDefaults";
@@ -121,7 +121,7 @@ const FilterTop = ({
   // default, so the default selection isn't surfaced in the search bar.
   const isPropertyStatusCustom =
     !!searchFilters.property_status &&
-    searchFilters.property_status !== DEFAULT_PROPERTY_STATUS;
+    !isDefaultPropertyStatus(searchFilters.property_status);
 
   // Advanced Search is unlocked ONLY when the main search box holds a valid
   // area value — a city (non-numeric text) or a ZIP (5-digit / ZIP+4) — or the
@@ -309,7 +309,7 @@ const FilterTop = ({
     if (!val) return;
     // Hide the automatic default status selection from the bar — it remains
     // visible and editable inside the Advanced Search modal.
-    if (key === "property_status" && val === DEFAULT_PROPERTY_STATUS) return;
+    if (key === "property_status" && isDefaultPropertyStatus(val)) return;
     const items = val.split("|").filter(Boolean);
     if (!items.length) return;
     chips.push({

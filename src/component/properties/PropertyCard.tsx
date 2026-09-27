@@ -16,7 +16,7 @@ import toast from "react-hot-toast";
 import { ListingTags } from "@/component/sharable/ListingTag";
 import { MlsProviderBadge } from "@/component/sharable/MlsProviderBadge";
 import { SharePopup } from "@/component/properties/SharePopup";
-import { canDisplayListing } from "@/helpers/listingDisplay";
+import { canDisplayListing, canShowPrimaryPhoto } from "@/helpers/listingDisplay";
 
 interface PropertyCardProps {
   item: any;
@@ -88,7 +88,7 @@ export const PropertyCard = ({ item, handleModal, hideWishlist }: PropertyCardPr
     >
       {/* Image */}
       <div className="relative overflow-hidden aspect-[4/3] bg-[var(--surface-charcoal)]">
-        {!item.cover_photo || imgError ? (
+        {!item.cover_photo || imgError || !canShowPrimaryPhoto(item) ? (
           <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-gradient-to-br from-[var(--surface-graphite)] to-[var(--surface-charcoal)]">
             <svg
               width="42"

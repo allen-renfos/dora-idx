@@ -6,6 +6,7 @@ import { ImageGalleryModal } from "./ImageGalleryModal";
 import { FiChevronLeft, FiChevronRight, FiMaximize2 } from "react-icons/fi";
 import { normalizePropertyDetails } from "@/services/properties/normalizePropertyDetails";
 import type { PropertyDetails } from "@/types/Property";
+import { getDisplayablePhotos } from "@/helpers/listingDisplay";
 
 interface Props {
   property?: any;
@@ -19,12 +20,9 @@ export const SinglePropertyImageSection = ({ property: prop }: Props) => {
     [property]
   );
 
-  // Non-displayable listings (e.g. revoked First Look) never expose photos.
-  const canShowPhotos =
-    details.compliance.canDisplayListing &&
-    (details.compliance.canShowPrimaryPhoto ||
-      details.compliance.canShowExtraPhotos);
-  const images: string[] = canShowPhotos ? details.media.images : [];
+  // Primary and extra photo permissions are enforced independently; a
+  // non-displayable listing (e.g. revoked First Look) exposes none.
+  const images: string[] = getDisplayablePhotos(details);
   // Extra (sidebar) photos may be independently restricted.
   const canShowExtraPhotos = details.compliance.canShowExtraPhotos;
 

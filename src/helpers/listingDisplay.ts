@@ -82,3 +82,70 @@ export function canDisplayListing(listing: unknown): boolean {
 export function filterDisplayableListings<T>(listings: T[] | null | undefined): T[] {
   return Array.isArray(listings) ? listings.filter((l) => canDisplayListing(l)) : [];
 }
+
+/**
+ * True when the payload carries an explicit, parseable `canDisplayListing`.
+ * Rows without one (e.g. wishlist projections) can't be trusted for listings
+ * whose display depends on seller consent.
+ */
+export function hasDisplayFlag(listing: unknown): boolean {
+  if (!listing || typeof listing !== "object") return false;
+  return readCanDisplayFlag(listing as AnyRecord) !== null;
+}
+
+/**
+ * Consent-dependent listings (First Look / Coming Soon) — their display can
+ * change at any time, so a row without a fresh display flag must be verified.
+ */
+export function isConsentDependentListing(listing: unknown): boolean {
+  if (isFirstLookListing(listing)) return true;
+  if (!listing || typeof listing !== "object") return false;
+  const l = listing as AnyRecord;
+  return [l.mls_status, l.MlsStatus, l.status, l.property_status, l.StandardStatus].some(
+    (s) => toSlug(s) === "coming_soon"
+  );
+}
+
+/**
+ * May a raw list/card payload show its primary (cover) photo? Explicit
+ * `compliance.canShowPrimaryPhoto` wins; otherwise the legacy NWMLS
+ * must-remove-photos flag. Unknown → allowed (legacy behavior).
+ */
+export function canShowPrimaryPhoto(listing: unknown): boolean {
+  if (!canDisplayListing(listing)) return false;
+  const l = listing as AnyRecord;
+  const c = l.compliance && typeof l.compliance === "object" ? l.compliance : null;
+  const flag = toFlag(c?.canShowPrimaryPhoto);
+  if (flag !== null) return flag;
+  return toFlag(l.NWM_IDXMustRemovePhotosYN) !== true;
+}
+
+interface PhotoSource {
+  compliance: {
+    canDisplayListing: boolean;
+    canShowPrimaryPhoto: boolean;
+    canShowExtraPhotos: boolean;
+  };
+  media: { coverPhoto: string | null; images: string[] };
+}
+
+/**
+ * The exact photo set a detail view may show. The primary photo is the cover
+ * (or the first image when no cover is set); every other image is "extra".
+ * Primary and extra permissions are independent — one never unlocks the other.
+ */
+export function getDisplayablePhotos({ compliance, media }: PhotoSource): string[] {
+  if (!compliance.canDisplayListing) return [];
+  const images = Array.isArray(media.images) ? media.images : [];
+  if (images.length === 0) return [];
+
+  const primary = media.coverPhoto && images.includes(media.coverPhoto)
+    ? media.coverPhoto
+    : images[0];
+  const extras = images.filter((img) => img !== primary);
+
+  return [
+    ...(compliance.canShowPrimaryPhoto ? [primary] : []),
+    ...(compliance.canShowExtraPhotos ? extras : []),
+  ];
+}

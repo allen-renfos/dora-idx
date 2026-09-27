@@ -1,5 +1,6 @@
 import axiosInstance from "../Api";
 import { getCustomerId } from "@/services/auth/authStorage";
+import { splitStatuses } from "@/component/mlsSearchMenu/filterDefaults";
 
 export const fetchPropertyList = async (data: { pageLimit?: number; search?: string }) => {
     const pageLimit = data?.pageLimit || 1;
@@ -33,7 +34,20 @@ export const fetchMlsSearchPropertyList = async (
 
     },
     signal?: AbortSignal
-) => {
+): Promise<any> => {
+    // The search API accepts ONE status per request (pipe/comma/array forms
+    // return nothing). Fan a multi-status filter out into one request per
+    // status and merge, so e.g. "Active|Coming Soon" returns both.
+    const statuses = splitStatuses(data?.property_status);
+    if (statuses.length > 1) {
+        const pages = await Promise.all(
+            statuses.map((status) =>
+                fetchMlsSearchPropertyList({ ...data, property_status: status }, signal)
+            )
+        );
+        return mergeSearchPages(pages, data?.pageLimit || 20);
+    }
+
     // Build the query incrementally so EMPTY/zero filters are omitted entirely
     // (never `search[price_min]=`). This keeps requests lean and prevents the
     // backend from interpreting blank predicates.
@@ -115,6 +129,40 @@ export const fetchMlsSearchPropertyList = async (
     );
     return response.data;
 }
+/** Does one search response have more pages? (Mirrors the infinite query.) */
+const searchPageHasMore = (page: any, pageLimit: number): boolean => {
+    const meta = page?.meta ?? page;
+    if (meta?.has_more !== undefined) return Boolean(meta.has_more);
+    const current = Number(meta?.current_page);
+    const last = Number(meta?.last_page);
+    if (current > 0 && last > 0) return current < last;
+    return (page?.data?.length ?? 0) >= pageLimit;
+};
+
+/** Merge per-status responses into one page (deduped, has_more if any has). */
+const mergeSearchPages = (pages: any[], pageLimit: number) => {
+    const seen = new Set<string>();
+    const data: any[] = [];
+    for (const page of pages) {
+        for (const item of Array.isArray(page?.data) ? page.data : []) {
+            const key = String(item?.listing_key ?? item?.mls_listingkey ?? item?.id ?? "");
+            if (key && seen.has(key)) continue;
+            if (key) seen.add(key);
+            data.push(item);
+        }
+    }
+    const totals = pages.map((p) => Number(p?.meta?.total));
+    return {
+        data,
+        meta: {
+            has_more: pages.some((p) => searchPageHasMore(p, pageLimit)),
+            ...(totals.every((t) => Number.isFinite(t))
+                ? { total: totals.reduce((a, b) => a + b, 0) }
+                : {}),
+        },
+    };
+};
+
 // Add single property fetcher
 export const fetchMlsPropertyById = async (id: string) => {
     if (!id) throw new Error("Missing property id");

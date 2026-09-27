@@ -15,7 +15,13 @@ import toast from "react-hot-toast";
 import { FiTrash2 } from "react-icons/fi";
 import { SharePopup } from "@/component/properties/SharePopup";
 import { ListingTags } from "@/component/sharable/ListingTag";
-import { canDisplayListing } from "@/helpers/listingDisplay";
+import {
+  canDisplayListing,
+  canShowPrimaryPhoto,
+  hasDisplayFlag,
+  isConsentDependentListing,
+} from "@/helpers/listingDisplay";
+import { usePropertyById } from "@/services/properties/PropertyQueries";
 
 interface PropertyWishlistCardProps {
   item: any;
@@ -31,6 +37,31 @@ export const PropertyWishlistCard = ({ item, handleModal, hideWishlist, onRemove
   const [isAddingToFavorites, setIsAddingToFavorites] = useState(false);
   const [isFavorited, setIsFavorited] = useState(item?.is_wishlisted || false);
   const [imgError, setImgError] = useState(false);
+
+  // Wishlist rows may lack a live display flag. For consent-dependent listings
+  // (First Look / Coming Soon) verify against the detail endpoint, which 404s
+  // anything that may no longer be shown. Nothing is rendered until verified.
+  const needsDisplayCheck =
+    isConsentDependentListing(item) && !hasDisplayFlag(item);
+  const verifyKey = needsDisplayCheck
+    ? String(item?.property_hid ?? item?.mls_listingkey ?? item?.listing_key ?? "") || undefined
+    : undefined;
+  const {
+    data: verifiedListing,
+    isLoading: isVerifying,
+    error: verifyError,
+  } = usePropertyById(verifyKey);
+  const displayState: "checking" | "hidden" | "visible" = !needsDisplayCheck
+    ? canDisplayListing(item)
+      ? "visible"
+      : "hidden"
+    : !verifyKey || verifyError
+      ? "hidden"
+      : isVerifying || !verifiedListing
+        ? "checking"
+        : canDisplayListing(verifiedListing?.data)
+          ? "visible"
+          : "hidden";
 
   useEffect(() => {
     setIsFavorited(item?.is_wishlisted || false);
@@ -88,7 +119,19 @@ export const PropertyWishlistCard = ({ item, handleModal, hideWishlist, onRemove
   // A saved listing can outlive its display permission (e.g. the seller
   // revoked NWMLS First Look consent). Show no listing data — only a way to
   // remove it.
-  if (!canDisplayListing(item)) {
+  if (displayState === "checking") {
+    return (
+      <article
+        aria-busy="true"
+        className="relative flex flex-col h-full bg-[var(--surface)] border border-dashed border-[var(--line-medium)] animate-pulse"
+        style={{ borderRadius: "var(--radius-md)" }}
+      >
+        <div className="aspect-[4/3]" />
+      </article>
+    );
+  }
+
+  if (displayState === "hidden") {
     return (
       <article
         className="relative flex flex-col h-full bg-[var(--surface)] border border-dashed border-[var(--line-medium)]"
@@ -127,7 +170,7 @@ export const PropertyWishlistCard = ({ item, handleModal, hideWishlist, onRemove
     >
       {/* Image */}
       <div className="relative overflow-hidden aspect-[4/3] bg-[var(--surface-charcoal)]">
-        {!item.cover_photo || imgError ? (
+        {!item.cover_photo || imgError || !canShowPrimaryPhoto(item) ? (
           <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-gradient-to-br from-[var(--surface-graphite)] to-[var(--surface-charcoal)]">
             <svg
               width="42"

@@ -12,7 +12,7 @@ import { getAccessToken, getCustomerId } from "@/services/auth/authStorage";
 import { ListingTags } from "@/component/sharable/ListingTag";
 import { MlsProviderBadge } from "@/component/sharable/MlsProviderBadge";
 import { SharePopup } from "@/component/properties/SharePopup";
-import { canDisplayListing } from "@/helpers/listingDisplay";
+import { canDisplayListing, canShowPrimaryPhoto } from "@/helpers/listingDisplay";
 
 interface PropertyCardProps {
   item: any;
@@ -98,7 +98,7 @@ export const MlsPropertyCard = ({
       style={{ borderRadius: "var(--radius-md)" }}
     >
       <div className="relative overflow-hidden aspect-[4/3] bg-[var(--canvas-2)] rounded-t-[var(--radius-md)]">
-        {!item.cover_photo || imgError ? (
+        {!item.cover_photo || imgError || !canShowPrimaryPhoto(item) ? (
           <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-gradient-to-br from-[var(--surface-graphite)] to-[var(--canvas-2)]">
             <svg
               width="42"

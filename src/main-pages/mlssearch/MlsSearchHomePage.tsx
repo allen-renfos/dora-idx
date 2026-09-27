@@ -23,7 +23,12 @@ import { recordCityEvent } from "@/helpers/cityInterest";
 import { saveSearches } from "@/services/properties/PropertyServices";
 import GoogleMapsProvider from "@/provider/GoogleMapProvider";
 import type { SearchFilters } from "@/types/Property";
-import { DEFAULT_PROPERTY_STATUS, isValidAreaSearch } from "@/component/mlsSearchMenu/filterDefaults";
+import {
+  DEFAULT_PROPERTY_STATUS,
+  SAVED_SEARCH_DEFAULT_STATUS,
+  isDefaultPropertyStatus,
+  isValidAreaSearch,
+} from "@/component/mlsSearchMenu/filterDefaults";
 import { FiSearch } from "react-icons/fi";
 import { useProfile } from "@/services/profile/ProfileQueries";
 import { triggerLeadIntake } from "@/services/automation/n8n";
@@ -497,11 +502,16 @@ const MlsSerchHomePage = () => {
       setIsLoginModalOpen(true);
       return;
     }
+    // Saved-search alerts run server-side with a single status; persist the
+    // default as the legacy single-status default (see filterDefaults).
+    const savedFilters = isDefaultPropertyStatus(searchFilters.property_status)
+      ? { ...searchFilters, property_status: SAVED_SEARCH_DEFAULT_STATUS }
+      : searchFilters;
     const nameParts: string[] = [];
     if (searchFilters.keyword) nameParts.push(searchFilters.keyword);
     if (searchFilters.property_type) nameParts.push(searchFilters.property_type);
     if (searchFilters.property_for) nameParts.push(searchFilters.property_for);
-    if (searchFilters.property_status) nameParts.push(searchFilters.property_status);
+    if (savedFilters.property_status) nameParts.push(savedFilters.property_status);
     if (searchFilters.price_min || searchFilters.price_max) {
       nameParts.push(
         `$${searchFilters.price_min || 0}-$${searchFilters.price_max || "Any"}`
@@ -518,7 +528,7 @@ const MlsSerchHomePage = () => {
         : `Search ${new Date().toLocaleDateString()}`;
     postSaveSearchMutation.mutate({
       user_id: customerId,
-      filters: searchFilters,
+      filters: savedFilters,
       name: searchName,
       uuid: process.env.NEXT_PUBLIC_REALTY_PRO_AGENT_ID,
     });

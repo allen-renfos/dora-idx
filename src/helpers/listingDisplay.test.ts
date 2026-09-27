@@ -1,7 +1,11 @@
 import { describe, expect, it } from "vitest";
 import {
   canDisplayListing,
+  canShowPrimaryPhoto,
   filterDisplayableListings,
+  getDisplayablePhotos,
+  hasDisplayFlag,
+  isConsentDependentListing,
   isFirstLookListing,
 } from "./listingDisplay";
 
@@ -115,5 +119,71 @@ describe("filterDisplayableListings", () => {
     ]);
     expect(filterDisplayableListings(null)).toEqual([]);
     expect(filterDisplayableListings(undefined)).toEqual([]);
+  });
+});
+
+describe("hasDisplayFlag / isConsentDependentListing", () => {
+  it("detects rows that carry a usable display flag", () => {
+    expect(hasDisplayFlag(firstLookDetail)).toBe(true);
+    expect(hasDisplayFlag({ compliance: { canDisplayListing: "false" } })).toBe(true);
+    expect(hasDisplayFlag({ property_status: "First Look" })).toBe(false);
+    expect(hasDisplayFlag({ compliance: { canDisplayListing: "?" } })).toBe(false);
+  });
+
+  it("flags First Look and Coming Soon rows as consent-dependent", () => {
+    expect(isConsentDependentListing({ property_status: "First Look" })).toBe(true);
+    expect(isConsentDependentListing({ property_status: "Coming Soon" })).toBe(true);
+    expect(isConsentDependentListing({ StandardStatus: "Coming Soon" })).toBe(true);
+    expect(isConsentDependentListing({ property_status: "Active" })).toBe(false);
+  });
+});
+
+describe("canShowPrimaryPhoto (cards)", () => {
+  it("follows compliance.canShowPrimaryPhoto when present", () => {
+    expect(canShowPrimaryPhoto(activeItem)).toBe(true);
+    expect(
+      canShowPrimaryPhoto({ ...activeItem, compliance: { ...allowed, canShowPrimaryPhoto: false } })
+    ).toBe(false);
+  });
+
+  it("falls back to the legacy NWMLS must-remove flag", () => {
+    expect(canShowPrimaryPhoto({ status: "Active" })).toBe(true);
+    expect(canShowPrimaryPhoto({ status: "Active", NWM_IDXMustRemovePhotosYN: true })).toBe(false);
+    expect(canShowPrimaryPhoto({ status: "Active", NWM_IDXMustRemovePhotosYN: "true" })).toBe(false);
+  });
+
+  it("never shows a photo for a non-displayable listing", () => {
+    expect(
+      canShowPrimaryPhoto({ ...activeItem, compliance: { ...allowed, canDisplayListing: false } })
+    ).toBe(false);
+  });
+});
+
+describe("getDisplayablePhotos (detail gallery)", () => {
+  const media = { coverPhoto: "cover.jpg", images: ["cover.jpg", "a.jpg", "b.jpg"] };
+  const c = (primary: boolean, extra: boolean, display = true) => ({
+    canDisplayListing: display,
+    canShowPrimaryPhoto: primary,
+    canShowExtraPhotos: extra,
+  });
+
+  it("enforces primary and extra permissions independently", () => {
+    expect(getDisplayablePhotos({ compliance: c(true, true), media })).toEqual(media.images);
+    expect(getDisplayablePhotos({ compliance: c(true, false), media })).toEqual(["cover.jpg"]);
+    expect(getDisplayablePhotos({ compliance: c(false, true), media })).toEqual(["a.jpg", "b.jpg"]);
+    expect(getDisplayablePhotos({ compliance: c(false, false), media })).toEqual([]);
+  });
+
+  it("treats the first image as primary when there is no cover", () => {
+    const noCover = { coverPhoto: null, images: ["x.jpg", "y.jpg"] };
+    expect(getDisplayablePhotos({ compliance: c(true, false), media: noCover })).toEqual(["x.jpg"]);
+    expect(getDisplayablePhotos({ compliance: c(false, true), media: noCover })).toEqual(["y.jpg"]);
+  });
+
+  it("returns nothing for a non-displayable listing or no images", () => {
+    expect(getDisplayablePhotos({ compliance: c(true, true, false), media })).toEqual([]);
+    expect(
+      getDisplayablePhotos({ compliance: c(true, true), media: { coverPhoto: null, images: [] } })
+    ).toEqual([]);
   });
 });
