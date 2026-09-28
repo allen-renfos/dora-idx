@@ -254,6 +254,7 @@ const MLSAdvanceSearch = ({
   const { data: metadata } = useSearchMetadata();
 
   const propertyTypeOpts = metadata?.property_types ?? [];
+  const structureTypeOpts = metadata?.structure_types ?? [];
   const statusOpts = metadata?.statuses ?? [];
   const communityOpts = metadata?.community_amenities ?? [];
   const viewOpts = metadata?.property_views ?? [];
@@ -282,6 +283,7 @@ const MLSAdvanceSearch = ({
   const [yearMin, setYearMin] = useState("");
   const [yearMax, setYearMax] = useState("");
   const [propTypes, setPropTypes] = useState<string[]>([]);
+  const [structureTypes, setStructureTypes] = useState<string[]>([]);
   const [propStatuses, setPropStatuses] = useState<string[]>([]);
   const [amenities, setAmenities] = useState<string[]>([]);
   const [views, setViews] = useState<string[]>([]);
@@ -305,6 +307,7 @@ const MLSAdvanceSearch = ({
       setYearMax(searchFilters.year_built_max ? String(searchFilters.year_built_max) : "");
       setStories(searchFilters.stories ? String(searchFilters.stories) : "");
       setPropTypes(splitPipe(searchFilters.property_type));
+      setStructureTypes(splitPipe(searchFilters.structure_type));
       setPropStatuses(splitPipe(searchFilters.property_status));
       setAmenities(splitPipe(searchFilters.community_amenities));
       setViews(splitPipe(searchFilters.property_view));
@@ -350,12 +353,12 @@ const MLSAdvanceSearch = ({
     setLotMin(""); setLotMax("");
     setYearMin(""); setYearMax("");
     setStories("");
-    setPropTypes([]); setPropStatuses([]);
+    setPropTypes([]); setStructureTypes([]); setPropStatuses([]);
     setAmenities([]); setViews([]);
     setInteriorFeats([]); setSiteFeats([]); setLotFeats([]);
     setBasement(""); setSewer("");
     const keys: (keyof typeof searchFilters)[] = [
-      "property_type", "property_status", "community_amenities", "property_view",
+      "property_type", "structure_type", "property_status", "community_amenities", "property_view",
       "interior_features", "mls_site_features", "mls_lot_feature",
       "garage_min", "garage_max", "square_footage_min", "square_footage_max",
       "lot_size_min", "lot_size_max", "year_built_min", "year_built_max",
@@ -365,7 +368,7 @@ const MLSAdvanceSearch = ({
   };
 
   const totalActive =
-    propTypes.length + propStatuses.length + amenities.length +
+    propTypes.length + structureTypes.length + propStatuses.length + amenities.length +
     views.length + interiorFeats.length + siteFeats.length + lotFeats.length +
     (garageMin || garageMax ? 1 : 0) + (sqftMin || sqftMax ? 1 : 0) +
     (lotMin || lotMax ? 1 : 0) + (yearMin || yearMax ? 1 : 0) +
@@ -422,6 +425,22 @@ const MLSAdvanceSearch = ({
                     selected={propTypes}
                     onToggle={value =>
                       toggleMulti(propTypes, setPropTypes, "property_type", value)
+                    }
+                  />
+                  <Divider />
+                </>
+              )}
+
+              {/* Home Type (StructureType) — metadata-driven and NOT area-gated,
+                  so it stays outside <AdvancedGate>. */}
+              {structureTypeOpts.length > 0 && (
+                <>
+                  <SectionTitle>Home Type</SectionTitle>
+                  <TagGroup
+                    items={structureTypeOpts}
+                    selected={structureTypes}
+                    onToggle={value =>
+                      toggleMulti(structureTypes, setStructureTypes, "structure_type", value)
                     }
                   />
                   <Divider />

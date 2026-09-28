@@ -4,6 +4,7 @@ export type SearchFilters = {
     page: number;
     property_status: string;
     property_type: string;
+    structure_type: string;
     property_for: string;
     category_type: string;
     price_min: number;

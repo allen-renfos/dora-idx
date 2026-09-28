@@ -27,6 +27,7 @@ export interface MetadataOption {
 export interface SearchMetadata {
   statuses: MetadataOption[];
   property_types: MetadataOption[];
+  structure_types: MetadataOption[];
   states: MetadataOption[];
   counties: MetadataOption[];
   cities: MetadataOption[];
@@ -43,6 +44,7 @@ export interface SearchMetadata {
 const EMPTY_METADATA: SearchMetadata = {
   statuses: [],
   property_types: [],
+  structure_types: [],
   states: [],
   counties: [],
   cities: [],
@@ -130,6 +132,9 @@ export const normalizeSearchMetadata = (payload: unknown): SearchMetadata => {
     ),
     property_types: normalizeMetadataOptions(
       pick(src, "property_types", "propertyTypes", "property_type"),
+    ),
+    structure_types: normalizeMetadataOptions(
+      pick(src, "structure_types", "structureTypes"),
     ),
     states: normalizeMetadataOptions(pick(src, "states", "state")),
     counties: normalizeMetadataOptions(pick(src, "counties", "county")),

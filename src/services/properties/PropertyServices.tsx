@@ -16,6 +16,20 @@ export const fetchNewListings = async () => {
     const response = await axiosInstance.get(`/v1/properties/featured-properties?lagnt=${process.env.NEXT_PUBLIC_REALTY_PRO_AGENT_ID}`);
     return response.data;
 }
+/**
+ * Multi-select keys kept pipe-joined in UI state, URLs and saved searches but
+ * sent comma-joined to the API (a pipe is a literal there and matches nothing).
+ * `property_status` is excluded: it is fanned out one value per request.
+ */
+const COMMA_MULTI_KEYS = new Set([
+    "property_type", "category_type", "structure_type", "community_amenities",
+    "property_view", "interior_features", "mls_site_features", "mls_lot_feature",
+]);
+
+/** "A|B| |A" -> "A,B": split on pipe, trim, drop empties, de-duplicate. */
+const toCommaList = (value: string): string =>
+    Array.from(new Set(value.split("|").map((v) => v.trim()).filter(Boolean))).join(",");
+
 export const fetchMlsSearchPropertyList = async (
     data: {
         pageLimit?: number; keyword?: string; property_status: string; property_type: string;
@@ -30,7 +44,7 @@ export const fetchMlsSearchPropertyList = async (
         mls_basement?: string; mls_sewer?: string; mls_school_district?: string;
         mls_builder_name?: string; mls_list_agent?: string; mls_site_features?: string;
         mls_lot_feature?: string; page?: number; community_amenities?: string; property_view?: string;
-        interior_features?: string;
+        interior_features?: string; structure_type?: string;
 
     },
     signal?: AbortSignal
@@ -65,6 +79,7 @@ export const fetchMlsSearchPropertyList = async (
         keyword: data?.keyword,
         property_status: data?.property_status,
         property_type: data?.property_type,
+        structure_type: data?.structure_type,
         property_for: data?.property_for,
         category_type: data?.category_type,
         price_min: data?.price_min,
@@ -103,13 +118,15 @@ export const fetchMlsSearchPropertyList = async (
     };
     for (const [key, value] of Object.entries(search)) {
         if (value === undefined || value === null) continue;
+        let out = String(value);
         if (typeof value === "number") {
             if (!value) continue; // skip 0 (no filter)
         } else {
-            const trimmed = String(value).trim();
-            if (!trimmed) continue; // skip empty string
+            // UI/URL/saved-search state is pipe-joined; the API expects commas.
+            if (COMMA_MULTI_KEYS.has(key)) out = toCommaList(out);
+            if (!out.trim()) continue; // skip empty string
         }
-        parts.push(`search[${key}]=${encodeURIComponent(String(value))}`);
+        parts.push(`search[${key}]=${encodeURIComponent(out)}`);
     }
 
     // Boolean flags — sent only when explicitly true.

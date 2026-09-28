@@ -146,6 +146,7 @@ const FilterTop = ({
     isBedActive ||
     isBathActive ||
     !!searchFilters.property_type ||
+    !!searchFilters.structure_type ||
     !!searchFilters.property_for ||
     isPropertyStatusCustom ||
     !!(searchFilters.square_footage_min || searchFilters.square_footage_max) ||
@@ -295,6 +296,7 @@ const FilterTop = ({
   // Advanced filter group chips
   const advancedGroups: { key: keyof typeof searchFilters; label: string }[] = [
     { key: "property_type", label: "Type" },
+    { key: "structure_type", label: "Home Type" },
     { key: "property_status", label: "Status" },
     { key: "community_amenities", label: "Amenities" },
     { key: "property_view", label: "View" },

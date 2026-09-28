@@ -44,6 +44,7 @@ const DEFAULT_FILTERS: SearchFilters = {
   page: 1,
   property_status: DEFAULT_PROPERTY_STATUS,
   property_type: "",
+  structure_type: "",
   property_for: "",
   category_type: "",
   price_min: 0,
@@ -147,7 +148,7 @@ const buildEffectiveFilters = (f: SearchFilters): SearchFilters => {
 
 /** Filter keys mirrored to the URL query string for shareable / back-forward UX. */
 const URL_SYNC_KEYS: (keyof SearchFilters)[] = [
-  "keyword", "property_status", "property_type", "property_for", "category_type",
+  "keyword", "property_status", "property_type", "structure_type", "property_for", "category_type",
   "price_min", "price_max", "bed_min", "bed_max", "bath_min", "bath_max",
   "mls_city", "mls_state", "zip", "mls_county",
   ...ADVANCED_FILTER_KEYS,
