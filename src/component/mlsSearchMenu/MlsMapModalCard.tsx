@@ -6,6 +6,7 @@ import { BiArea } from "react-icons/bi";
 import { FiMapPin } from "react-icons/fi";
 import Image from "next/image";
 import { MlsProviderBadge } from "@/component/sharable/MlsProviderBadge";
+import { ListingBrokerAttribution } from "@/component/sharable/ListingBrokerAttribution";
 import { SharePopup } from "@/component/properties/SharePopup";
 import { canDisplayListing, canShowPrimaryPhoto } from "@/helpers/listingDisplay";
 
@@ -128,6 +129,7 @@ export const MlsMapModalCard = ({ item, onClose }: PropertyCardProps) => {
 
                 {/* MLS attribution */}
                 <MlsProviderBadge item={item} />
+                <ListingBrokerAttribution item={item} compact />
             </div>
         </div>
     );

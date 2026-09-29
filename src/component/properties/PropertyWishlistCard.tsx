@@ -15,6 +15,7 @@ import toast from "react-hot-toast";
 import { FiTrash2 } from "react-icons/fi";
 import { SharePopup } from "@/component/properties/SharePopup";
 import { ListingTags } from "@/component/sharable/ListingTag";
+import { ListingBrokerAttribution } from "@/component/sharable/ListingBrokerAttribution";
 import {
   canDisplayListing,
   canShowPrimaryPhoto,
@@ -313,6 +314,12 @@ export const PropertyWishlistCard = ({ item, handleModal, hideWishlist, onRemove
             </span>
           </div>
         )}
+
+        {/* NWMLS Listing Broker line (renders only when the API sends it) */}
+        <ListingBrokerAttribution
+          item={item}
+          className={item.listed_with ? "mt-2" : "mt-auto pt-3"}
+        />
 
         {onRemove && (
           <button

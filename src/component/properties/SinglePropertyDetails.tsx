@@ -34,6 +34,7 @@ import LoginModal from "@/main-pages/auth/LoginModal";
 import { normalizePropertyDetails } from "@/services/properties/normalizePropertyDetails";
 import { isFirstLookListing } from "@/helpers/listingDisplay";
 import { tagToneClass } from "@/component/sharable/ListingTag";
+import { ListingBrokerAttribution } from "@/component/sharable/ListingBrokerAttribution";
 import type { PropertyDetails, PropertyOpenHouse } from "@/types/Property";
 
 const LocalInformation = dynamic(() => import("./LocalInformation"), {
@@ -796,6 +797,10 @@ export const SinglePropertyDetails = ({ property: prop }: Props) => {
                 Request a Showing
               </button>
             </motion.div>
+
+            {/* NWMLS Listing Broker (IDX Rule 22) — must sit directly below the
+                contact buttons, at least as prominent as they are. */}
+            <ListingBrokerAttribution item={property} variant="sidebar" />
 
             <div className="bg-[var(--surface-obsidian)] border border-[var(--line-soft)] rounded-[var(--radius-md)] p-6 flex flex-col gap-3">
               <button

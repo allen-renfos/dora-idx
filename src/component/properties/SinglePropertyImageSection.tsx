@@ -69,11 +69,21 @@ export const SinglePropertyImageSection = ({ property: prop }: Props) => {
             <EmptyGallery />
           ) : (
             <div className={`grid grid-cols-1 ${!mustRemovePhotos && sidebar.length > 0 ? "lg:grid-cols-[minmax(0,72%)_minmax(0,28%)]" : ""} gap-1.5 h-[55vh] min-h-[360px] max-h-[560px]`}>
-              {/* Main image */}
-              <button
-                type="button"
+              {/* Main image — a div, not a <button>, because it contains the
+                  arrow / "View all" buttons (nested buttons break hydration). */}
+              <div
+                role="button"
+                tabIndex={0}
+                aria-label="Open photo gallery"
                 onClick={() => open(currentIndex)}
-                className="relative overflow-hidden rounded-[var(--radius-md)] bg-[var(--surface-charcoal)] group w-full h-full"
+                onKeyDown={(e) => {
+                  if (e.target !== e.currentTarget) return;
+                  if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault();
+                    open(currentIndex);
+                  }
+                }}
+                className="relative overflow-hidden rounded-[var(--radius-md)] bg-[var(--surface-charcoal)] group w-full h-full cursor-pointer"
               >
                 {images[currentIndex] && !mainImgError ? (
                   <Image
@@ -99,6 +109,7 @@ export const SinglePropertyImageSection = ({ property: prop }: Props) => {
                 {images.length > 1 && (
                   <>
                     <button
+                      type="button"
                       onClick={prev}
                       aria-label="Previous photo"
                       className="absolute left-4 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-black/55 backdrop-blur-md border border-white/15 text-white hover:bg-[var(--gold-500)] hover:text-[var(--surface-ink)] hover:border-[var(--gold-500)] transition-colors flex items-center justify-center"
@@ -106,6 +117,7 @@ export const SinglePropertyImageSection = ({ property: prop }: Props) => {
                       <FiChevronLeft size={20} />
                     </button>
                     <button
+                      type="button"
                       onClick={next}
                       aria-label="Next photo"
                       className="absolute right-4 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-black/55 backdrop-blur-md border border-white/15 text-white hover:bg-[var(--gold-500)] hover:text-[var(--surface-ink)] hover:border-[var(--gold-500)] transition-colors flex items-center justify-center"
@@ -118,6 +130,7 @@ export const SinglePropertyImageSection = ({ property: prop }: Props) => {
                 {/* View all */}
                 {images.length > 1 && (
                   <button
+                    type="button"
                     onClick={(e) => {
                       e.stopPropagation();
                       setIsModalOpen(true);
@@ -128,7 +141,7 @@ export const SinglePropertyImageSection = ({ property: prop }: Props) => {
                     View all {images.length}
                   </button>
                 )}
-              </button>
+              </div>
 
               {/* Sidebar stack — hidden on mobile, hidden when photos must be removed */}
               {!mustRemovePhotos && sidebar.length > 0 && (

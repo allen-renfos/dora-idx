@@ -21,7 +21,7 @@ interface MlsProvider {
 
 export function MlsProviderBadge({
   item,
-  className = "",
+  className = "pt-3 mt-auto",
 }: {
   item: any;
   className?: string;
@@ -38,7 +38,7 @@ export function MlsProviderBadge({
   const alt = provider.name || provider.full_name || "MLS";
 
   return (
-    <div className={`flex items-center gap-2 pt-3 mt-auto ${className}`}>
+    <div className={`flex items-center gap-2 ${className}`}>
       {logo && (
         // eslint-disable-next-line @next/next/no-img-element
         <img

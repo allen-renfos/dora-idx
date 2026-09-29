@@ -15,6 +15,7 @@ import { useState, useEffect } from "react";
 import toast from "react-hot-toast";
 import { ListingTags } from "@/component/sharable/ListingTag";
 import { MlsProviderBadge } from "@/component/sharable/MlsProviderBadge";
+import { ListingBrokerAttribution } from "@/component/sharable/ListingBrokerAttribution";
 import { SharePopup } from "@/component/properties/SharePopup";
 import { canDisplayListing, canShowPrimaryPhoto } from "@/helpers/listingDisplay";
 
@@ -173,7 +174,7 @@ export const PropertyCard = ({ item, handleModal, hideWishlist }: PropertyCardPr
       </div>
 
       {/* Body */}
-      <div className="flex flex-col gap-4 p-6">
+      <div className="flex flex-col gap-3 px-6 pt-6 pb-5">
         <div className="flex items-baseline justify-between gap-3">
           <h3 className="font-sans font-bold text-[clamp(1.35rem,1.2vw+0.8rem,1.65rem)] text-[var(--ink)] leading-none tracking-[-0.02em]">
             {formattedPrice}
@@ -191,7 +192,7 @@ export const PropertyCard = ({ item, handleModal, hideWishlist }: PropertyCardPr
         )}
 
         {/* Specs */}
-        <div className="flex items-center gap-5 pt-4 border-t border-[var(--line)] text-[13px] text-[var(--ink-soft)]">
+        <div className="flex flex-wrap items-center gap-x-5 gap-y-2 pt-3 border-t border-[var(--line)] text-[13px] text-[var(--ink-soft)]">
           {item.beds ? (
             <span className="inline-flex items-center gap-2">
               <IoBedOutline size={16} className="text-[var(--accent)]" />
@@ -212,8 +213,11 @@ export const PropertyCard = ({ item, handleModal, hideWishlist }: PropertyCardPr
           ) : null}
         </div>
 
-        {/* MLS attribution */}
-        <MlsProviderBadge item={item} />
+        {/* MLS attribution + NWMLS Listing Broker line, pinned to the card bottom */}
+        <div className="mt-auto flex flex-col gap-2 pt-1">
+          <MlsProviderBadge item={item} className="" />
+          <ListingBrokerAttribution item={item} />
+        </div>
       </div>
     </article>
   );
