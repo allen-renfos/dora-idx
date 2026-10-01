@@ -1,18 +1,19 @@
 "use client";
 
-import { useLayoutEffect, useRef, useState } from "react";
+import { useLayoutEffect, useRef, useState, type ReactNode } from "react";
 import { getListingBroker, type ListingBroker } from "@/helpers/listingBroker";
 
 /**
  * NWMLS "Listing Broker firm | broker | phone | email" attribution
- * (MLS Grid IDX Rule 22), shown as quiet, plain text in two lines:
+ * (MLS Grid IDX Rule 22), shown as plain text in two lines:
  *
  *   Listing Broker Firm | Broker
  *   (425) 555-1234 | broker@example.com
  *
- * Deliberately unemphasized (no icons, links or bold), but never smaller or
- * lighter than the nearby contact buttons (12–13px, --ink-soft): the rule
- * requires at least that prominence.
+ * Slightly emphasized but never dominant: values in --ink at medium weight,
+ * the "Listing Broker" label in quiet --ink-soft; no icons, links or bold.
+ * Never smaller than the nearby contact buttons (12–13px): the rule requires
+ * at least that prominence.
  *
  * - `inline`  — bare text for property cards.
  * - `compact` (prop) — smaller text for the map popup card, which
@@ -59,7 +60,7 @@ export function ListingBrokerAttribution({
  * a wrapped line never begins or ends with a dangling bar. The bar is also
  * in the text (sr-only) for screen readers and copy/paste.
  */
-function Segments({ items }: { items: [string, string][] }) {
+function Segments({ items }: { items: [string, ReactNode][] }) {
   return (
     <span className="block overflow-hidden">
       <span data-row className="flex flex-wrap -ml-4">
@@ -139,10 +140,15 @@ function BrokerText({
   sizes: number[];
 }) {
   const { ref, stacked } = useFitRows(sizes);
-  const who: [string, string][] = [];
+  // The label stays quiet; the firm, broker and contact details carry the
+  // (slight) emphasis.
+  const label = (
+    <span className="font-normal text-[var(--ink-soft)]">Listing Broker </span>
+  );
+  const who: [string, ReactNode][] = [];
   if (broker.firm) who.push(["firm", broker.firm]);
   if (broker.broker) who.push(["broker", broker.broker]);
-  if (!stacked) who[0] = [who[0][0], `Listing Broker ${who[0][1]}`];
+  if (!stacked) who[0] = [who[0][0], <>{label}{who[0][1]}</>];
   const contact: [string, string][] = [];
   if (broker.phone) contact.push(["phone", broker.phone]);
   if (broker.email) contact.push(["email", broker.email]);
@@ -150,10 +156,10 @@ function BrokerText({
   return (
     <div
       ref={ref}
-      className="flex flex-col leading-[1.55] text-[var(--ink-soft)] [overflow-wrap:anywhere]"
+      className="flex flex-col leading-[1.55] font-medium text-[var(--ink)] [overflow-wrap:anywhere]"
       style={{ fontSize: sizes[0] }}
     >
-      {stacked && <span>Listing Broker </span>}
+      {stacked && label}
       <Segments items={who} />
       {contact.length > 0 && (
         <>
@@ -166,7 +172,10 @@ function BrokerText({
       {broker.buyerOffice && (
         <>
           {" "}
-          <span className="mt-1">Buyer&apos;s Brokerage {broker.buyerOffice}</span>
+          <span className="mt-1">
+            <span className="font-normal text-[var(--ink-soft)]">Buyer&apos;s Brokerage </span>
+            {broker.buyerOffice}
+          </span>
         </>
       )}
     </div>
