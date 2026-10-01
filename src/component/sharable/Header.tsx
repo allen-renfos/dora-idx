@@ -13,7 +13,7 @@ import {
 } from "@/services/auth/authStorage";
 import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
-import { FiMenu, FiX, FiUser } from "react-icons/fi";
+import { FiMenu, FiX, FiUser, FiCalendar } from "react-icons/fi";
 
 type NavItem = { label: string; path: string; key: string };
 
@@ -141,16 +141,19 @@ export const Header = ({ activeHeader }: HeaderProps = {}) => {
       <Link
         key={item.key}
         href={item.path}
-        className={`relative px-3.5 py-2 text-[12.5px] font-semibold tracking-[0.18em] uppercase font-[family-name:var(--font-accent)] transition-colors duration-300 ${
+        aria-current={active ? "page" : undefined}
+        className={`group relative px-2.5 xl:px-3.5 py-2.5 whitespace-nowrap text-[12px] xl:text-[12.5px] font-semibold tracking-[0.12em] uppercase font-[family-name:var(--font-accent)] transition-colors duration-300 ${
           active
             ? "text-[var(--accent-text)]"
-            : "text-[var(--ink-soft)] hover:text-[var(--accent-text)]"
+            : "text-[var(--ink)] hover:text-[var(--accent-text)]"
         }`}
       >
         {item.label}
+        {/* Short centered gold bar: grows in on hover, stays on the active page */}
         <span
-          className={`absolute left-3.5 right-3.5 -bottom-0.5 h-px bg-[var(--gold-500)] origin-center transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
-            active ? "scale-x-100" : "scale-x-0"
+          aria-hidden
+          className={`absolute left-1/2 bottom-0.5 h-[2px] -translate-x-1/2 rounded-full bg-[var(--gold-500)] transition-[width] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+            active ? "w-5" : "w-0 group-hover:w-5"
           }`}
         />
       </Link>
@@ -205,9 +208,12 @@ export const Header = ({ activeHeader }: HeaderProps = {}) => {
           isScrolled ? "shadow-[var(--shadow-soft)]" : ""
         }`}
       >
+        {/* Below lg the logo is absolutely centered, so the min-heights keep the bar tall enough to hold it. */}
         <div
           className={`container-wide relative flex items-center justify-between transition-all duration-500 ${
-            isScrolled ? "py-1.5" : "py-2"
+            isScrolled
+              ? "py-0.5 min-h-[64px] sm:min-h-[72px] md:min-h-[70px] lg:min-h-0"
+              : "py-1 min-h-[64px] sm:min-h-[72px] md:min-h-[84px] lg:min-h-0"
           }`}
         >
           {/* Logo / Brand — absolutely centered across all breakpoints */}
@@ -234,14 +240,27 @@ export const Header = ({ activeHeader }: HeaderProps = {}) => {
             )}
           </Link>
 
-          {/* Desktop Nav — left flank */}
-          <nav className="hidden lg:flex lg:order-1 lg:flex-1 min-w-0 items-center gap-1 justify-end pr-6 xl:pr-10">
-            {leftItems.map(renderNavLink)}
-          </nav>
+          {/* Desktop left flank — "Book a Showing" pill mirrors Sign In, then the nav */}
+          <div className="hidden lg:flex lg:order-1 lg:flex-1 min-w-0 items-center pr-3 xl:pr-6">
+            <Link
+              href="/connect"
+              className="group hidden xl:inline-flex items-center gap-2.5 pl-1.5 pr-5 py-1.5 rounded-full border border-[var(--line)] whitespace-nowrap transition-all duration-300 hover:border-[var(--gold-500)] hover:bg-[var(--gold-500)]/[0.06]"
+            >
+              <span className="flex items-center justify-center w-8 h-8 rounded-full bg-[var(--gold-500)]/10 text-[var(--gold-deep)] transition-colors duration-300 group-hover:bg-[var(--gold-500)] group-hover:text-white">
+                <FiCalendar size={15} />
+              </span>
+              <span className="text-[12px] font-semibold tracking-[0.14em] uppercase text-[var(--ink-soft)] transition-colors duration-300 group-hover:text-[var(--accent-text)]">
+                Book a Showing
+              </span>
+            </Link>
+            <nav className="ml-auto flex items-center gap-0.5">
+              {leftItems.map(renderNavLink)}
+            </nav>
+          </div>
 
           {/* Desktop Nav — right flank + sign-in / mobile hamburger */}
-          <div className="flex items-center gap-3 ml-auto lg:ml-0 lg:order-3 lg:flex-1 lg:min-w-0 lg:justify-start lg:pl-6 xl:pl-10">
-            <nav className="hidden lg:flex items-center gap-1">
+          <div className="flex items-center gap-3 ml-auto lg:ml-0 lg:order-3 lg:flex-1 lg:min-w-0 lg:justify-start lg:pl-3 xl:pl-6">
+            <nav className="hidden lg:flex items-center gap-0.5">
               {rightItems.map(renderNavLink)}
             </nav>
             <span className="hidden lg:block lg:ml-auto" />
@@ -250,7 +269,7 @@ export const Header = ({ activeHeader }: HeaderProps = {}) => {
               <>
                 <Link
                   href="/collection/favourites"
-                  className="hidden md:inline-flex items-center gap-2 px-4 py-2 text-[12px] font-semibold tracking-[0.14em] uppercase transition text-[var(--ink-soft)] hover:text-[var(--accent-text)]"
+                  className="hidden md:inline-flex items-center gap-2 px-4 py-2 whitespace-nowrap text-[12px] font-semibold tracking-[0.14em] uppercase transition text-[var(--ink-soft)] hover:text-[var(--accent-text)]"
                   aria-label="Dashboard"
                 >
                   <FiUser size={16} />
@@ -271,7 +290,7 @@ export const Header = ({ activeHeader }: HeaderProps = {}) => {
                 {/* Sign In — pill with gold icon badge */}
                 <button
                   onClick={handleDashboard}
-                  className="group hidden md:inline-flex items-center gap-2.5 pl-1.5 pr-5 py-1.5 rounded-full border transition-all duration-300 border-[var(--line)] hover:border-[var(--gold-500)] hover:bg-[var(--gold-500)]/[0.06]"
+                  className="group hidden md:inline-flex shrink-0 items-center gap-2.5 pl-1.5 pr-5 py-1.5 rounded-full border whitespace-nowrap transition-all duration-300 border-[var(--line)] hover:border-[var(--gold-500)] hover:bg-[var(--gold-500)]/[0.06]"
                   aria-label="Sign in"
                 >
                   <span
