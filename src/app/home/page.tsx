@@ -13,7 +13,7 @@ import HomeInsights from "@/main-pages/home/HomeInsights";
 import HomeNewsletter from "@/main-pages/home/HomeNewsletter";
 
 // "For You" rail is temporarily hidden. Set to true to show it again.
-const SHOW_FOR_YOU = false;
+const SHOW_FOR_YOU = true;
 
 export default function HomePage() {
   return (

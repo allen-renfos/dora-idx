@@ -56,7 +56,7 @@ function RecommendedRail({ city, range }: { city: string; range: PriceRange | nu
     : `Handpicked for you based on where you've been looking in ${city}.`;
 
   return (
-    <section className="relative bg-[var(--canvas)] text-[var(--ink)] section-pad overflow-hidden">
+    <section className="relative bg-[var(--canvas)] text-[var(--ink)] section-pad !pb-10 md:!pb-14 overflow-hidden">
       {loginModal}
       <div className="container-wide relative">
         <div className="flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
@@ -71,15 +71,6 @@ function RecommendedRail({ city, range }: { city: string; range: PriceRange | nu
             </h2>
             <p className="lede text-[var(--ink-soft)] max-w-xl">{description}</p>
           </Reveal>
-
-          <Reveal delay={0.08} className="shrink-0">
-            <Link
-              href={`/properties?keyword=${encodeURIComponent(city)}`}
-              className="btn-outline-new"
-            >
-              See more in {city}
-            </Link>
-          </Reveal>
         </div>
 
         <div className="mt-14">
@@ -92,6 +83,15 @@ function RecommendedRail({ city, range }: { city: string; range: PriceRange | nu
                   handleModal={handleModal}
                 />
               ))}
+            </div>
+
+            <div className="mt-6 flex justify-end">
+              <Link
+                href={`/properties?keyword=${encodeURIComponent(city)}`}
+                className="btn-outline-new"
+              >
+                See more in {city}
+              </Link>
             </div>
           </Reveal>
         </div>
