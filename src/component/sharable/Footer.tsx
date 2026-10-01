@@ -68,22 +68,39 @@ export const Footer = () => {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
           {/* Brand */}
           <div className="lg:col-span-5 flex flex-col gap-3">
-            <Link
-              href="/home"
-              className="inline-flex items-center gap-3 self-start"
-            >
-              {cachedLogo ? (
-                /* Full-colour logo, transparent background, no glow. */
-                /* eslint-disable-next-line @next/next/no-img-element */
+            {cachedLogo ? (
+              /* "Calling card": the full-colour logo on a cream plate (agent logos are
+                 drawn for light backgrounds, so dark lettering would vanish on pine),
+                 framed by an inset gold hairline with diamond seals and a hover sheen. */
+              <Link
+                href="/home"
+                aria-label={company_name || name || "Home"}
+                className="group relative isolate inline-flex items-center self-start max-w-full overflow-hidden mb-2 px-7 py-5 rounded-[var(--radius-md)] bg-[var(--cream)] border border-[var(--gold)]/45 transition-colors duration-500 hover:border-[var(--gold)]"
+              >
+                <span
+                  aria-hidden
+                  className="pointer-events-none absolute inset-[6px] rounded-[calc(var(--radius-md)-5px)] border border-[var(--gold)]/55 transition-colors duration-500 group-hover:border-[var(--gold)]"
+                />
+                <span aria-hidden className="pointer-events-none absolute left-1/2 top-[6px] w-[7px] h-[7px] -translate-x-1/2 -translate-y-1/2 rotate-45 bg-[var(--gold)]" />
+                <span aria-hidden className="pointer-events-none absolute left-1/2 bottom-[6px] w-[7px] h-[7px] -translate-x-1/2 translate-y-1/2 rotate-45 bg-[var(--gold)]" />
+                <span
+                  aria-hidden
+                  className="pointer-events-none absolute inset-y-0 -left-1/2 w-1/3 -skew-x-[20deg] bg-gradient-to-r from-transparent via-white/80 to-transparent transition-transform duration-[1200ms] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-x-[450%] motion-reduce:hidden"
+                />
+                {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={cachedLogo}
                   alt={company_name || name || "Logo"}
-                  style={{ objectFit: "contain", height: 60, width: "auto", maxWidth: "100%" }}
+                  className="relative"
+                  // vw cap, not %: a % max-width inside this shrink-to-fit plate collapses the image to 0.
+                  style={{ objectFit: "contain", height: 64, width: "auto", maxWidth: "calc(100vw - 8.5rem)" }}
                 />
-              ) : (
+              </Link>
+            ) : (
+              <Link href="/home" className="inline-flex items-center self-start">
                 <span className="font-serif text-4xl text-[var(--on-pine)]">{name || "Dora"}</span>
-              )}
-            </Link>
+              </Link>
+            )}
             <p className="text-[15px] text-[var(--on-pine-soft)] max-w-md leading-relaxed font-light">
               {shortDescription ||
                 "A boutique real estate practice pairing distinctive homes with the people who belong in them — guided by patience, taste, and quiet conviction."}
