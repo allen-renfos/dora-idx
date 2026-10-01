@@ -73,13 +73,12 @@ export const Footer = () => {
               className="inline-flex items-center gap-3 self-start"
             >
               {cachedLogo ? (
-                /* Full-colour logo, transparent background; a soft light glow
-                   keeps the dark-blue lettering readable on dark pine. */
+                /* Full-colour logo, transparent background, no glow. */
                 /* eslint-disable-next-line @next/next/no-img-element */
                 <img
                   src={cachedLogo}
                   alt={company_name || name || "Logo"}
-                  style={{ objectFit: "contain", height: 60, width: "auto", maxWidth: "100%", filter: "drop-shadow(0 0 6px rgba(255,255,255,0.85))" }}
+                  style={{ objectFit: "contain", height: 60, width: "auto", maxWidth: "100%" }}
                 />
               ) : (
                 <span className="font-serif text-4xl text-[var(--on-pine)]">{name || "Dora"}</span>
