@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useNewListings } from "@/services/properties/PropertyQueries";
 import { PropertyCard } from "@/component/properties/PropertyCard";
 import { Reveal } from "@/component/ui/Reveal";
@@ -9,10 +9,33 @@ import { useLoginPrompt } from "@/hooks/useLoginPrompt";
 
 type Property = { id: string; [key: string]: any };
 
+/** Cards shown at first and added per "View more" click. */
+const PAGE_STEP = 6;
+
 export default function HomeFeatured() {
   const { handleModal, loginModal } = useLoginPrompt();
-  const { data, isLoading } = useNewListings();
-  const properties: Property[] = (data?.data || []).slice(0, 6);
+  const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } =
+    useNewListings();
+  // All loaded pages, deduped (pages can overlap as new homes arrive).
+  const loaded: Property[] = useMemo(() => {
+    const seen = new Set<string>();
+    return (data?.pages ?? [])
+      .flatMap((page: any) => page?.data ?? [])
+      .filter((item: Property) => {
+        const key = String(item?.id ?? "");
+        if (!key || seen.has(key)) return false;
+        seen.add(key);
+        return true;
+      });
+  }, [data]);
+
+  // Show 6 to start; "View more" reveals 6 more, fetching pages as needed.
+  const [visible, setVisible] = useState(PAGE_STEP);
+  const properties = loaded.slice(0, visible);
+  const canShowMore = loaded.length > visible || !!hasNextPage;
+  useEffect(() => {
+    if (visible > loaded.length && hasNextPage && !isFetchingNextPage) fetchNextPage();
+  }, [visible, loaded.length, hasNextPage, isFetchingNextPage, fetchNextPage]);
 
   const railRef = useRef<HTMLDivElement>(null);
   const [progress, setProgress] = useState(0);
@@ -43,7 +66,7 @@ export default function HomeFeatured() {
   };
 
   return (
-    <section className="relative bg-[var(--canvas-2)] text-[var(--ink)] section-pad overflow-hidden">
+    <section className="relative bg-[var(--canvas-2)] text-[var(--ink)] section-pad !pb-10 md:!pb-14 overflow-hidden">
       {loginModal}
       {/* Soft sage halo */}
       <div
@@ -83,9 +106,6 @@ export default function HomeFeatured() {
                 onClick={() => scrollByCards(1)}
               />
             </div>
-            <Link href="/properties" className="btn-outline-new">
-              See every listing
-            </Link>
           </Reveal>
         </div>
 
@@ -143,6 +163,19 @@ export default function HomeFeatured() {
                   Drag or scroll
                 </span>
               </div>
+
+              {canShowMore && (
+                <div className="mt-6 flex justify-end">
+                  <button
+                    type="button"
+                    onClick={() => setVisible((v) => v + PAGE_STEP)}
+                    disabled={isFetchingNextPage}
+                    className="btn-outline-new disabled:opacity-60 disabled:cursor-wait"
+                  >
+                    {isFetchingNextPage ? "Loading…" : "View more"}
+                  </button>
+                </div>
+              )}
             </Reveal>
           ) : (
             <EmptyState />

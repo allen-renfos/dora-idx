@@ -12,8 +12,13 @@ export const fetchFeaturedPropertyList = async () => {
     const response = await axiosInstance.get(`/v1/properties/featured-properties?lagnt=${process.env.NEXT_PUBLIC_REALTY_PRO_AGENT_ID}`);
     return response.data;
 }
-export const fetchNewListings = async () => {
-    const response = await axiosInstance.get(`/v1/properties/featured-properties?lagnt=${process.env.NEXT_PUBLIC_REALTY_PRO_AGENT_ID}`);
+/**
+ * One page of newly listed homes. The API pages these 9 at a time and reports
+ * `meta.has_more`; `featured-properties` is capped at 6 with no paging, which
+ * NWMLS flagged ("Newly Listed" must offer a way to view more).
+ */
+export const fetchNewListings = async (page = 1) => {
+    const response = await axiosInstance.get(`/v1/properties/new-listings?lagnt=${process.env.NEXT_PUBLIC_REALTY_PRO_AGENT_ID}&page=${page}`);
     return response.data;
 }
 /**

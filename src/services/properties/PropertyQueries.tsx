@@ -11,7 +11,13 @@ export const usePropertyList = (data: { pageLimit?: number; search?: string }) =
        fetchFeaturedPropertyList() });
   };
   export const useNewListings = () => {
-    return useQuery({ queryKey: ['newListings'], queryFn: () => fetchNewListings() });
+    return useInfiniteQuery({
+      queryKey: ['newListings'],
+      queryFn: ({ pageParam }) => fetchNewListings(pageParam),
+      initialPageParam: 1,
+      getNextPageParam: (lastPage: any, _pages, lastPageParam: number) =>
+        lastPage?.meta?.has_more && (lastPage?.data?.length ?? 0) > 0 ? lastPageParam + 1 : undefined,
+    });
   };
 export const useMlsPropertyList = (params: Parameters<typeof fetchMlsSearchPropertyList>[0]) => {
   return useQuery({
