@@ -10,12 +10,13 @@ import { getListingBroker, type ListingBroker } from "@/helpers/listingBroker";
  *   Listing Broker Firm | Broker
  *   (425) 555-1234 | broker@example.com
  *
- * Slightly emphasized but never dominant: values in --ink at medium weight,
- * the "Listing Broker" label in quiet --ink-soft; no icons, links or bold.
+ * Slightly emphasized but never dominant: a soft inset panel, values in
+ * --ink and the "Listing Broker" label in quiet --ink-soft; no icons, links
+ * or bold.
  * Never smaller than the nearby contact buttons (12–13px): the rule requires
  * at least that prominence.
  *
- * - `inline`  — bare text for property cards.
+ * - `inline`  — soft inset panel for property cards.
  * - `compact` (prop) — smaller text for the map popup card, which
  *               has no contact buttons to match.
  * - `sidebar` — the same text in a standard sidebar card, placed directly
@@ -47,7 +48,13 @@ export function ListingBrokerAttribution({
       <BrokerText broker={broker} sizes={FIT_SIZES} />
     </section>
   ) : (
-    <div className={className}>
+    // Soft inset panel so the block reads as its own unit on cards without
+    // shouting: faint tint + hairline, no bold.
+    <div
+      className={`bg-[var(--ink)]/[0.035] border border-[var(--line-soft)] rounded-[var(--radius-sm)] ${
+        compact ? "px-2.5 py-1.5" : "px-3.5 py-2.5"
+      } ${className}`}
+    >
       <BrokerText broker={broker} sizes={compact ? COMPACT_FIT_SIZES : FIT_SIZES} />
     </div>
   );
@@ -140,11 +147,8 @@ function BrokerText({
   sizes: number[];
 }) {
   const { ref, stacked } = useFitRows(sizes);
-  // The label stays quiet; the firm, broker and contact details carry the
-  // (slight) emphasis.
-  const label = (
-    <span className="font-normal text-[var(--ink-soft)]">Listing Broker </span>
-  );
+  // The label stays quiet; the firm, broker and contact details read in ink.
+  const label = <span className="text-[var(--ink-soft)]">Listing Broker </span>;
   const who: [string, ReactNode][] = [];
   if (broker.firm) who.push(["firm", broker.firm]);
   if (broker.broker) who.push(["broker", broker.broker]);
@@ -156,7 +160,7 @@ function BrokerText({
   return (
     <div
       ref={ref}
-      className="flex flex-col leading-[1.55] font-medium text-[var(--ink)] [overflow-wrap:anywhere]"
+      className="flex flex-col leading-[1.55] text-[var(--ink)] [overflow-wrap:anywhere]"
       style={{ fontSize: sizes[0] }}
     >
       {stacked && label}
@@ -173,7 +177,7 @@ function BrokerText({
         <>
           {" "}
           <span className="mt-1">
-            <span className="font-normal text-[var(--ink-soft)]">Buyer&apos;s Brokerage </span>
+            <span className="text-[var(--ink-soft)]">Buyer&apos;s Brokerage </span>
             {broker.buyerOffice}
           </span>
         </>
