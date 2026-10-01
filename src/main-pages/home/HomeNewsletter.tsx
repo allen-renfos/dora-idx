@@ -72,7 +72,7 @@ export default function HomeNewsletter() {
   return (
     <section className="bg-[var(--canvas)] section-pad">
       <div className="container-page">
-        <div className="relative overflow-hidden rounded-[var(--radius-lg)] bg-[var(--pine)] text-[var(--on-pine)] shadow-[var(--shadow-lift)]">
+        <div className="relative overflow-hidden rounded-[var(--radius-md)] bg-[var(--pine)] text-[var(--on-pine)] shadow-[var(--shadow-lift)]">
           {/* Photography texture — contained inside the card's own stacking context */}
           <Image
             src="/images/sample8.jpg"
@@ -84,7 +84,7 @@ export default function HomeNewsletter() {
           />
           <div className="absolute inset-0 bg-gradient-to-br from-[var(--pine)] via-[var(--pine)]/92 to-[#18241f]" />
           {/* Gold hairline framing */}
-          <div className="pointer-events-none absolute inset-4 md:inset-6 rounded-[calc(var(--radius-lg)-12px)] border border-[var(--gold-300)]/15" />
+          <div className="pointer-events-none absolute inset-4 md:inset-6 rounded-[calc(var(--radius-md)-10px)] border border-[var(--gold-300)]/15" />
 
           <div className="relative grid lg:grid-cols-[1.05fr_1fr] gap-10 lg:gap-16 items-center p-8 sm:p-12 lg:p-16">
             {/* Copy */}

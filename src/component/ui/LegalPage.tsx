@@ -36,7 +36,7 @@ export function LegalPage({ eyebrow, title, children }: Props) {
         </section>
 
         <section className="container-page max-w-4xl section-pad">
-          <article className="bg-[var(--cream)] rounded-[var(--radius-lg)] border border-[var(--line)] shadow-[var(--shadow-soft)] p-7 md:p-10 lg:p-14 legal-prose">
+          <article className="bg-[var(--cream)] rounded-[var(--radius-md)] border border-[var(--line)] shadow-[var(--shadow-soft)] p-7 md:p-10 lg:p-14 legal-prose">
             {children}
           </article>
         </section>

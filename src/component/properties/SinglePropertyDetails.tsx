@@ -261,8 +261,9 @@ export const SinglePropertyDetails = ({ property: prop }: Props) => {
               {details.tags.map((tag) => (
                 <span
                   key={tag}
-                  className="inline-flex items-center px-3 py-1 text-[11px] font-bold tracking-[0.2em] uppercase text-[var(--ink-soft)] bg-[var(--ink)]/5 border border-[var(--line-medium)] rounded-[var(--radius-pill)]"
+                  className={`inline-flex items-center gap-2 px-3 py-1 text-[11px] font-bold tracking-[0.2em] uppercase rounded-[var(--radius-pill)] ${tagToneClass(tag)}`}
                 >
+                  <span aria-hidden className="w-1.5 h-1.5 rounded-full bg-current" />
                   {tag}
                 </span>
               ))}
@@ -890,7 +891,7 @@ function OpenHouseSection({
           return (
             <div
               key={oh.key || idx}
-              className="group relative flex flex-col gap-4 bg-[var(--surface-obsidian)] border border-[var(--line-soft)] rounded-xl p-5 transition-colors duration-300 hover:border-[var(--gold-500)]/40"
+              className="group relative flex flex-col gap-4 bg-[var(--surface-obsidian)] border border-[var(--line-soft)] rounded-[var(--radius-md)] p-5 transition-colors duration-300 hover:border-[var(--gold-500)]/40"
             >
               <div className="flex items-center gap-5">
                 {/* Calendar tile */}

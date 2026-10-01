@@ -83,7 +83,7 @@ export default function HomeHero() {
             transition={{ duration: 0.9, delay: 0.25, ease: [0.16, 1, 0.3, 1] }}
             className="mt-7 max-w-[58rem]"
           >
-            <div className="bg-[var(--cream)]/95 backdrop-blur-xl border border-[var(--line)] rounded-[var(--radius-lg)] shadow-[var(--shadow-lift)] overflow-hidden">
+            <div className="bg-[var(--cream)]/95 backdrop-blur-xl border border-[var(--line)] rounded-[var(--radius-md)] shadow-[var(--shadow-lift)] overflow-hidden">
               <div className="px-5 md:px-9 py-7 md:py-8">
                 <span className="eyebrow inline-flex items-center gap-3">
                   <span className="inline-block h-px w-8 bg-[var(--gold)]" />

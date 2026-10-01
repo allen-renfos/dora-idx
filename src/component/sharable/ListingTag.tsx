@@ -22,35 +22,36 @@ type Tone =
   | "active"
   | "caution"
   | "progress"
+  | "closed"
+  | "reduced"
   | "neutral";
 
 /**
- * Single source of truth for tone → styling. Colors are solid pills with
- * AA-contrast text that read well overlaid on listing photos in both light and
- * dark themes (the site uses a dark-mode class strategy; `dark:` variants are
- * included for safety).
+ * Single source of truth for tone → styling. Each status gets its own
+ * conventional color (green = active, amber = pending, …) as a solid pill
+ * with white text — every background is a 700-weight shade so white text
+ * meets WCAG AA at badge size — plus a faint white ring so it reads on any
+ * listing photo.
  */
-// Retoned into the "Verdant Atelier" palette (sand / sage / champagne gold /
-// pine). Solid, AA-contrast pills with a faint hairline so they read on any
-// listing photo while staying calm against the muted surfaces.
 const TAG_TONES: Record<Tone, string> = {
-  // OPEN HOUSE — most prominent: champagne gold pill on dark ink text.
-  highlight:
-    "bg-[var(--gold)] text-[var(--pine)] ring-1 ring-black/10",
-  // FIRST LOOK (NWMLS Coming Soon) — pre-market preview: light pill on dark
-  // ink with an accent ring, distinct from OPEN HOUSE's solid accent.
-  firstLook:
-    "bg-[var(--on-pine)] text-[var(--pine)] ring-1 ring-[var(--gold)]",
-  // NEW — positive / fresh: deep forest pine.
-  fresh: "bg-[var(--pine)] text-[var(--on-pine)] ring-1 ring-white/10",
-  // ACTIVE — neutral-positive: AA-safe sage.
-  active: "bg-[var(--sage-deep)] text-white ring-1 ring-white/15",
-  // CONTINGENT — caution: muted clay/ochre.
-  caution: "bg-[#a06b3c] text-white ring-1 ring-white/15",
-  // PENDING family — in-progress: pewter silver.
-  progress: "bg-[var(--silver-deep)] text-white ring-1 ring-white/15",
-  // Fallback for unknown / new tag strings: soft ink.
-  neutral: "bg-[var(--ink-soft)] text-white ring-1 ring-white/15",
+  // OPEN HOUSE — event: violet, the most eye-catching.
+  highlight: "bg-[#6d28d9] text-white ring-1 ring-white/20",
+  // FIRST LOOK / COMING SOON (NWMLS pre-market preview): teal.
+  firstLook: "bg-[#0f766e] text-white ring-1 ring-white/20",
+  // NEW — just listed: blue.
+  fresh: "bg-[#1d4ed8] text-white ring-1 ring-white/20",
+  // ACTIVE — on the market: green.
+  active: "bg-[#15803d] text-white ring-1 ring-white/20",
+  // CONTINGENT — offer accepted with conditions: orange.
+  caution: "bg-[#c2410c] text-white ring-1 ring-white/20",
+  // PENDING family — under contract: amber.
+  progress: "bg-[#a16207] text-white ring-1 ring-white/20",
+  // SOLD / CLOSED — off the market: red.
+  closed: "bg-[#b91c1c] text-white ring-1 ring-white/20",
+  // PRICE REDUCED: pink.
+  reduced: "bg-[#be185d] text-white ring-1 ring-white/20",
+  // Fallback for unknown / new tag strings: slate.
+  neutral: "bg-[#475569] text-white ring-1 ring-white/20",
 };
 
 /**
@@ -62,12 +63,17 @@ const TAG_TONE_MAP: Record<string, Tone> = {
   NEW: "fresh",
   ACTIVE: "active",
   "FIRST LOOK": "firstLook",
+  "COMING SOON": "firstLook",
   CONTINGENT: "caution",
   PENDING: "progress",
   "PENDING FEASIBILITY": "progress",
   "PENDING INSPECTION": "progress",
   "PENDING SHORT SALE": "progress",
   "PENDING - BACKUP OFFER REQUESTED": "progress",
+  SOLD: "closed",
+  CLOSED: "closed",
+  "PRICE REDUCED": "reduced",
+  REDUCED: "reduced",
 };
 
 const toneFor = (tag: string): Tone =>
@@ -85,8 +91,8 @@ interface ListingTagProps {
 }
 
 /**
- * Pure presentational pill for a single tag. Real text (screen-reader
- * readable). Long labels truncate gracefully with the full text exposed via
+ * Pure presentational pill for a single tag: status dot + label. Real text
+ * (screen-reader readable). Long labels truncate gracefully with the full text exposed via
  * `title`/`aria-label`.
  */
 function ListingTagBase({ tag, className = "" }: ListingTagProps) {
@@ -97,10 +103,12 @@ function ListingTagBase({ tag, className = "" }: ListingTagProps) {
     <span
       title={tag}
       aria-label={tag}
-      className={`inline-flex max-w-[160px] items-center truncate whitespace-nowrap px-3 py-1.5 text-[10px] font-semibold uppercase leading-none tracking-[0.16em] shadow-sm ${tone} ${className}`}
+      className={`inline-flex max-w-[180px] items-center gap-1.5 whitespace-nowrap pl-2.5 pr-3 py-1.5 text-[10px] font-bold uppercase leading-none tracking-[0.14em] shadow-[0_2px_8px_-2px_rgba(0,0,0,0.35)] ${tone} ${className}`}
       style={{ borderRadius: "var(--radius-pill, 999px)" }}
     >
-      {tag}
+      {/* Status dot */}
+      <span aria-hidden className="h-1.5 w-1.5 shrink-0 rounded-full bg-white/90" />
+      <span className="truncate">{tag}</span>
     </span>
   );
 }

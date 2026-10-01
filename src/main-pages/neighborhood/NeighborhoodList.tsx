@@ -137,7 +137,7 @@ function NeighborhoodTile({
     <Link
       href={hrefOf(item)}
       aria-label={`Explore ${label}`}
-      className="group relative block w-full aspect-[3/4] overflow-hidden rounded-[var(--radius-lg)] bg-[var(--pine)] border border-[var(--line)] hover:shadow-[var(--shadow-lift)] transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]"
+      className="group relative block w-full aspect-[3/4] overflow-hidden rounded-[var(--radius-md)] bg-[var(--pine)] border border-[var(--line)] hover:shadow-[var(--shadow-lift)] transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]"
     >
       <Image
         src={resolveImage(item)}
@@ -194,7 +194,7 @@ function LoadingState() {
         {Array.from({ length: 8 }).map((_, i) => (
           <div
             key={i}
-            className="aspect-[3/4] rounded-[var(--radius-lg)] bg-[var(--canvas-2)] animate-pulse"
+            className="aspect-[3/4] rounded-[var(--radius-md)] bg-[var(--canvas-2)] animate-pulse"
           />
         ))}
       </div>

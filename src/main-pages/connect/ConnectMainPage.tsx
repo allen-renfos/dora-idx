@@ -322,7 +322,7 @@ export default function ConnectMainPage() {
             <Reveal y={32}>
               <form
                 onSubmit={onSubmit}
-                className="bg-[var(--cream)] rounded-[var(--radius-lg)] border border-[var(--line)] shadow-[var(--shadow-soft)] p-6 md:p-10 flex flex-col gap-6"
+                className="bg-[var(--cream)] rounded-[var(--radius-md)] border border-[var(--line)] shadow-[var(--shadow-soft)] p-6 md:p-10 flex flex-col gap-6"
               >
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                   <Field
@@ -452,7 +452,7 @@ export default function ConnectMainPage() {
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 10, scale: 0.98 }}
               transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-              className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-[90] w-[92%] max-w-[440px] bg-[var(--cream)] rounded-[var(--radius-lg)] border border-[var(--line)] shadow-[var(--shadow-lift)] p-6 md:p-7"
+              className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-[90] w-[92%] max-w-[440px] bg-[var(--cream)] rounded-[var(--radius-md)] border border-[var(--line)] shadow-[var(--shadow-lift)] p-6 md:p-7"
             >
               <div className="flex items-center justify-between mb-5">
                 <h3 className="font-serif text-xl text-[var(--ink)]">

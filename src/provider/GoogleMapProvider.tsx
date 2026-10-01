@@ -24,7 +24,7 @@ export default function GoogleMapsProvider({
             <div className="lg:col-span-7">
               <div
                 className="skeleton"
-                style={{ width: "100%", height: "420px", borderRadius: "20px" }}
+                style={{ width: "100%", height: "420px", borderRadius: "var(--radius-md)" }}
               />
               <div className="flex items-center gap-3 mt-6">
                 {/* <div
@@ -40,7 +40,7 @@ export default function GoogleMapsProvider({
             <div className="lg:col-span-5">
               <div
                 className="skeleton"
-                style={{ width: "100%", height: "420px", borderRadius: "20px" }}
+                style={{ width: "100%", height: "420px", borderRadius: "var(--radius-md)" }}
               />
               <div className="flex items-center gap-3 mt-6">
                 {/* <div

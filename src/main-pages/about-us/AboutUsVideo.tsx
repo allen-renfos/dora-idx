@@ -62,7 +62,7 @@ export const AboutUsVideo = () => {
   return (
     <section className="bg-[var(--canvas)] text-[var(--ink)] py-20 pb-40 md:py-32 md:pb-60 relative overflow-hidden">
       <div className="container-wide relative z-10 mb-20">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center justify-items-center bg-[var(--cream)] border border-[var(--line)] rounded-[var(--radius-lg)] shadow-[var(--shadow-soft)] p-10 md:p-16">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center justify-items-center bg-[var(--cream)] border border-[var(--line)] rounded-[var(--radius-md)] shadow-[var(--shadow-soft)] p-10 md:p-16">
 
           {/* Left Column - Video Player */}
           <div className="flex flex-col gap-6 group">
