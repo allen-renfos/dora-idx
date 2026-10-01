@@ -12,12 +12,15 @@ import HomePhilosophy from "@/main-pages/home/HomePhilosophy";
 import HomeInsights from "@/main-pages/home/HomeInsights";
 import HomeNewsletter from "@/main-pages/home/HomeNewsletter";
 
+// "For You" rail is temporarily hidden. Set to true to show it again.
+const SHOW_FOR_YOU = false;
+
 export default function HomePage() {
   return (
     <main className="bg-[var(--canvas)]">
       <HomeHero />
       <HomeAdvisor />
-      <HomeRecommended />
+      {SHOW_FOR_YOU && <HomeRecommended />}
       <HomeFeatured />
       <HomeNeighborhoods />
       <HomePhilosophy />

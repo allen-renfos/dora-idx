@@ -16,7 +16,7 @@ import {
   toBool,
   toNumber,
 } from "@/helpers/propertyNormalize";
-import { canDisplayListing } from "@/helpers/listingDisplay";
+import { canDisplayListing, displayStatusLabel, isFirstLookListing } from "@/helpers/listingDisplay";
 
 type AnyRecord = Record<string, any>;
 
@@ -386,10 +386,13 @@ export function normalizePropertyDetails(raw: unknown): PropertyDetails {
     { label: "MLS Listing ID", value: pickValue<string>(data.mls_listingid, data.listing_id) },
     {
       label: "MLS Status",
-      value: pickValue<string>(data.MlsStatus, data.mls_status, data.status, data.property_status),
+      value: displayStatusLabel(
+        pickValue<string>(data.MlsStatus, data.mls_status, data.status, data.property_status)
+      ) || null,
     },
     { label: "Listed Date", value: pickValue<string>(data.ListingContractDate) },
-    { label: "Days on Market", value: numToStr(daysOnSite) },
+    // Not shown for First Look listings (MLS rule).
+    { label: "Days on Market", value: isFirstLookListing(data) ? null : numToStr(daysOnSite) },
     {
       label: "MLS Source",
       value: pickValue<string>(data.listing_source, data.OriginatingSystemName, attribution.name),

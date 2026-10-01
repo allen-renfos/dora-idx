@@ -58,6 +58,19 @@ export function isFirstLookListing(listing: unknown): boolean {
   return Array.isArray(l.tags) && l.tags.some((t: unknown) => toSlug(t) === FIRST_LOOK);
 }
 
+/**
+ * Consumer-facing label for a status. NWMLS First Look listings are filtered
+ * and stored as "Coming Soon" (the API value stays untouched so queries keep
+ * working), but MLS rules require them to read simply "First Look".
+ */
+export function displayStatusLabel(status: string | null | undefined): string {
+  const slug = toSlug(status);
+  // Also catches compound labels such as "Coming Soon - First Look".
+  return slug.includes("coming_soon") || slug.includes(FIRST_LOOK)
+    ? "First Look"
+    : (status ?? "");
+}
+
 /** Raw `canDisplayListing` flag from the payload (tri-state). */
 const readCanDisplayFlag = (l: AnyRecord): boolean | null => {
   const c = l.compliance && typeof l.compliance === "object" ? l.compliance : null;

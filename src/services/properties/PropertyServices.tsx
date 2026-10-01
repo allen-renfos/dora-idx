@@ -169,9 +169,15 @@ const mergeSearchPages = (pages: any[], pageLimit: number) => {
         }
     }
     const totals = pages.map((p) => Number(p?.meta?.total));
+    // Latest MLS data refresh reported by any of the merged responses.
+    const refreshed = pages
+        .map((p) => p?.meta?.data_refreshed_at)
+        .filter((v): v is string => typeof v === "string" && !Number.isNaN(Date.parse(v)))
+        .sort((a, b) => Date.parse(b) - Date.parse(a))[0];
     return {
         data,
         meta: {
+            ...(refreshed ? { data_refreshed_at: refreshed } : {}),
             has_more: pages.some((p) => searchPageHasMore(p, pageLimit)),
             ...(totals.every((t) => Number.isFinite(t))
                 ? { total: totals.reduce((a, b) => a + b, 0) }

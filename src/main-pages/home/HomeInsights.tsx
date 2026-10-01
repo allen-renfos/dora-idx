@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { FiArrowRight, FiArrowUpRight } from "react-icons/fi";
-import { useNewsList } from "@/services/blog/BlogQueries";
+import { useArticleList, useNewsList } from "@/services/blog/BlogQueries";
 import { SectionHeading } from "@/component/ui/SectionHeading";
 import { Reveal, StaggerGroup, StaggerItem } from "@/component/ui/Reveal";
 import { dateToString } from "@/helpers/DateConverters";
@@ -29,8 +29,18 @@ function Meta({ item }: { item: Blog }) {
 }
 
 export default function HomeInsights() {
-  const { data, isLoading } = useNewsList();
-  const blogs: Blog[] = (data?.data || []).slice(0, 5);
+  const { data, isLoading: newsLoading } = useNewsList();
+  const { data: latestData, isLoading: latestLoading } = useArticleList();
+  // Featured news first; when none is featured, show the latest published
+  // articles instead of an empty state.
+  const featured: Blog[] = data?.data || [];
+  const latest: Blog[] = [...(latestData?.data || [])].sort(
+    (a, b) =>
+      Date.parse(b.publishDate || b.created_at || "") -
+      Date.parse(a.publishDate || a.created_at || "")
+  );
+  const blogs: Blog[] = (featured.length ? featured : latest).slice(0, 5);
+  const isLoading = newsLoading || (!featured.length && latestLoading);
   const [lead, ...rest] = blogs;
 
   return (

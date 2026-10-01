@@ -243,7 +243,7 @@ export const Header = ({ activeHeader }: HeaderProps = {}) => {
                   alt={company_name || name || "Logo"}
                   className={`site-logo relative block w-auto h-auto object-contain transition-[max-height,max-width,filter] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
                     isScrolled ? "is-scrolled" : ""
-                  }`}
+                  } ${!solid ? "drop-shadow-[0_0_10px_rgba(255,255,255,0.9)]" : ""}`}
                 />
               </div>
             ) : (

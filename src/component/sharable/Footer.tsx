@@ -68,13 +68,18 @@ export const Footer = () => {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
           {/* Brand */}
           <div className="lg:col-span-5 flex flex-col gap-3">
-            <Link href="/home" className="inline-flex items-center gap-3">
+            <Link
+              href="/home"
+              className="inline-flex items-center gap-3 self-start"
+            >
               {cachedLogo ? (
+                /* Full-colour logo, transparent background; a soft light glow
+                   keeps the dark-blue lettering readable on dark pine. */
                 /* eslint-disable-next-line @next/next/no-img-element */
                 <img
                   src={cachedLogo}
                   alt={company_name || name || "Logo"}
-                  style={{ objectFit: "contain", height: 44, width: "auto", filter: "brightness(0) invert(1)" }}
+                  style={{ objectFit: "contain", height: 60, width: "auto", maxWidth: "100%", filter: "drop-shadow(0 0 6px rgba(255,255,255,0.85))" }}
                 />
               ) : (
                 <span className="font-serif text-4xl text-[var(--on-pine)]">{name || "Dora"}</span>

@@ -30,9 +30,10 @@ import { CallAppPopup } from "./CallAppPopup";
 import { AddToCalendar } from "./AddToCalendar";
 import { buildOpenHouseEvent } from "@/helpers/openHouseEvent";
 import { toEmbedUrl } from "@/helpers/embedUrl";
+import { MlsGridDisclaimerText } from "@/component/sharable/MlsSearchDisclaimer";
 import LoginModal from "@/main-pages/auth/LoginModal";
 import { normalizePropertyDetails } from "@/services/properties/normalizePropertyDetails";
-import { isFirstLookListing } from "@/helpers/listingDisplay";
+import { displayStatusLabel, isFirstLookListing } from "@/helpers/listingDisplay";
 import { tagToneClass } from "@/component/sharable/ListingTag";
 import { ListingBrokerAttribution } from "@/component/sharable/ListingBrokerAttribution";
 import type { PropertyDetails, PropertyOpenHouse } from "@/types/Property";
@@ -60,9 +61,6 @@ export const SinglePropertyDetails = ({ property: prop }: Props) => {
   const [isAddingToFavorites, setIsAddingToFavorites] = useState(false);
   const [isFavorited, setIsFavorited] = useState(false);
   const [wishlistItemId, setWishlistItemId] = useState<string | null>(null);
-  const [disclaimerUpdatedAt, setDisclaimerUpdatedAt] = useState<Date>(
-    () => new Date()
-  );
 
   // Mortgage calculator
   const [mortgageHomePrice, setMortgageHomePrice] = useState<number>(0);
@@ -170,14 +168,6 @@ export const SinglePropertyDetails = ({ property: prop }: Props) => {
     if (details.price) setMortgageHomePrice(Number(details.price));
   }, [details.price]);
 
-  useEffect(() => {
-    const id = window.setInterval(
-      () => setDisclaimerUpdatedAt(new Date()),
-      30 * 60 * 1000
-    );
-    return () => window.clearInterval(id);
-  }, []);
-
   /* -------- Mortgage math -------- */
   const mortgage = useMemo(() => {
     const downAmt = Math.round(mortgageHomePrice * (mortgageDownPct / 100));
@@ -222,14 +212,6 @@ export const SinglePropertyDetails = ({ property: prop }: Props) => {
       ? formattedPhone.trim().length > 0
       : Boolean(formattedPhone);
 
-  const formattedMlsUpdated = `Data last updated ${disclaimerUpdatedAt.toLocaleDateString(
-    "en-US",
-    { month: "long", day: "numeric", year: "numeric" }
-  )} at ${disclaimerUpdatedAt.toLocaleTimeString("en-US", {
-    hour: "numeric",
-    minute: "2-digit",
-  })}`;
-
   const showMortgageCalculator = details.compliance.canShowValuation;
 
   const showPropertyMap =
@@ -245,10 +227,10 @@ export const SinglePropertyDetails = ({ property: prop }: Props) => {
 
   if (!property || !details.compliance.canDisplayListing) return null;
 
-  // First Look (NWMLS Coming Soon) reports Days_On_Site = 0 by design — it
-  // isn't fully on-market yet, so "0 days on market" would mislead.
+  // First Look reports Days_On_Site = 0 by design (not yet on market), and MLS
+  // requires no days-on-market for it — show the count for other statuses only.
   const isFirstLook = isFirstLookListing(property);
-  const statusLabel = details.status || "Active";
+  const statusLabel = displayStatusLabel(details.status || "Active");
 
   /* -------- Spec card data (normalized) -------- */
   const {
@@ -284,18 +266,11 @@ export const SinglePropertyDetails = ({ property: prop }: Props) => {
                   {tag}
                 </span>
               ))}
-              {isFirstLook ? (
+              {!isFirstLook && details.daysOnSite !== null && (
                 <span className="inline-flex items-center gap-2 text-[12px] text-[var(--ink-faint)]">
                   <FiClock size={12} />
-                  Coming soon — First Look
+                  {details.daysOnSite} days on market
                 </span>
-              ) : (
-                details.daysOnSite !== null && (
-                  <span className="inline-flex items-center gap-2 text-[12px] text-[var(--ink-faint)]">
-                    <FiClock size={12} />
-                    {details.daysOnSite} days on market
-                  </span>
-                )
               )}
             </div>
 
@@ -402,12 +377,15 @@ export const SinglePropertyDetails = ({ property: prop }: Props) => {
                   trusted advisor.
                 </p>
               </div>
-              <button
-                onClick={() => setIsModalOpen(true)}
-                className="btn-gold-new shrink-0"
-              >
-                Request a Showing
-              </button>
+              <div className="shrink-0 md:max-w-[300px]">
+                <button
+                  onClick={() => setIsModalOpen(true)}
+                  className="btn-gold-new shrink-0"
+                >
+                  Request a Showing
+                </button>
+                <ListingBrokerAttribution item={property} className="mt-3" />
+              </div>
             </div>
 
             {/* Mortgage calculator */}
@@ -696,21 +674,9 @@ export const SinglePropertyDetails = ({ property: prop }: Props) => {
                 Estimated payment, market insight calculations, school and
                 neighborhood information provided by Realtipro.
               </p>
-              <p>
-                The database information herein is provided from and copyrighted
-                by the Northwest Multiple Listing Service (NWMLS). NWMLS data
-                may not be reproduced or redistributed and is only for people
-                viewing this site. All information provided is deemed reliable
-                but is not guaranteed and should be independently verified. All
-                properties are subject to prior sale or withdrawal. All rights
-                are reserved by copyright. Property locations as displayed on
-                any map are best approximations only and exact locations should
-                be independently verified. The three-tree icon represents
-                listings courtesy of NWMLS.
-              </p>
+              <MlsGridDisclaimerText />
               <div className="flex flex-wrap items-center justify-between gap-4 pt-3 border-t border-[var(--line-soft)] mt-1">
                 <div className="flex flex-col gap-1">
-                  <span>{formattedMlsUpdated}</span>
                   <span>
                     © {new Date().getFullYear()}{" "}
                     {details.attribution.fullName ||
@@ -796,11 +762,11 @@ export const SinglePropertyDetails = ({ property: prop }: Props) => {
               >
                 Request a Showing
               </button>
-            </motion.div>
 
-            {/* NWMLS Listing Broker (IDX Rule 22) — must sit directly below the
-                contact buttons, at least as prominent as they are. */}
-            <ListingBrokerAttribution item={property} variant="sidebar" />
+              {/* NWMLS Listing Broker (IDX Rule 22) — directly adjacent to the
+                  contact CTAs, at least as prominent as they are. */}
+              <ListingBrokerAttribution item={property} className="mt-4" />
+            </motion.div>
 
             <div className="bg-[var(--surface-obsidian)] border border-[var(--line-soft)] rounded-[var(--radius-md)] p-6 flex flex-col gap-3">
               <button

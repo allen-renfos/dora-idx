@@ -33,6 +33,7 @@ import { FiSearch } from "react-icons/fi";
 import { useProfile } from "@/services/profile/ProfileQueries";
 import { triggerLeadIntake } from "@/services/automation/n8n";
 import { filterDisplayableListings } from "@/helpers/listingDisplay";
+import { MlsSearchDisclaimer } from "@/component/sharable/MlsSearchDisclaimer";
 
 type Property = { id: string; [key: string]: any };
 
@@ -397,6 +398,9 @@ const MlsSerchHomePage = () => {
   }, [infiniteData, wishlistData]);
 
   const totalCount: number = (infiniteData?.pages[0] as any)?.meta?.total ?? 0;
+  // Real MLS refresh time from the API (first page = freshest request).
+  const dataRefreshedAt: string | null =
+    (infiniteData?.pages[0] as any)?.meta?.data_refreshed_at ?? null;
 
   // City personalization (search signal). Record ONLY the confirmed structured
   // city filter (mls_city, set when the user picks a city from autocomplete) —
@@ -728,6 +732,8 @@ const MlsSerchHomePage = () => {
             )
           )}
         </div>
+
+        {!isLoading && <MlsSearchDisclaimer refreshedAt={dataRefreshedAt} />}
       </div>
     </GoogleMapsProvider>
   );
