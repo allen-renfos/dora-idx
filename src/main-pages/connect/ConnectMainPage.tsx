@@ -201,7 +201,7 @@ export default function ConnectMainPage() {
       />
 
       {/* HERO — pine band */}
-      <section className="relative isolate overflow-hidden bg-[var(--pine)] pt-16 pb-8 md:pt-20 md:pb-12">
+      <section className="relative isolate overflow-hidden bg-[var(--pine)] pt-28 pb-8 md:pt-32 md:pb-12">
         <span
           aria-hidden
           className="pointer-events-none select-none absolute -bottom-16 right-[2vw] font-serif text-[clamp(7rem,20vw,18rem)] leading-none text-[var(--on-pine)]/[0.04]"

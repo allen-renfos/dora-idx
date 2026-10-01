@@ -66,11 +66,6 @@ export const Header = ({ activeHeader }: HeaderProps = {}) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
 
-  // The transparent, white-text header is only legible over the full-bleed dark
-  // hero on the home page. On every other (white) route — and once scrolled —
-  // the header uses the solid white surface with ink text.
-  const isHeroRoute = pathname === "/" || pathname.startsWith("/home");
-  const solid = isScrolled || !isHeroRoute;
 
   useEffect(() => {
     setIsUserDashboard(isAuthenticated());
@@ -147,15 +142,9 @@ export const Header = ({ activeHeader }: HeaderProps = {}) => {
         key={item.key}
         href={item.path}
         className={`relative px-3.5 py-2 text-[12.5px] font-semibold tracking-[0.18em] uppercase font-[family-name:var(--font-accent)] transition-colors duration-300 ${
-          !solid ? "[text-shadow:0_1px_12px_rgba(15,22,18,0.9)]" : ""
-        } ${
           active
-            ? solid
-              ? "text-[var(--accent-text)]"
-              : "text-[var(--gold-300)]"
-            : solid
-            ? "text-[var(--ink-soft)] hover:text-[var(--accent-text)]"
-            : "text-white hover:text-[var(--gold-300)]"
+            ? "text-[var(--accent-text)]"
+            : "text-[var(--ink-soft)] hover:text-[var(--accent-text)]"
         }`}
       >
         {item.label}
@@ -210,20 +199,12 @@ export const Header = ({ activeHeader }: HeaderProps = {}) => {
         }}
       />
 
+      {/* Always a solid white bar so the logo reads on every route (incl. the dark home hero). */}
       <header
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
-          solid
-            ? "bg-[var(--surface-ink)]/92 backdrop-blur-xl border-b border-[var(--line-soft)]"
-            : "bg-transparent border-b border-transparent"
+        className={`fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-xl border-b border-[var(--line-soft)] transition-shadow duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+          isScrolled ? "shadow-[var(--shadow-soft)]" : ""
         }`}
       >
-        {/* Pine-tinted scrim — keeps white nav legible over any hero frame */}
-        {!solid && (
-          <div
-            aria-hidden
-            className="pointer-events-none absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-[var(--pine)]/95 via-[var(--pine)]/45 to-transparent"
-          />
-        )}
         <div
           className={`container-wide relative flex items-center justify-between transition-all duration-500 ${
             isScrolled ? "py-1.5" : "py-2"
@@ -247,11 +228,7 @@ export const Header = ({ activeHeader }: HeaderProps = {}) => {
                 />
               </div>
             ) : (
-              <span
-                className={`font-serif text-2xl tracking-tight ${
-                  solid ? "text-[var(--ink)]" : "text-white"
-                }`}
-              >
+              <span className="font-serif text-2xl tracking-tight text-[var(--ink)]">
                 {name || "Dora"}
               </span>
             )}
@@ -273,11 +250,7 @@ export const Header = ({ activeHeader }: HeaderProps = {}) => {
               <>
                 <Link
                   href="/collection/favourites"
-                  className={`hidden md:inline-flex items-center gap-2 px-4 py-2 text-[12px] font-semibold tracking-[0.14em] uppercase transition ${
-                    solid
-                      ? "text-[var(--ink-soft)] hover:text-[var(--accent-text)]"
-                      : "text-white/85 hover:text-white"
-                  }`}
+                  className="hidden md:inline-flex items-center gap-2 px-4 py-2 text-[12px] font-semibold tracking-[0.14em] uppercase transition text-[var(--ink-soft)] hover:text-[var(--accent-text)]"
                   aria-label="Dashboard"
                 >
                   <FiUser size={16} />
@@ -286,7 +259,7 @@ export const Header = ({ activeHeader }: HeaderProps = {}) => {
                 <div className="hidden md:block">
                   <button
                     onClick={handleLogout}
-                    className={`btn-outline-new ${solid ? "" : "on-dark"}`}
+                    className="btn-outline-new"
                     aria-label="Sign out"
                   >
                     Sign Out
@@ -298,28 +271,16 @@ export const Header = ({ activeHeader }: HeaderProps = {}) => {
                 {/* Sign In — pill with gold icon badge */}
                 <button
                   onClick={handleDashboard}
-                  className={`group hidden md:inline-flex items-center gap-2.5 pl-1.5 pr-5 py-1.5 rounded-full border transition-all duration-300 ${
-                    solid
-                      ? "border-[var(--line)] hover:border-[var(--gold-500)] hover:bg-[var(--gold-500)]/[0.06]"
-                      : "border-white/25 hover:border-[var(--gold-300)] hover:bg-white/[0.06]"
-                  }`}
+                  className="group hidden md:inline-flex items-center gap-2.5 pl-1.5 pr-5 py-1.5 rounded-full border transition-all duration-300 border-[var(--line)] hover:border-[var(--gold-500)] hover:bg-[var(--gold-500)]/[0.06]"
                   aria-label="Sign in"
                 >
                   <span
-                    className={`flex items-center justify-center w-8 h-8 rounded-full transition-colors duration-300 group-hover:bg-[var(--gold-500)] group-hover:text-white ${
-                      solid
-                        ? "bg-[var(--gold-500)]/10 text-[var(--gold-deep)]"
-                        : "bg-white/10 text-[var(--gold-300)]"
-                    }`}
+                    className="flex items-center justify-center w-8 h-8 rounded-full transition-colors duration-300 group-hover:bg-[var(--gold-500)] group-hover:text-white bg-[var(--gold-500)]/10 text-[var(--gold-deep)]"
                   >
                     <FiUser size={15} />
                   </span>
                   <span
-                    className={`text-[12px] font-semibold tracking-[0.16em] uppercase transition-colors duration-300 ${
-                      solid
-                        ? "text-[var(--ink-soft)] group-hover:text-[var(--accent-text)]"
-                        : "text-white [text-shadow:0_1px_14px_rgba(0,0,0,0.55)]"
-                    }`}
+                    className="text-[12px] font-semibold tracking-[0.16em] uppercase transition-colors duration-300 text-[var(--ink-soft)] group-hover:text-[var(--accent-text)]"
                   >
                     Sign In
                   </span>
@@ -329,9 +290,7 @@ export const Header = ({ activeHeader }: HeaderProps = {}) => {
             )}
             <button
               onClick={() => setIsMobileMenuOpen(true)}
-              className={`lg:hidden inline-flex items-center justify-center w-11 h-11 ${
-                solid ? "text-[var(--ink)]" : "text-white"
-              }`}
+              className="lg:hidden inline-flex items-center justify-center w-11 h-11 text-[var(--ink)]"
               aria-label="Open menu"
             >
               <FiMenu size={22} />
