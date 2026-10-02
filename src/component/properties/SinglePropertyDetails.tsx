@@ -35,7 +35,7 @@ import LoginModal from "@/main-pages/auth/LoginModal";
 import { normalizePropertyDetails } from "@/services/properties/normalizePropertyDetails";
 import { displayStatusLabel, isFirstLookListing } from "@/helpers/listingDisplay";
 import { tagToneClass } from "@/component/sharable/ListingTag";
-import { ListingBrokerAttribution } from "@/component/sharable/ListingBrokerAttribution";
+import { getListingBroker } from "@/helpers/listingBroker";
 import type { PropertyDetails, PropertyOpenHouse } from "@/types/Property";
 
 const LocalInformation = dynamic(() => import("./LocalInformation"), {
@@ -367,7 +367,8 @@ export const SinglePropertyDetails = ({ property: prop }: Props) => {
               />
             )}
 
-            {/* Inline CTA */}
+            {/* Inline CTA — attribution sits directly below the box, never in it */}
+            <div className="flex flex-col gap-3">
             <div className="bg-gradient-to-br from-[var(--gold-500)]/10 to-transparent border border-[var(--gold-500)]/25 rounded-[var(--radius-md)] px-6 md:px-8 py-7 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
               <div>
                 <h3 className="font-serif text-2xl text-[var(--ink)]">
@@ -378,15 +379,14 @@ export const SinglePropertyDetails = ({ property: prop }: Props) => {
                   trusted advisor.
                 </p>
               </div>
-              <div className="shrink-0 md:max-w-[300px]">
-                <button
-                  onClick={() => setIsModalOpen(true)}
-                  className="btn-gold-new shrink-0"
-                >
-                  Request a Showing
-                </button>
-                <ListingBrokerAttribution item={property} className="mt-3" />
-              </div>
+              <button
+                onClick={() => setIsModalOpen(true)}
+                className="btn-gold-new shrink-0"
+              >
+                Request a Showing
+              </button>
+            </div>
+            <ListingBrokerLine item={property} />
             </div>
 
             {/* Mortgage calculator */}
@@ -763,11 +763,12 @@ export const SinglePropertyDetails = ({ property: prop }: Props) => {
               >
                 Request a Showing
               </button>
-
-              {/* NWMLS Listing Broker (IDX Rule 22) — directly adjacent to the
-                  contact CTAs, at least as prominent as they are. */}
-              <ListingBrokerAttribution item={property} className="mt-4" />
             </motion.div>
+
+            {/* NWMLS Listing Broker (IDX Rule 22) — immediately adjacent to the
+                contact CTAs but OUTSIDE their box, so the buttons are never
+                read as contacting the listing broker. */}
+            <ListingBrokerLine item={property} />
 
             <div className="bg-[var(--surface-obsidian)] border border-[var(--line-soft)] rounded-[var(--radius-md)] p-6 flex flex-col gap-3">
               <button
@@ -828,6 +829,31 @@ export const SinglePropertyDetails = ({ property: prop }: Props) => {
 };
 
 /* ─────────── Sub-components ─────────── */
+
+/**
+ * NWMLS Listing Broker attribution (IDX Rule 22) in its own box, on the same
+ * surface as the neighbouring cards:
+ *
+ *   Listing Broker: [firm name]; [broker name]; [phone]; [email]
+ *
+ * Values come straight from the feed; missing parts are skipped. Kept at
+ * least as prominent as the contact buttons (12–13px): 15px, full --ink.
+ */
+function ListingBrokerLine({ item, className = "" }: { item: unknown; className?: string }) {
+  const broker = getListingBroker(item);
+  if (!broker) return null;
+  return (
+    <section
+      aria-label="Listing broker"
+      className={`bg-[var(--surface-obsidian)] border border-[var(--line-soft)] rounded-[var(--radius-md)] px-6 py-5 flex flex-col text-[15px] font-medium leading-[1.6] text-[var(--ink)] [overflow-wrap:anywhere] ${className}`}
+    >
+      <span>
+        <span className="font-semibold">Listing Broker:</span> {broker.parts.join("; ")}
+      </span>
+      {broker.buyerOffice && <span>Buyer&apos;s Brokerage: {broker.buyerOffice}</span>}
+    </section>
+  );
+}
 
 type SpecRow = { label: string; value: any };
 
