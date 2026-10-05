@@ -80,9 +80,10 @@ export const EditProfileModal = ({ isOpen, onClose, userData }: Props) => {
         customer_id: customerId,
         id: customerId,
       });
+      // useUpdateProfile refetches the profile, so no reload (it would
+      // wipe the toast before anyone sees it).
       toast.success("Profile updated.");
       onClose();
-      window.location.reload();
     } catch (err: any) {
       const msg = err?.response?.data?.message || "Failed to update profile";
       toast.error(msg);
