@@ -1,5 +1,7 @@
 "use client";
 
+import { LoadedImg } from "@/component/ui/LoadedImg";
+
 /**
  * MLS attribution badge shown on every property card.
  *
@@ -40,8 +42,7 @@ export function MlsProviderBadge({
   return (
     <div className={`flex items-center gap-2 ${className}`}>
       {logo && (
-        // eslint-disable-next-line @next/next/no-img-element
-        <img
+        <LoadedImg
           src={logo}
           alt={alt}
           width={18}

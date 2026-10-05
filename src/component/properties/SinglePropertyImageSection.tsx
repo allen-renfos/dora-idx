@@ -7,6 +7,7 @@ import { FiChevronLeft, FiChevronRight, FiMaximize2 } from "react-icons/fi";
 import { normalizePropertyDetails } from "@/services/properties/normalizePropertyDetails";
 import type { PropertyDetails } from "@/types/Property";
 import { getDisplayablePhotos } from "@/helpers/listingDisplay";
+import { LoadedImg } from "@/component/ui/LoadedImg";
 
 interface Props {
   property?: any;
@@ -225,8 +226,7 @@ export const SinglePropertyImageSection = ({ property: prop }: Props) => {
                     </span>
                   )}
                   {attribution.logo && (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img
+                    <LoadedImg
                       src={attribution.logo}
                       alt={attribution.fullName || attribution.name || "MLS"}
                       className="h-4 object-contain"

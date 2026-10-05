@@ -28,6 +28,7 @@ import { SharePopup } from "./SharePopup";
 import { MailAppPopup } from "./MailAppPopup";
 import { CallAppPopup } from "./CallAppPopup";
 import { AddToCalendar } from "./AddToCalendar";
+import { LoadedImg } from "@/component/ui/LoadedImg";
 import { buildOpenHouseEvent } from "@/helpers/openHouseEvent";
 import { toEmbedUrl } from "@/helpers/embedUrl";
 import { MlsGridDisclaimerText } from "@/component/sharable/MlsSearchDisclaimer";
@@ -684,28 +685,14 @@ export const SinglePropertyDetails = ({ property: prop }: Props) => {
                       "Northwest Multiple Listing Service"}
                   </span>
                 </div>
-                <div className="relative w-[80px] h-[40px]">
-                  {details.attribution.logo ? (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img
-                      src={details.attribution.logo}
-                      alt={
-                        details.attribution.fullName ||
-                        details.attribution.name ||
-                        "MLS"
-                      }
-                      className="w-full h-full object-contain"
-                      referrerPolicy="no-referrer"
-                    />
-                  ) : (
-                    <Image
-                      src="/images/nwmls.png"
-                      alt="Northwest Multiple Listing Service"
-                      fill
-                      className="object-contain"
-                    />
-                  )}
-                </div>
+                <DisclaimerLogo
+                  src={details.attribution.logo}
+                  alt={
+                    details.attribution.fullName ||
+                    details.attribution.name ||
+                    "MLS"
+                  }
+                />
               </div>
             </div>
           </div>
@@ -1072,6 +1059,32 @@ function CalcField({
           </button>
         )}
       </div>
+    </div>
+  );
+}
+
+/** MLS logo in the disclaimer; falls back to the bundled NWMLS mark if the API logo is missing or fails. */
+function DisclaimerLogo({ src, alt }: { src?: string | null; alt: string }) {
+  const [failed, setFailed] = useState(false);
+  if (src && !failed) {
+    return (
+      <LoadedImg
+        src={src}
+        alt={alt}
+        onFail={() => setFailed(true)}
+        className="w-[80px] h-[40px] object-contain"
+        referrerPolicy="no-referrer"
+      />
+    );
+  }
+  return (
+    <div className="relative w-[80px] h-[40px]">
+      <Image
+        src="/images/nwmls.png"
+        alt="Northwest Multiple Listing Service"
+        fill
+        className="object-contain"
+      />
     </div>
   );
 }

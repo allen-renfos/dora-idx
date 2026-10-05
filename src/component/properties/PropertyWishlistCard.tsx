@@ -23,6 +23,7 @@ import {
   isConsentDependentListing,
 } from "@/helpers/listingDisplay";
 import { usePropertyById } from "@/services/properties/PropertyQueries";
+import { LoadedImg } from "@/component/ui/LoadedImg";
 
 interface PropertyWishlistCardProps {
   item: any;
@@ -299,8 +300,7 @@ export const PropertyWishlistCard = ({ item, handleModal, hideWishlist, onRemove
         {item.listed_with && (
           <div className="flex items-center gap-2 pt-3 mt-auto">
             {item.logo && (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img
+              <LoadedImg
                 src={item.logo}
                 alt="MLS"
                 width={18}
