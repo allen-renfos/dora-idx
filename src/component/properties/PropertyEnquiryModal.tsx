@@ -9,7 +9,6 @@ import { postEnquiry } from "@/services/auth/AuthServices";
 import { useProfile } from "@/services/profile/ProfileQueries";
 import { formatUSPhoneInput, getUSPhoneDigits } from "@/helpers/phoneFormat";
 import { FormDisclaimer } from "@/component/sharable/FormDisclaimer";
-import { ListingBrokerAttribution } from "@/component/sharable/ListingBrokerAttribution";
 import { AuthModal } from "@/component/ui/AuthModal";
 import { AuthField } from "@/component/ui/AuthShell";
 import { triggerShowingPropose } from "@/services/automation/n8n";
@@ -264,7 +263,6 @@ function ScheduleTourForm({ property, profileData, onClose }: SharedFormProps) {
           )}
         </button>
       </div>
-      <ListingBrokerAttribution item={property} />
     </form>
   );
 }
@@ -442,7 +440,6 @@ function SendInquiryForm({ property, profileData, onClose }: SharedFormProps) {
           )}
         </button>
       </div>
-      <ListingBrokerAttribution item={property} />
     </form>
   );
 }
