@@ -9,13 +9,12 @@ import { useLoginPrompt } from "@/hooks/useLoginPrompt";
 
 type Property = { id: string; [key: string]: any };
 
-/** Cards shown at first and added per "View more" click. */
-const PAGE_STEP = 6;
+/** Cards shown on the home page; "View more" links to the full listings. */
+const SHOWN = 6;
 
 export default function HomeFeatured() {
   const { handleModal, loginModal } = useLoginPrompt();
-  const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } =
-    useNewListings();
+  const { data, isLoading } = useNewListings();
   // All loaded pages, deduped (pages can overlap as new homes arrive).
   const loaded: Property[] = useMemo(() => {
     const seen = new Set<string>();
@@ -29,13 +28,7 @@ export default function HomeFeatured() {
       });
   }, [data]);
 
-  // Show 6 to start; "View more" reveals 6 more, fetching pages as needed.
-  const [visible, setVisible] = useState(PAGE_STEP);
-  const properties = loaded.slice(0, visible);
-  const canShowMore = loaded.length > visible || !!hasNextPage;
-  useEffect(() => {
-    if (visible > loaded.length && hasNextPage && !isFetchingNextPage) fetchNextPage();
-  }, [visible, loaded.length, hasNextPage, isFetchingNextPage, fetchNextPage]);
+  const properties = loaded.slice(0, SHOWN);
 
   const railRef = useRef<HTMLDivElement>(null);
   const [progress, setProgress] = useState(0);
@@ -164,18 +157,11 @@ export default function HomeFeatured() {
                 </span>
               </div>
 
-              {canShowMore && (
-                <div className="mt-6 flex justify-end">
-                  <button
-                    type="button"
-                    onClick={() => setVisible((v) => v + PAGE_STEP)}
-                    disabled={isFetchingNextPage}
-                    className="btn-outline-new disabled:opacity-60 disabled:cursor-wait"
-                  >
-                    {isFetchingNextPage ? "Loading…" : "View more"}
-                  </button>
-                </div>
-              )}
+              <div className="mt-6 flex justify-end">
+                <Link href="/properties" className="btn-outline-new">
+                  View more
+                </Link>
+              </div>
             </Reveal>
           ) : (
             <EmptyState />
