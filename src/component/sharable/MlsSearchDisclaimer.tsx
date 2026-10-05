@@ -9,6 +9,8 @@ import { lastSyncSlot } from "@/helpers/mlsRefresh";
  * The date/time is the real last MLS data refresh when the API reports it
  * (`refreshedAt`, from list `meta.data_refreshed_at`). Otherwise it is the
  * latest 15-minute sync slot before the visit (see helpers/mlsRefresh).
+ * Always shown in Pacific time (PST/PDT), the MLS's own zone, whatever the
+ * visitor's zone is.
  * It is resolved client-side only so server and browser never disagree.
  */
 function useRefreshLabel(refreshedAt?: string | null): string | null {
@@ -28,10 +30,12 @@ function useRefreshLabel(refreshedAt?: string | null): string | null {
   const date = apiDate && !Number.isNaN(apiDate.getTime()) ? apiDate : slot;
   if (!date) return null;
   return `${date.toLocaleDateString("en-US", {
+    timeZone: "America/Los_Angeles",
     month: "long",
     day: "numeric",
     year: "numeric",
   })} at ${date.toLocaleTimeString("en-US", {
+    timeZone: "America/Los_Angeles",
     hour: "numeric",
     minute: "2-digit",
     timeZoneName: "short",
