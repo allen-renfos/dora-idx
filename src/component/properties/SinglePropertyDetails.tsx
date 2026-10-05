@@ -36,7 +36,7 @@ import LoginModal from "@/main-pages/auth/LoginModal";
 import { normalizePropertyDetails } from "@/services/properties/normalizePropertyDetails";
 import { displayStatusLabel, isFirstLookListing } from "@/helpers/listingDisplay";
 import { tagToneClass } from "@/component/sharable/ListingTag";
-import { getListingBroker } from "@/helpers/listingBroker";
+import { getListingBroker, LISTING_BROKER_SEPARATOR } from "@/helpers/listingBroker";
 import type { PropertyDetails, PropertyOpenHouse } from "@/types/Property";
 
 const LocalInformation = dynamic(() => import("./LocalInformation"), {
@@ -821,7 +821,7 @@ export const SinglePropertyDetails = ({ property: prop }: Props) => {
  * NWMLS Listing Broker attribution (IDX Rule 22) in its own box, on the same
  * surface as the neighbouring cards:
  *
- *   Listing Broker: [firm name]; [broker name]; [phone]; [email]
+ *   Listing Broker: [firm name] | [broker name] | [phone] | [email]
  *
  * Values come straight from the feed; missing parts are skipped. Kept at
  * least as prominent as the contact buttons (12–13px): 15px, full --ink.
@@ -835,7 +835,7 @@ function ListingBrokerLine({ item, className = "" }: { item: unknown; className?
       className={`bg-[var(--surface-obsidian)] border border-[var(--line-soft)] rounded-[var(--radius-md)] px-6 py-5 flex flex-col text-[15px] font-medium leading-[1.6] text-[var(--ink)] [overflow-wrap:anywhere] ${className}`}
     >
       <span>
-        <span className="font-semibold">Listing Broker:</span> {broker.parts.join("; ")}
+        <span className="font-semibold">Listing Broker:</span> {broker.parts.join(LISTING_BROKER_SEPARATOR)}
       </span>
       {broker.buyerOffice && <span>Buyer&apos;s Brokerage: {broker.buyerOffice}</span>}
     </section>
