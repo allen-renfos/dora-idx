@@ -326,9 +326,9 @@ export const Header = ({ activeHeader }: HeaderProps = {}) => {
               <a
                 href={telHref}
                 aria-label={`Call ${phoneDisplay}`}
-                className="2xl:hidden inline-flex items-center justify-center w-11 h-11 rounded-full text-[var(--gold-deep)] hover:bg-[var(--gold-500)]/10"
+                className="2xl:hidden inline-flex items-center justify-center w-10 h-10 rounded-full bg-[var(--pine)] text-[var(--on-pine)] hover:bg-[var(--pine-soft)]"
               >
-                <FiPhone size={20} />
+                <FiPhone size={17} />
               </a>
             )}
             <button

@@ -18,7 +18,14 @@ export default function SocialUrlFetcher() {
     if (data.profile_image || data.photo) setters.setProfileImage(data.profile_image || data.photo);
     if (data.address) setters.setAddress(data.address);
     if (data.email) setters.setEmail(data.email);
-    if (data.phone) setters.setPhone(data.phone);
+    const agentPhone =
+      data.phone ||
+      data.mobile ||
+      data.mobile_number ||
+      data.cell ||
+      data.cell_phone ||
+      process.env.NEXT_PUBLIC_AGENT_PHONE;
+    if (agentPhone) setters.setPhone(agentPhone);
   }, [data]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return null;

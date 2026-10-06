@@ -54,7 +54,7 @@ export const Footer = () => {
   ].filter((s) => s.href);
 
   return (
-    <footer className="bg-[var(--pine)] text-[var(--on-pine-soft)] relative overflow-hidden">
+    <footer className="bg-[var(--pine)] text-[var(--on-pine-soft)] relative overflow-hidden pb-20 sm:pb-0">
       {/* Soft gold top hairline */}
       <div className="h-px bg-gradient-to-r from-transparent via-[var(--gold)]/45 to-transparent" />
 

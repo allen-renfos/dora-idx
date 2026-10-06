@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import { FiPhone, FiMail, FiMessageSquare, FiX } from "react-icons/fi";
 import { useNameContext } from "../NameProvider";
@@ -24,6 +25,10 @@ import {
 export const AgentContactDock = () => {
   const { name, profile_image, phone, email } = useNameContext();
   const photo = useCachedImage(profile_image);
+  const pathname = usePathname() || "";
+  // Listing detail pages already carry a floating Share button (bottom-right)
+  // and their own Call/Email buttons, so the phone-width bar steps aside there.
+  const hideOnMobile = /^\/properties\/[^/]+/.test(pathname);
   const { phoneDisplay, telHref, smsHref, emailAddress } = getAgentContact(
     phone,
     email,
@@ -85,7 +90,56 @@ export const AgentContactDock = () => {
   );
 
   return (
-    <div className="fixed bottom-4 left-4 z-40 print:hidden">
+    <div className="fixed bottom-4 left-4 right-4 sm:right-auto z-40 print:hidden">
+      {/* PHONE: the number itself is the button — one tap opens the dialer.
+          Email is the small secondary button beside it. */}
+      <div className={`${hideOnMobile ? "hidden" : "flex"} sm:hidden items-stretch gap-2`}>
+        <a
+          href={telHref ?? `mailto:${emailAddress}`}
+          aria-label={
+            telHref
+              ? `Call ${name || "the agent"} ${phoneDisplay}`
+              : `Email ${name || "the agent"}`
+          }
+          className="flex min-w-0 flex-1 items-center gap-3 rounded-full bg-[var(--pine)] py-1.5 pl-1.5 pr-5 text-[var(--on-pine)] shadow-[var(--shadow-lift)] active:scale-[0.98] transition-transform"
+        >
+          <span className="relative shrink-0">
+            {portrait("h-11 w-11")}
+            {presence}
+          </span>
+          <span className="flex min-w-0 flex-col leading-tight">
+            <span className="text-[10.5px] font-semibold uppercase tracking-[0.16em] text-[var(--gold-300)]">
+              {telHref
+                ? isOnline
+                  ? "Tap to call · available now"
+                  : "Tap to call"
+                : "Tap to email"}
+            </span>
+            <span
+              className={`truncate font-serif ${telHref ? "text-[21px]" : "text-[15px]"}`}
+            >
+              {telHref ? phoneDisplay : emailAddress}
+            </span>
+          </span>
+          {telHref ? (
+            <FiPhone size={20} className="ml-auto shrink-0 text-[var(--gold-300)]" />
+          ) : (
+            <FiMail size={20} className="ml-auto shrink-0 text-[var(--gold-300)]" />
+          )}
+        </a>
+        {telHref && emailAddress && (
+          <a
+            href={`mailto:${emailAddress}`}
+            aria-label={`Email ${name || "the agent"}`}
+            className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full border border-[var(--line)] bg-white/95 text-[var(--ink-soft)] shadow-[var(--shadow-soft)]"
+          >
+            <FiMail size={19} />
+          </a>
+        )}
+      </div>
+
+      {/* TABLET / DESKTOP: portrait pill that expands into a contact card */}
+      <div className="hidden sm:block">
       <AnimatePresence>
         {open && (
           <motion.div
@@ -230,6 +284,7 @@ export const AgentContactDock = () => {
             </span>
           </a>
         )}
+      </div>
       </div>
     </div>
   );
