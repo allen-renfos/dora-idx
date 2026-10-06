@@ -10,6 +10,7 @@ import {
 } from "react-icons/fa6";
 import { useNameContext } from "../NameProvider";
 import { useCachedImage } from "@/helpers/useCachedImage";
+import { getAgentContact } from "@/helpers/agentContact";
 
 const FOOTER_COLS = [
   {
@@ -39,8 +40,9 @@ const FOOTER_COLS = [
 ];
 
 export const Footer = () => {
-  const { name, company_logo, company_name, socialUrls, shortDescription } =
+  const { name, company_logo, company_name, socialUrls, shortDescription, phone, email } =
     useNameContext();
+  const { phoneDisplay, telHref, emailAddress } = getAgentContact(phone, email);
   const cachedLogo = useCachedImage(company_logo);
 
   const socials: { href?: string; Icon: React.ComponentType<{ size?: number }>; label: string }[] = [
@@ -105,6 +107,27 @@ export const Footer = () => {
               {shortDescription ||
                 "A boutique real estate practice pairing distinctive homes with the people who belong in them — guided by patience, taste, and quiet conviction."}
             </p>
+            {(telHref || emailAddress) && (
+              <div className="flex flex-col gap-1 pt-1">
+                <span className="eyebrow on-dark">Direct line</span>
+                {telHref && (
+                  <a
+                    href={telHref}
+                    className="font-serif text-3xl sm:text-4xl text-[var(--on-pine)] hover:text-[var(--gold-300)] transition-colors"
+                  >
+                    {phoneDisplay}
+                  </a>
+                )}
+                {emailAddress && (
+                  <a
+                    href={`mailto:${emailAddress}`}
+                    className="text-[15px] text-[var(--on-pine-soft)] hover:text-[var(--gold-300)] transition-colors break-all"
+                  >
+                    {emailAddress}
+                  </a>
+                )}
+              </div>
+            )}
             {socials.length > 0 && (
               <div className="flex items-center gap-3 pt-2">
                 {socials.map(({ href, Icon, label }) => (

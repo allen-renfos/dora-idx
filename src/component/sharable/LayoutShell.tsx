@@ -4,6 +4,7 @@ import { ReactNode } from "react";
 import { usePathname } from "next/navigation";
 import { Header } from "./Header";
 import { Footer } from "./Footer";
+import { AgentContactDock } from "./AgentContactDock";
 
 const AUTH_ROUTES = [
   "/login",
@@ -30,6 +31,7 @@ export function LayoutShell({ children }: { children: ReactNode }) {
       <Header />
       {children}
       <Footer />
+      <AgentContactDock />
     </>
   );
 }

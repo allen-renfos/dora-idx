@@ -13,7 +13,8 @@ import {
 } from "@/services/auth/authStorage";
 import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
-import { FiMenu, FiX, FiUser, FiCalendar } from "react-icons/fi";
+import { FiMenu, FiX, FiUser, FiCalendar, FiPhone } from "react-icons/fi";
+import { getAgentContact } from "@/helpers/agentContact";
 
 type NavItem = { label: string; path: string; key: string };
 
@@ -55,7 +56,8 @@ export const Header = ({ activeHeader }: HeaderProps = {}) => {
     return PATH_TO_KEY.find((entry) => entry.test(pathname))?.key ?? "";
   }, [pathname]);
   const activeKey = activeHeader ?? derivedActive;
-  const { company_logo, company_name, name } = useNameContext();
+  const { company_logo, company_name, name, phone, email } = useNameContext();
+  const { phoneDisplay, telHref } = getAgentContact(phone, email);
   const cachedLogo = useCachedImage(company_logo);
 
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
@@ -264,6 +266,19 @@ export const Header = ({ activeHeader }: HeaderProps = {}) => {
               {rightItems.map(renderNavLink)}
             </nav>
             <span className="hidden lg:block lg:ml-auto" />
+            {/* Click-to-call: number in the bar on wide screens, icon on small ones */}
+            {telHref && (
+              <a
+                href={telHref}
+                aria-label={`Call ${phoneDisplay}`}
+                className="group hidden 2xl:inline-flex shrink-0 items-center gap-2 whitespace-nowrap text-[var(--ink)] transition-colors hover:text-[var(--accent-text)]"
+              >
+                <FiPhone size={15} className="text-[var(--gold-deep)]" />
+                <span className="font-[family-name:var(--font-accent)] text-[15px] tracking-[0.04em]">
+                  {phoneDisplay}
+                </span>
+              </a>
+            )}
             {/* Desktop CTA cluster */}
             {isUserDashboard ? (
               <>
@@ -306,6 +321,15 @@ export const Header = ({ activeHeader }: HeaderProps = {}) => {
                 </button>
                 {/* Book a Showing already handled above for mobile */}
               </>
+            )}
+            {telHref && (
+              <a
+                href={telHref}
+                aria-label={`Call ${phoneDisplay}`}
+                className="2xl:hidden inline-flex items-center justify-center w-11 h-11 rounded-full text-[var(--gold-deep)] hover:bg-[var(--gold-500)]/10"
+              >
+                <FiPhone size={20} />
+              </a>
             )}
             <button
               onClick={() => setIsMobileMenuOpen(true)}
@@ -401,6 +425,15 @@ export const Header = ({ activeHeader }: HeaderProps = {}) => {
               </nav>
 
               <div className="px-6 pb-8 pt-4 border-t border-[var(--line-soft)] flex flex-col gap-3">
+                {telHref && (
+                  <a
+                    href={telHref}
+                    className="flex items-center justify-center gap-2.5 py-3 font-serif text-2xl text-[var(--ink)]"
+                  >
+                    <FiPhone size={20} className="text-[var(--gold-deep)]" />
+                    {phoneDisplay}
+                  </a>
+                )}
                 <Link
                   href="/connect"
                   onClick={() => setIsMobileMenuOpen(false)}
