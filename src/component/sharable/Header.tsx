@@ -271,7 +271,7 @@ export const Header = ({ activeHeader }: HeaderProps = {}) => {
               <a
                 href={telHref}
                 aria-label={`Call ${phoneDisplay}`}
-                className="group hidden 2xl:inline-flex shrink-0 items-center gap-2 whitespace-nowrap text-[var(--ink)] transition-colors hover:text-[var(--accent-text)]"
+                className="group hidden min-[1700px]:inline-flex shrink-0 items-center gap-2 whitespace-nowrap text-[var(--ink)] transition-colors hover:text-[var(--accent-text)]"
               >
                 <FiPhone size={15} className="text-[var(--gold-deep)]" />
                 <span className="font-[family-name:var(--font-accent)] text-[15px] tracking-[0.04em]">
@@ -284,16 +284,17 @@ export const Header = ({ activeHeader }: HeaderProps = {}) => {
               <>
                 <Link
                   href="/collection/favourites"
-                  className="hidden md:inline-flex items-center gap-2 px-4 py-2 whitespace-nowrap text-[12px] font-semibold tracking-[0.14em] uppercase transition text-[var(--ink-soft)] hover:text-[var(--accent-text)]"
+                  className="hidden md:inline-flex shrink-0 items-center gap-2 px-2.5 2xl:px-4 py-2 whitespace-nowrap text-[12px] font-semibold tracking-[0.14em] uppercase transition text-[var(--ink-soft)] hover:text-[var(--accent-text)]"
                   aria-label="Dashboard"
+                  title="Dashboard"
                 >
-                  <FiUser size={16} />
-                  Dashboard
+                  <FiUser size={18} />
+                  <span className="hidden 2xl:inline">Dashboard</span>
                 </Link>
-                <div className="hidden md:block">
+                <div className="hidden md:block shrink-0">
                   <button
                     onClick={handleLogout}
-                    className="btn-outline-new"
+                    className="btn-outline-new !px-5 !py-2.5 !text-[12px] whitespace-nowrap"
                     aria-label="Sign out"
                   >
                     Sign Out
@@ -326,7 +327,7 @@ export const Header = ({ activeHeader }: HeaderProps = {}) => {
               <a
                 href={telHref}
                 aria-label={`Call ${phoneDisplay}`}
-                className="2xl:hidden inline-flex items-center justify-center w-10 h-10 rounded-full bg-[var(--pine)] text-[var(--on-pine)] hover:bg-[var(--pine-soft)]"
+                className="min-[1700px]:hidden inline-flex shrink-0 items-center justify-center w-10 h-10 rounded-full bg-[var(--pine)] text-[var(--on-pine)] hover:bg-[var(--pine-soft)]"
               >
                 <FiPhone size={17} />
               </a>

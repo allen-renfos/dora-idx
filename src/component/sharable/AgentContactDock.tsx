@@ -267,9 +267,9 @@ export const AgentContactDock = () => {
             aria-label={`Call ${name || "the agent"} ${phoneDisplay}`}
             className="flex items-center gap-2 rounded-r-full bg-[var(--pine)] pl-4 pr-5 text-[var(--on-pine)] transition-colors hover:bg-[var(--pine-soft)]"
           >
-            <FiPhone size={16} />
-            <span className="text-[12px] font-semibold uppercase tracking-[0.16em]">
-              Call
+            <FiPhone size={17} />
+            <span className="font-serif text-[19px] leading-none tracking-[0.01em]">
+              {phoneDisplay}
             </span>
           </a>
         ) : (

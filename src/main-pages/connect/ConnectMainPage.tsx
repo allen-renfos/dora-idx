@@ -19,6 +19,7 @@ import {
   FiArrowRight,
   FiX,
   FiRefreshCw,
+  FiClock,
 } from "react-icons/fi";
 
 import { useNameContext } from "@/component/NameProvider";
@@ -26,6 +27,7 @@ import { postEnquiry } from "@/services/auth/AuthServices";
 import { useProfile } from "@/services/profile/ProfileQueries";
 import { FormDisclaimer } from "@/component/sharable/FormDisclaimer";
 import { formatUSPhoneInput, getUSPhoneDigits } from "@/helpers/phoneFormat";
+import { getAgentContact } from "@/helpers/agentContact";
 import { Reveal } from "@/component/ui/Reveal";
 import HomeNewsletter from "@/main-pages/home/HomeNewsletter";
 
@@ -48,7 +50,8 @@ const initialForm: FormState = {
 };
 
 export default function ConnectMainPage() {
-  const { name, shortDescription, address, email, socialUrls } = useNameContext();
+  const { name, shortDescription, address, email, phone, socialUrls } = useNameContext();
+  const { phoneDisplay, telHref } = getAgentContact(phone, email);
   const { data: profileData } = useProfile();
 
   const [form, setForm] = useState<FormState>(initialForm);
@@ -240,7 +243,19 @@ export default function ConnectMainPage() {
 
       {/* INFO TILES */}
       <section className="border-y border-[var(--line)] bg-[var(--canvas-2)]">
-        <div className="container-wide grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-[var(--line)]">
+        <div
+          className={`container-wide grid grid-cols-1 ${
+            telHref ? "md:grid-cols-4" : "md:grid-cols-3"
+          } divide-y md:divide-y-0 md:divide-x divide-[var(--line)]`}
+        >
+          {telHref && (
+            <InfoTile
+              Icon={FiPhone}
+              label="Call or text"
+              value={phoneDisplay}
+              href={telHref}
+            />
+          )}
           <InfoTile
             Icon={FiMail}
             label="Email"
@@ -253,7 +268,7 @@ export default function ConnectMainPage() {
             value={formattedAddress || "By appointment"}
           />
           <InfoTile
-            Icon={FiPhone}
+            Icon={FiClock}
             label="Hours"
             value="Mon – Fri · 9 AM – 7 PM"
           />
@@ -551,7 +566,11 @@ function InfoTile({
         <span className="text-[10px] uppercase tracking-[0.22em] text-[var(--ink-faint)] font-[family-name:var(--font-accent)]">
           {label}
         </span>
-        <span className="text-[15px] text-[var(--ink-soft)] break-words">{value}</span>
+        <span
+          className={`break-words ${href?.startsWith("tel:") ? "font-serif text-[22px] text-[var(--ink)]" : "text-[15px] text-[var(--ink-soft)]"}`}
+        >
+          {value}
+        </span>
       </div>
     </>
   );
@@ -560,8 +579,8 @@ function InfoTile({
     return (
       <a
         href={href}
-        target={href.startsWith("mailto") ? undefined : "_blank"}
-        rel={href.startsWith("mailto") ? undefined : "noopener noreferrer"}
+        target={/^(mailto|tel):/.test(href) ? undefined : "_blank"}
+        rel={/^(mailto|tel):/.test(href) ? undefined : "noopener noreferrer"}
         className="flex items-start gap-4 px-6 md:px-8 py-7 hover:bg-[var(--cream)] transition-colors"
       >
         {inner}
