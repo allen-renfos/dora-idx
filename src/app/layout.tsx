@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from "next";
 
-import { Fraunces, Jost, Marcellus } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
 import "@/styles/dashboard.css";
 import Providers from "@/provider/QueryClientProvider";
@@ -14,24 +14,25 @@ import AuthBootstrap from "@/component/auth/AuthBootstrap";
 // Roman). Body/UI: Jost (refined geometric sans). Variable names below are
 // aliased to the legacy --font-* names in globals.css so existing references
 // pick up the new fonts automatically.
-const fraunces = Fraunces({
-  subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
-  style: ["normal", "italic"],
+// Self-hosted (latin subset, variable weights) so builds never depend on a
+// live request to Google Fonts — that fetch intermittently failed on Railway.
+const fraunces = localFont({
+  src: [
+    { path: "../fonts/site/fraunces-normal.woff2", weight: "300 700", style: "normal" },
+    { path: "../fonts/site/fraunces-italic.woff2", weight: "300 700", style: "italic" },
+  ],
   variable: "--font-display",
   display: "swap",
 });
 
-const jost = Jost({
-  subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
+const jost = localFont({
+  src: [{ path: "../fonts/site/jost-normal.woff2", weight: "300 700", style: "normal" }],
   variable: "--font-body",
   display: "swap",
 });
 
-const marcellus = Marcellus({
-  subsets: ["latin"],
-  weight: "400",
+const marcellus = localFont({
+  src: [{ path: "../fonts/site/marcellus-normal.woff2", weight: "400", style: "normal" }],
   variable: "--font-accent",
   display: "swap",
 });
