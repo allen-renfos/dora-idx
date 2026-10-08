@@ -270,7 +270,7 @@ export default function ConnectMainPage() {
           <InfoTile
             Icon={FiClock}
             label="Hours"
-            value="Mon – Fri · 9 AM – 7 PM"
+            value="Mon – Fri · 8 AM – 7 PM"
           />
         </div>
       </section>

@@ -33,8 +33,8 @@ export const getAgentContact = (phone: unknown, email: unknown): AgentContact =>
 
 export type Availability = { online: boolean; label: string };
 
-// Office hours match the Connect page: Mon – Fri · 9 AM – 7 PM, Pacific.
-const OPEN_HOUR = 9;
+// Office hours match the Connect page: Mon – Fri · 8 AM – 7 PM, Pacific.
+const OPEN_HOUR = 8;
 const CLOSE_HOUR = 19;
 const TZ = "America/Los_Angeles";
 
@@ -52,13 +52,13 @@ export const getAvailability = (now: Date = new Date()): Availability => {
   if (isWeekday && hour >= OPEN_HOUR && hour < CLOSE_HOUR) {
     return { online: true, label: "Picking up now · until 7 PM PT" };
   }
-  // Next open: later today before 9, otherwise the next weekday.
+  // Next open: later today before 8, otherwise the next weekday.
   if (isWeekday && hour < OPEN_HOUR) {
-    return { online: false, label: "Back today at 9 AM PT" };
+    return { online: false, label: "Back today at 8 AM PT" };
   }
   if (weekday === "Fri" || weekday === "Sat") {
-    return { online: false, label: "Back Monday at 9 AM PT" };
+    return { online: false, label: "Back Monday at 8 AM PT" };
   }
-  if (weekday === "Sun") return { online: false, label: "Back Monday at 9 AM PT" };
-  return { online: false, label: "Back tomorrow at 9 AM PT" };
+  if (weekday === "Sun") return { online: false, label: "Back Monday at 8 AM PT" };
+  return { online: false, label: "Back tomorrow at 8 AM PT" };
 };
